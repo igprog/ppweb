@@ -62,7 +62,7 @@
                                     <strong class="text-uppercase">{{'error' | translate}} !</strong> {{errorMesage}}.
                                 </div>
                                 <div class="text-right pt-2">
-                                    <a href="../app_v_1_4_8/index.html" class="text-gray-500 small" title="{{'version' | translate}} 1.4.8">{{'version' | translate}} <em>1.4.8</em></a>
+                                    <a href="../app_v_1_4_8/index.html" class="text-gray-500 small" title="{{'old version' | translate}} 1.4.8">{{'old version' | translate}} <em>1.4.8</em></a>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +85,6 @@
 </div>
 
 <script type="text/ng-template" id="loginTpl">
-
 
     <!-- Outer Row -->
     <div class="row justify-content-center">
@@ -239,7 +238,7 @@
                 </div>
             </form>
             <div class="m2">
-                <button ng-disabled="signupdisabled||signingUp" type="submit" form="signupform" class="btn btn-primary btn-block text-capitalize" ng-click="signup()" ><i class="fa fa-{{signingUp===true?'spinner fa-spin':'check'}}"></i> {{'register' | translate}}</button>
+                <button ng-disabled="signupdisabled||signingUp" type="submit" form="signupform" class="btn btn-primary btn-block" ng-click="signup()" ><i class="fa fa-{{signingUp===true?'spinner fa-spin':'check'}}"></i> <span class="text-capitalize">{{'register' | translate}}</span></button>
             </div>
         </div>
     </div>

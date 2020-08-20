@@ -1143,6 +1143,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.id = '#myScheduler';
     $scope.room = 0;
     $scope.uid = $rootScope.user.userId;
+    $scope.loading = false;
 
     var showScheduler = function () {
         YUI().use('aui-scheduler', function (Y) {
@@ -1204,6 +1205,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     $scope.getSchedulerEvents = function (uid) {
+        $scope.loading = true;
         $http({
             url: $sessionStorage.config.backend + webService + '/GetSchedulerEvents',
             method: 'POST',
@@ -1212,10 +1214,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
        .then(function (response) {
            $rootScope.events = JSON.parse(response.data.d);
            $timeout(function () {
+               $scope.loading = false;
                showScheduler();
            }, 200);
        },
        function (response) {
+           $scope.loading = false;
            functions.alert($translate.instant(response.data.d));
        });
     };
@@ -1873,7 +1877,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     $scope.searchPopupCtrl = function ($scope, $mdDialog, $http) {
+        $scope.loading = false;
         var load = function () {
+            $scope.loading = true;
             $http({
                 url: $sessionStorage.config.backend + 'Clients.asmx/Load',
                 method: "POST",
@@ -1881,9 +1887,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             })
             .then(function (response) {
                 $scope.d = JSON.parse(response.data.d);
+                $scope.loading = false;
             },
             function (response) {
-                alert(response.data.d)
+                $scope.loading = false;
+                alert(response.data.d);
             });
         }
         load();

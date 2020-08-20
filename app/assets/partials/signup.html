@@ -57,7 +57,7 @@
                                 </a>-->
                             </form>
                             <div class="m-2">
-                                <button ng-disabled="signupdisabled||signingUp" type="submit" form="signupform" class="btn btn-primary btn-user btn-block rounded-pill" ng-click="signup()"><i class="fa fa-{{signingUp===true?'spinner fa-spin':'check'}}"></i> {{'register' | translate}}</button>
+                                <button ng-disabled="signupdisabled||signingUp" type="submit" form="signupform" class="btn btn-primary btn-user btn-block rounded-pill" ng-click="signup()"><i class="fa fa-{{signingUp===true?'spinner fa-spin':'check'}}"></i> <span class="text-capitalize">{{'register' | translate}}</span></button>
                             </div>
                             <div ng-controller="loginCtrl" class="text-center pt-2">
                                 <a href="" ng-click="forgotPasswordPopup()">{{'forgot password' | translate}}?</a>

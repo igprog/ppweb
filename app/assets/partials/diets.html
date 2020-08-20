@@ -83,8 +83,9 @@
             </div>-->
         </div>
         <div>
-            <button ng-if="client.clientId" class="btn btn-primary btn-lg" title="{{'back' | translate}}" ng-click="toggleNewTpl('activities')"><i class="fa fa-angle-double-left fa-2x" aria-hidden="true"></i></button>
-            <button ng-if="client.clientId" class="btn btn-primary btn-lg float-right" title="{{'forward' | translate}}" ng-click="toggleNewTpl('meals')"><i class="fa fa-angle-double-right fa-2x" aria-hidden="true"></i></button>
+            <hr />
+            <button ng-if="client.clientId" class="btn btn-outline-primary btn-lg" title="{{'back' | translate}}" ng-click="toggleNewTpl('activities')"><i class="fa fa-angle-double-left" aria-hidden="true"></i> {{'back' | translate}}</button>
+            <button ng-if="client.clientId" class="btn btn-outline-primary btn-lg float-right" title="{{'forward' | translate}}" ng-click="toggleNewTpl('meals')">{{'forward' | translate}} <i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
         </div>
         <json-directive data="clientData.diet" desc="'clientData.diet'"></json-directive>
     </div>

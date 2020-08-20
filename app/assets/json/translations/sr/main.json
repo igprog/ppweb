@@ -1973,6 +1973,7 @@
   "show all clients": "Prikaži sve klijente",
   "you do not have any appointments": "Nemate niti jedan zakazan termin",
   "client database is empty": "Baza klijenata je prazna",
-  "add client": "Dodaj klijenta"
+  "add client": "Dodaj klijenta",
+  "old version": "stara verzija"
 
 }
