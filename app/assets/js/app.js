@@ -1634,8 +1634,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 //-------------- Program Prehrane Controllers---------------
-.controller('dashboardCtrl', ['$scope', '$http', '$sessionStorage', '$rootScope', 'functions', '$translate', '$timeout', function ($scope, $http, $sessionStorage, $rootScope, functions, $translate, $timeout) {
-	var getUser = function () {
+.controller('dashboardCtrl', ['$scope', '$http', '$sessionStorage', '$rootScope', 'functions', '$translate', '$timeout', '$state', function ($scope, $http, $sessionStorage, $rootScope, functions, $translate, $timeout, $state) {
+    var getUser = function () {
+        if ($rootScope.user === null) { return false;}
         $http({
             url: $sessionStorage.config.backend + 'Users.asmx/Get',
             method: 'POST',
@@ -1668,8 +1669,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 	        }
 	    }, 8000);
 	}
-	if ($rootScope.user.licenceStatus == 'demo' && $rootScope.config.language == 'hr' && $sessionStorage.showHelpAlert === undefined) {
-	    showHelpAlert();
+	if ($rootScope.user !== null) {
+	    if ($rootScope.user.licenceStatus == 'demo' && $rootScope.config.language == 'hr' && $sessionStorage.showHelpAlert === undefined) {
+	        showHelpAlert();
+	    }
+	} else {
+        $state.go('login');
 	}
 
 }])
