@@ -26,7 +26,7 @@
                         1. {{'a new application upgrade is available' | translate}}. - <em><span class="text-capitalize">{{'version' | translate}}</span>: {{config.version}}</em>
                         <em class="float-right small">{{config.date}}</em>
                     </p>
-                    <div>
+                    <div ng-hide="config.showupdatedes==false">
                         <a ng-hide="config.language=='en'" href="" ng-click="toggleUpdates()" title="{{'what is new' | translate}}?" class="text-uppercase">{{'what is new' | translate}}? <i class="fa fa-caret-{{showUpdates==false?'right':'down'}}" aria-hidden="true"></i></a>
                         <div ng-if="showUpdates" ng-include="'./assets/partials/updates.html'" class="text-center table-scroll" style="height:55vh"></div>
                     </div>

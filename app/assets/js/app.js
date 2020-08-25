@@ -1700,6 +1700,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         })
         .then(function (response) {
             $rootScope.clientData = JSON.parse(response.data.d);
+            $rootScope.clientData.date = new Date(new Date().setHours(0, 0, 0, 0));
             $rootScope.clientData.date = new Date($rootScope.clientData.date);
         },
         function (response) {
@@ -1752,6 +1753,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         .then(function (response) {
             $rootScope.client = JSON.parse(response.data.d);
             $rootScope.client.date = new Date(new Date().setHours(0, 0, 0, 0));
+            $rootScope.client.birthDate = new Date(new Date().setHours(0, 0, 0, 0));
             $rootScope.clientData = [];
             $rootScope.calculation = [];
             $rootScope.initMyCalculation();
