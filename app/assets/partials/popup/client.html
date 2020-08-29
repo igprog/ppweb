@@ -49,6 +49,7 @@
                 </div>
             </div>
             <div class="pull-right mr-3 mb-2">
+                <button ng-if="d.clientId!=null" class="btn btn-outline-danger" ng-click="remove(d)"><i class="fa fa-trash-alt"></i> {{'remove' | translate}}</button>
                 <!--<a ng-if="user.licenceStatus=='demo'" href="" class="btn btn-primary" ng-click="save(d)">{{'forward' | translate}} <i class="fa fa-arrow-right"></i></a>
                 <a ng-if="user.licenceStatus!='demo'" href="" class="btn btn-primary" ng-click="save(d)"><i class="fa fa-floppy-o"></i> {{'save' | translate}}</a>-->
                 <button class="btn btn-primary" ng-click="save(d)"><i class="fa fa-floppy-o"></i> {{'save' | translate}}</button>

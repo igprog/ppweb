@@ -1971,6 +1971,7 @@
   "you do not have any appointments": "Немате нити један заказан термин",
   "client database is empty": "База клијената је празна",
   "add client": "Додај клијента",
-  "old version": "стара верзија"
+  "old version": "стара верзија",
+  "remove": "Бриши"
 
 }

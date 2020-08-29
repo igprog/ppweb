@@ -41,7 +41,7 @@
                             <hr />
                             <div>
                                 {{'or' | translate}} {{'web application' | translate}} ({{'without activation code' | translate}}):<br />
-                                <a ng-if="client.clientId" href="{{clientAppUrl(client)}}" target="_blank">{{clientAppUrl(client)}}</a>
+                                <a ng-if="client.clientId" href="{{clientAppUrl(client)}}" target="_blank" class="text-primary">{{clientAppUrl(client)}}</a>
                             </div>
 
                             <div class="mt10">

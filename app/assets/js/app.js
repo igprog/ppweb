@@ -1835,16 +1835,38 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                    functions.alert($translate.instant(JSON.parse(response.data.d).message), '');
                    return false;
                }
-               //getClients();
-               //$timeout(function () {
-               //    $mdDialog.hide(JSON.parse(response.data.d).data);
-               //}, 500);
                $mdDialog.hide(JSON.parse(response.data.d).data);
            },
            function (response) {
                functions.alert($translate.instant(response.data.d), '');
            });
         }
+
+        $scope.remove = function (x) {
+            var confirm = $mdDialog.confirm()
+                  .title($translate.instant('are you sure you want to delete') + '?')
+                  .textContent($translate.instant('client') + ': ' + x.firstName + ' ' + x.lastName)
+                  .targetEvent(x)
+                  .ok($translate.instant('yes'))
+                  .cancel($translate.instant('no'));
+            $mdDialog.show(confirm).then(function () {
+                $http({
+                    url: $sessionStorage.config.backend + webService + '/Delete',
+                    method: "POST",
+                    data: { userId: $sessionStorage.usergroupid, clientId: x.clientId, user: $rootScope.user }
+                })
+               .then(function (response) {
+                   $rootScope.clients = JSON.parse(response.data.d);
+                   $mdDialog.cancel();
+               },
+               function (response) {
+                   functions.alert($translate.instant(response.data.d), '');
+               });
+            }, function () {
+            });
+        };
+
+
     }
 
     $scope.edit = function (x) {

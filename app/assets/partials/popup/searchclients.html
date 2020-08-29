@@ -42,7 +42,7 @@
                             <td style="width:20%" ng-click="get(x)">{{x.lastName}}</td>
                             <td style="width:20%" ng-click="get(x)">{{getDateFormat(x.birthDate) | date:'dd.MM.yyyy'}}</td>
                             <td style="width:20%" ng-click="get(x)">{{x.phone}}</td>
-                            <td><button ng-click="remove(x, $index)" class="btn btn-outline-danger btn-circle"><i class="fa fa-trash-alt"></i></button></td>
+                            <td><button ng-click="remove(x, $index)" class="btn btn-outline-danger btn-circle" title="{{'remove' | translate}}"><i class="fa fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
