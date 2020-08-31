@@ -299,7 +299,7 @@ public class WeeklyMenus : System.Web.Services.WebService {
         using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
             connection.Open();
             string sql = @"SELECT w.id, w.title, w.note, w.dietId, w.diet, w.menuList, w.date, w.clientId, c.firstName, c.lastName, w.userId, w.userGroupId FROM weeklymenus w
-                    LEFT OUTER JOIN clients c ON w.clientId = w.clientId
+                    LEFT OUTER JOIN clients c ON w.clientId = c.clientId
                     GROUP BY w.id
                     ORDER BY w.rowid DESC";
             using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {

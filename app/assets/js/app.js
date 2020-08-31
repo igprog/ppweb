@@ -7504,7 +7504,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             templateUrl: 'assets/partials/popup/searchweeklymenus.html',
             parent: angular.element(document.body),
             clickOutsideToClose: true,
-            d: {}
+            d: { clientData: $rootScope.clientData }
         })
        .then(function (response) {
            $rootScope.weeklyMenu = response;
@@ -7514,8 +7514,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
        });
     }
 
-    var openSearchMenuPopupCtrl = function ($scope, $mdDialog, $http, $translate, functions) {
+    var openSearchMenuPopupCtrl = function ($scope, $mdDialog, $http, $translate, functions, d) {
         var webService = 'WeeklyMenus.asmx';
+        $scope.clientData = d.clientData;
         $scope.type = 0;
         $scope.limit = 20;
 
