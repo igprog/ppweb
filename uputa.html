@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="hr">
 <head>
-    <title>Program Prehrane Web | Uputa</title>
+    <title>Program Prehrane Web | Uputa (Verzija 2)</title>
 	<meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Uputa za korištenje web aplikacije Program Prehrane Web">
@@ -167,7 +167,7 @@
                                 Na osnovi antropometrijskih veličina (visina, masa...) i intenziteta tjelesne aktivnosti dolazimo do preporučene energetske vrijednosti jelovnika i preporučene dodatne energetske potrošnje.
                                 <a href="#inputdata">više...</a>
                             </p>
-                            
+
                         </li>
                         <li>
                             <label>2. KORAK - Izbor dodatne tjelesne aktivnosti</label>
@@ -182,7 +182,7 @@
                                 Moguće je odabrati jednu od 24 dijete ovisno o zdravstvenom stanju i dobi klijeta.
                                 <a href="#diet">više...</a>
                             </p>
-                            
+
                         </li>
                         <li>
                             <label>4. KORAK - Izbor obroka</label>
@@ -197,521 +197,526 @@
                             <a href="#menus">više...</a>
                         </li>
                     </ul>
-                <hr />
-            </div>
-            <div id="newclient">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Novi klijent</h4>
-                    <ul>
-                        <li>Nakon prijave u aplikaciju, registrirajte novog klijenta ili iz baze klijenata odabrati postojećeg.</li>
-                    </ul>
-                    <img src="./assets/img/ppweb/help/start.png" class="img-thumbnail m10" />
-                    <ul>
-                        <li>Klikom na <em>dugme</em> <strong>DODAJ NOVOG KLIJENTA</strong> otvara se pozor za unos novog klijenta.</li>
-                        <li>Obavezni podaci su ime, prezime, datum rođenja i spol, dok telefon i e-mail nisu obavezni.</li>
-                        <li>Klikom na <em>dugme</em> <strong>PRETRAŽI KLIJENTE</strong> pristupate klijentima koje ste prethodno spremili u bazu.</li>
-                    </ul>
-                <hr />
-            </div>
-            <div id="inputdata">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Ulazni podaci</h4>
-                    <p>
-                        Prvi korak u izradi jelovnika je utvrđivanje stanja uhranjenosti pojedinca na osnovi njegovih antropometrijskih veličina.<br />
-                        Odaberite datum mjerenja, unesite visinu (u cm), masu (u kg) opseg struka i bokova (u cm) i odaberite intenzitet tjelesne aktivnosti.<br />
-                        * <em>Opseg struka i bokova i masno tkivo nisu obavezni.</em><br />
-                        Za nastavak kliknite na dugme <strong>Naprijed</strong> ili <em>tab</em> <strong>Izračun</strong>
-                    </p>
-                </div>
-                <div>
-                    <img src="./assets/img/ppweb/help/ulazni_podaci.png" class="img-thumbnail m10" />
-                </div>
-                <hr />
-            </div>
-            <div id="bodyfat">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Izračun masnog tkiva</h4>
-                    <p>
-                        Izračuna masnog tkiva pomoću mjerenja kaliperom dostupan je samo za korisnike <strong>PREMIUM</strong> paketa.<br />
-                        Metode mjerenja:
-                        <ul>
-                            <li>Mjerenje na 3 točke prema Jackson/Pollock</li>
-                            <li>Mjerenje na 4 točke prema Jackson/Pollock</li>
-                            <li>Mjerenje na 7 točaka prema Jackson/Pollock</li>
-                            <li>Mjerenje prema Durnin/Womersley</li>
-                        </ul>
-                    </p>
-                </div>
-                <div class="p10">
-                    <img src="../app/assets/img/updates/bodyfatcalculator1.png" class="img-thumbnail" />
-                </div>
-                <div class="p10">
-                    <img src="../app/assets/img/updates/bodyfatcalculator2.png" class="img-thumbnail" />
-                </div>
-                <div class="alert alert-danger mt10">
-                    <em class="text-danger mt10">
-                        <strong>* Napomena:</strong> Postotak masnog tkiva se koristi za izračun bazalnog metabolizma (<strong>BMR</strong>) prema <strong>Katch-McArdle</strong> metodi.
-                    </em>
-                </div>
-                <div class="p10">
-                    <img src="../app/assets/img/updates/bmrequationsbodyfat.png" class="img-thumbnail" />
-                </div>
-                <hr />
-            </div>
-            <div id="detailpal">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Detaljni izračun energetske potrošnje</h4>
-                    <p>
-                        Ako želite preciznije odrediti dnevnu energetsku potrošnju kliknite na <strong>Detaljni izračun energetske potrošnje</strong><br />
-                        Klikom na <strong>Detaljni izračun energetske potrošnje</strong> otvara se prozor u kojemu je moguće izračunati detaljan izračun dnevne potrošnje.<br />
-                        Potrebno je unijeti sve aktivnosti i njihovo trajanje u periodu od 0:00 do 24:00.<br />
-                    </p>
-                </div>
-                <div>
-                    <img src="./assets/img/ppweb/help/detaljni_izracun.png" class="img-thumbnail m10" />
-                </div>
-                <hr />
-            </div>
-            <div id="anthropometricmeasures">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Praćenje antropometrijskih parametara</h4>
-                    <p>
-                        Klikom na <em>tab</em> <strong>Praćenje antropometrijskih parametara</strong> otvara se prozor u kojemu se prate antropometrijski parametri u grafičkom i tabelarnom prikazu.<br />
-                        Podaci koji se prate su masa, visina, opseg struka i opseg bokova. <br />
-                        <strong>Cilj</strong> je tjelesna masa koju aplikacija daje kao preporučenu tjelesnu masu na osnovi ulaznih parametara.
-                        Uz pretpostavku da je 1 kg masnog tkiva jednako 7000 kcal, i da je dnevni deficit <em>(energetska potrošnja - preporučena energetska potrošnja + dodatna tjelesna aktivnost)</em> jednako 500 kcal
-                        dolazi se do gubitka tjelesne mase od 2 kg mjesečno.
-                    </p>
-                </div>
-                <div>
-                    <img src="./assets/img/ppweb/help/pracenje_antropometrijskih_parametara.png" class="img-thumbnail m10" />
-                </div>
-                <hr />
-            </div>
-            <div id="calculation">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Izračun</h4>
-                    <ul>
-                        <li>
-                            Nakon unesenih ulaznih podataka aplikacija daje izračun za indeks tjelesna mase (BMI), bazalni metabolizam (BMR), ukupnu dnevnu energetsku potrošnju (TEE), omjer opsega struka i bokova (WHR)
-                            te preporuke za primjerenu tjelesnu masu, energetsku vrijednost jelovnika i dodatnu energetsku potrošnju.
-                        </li>
-                        <li>
-                            Aplikacija na osnovi ulaznih parametara određuje <strong>Cilj</strong>: redukciju tjelesne mase, zadržavanje postojeće tjelesne mase, povećanje tjelesne mase ili povećanje mišićne mase.<br />
-                            * <em>Sami možete odabrati neki drugi cilj, npr. ako program preporuči zadržavanje postojeće tjelesne mase vi možete odabrati povećanje mišićne mase, ali ne možete odabrati povećanje tjelesne mase ako osoba već ima povišenu tjelesnu masu.</em>
-                        </li>
-                        <li>Ako želite koristiti vlastite preporuke za energetski unos i dodatnu energetsku potrošnju, u sekciji <strong>Moje Preporuke</strong> unesite vlastite vrijednosti i kliknite na dugme <strong>Spremi</strong>.</li>
-                        <li>Za nastavak kliknite na dugme <strong>Naprijed</strong> ili <em>tab</em> <strong>DODATNA AKTIVNOST</strong></li>
-                    </ul>
-                </div>
-                <div>
-                    <img src="./assets/img/ppweb/help/izracun.png" class="img-thumbnail m10" />
-                </div>
-                <div>
-                    Korisnici STANDARD i PREMIUM paketa imaju mogućnost odabira između četiri jednadžbe za izračun bazalnog metabolizma (BMR):
-                    <ul>
-                        <li>Mifflin - St Jeor</li>
-                        <li>Harris - Benedict (Roza and Shizgal)</li>
-                        <li>Harris - Benedict</li>
-                        <li>Owen</li>
-                    </ul>
-                    U START verziji bazalni metabolizam se računa prema Mifflin - St Jeor metodi
-                </div>
-                <hr />
-            </div>
-            <div id="additionalactivities">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Dodatna tjelesna aktivnost</h4>
-                    <ul>
-                        <li>
-                            Ukoliko aplikacija na osnovu ulaznih podataka da preporuku za dodatnu energetsku potrošnju, u <em>prozoru</em> <strong>Dodatna aktivnost</strong>
-                            odabirete dodatnu tjelesnu aktivnost.
-                        </li>
-                        <li>Klikom na odabranu aktivnosti program izračunava vrijeme potrebno za potrošnju kalorija (<em>dodatna energetska potrošnja</em>).</li>
-                    </ul>
-                </div>
-                <ul>
-                    <li>Možete odabrati i više od jedne aktivnosti s time da je potrebno ručno promijeniti trajanje aktivnosti. Važno je da je suma kalorijske vrijednosti odabranih aktivnosti jednaka ili približna preporučenoj dodatnoj energetskoj potrošnji.</li>
-                </ul>
-                <div class="alert alert-danger mt10">
-                    <strong>* Napomena: </strong><em>Osobe sa zdravstvenim problemima ili sumnjom na njih, prije odabira dijete moraju se posavjetovati sa svojim liječnikom.</em>
-                </div>
-                <hr />
-            </div>
-            <div id="diet">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Dijeta</h4>
-                    <ul>
-                        <li>U <em>prozoru</em> <strong>Dijeta</strong> aplikacija automatski nudi redukcijsku dijetu ili normalnu prehranu ovisno o indeksu tjelesne mase (BMI).</li>
-                        <li>Moguće je odabrati i druge vrste prehrane i dijete ovisno o potrebama ili zdravstvenom stanju.</li>
-                    </ul>
-                    <div class="alert alert-danger mt10">
-                        <strong>Napomena: </strong><em>Osobe sa zdravstvenim problemima ili sumnjom na njih, prije odabira dodatne tjelesne aktivnosti moraju se posavjetovati sa svojim liječnikom.</em>
-                    </div>
-                </div>
-                <hr />
-            </div>
-            <div id="meals">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Obroci</h4>
-                    <h5 class="text-uppercase">Standardni obroci</h5>
-                    <ul>
-                        <li>U <em>prozoru</em> <strong>Obroci</strong>, sekcija <strong>Standardni Obroci</strong> odaberite željenu kombinaciju obroka.</li>
-                    </ul>
-                    <div class="alert alert-danger mt10">
-                        <strong>Napomena: </strong><em>Doručak, ručak i večera su obavezni.</em>
-                    </div>
-                </div>
-                <div>
-                    <h5 class="text-uppercase">Moji obroci (<em>Samo <strong>PREMIUM paket</strong></em>)</h5>
-                    <p>Korisnici <strong>PREMIUM peketa</strong> osim standardnih obroka mogu kreirati i vlastite obroke sa vlastitim nazivima i preporukama.<br />
-                    Broj obroka je limitiran na 8 dok je minimalni broj obroka 3.<br />
-                    Moje obroke možete spremiti za kasnije korištenje. Aplikacija automatski sprema <em>moje obroke</em> za svakog klijenta posebno.
-                    </p>
-                </div>
-                <hr />
-            </div>
-            <div id="menus">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Izrada jelovnika</h4>
-                    <ul>
-                        <li>Nakon što smo izračunali preporučenu energetsku potrošnju, odabrali dijetu i definirali obroke možemo pristupiti izradi dnevnog jelovnika.</li>
-                        <li>Sučelju za izradu jelovnika pristupamo klikom na <em>tab</em> <strong>Jelovnik</strong></li>
-                    </ul>
-                    <div>
-                        <img src="./assets/img/ppweb/help/jelovnik.png" class="img-thumbnail m10" />
-                    </div>
-                    <ul>
-                        <li>Za odabir namirnica kliknite na <em>tipku</em> <strong>Dodaj namirnicu</strong>.</li>
-                    </ul>
-                </div>
-                <ul>
-                    <li>U novom prozoru moguće je pretraživati namirnice po nazivu i po skupinama namirnica.</li>
-                    <li>Odabranoj namirnici možete promijeniti količinu, masu i odabrati termičku obradu.</li>
-                </ul>
-                <div>
-                    <img src="./assets/img/ppweb/help/namirnice_popup.png" class="img-thumbnail m10" />
-                </div>
-                <ul>
-                    <li>Klikom na <em>dugme</em> <strong>Dodaj</strong> odabrana namirnica se uvrštava u selektirani obrok.</li>
-                </ul>
-                <ul>
-                    <li>Prilikom izrade jelovnika vodi se računa da odabrane vrijednosti jelovnika budu unutar ili približno preporučenim vrijednostima</li>
-                    <li>
-                        Vrijednosti koje se prate su: energetska vrijednost jelovnika, energetska vrijednost obroka, broj jediničnih serviranja pojedine skupine namirnica
-                        mikro i makronutritivne vrijednosti i energetska vrijednost ostalih namirnica.
-                    </li>
-                    <li>Preporučene i odabrane vrijednosti su prikazane grafički i numerički, sa naznačenim odabranim i preporučenim vrijednostima.</li>
-                </ul>
-                <div>
-                    <img src="./assets/img/ppweb/help/analitika1.png" class="img-thumbnail m10" />
-                </div>
-                <div>
-                    <img src="./assets/img/ppweb/help/analitika2.png" class="img-thumbnail m10" />
-                </div>
-                <div>
-                    <ul>
-                        <li>Uz svaki obrok je moguće dodati opis npr. naziv i pripremu jela.</li>
-                    </ul>
-                    <img src="./assets/img/ppweb/help/opis_priprema_jela.png" class="img-thumbnail" />
-                    <div class="alert alert-danger mt10">
-                        <strong>Napomena: </strong>
-                        <em>
-                            Uključivanje ili isključivanje naziva i opisa jela moguće je samo ako su se u opisu jela koristili <strong>separatori</strong>.
-                            Za odvajanje naziva jela od njegovog opisa koristi se separator <strong class="bg-primary p5">~</strong> (<kbd>Alt+1(!)</kbd>).
-                            Ako imate više jela unutar jednog obroka, jela odvajajte separatorom <strong class="bg-primary p5">|</strong> (<kbd>Alt+w</kbd>).
-                            Separatore koristite samo ako u ispisu želite odvojeno isključiti ili uključiti naziv jela i opis jela i kod ispisa tjednih jelovnika
-                            kada je potrebno ispisati samo naziv jela za pojedini obrok.
-                        </em>
-                    </div>
-                    <img src="./assets/img/ppweb/help/opis_jela.png" class="img-thumbnail" />
-                </div>
-                <ul>
-                    <li>Za prikaz mikro-nutrijenata i ostalih parametara kliknite na <em>tab</em> <strong>Analiza</strong></li>
-                    <li>Kada su ukupne vrijednosti jelovnika unutar preporučenih, jelovnik je gotov.</li>
-                    <li>Jelovnik je moguće spremiti u bazu i kasnije ga koristiti kao predložak za izradu novog jelovnika.</li>
-                </ul>
-                <p>Postoje dvije opcije spremanja jelovnika: kao <strong>Jelovnik</strong> i kao <strong>Recept</strong></p>
-                <div>
-                    <img src="./assets/img/ppweb/help/spremi_jelovnik_opcije.png" class="img-thumbnail m10" />
-                </div>
-                <h4 class="text-uppercase">Ispis</h4>
-                <ul>
-                    <li>Klikom na tipku <strong>PDF</strong> otvara se prozor u kojemu možete kreirati PDF datoteku.</li>
-                    <li>
-                        Kada je jelovnik izrađen za grupu korisnika sa jednakom energetskom potrošnjom, npr. učenički domovi,
-                        moguće je odabrati broj konzumentat tog jelovnika, pri čemu se dobiva ukupna količina namirnica za odabrani broj korisnika.
-                    </li>
-                    <li>Također, moguće je mijenjati postavke ispisa na način da možete odabrati koje podatke želite prikazati u ispisu, a koje ne.</li>
-                    <li>Klikom na tipku <strong>Košarica</strong> ispisuje se shopping lista namirnica sa ukupnim količinama i cijenama.</li>
-                    <li>Jelovnik možete poslati direktno na e-mail klijenta klikom na tipku <strong>Ispis</strong> nakon čega se otvara prozor sa prikazom i opcijama ispisa.
-                    <!--Za slanje jelovnika kliknuti na tipku <strong>Pošalji</strong>. Ako e-mail želite poslati kao PDF-datoteku, prije slanja kliknuti na tipku <strong>Kreiraj PDF</strong>.-->
-                    </li>
-                </ul>
-                <hr />
-            </div>
-            <div id="weeklymenu">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Tjedni jelovnik</h4>
-                    <ul>
-                        <li>Klikom na <em>tab</em> <strong>Tjedni Jelovnik</strong> otvara se sučelje za izradu tjednih jelovnika.</li>
-                        <li>Upisati naziv jelovnika i za svaki dan u tjednu odabrati prethodno izrađene dnevne jelovnike.</li>
-                    </ul>
-                    <div>
-                        <img src="./assets/img/ppweb/help/tjedni_jelovnik.png" class="img-thumbnail m10" />
-                    </div>
-                    <div class="alert alert-danger mt10">
-                        <strong>Napomena: </strong><em>Dnevni jelovnici koje se koriste za izradu tjednog jelovnika moraju imati isti raspored obroka.</em>
-                    </div>
-                    <ul>
-                        <li>U <strong>Postavkama ispisa</strong> odabrati veličinu i orijentaciju stranice i vrijednosti koje želimo da budu vidljive u ispisu.</li>
-                    </ul>
-                    <div class="alert alert-danger mt10">
-                        <strong>Napomena: </strong>
-                        <p>Za prikaz samo naziva jela u pojedinom obroku, kod izrade dnevnih jelovnika potrebno je odvojiti naziva jela od njegovog opisa korištenjem separator <strong class="p5">~</strong> <kbd>Alt+1(!)</kbd>.
-                        Ako imate više jela unutar jednog obroka, jela odvajajte separatorom <strong class="p5">|</strong> <kbd>Alt+w</kbd>.<br />
-                        Npr: Naziv jela 1~Opis jela 1|Naziv jela 2~Opis jela 2.</p>
-                    </div>
-                    <div class="p10">
-                        <img src="../app/assets/img/updates/separatorweeklymenu.png" class="img-thumbnail" />
-                    </div>
-                    <div class="p10">
-                        <img src="../app/assets/img/updates/weeklymenupdf.png" class="img-thumbnail" />
-                    </div>
-                </div>
-                <hr />
-            </div>
-            <div id="myfoods">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Moje namirnice</h4>
-                    <ul>
-                        <li>Aplikacija daje mogućnost unosa vlastitih namirnica i njihovih makro i mikronutritivnih vrijednosti.</li>
-                        <li>
-                            Kod izrade jelovnika <strong>Mojim namirnicama</strong> možete pristupiti klikom na skupinu <strong>Moje namirnice</strong>.
-                        </li>
-                    </ul>
-                    <div class="alert alert-danger mt10">
-                        <strong>Napomena: </strong><em>
-                            Ukoliko prilikom unosa vlastite namirnice ne odaberete vrijednost jediničnog serviranja za tu namirnicu, namirnica će biti svrstana u kategoriju
-                            ostale namirnice.
-                        </em>
-                    </div>
-                </div>
-                <div>
-                    <img src="./assets/img/ppweb/help/moje_namirnice.png" class="img-thumbnail" />
-                </div>
-                <hr />
-            </div>
-            <div id="usda">
-                <div class="pt60">
-                    <h4 class="text-uppercase">USDA baza namirnica</h4>
-                    <div>
-                        <p>
-                            Korisnicima PREMIUM paketa omogućen je pristup USDA bazi namirnica (<em>nacionalna baza podataka nutritivnih sastojaka namirnica američkog ministarstva poljoprivrede</em>). Baza sadrži nutritivne vrijednosti 313191 namirnica.
-                        </p>
-                        <p>
-                            Za pristup bazi potrebno je kliknuti na dugme <strong>USDA</strong> u <em>tabu</em> <strong>Moje Namirnice</strong>.
-                        </p>
-                        <div class="p10">
-                            <img src="../app/assets/img/updates/usda1.png" class="img-thumbnail" />
-                        </div>
-                        <p>Odabrati namirnicu i mjeru i kliknuti na dugme <strong>KOPIRAJ NAMIRNICU U MOJE NAMIRNICE</strong>.</p>
-                        <div class="p10">
-                            <img src="../app/assets/img/updates/usda2.png" class="img-thumbnail" />
-                        </div>
-                        <p>Baza je na engleskom jeziku pa je namirnicu i mjeru potrebno prevesti. Odabrati skupinu namirnica, jedinično serviranje i kliknuti na dugme <strong>Spremi</strong>.</p>
-                        <div class="p10">
-                            <img src="../app/assets/img/updates/usda3.png" class="img-thumbnail" />
-                        </div>
-                        Nakon što se namirnica spremi pristupa joj se na isti način kao i ostalim namirnicama.
-                        <div class="p10">
-                            <img src="../app/assets/img/updates/usda4.png" class="img-thumbnail" />
-                        </div>
-                        <div class="p10">
-                            <img src="../app/assets/img/updates/usda5.png" class="img-thumbnail" />
-                        </div>
-                    </div>
-                <hr />
-            </div>
-            <div id="myrecipes">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Moji recepti</h4>
-                    <p>Recepte je moguće izrađivati na dva načina:</p>
-                    <ul>
-                        <li>Klikom na <strong>MOJI RECEPTI</strong> u lijevom izborniku ili</li>
-                        <li>Preko prozora za izradu jelovnika <strong>JELOVNIK</strong></li>
-                    </ul>
-                    <p>Kada recept izrađujemo u prozoru <strong>JELOVNIK</strong> namirnice unosimo u jedan od obroka, npr. doručak.</p>
-                    <div class="alert alert-danger mt10">
-                        <em>* Napomena: Samo one namirnice koje se nalaze u trenutnom selektiranom obroku će se spremiti u recept.</em><br />
-                        Nakon što unesete sve namirnice kliknite na tipku <strong>Spremi Kao Recept</strong>.
-                    </div>
-                    <p>
-                        U prozoru <strong>MOJI RECEPTI</strong> upišite naziv i opis recepta i kliknite na tipku <strong>Spremi</strong>.
-                    </p>
-                </div>
-                <div class="mt10">
-                    <img src="./assets/img/ppweb/help/moji_recepti1.png" class="img-thumbnail" />
-                </div>
-                <div class="mt10">
-                    <img src="./assets/img/ppweb/help/moji_recepti2.png" class="img-thumbnail" />
-                </div>
-                <div class="p10">
-                    <p>Postoje dva načina spremanja recepata:</p>
-                    <ol>
-                        <li>Standardno spremanje</li>
-                        <li>Spremanje recepta kao namirnice</li>
-                    </ol>
-                    <p>
-                        Uobičajeno je da kada recept uvrstimo u jelovnik, vidimo sve njegove sastavne namirnice. Ako želimo da u jelovniku bude vidljiv samo naziv recepta i njegove ukupne vrijednosti
-                        onda to radimo na način da nakon izrade recepta kliknemo na tipku <strong>Spremi Kao Namirnicu</strong>. Recept će biti automatski spremljen i kao recept u <strong>Moje Recepte</strong> sa svim njegovim sastavnim namirnicama
-                        i kao pojedinačna namirnica u <strong>Moje Namirnice</strong> sa ukupnom sumom nutrijenata iz tog recepta.
-                    </p>
-                    <p class="text-success">
-                        <em>
-                            <strong>Primjer:</strong> Čaj sa medom možemo spremiti kao <strong>Moju Namirnicu</strong> klikom na dugme <strong>Spremi Kao Namirnicu</strong><br />
-                            Namirnica (recept) će automatski biti spremljena i u <strong>Moje Namirnice</strong> i u <strong>Moje Recepte</strong>. Ako želimo u jelovniku prikazati taj recept bez
-                            njegovih sastavnih namirnica onda taj recept odaberemo iz rubrike <strong>Moje Namirnice</strong>. U protivnom, ako želimo da u jelovniku budu vidljive sve namirnice iz tog recepta onda
-                            recept dodamo klasično klikom na <strong>Dodaj Recept</strong>.
-                        </em>
-                    </p>
-                    <div class="alert alert-danger mt10">
-                        <em class="text-danger">
-                            <strong>* Napomena:</strong>
-                            Kada brišemo recept onda se automatski briše i recept spremljen u <strong>Moje Namirnice</strong>. Ali ako taj isti recept brišemo u <strong>Mojim Namirnicama</strong> onda on
-                            ostaje sačuvan u <strong>Mojim Receptima</strong>.<br />
-                            Ako želimo urediti recept spremljen u <strong>Moje Namirnice</strong> onda ga otvaramo u prozoru <strong>Moji Recepti</strong>.
-                        </em>
-                    </div>
-                    <div class="p10">
-                        <p>1.</p>
-                        <img src="./assets/img/ppweb/help/recept_kao_namirnica1.png" class="img-responsive" />
-                    </div>
-                    <div class="p10">
-                        <p>2.</p>
-                        <img src="./assets/img/ppweb/help/recept_kao_namirnica2.png" class="img-responsive" />
-                    </div>
-                    <div class="p10">
-                        <p>3.</p>
-                        <img src="./assets/img/ppweb/help/recept_kao_namirnica3.png" class="img-responsive" />
-                    </div>
-                    <div class="p10">
-                        <p>4.</p>
-                        <img src="./assets/img/ppweb/help/recept_kao_namirnica4.png" class="img-responsive" />
-                    </div>
-                </div>
-
-                <hr />
-            </div>
-            <div id="prices">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Cijene</h4>
-                    <p>U prozoru <strong>CIJENE</strong> odaberite namirnicu iz izbornika, upišite neto cijenu i masu i kliknite na dugme <strong>Spremi</strong>.</p>
-                    Napomene:
-                    <ul>
-                        <li>
-                            <em>Potrebno je unositi neto cijene. Npr. kod krumpira je potrebno unaprijed uračunati gubitak na masi kod guljenja kore.</em>
-                        </li>
-                        <li>
-                            <em>
-                                Ako želite dobiti ukupnu cijenu namirnica unutar jednog jelovnika vodite računa o tome da imate spremljene jedinične cijene za sve namirnice.
-                                Na primjeru sa slike imamo tri namirnice: kruh, sirni namaz i bananu. cijena je 1.54 kn zato što u bazi imamo spremljenu jediničnu cijenu samo za bananu.
-                            </em>
-                        </li>
-                    </ul>
-                </div>
-                <div class="mt10">
-                    <img src="./assets/img/ppweb/help/cijene1.png" class="img-thumbnail" />
-                </div>
-                <div class="mt10">
-                    <img src="./assets/img/ppweb/help/cijene2.png" class="img-thumbnail" />
-                </div>
-                <hr />
-            </div>
-                <div id="shoppinglist">
-                    <div class="pt60">
-                        <h4 class="text-uppercase">Košarica</h4>
-                        <p>
-                            Klikom na <strong>Košarica</strong>, iz trenutnog jelovnika se kreira popis namirnica (shopping lista) sa grupiranim namirnicama i ukupnim količinama, masom i cijenama ako su dostupne (vidi <em>tab</em> <strong>Cijene</strong>).
-                        </p>
-                    </div>
-                    <div class="mt10">
-                        <img src="./assets/img/ppweb/help/kosarica1.png" class="img-thumbnail" />
-                    </div>
-                    <p>
-                        Kao što se vidi u primjeru na slici u jelovnik je dodana 1 kriška kruha i dvije banane kao odvojene namirnice. Pogram automatski rekalkulira i grupira namirnice.
-                        U ovom slučaju za 20 konzumenata imamo 20 kriški kruha što je program preračunao u 1.5 štruce.
-                    </p>
-                    <div class="mt10">
-                        <img src="./assets/img/ppweb/help/kosarica2.png" class="img-thumbnail" />
-                    </div>
                     <hr />
                 </div>
-            <div id="newuser">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Novi korisnik</h4>
-                    <p>
-                        Korisnici STANDARD i PREMIUM paketa imaju mogućnost registracije dodatnog korisnika.
-                        U STANDARD paketu moguće je dodati jednog dodatnog korisnika, a u PREMIUM paketu 4 dodatna korisnika.<br />
-                        Svi korisnici mogu pristupiti zajedničkoj bazi podataka unutar grupe (bazi klijenata, bazi mojih namirnica, bazi mojih jelovnika i bazi mojih recepata).<br />
-                    </p>
-                </div>
-                <div class="mt10">
-                    <img src="./assets/img/ppweb/help/novi_korisnik1.png" class="img-thumbnail" />
-                </div>
-                <div class="mt10">
-                    <img src="./assets/img/ppweb/help/novi_korisnik2.png" class="img-thumbnail" />
-                </div>
-                <div class="pt20">
-                    <h5 class="text-uppercase">Administracijska prava korisnika</h5>
-                    <p>
-                        Prilikom registracije dodatnog korisnika mogu se postaviti njegova administracijska prava.<br />
-                        Postoje tri vrste administratora: <strong><em>Supervizor</em></strong>,  <strong><em>Administrator</em></strong> i <strong><em>Student</em></strong>.<br />
-                        <strong><em>Supervizor</em></strong> može dodavati i brisati korisnike, ima pristup svim klijentima, jelovnicima, receptima i namirnica spremljenih od strane svih članova unutar grupe.<br />
-                        <strong><em>Administrator</em></strong> ima pristup svim jelovnicima unutar grupe korisnika ali može uređivati i spremati samo jelovnike koje je sam izradio i ima pristup samo klijentima koje je sam spremio u aplikaciju. Administrator ima pristup svim receptima i namirnicama spremljenih od strane ostalih članova grupe.<br />
-                        <strong><em>Student</em></strong> ima pristup svim funkcijama programa koja ima i administrator osim što nema pravo pristupa administracijskom sučelju, ne može slati jelovnike na email klijenta i ne može koristiti kalendar.<br />
-                        Administratorska prava se mogu mijenjati u <em>Korisničkom profilu</em>.
-                    </p>
-                    <div class="mt10">
-                        <img src="./assets/img/ppweb/help/korisnici.png" class="img-thumbnail" />
+                <div id="newclient">
+                    <div class="pt60">
+                        <h4 class="text-uppercase">Novi klijent</h4>
+                        <ul>
+                            <li>Nakon prijave u aplikaciju, registrirajte novog klijenta ili iz baze klijenata odabrati postojećeg.</li>
+                        </ul>
+                        <img src="./assets/img/ppweb/help/start.png" class="img-thumbnail m10" />
+                        <ul>
+                            <li>Klikom na <em>dugme</em> <strong>DODAJ NOVOG KLIJENTA</strong> otvara se pozor za unos novog klijenta.</li>
+                            <li>Obavezni podaci su ime, prezime, datum rođenja i spol, dok telefon i e-mail nisu obavezni.</li>
+                            <li>Klikom na <em>dugme</em> <strong>PRETRAŽI KLIJENTE</strong> pristupate klijentima koje ste prethodno spremili u bazu.</li>
+                        </ul>
+                        <hr />
                     </div>
-                    <div class="mt10">
-                        <img src="./assets/img/ppweb/help/administratorska_prava.png" class="img-thumbnail" />
+                    <div id="inputdata">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">Ulazni podaci</h4>
+                            <p>
+                                Prvi korak u izradi jelovnika je utvrđivanje stanja uhranjenosti pojedinca na osnovi njegovih antropometrijskih veličina.<br />
+                                Odaberite datum mjerenja, unesite visinu (u cm), masu (u kg) opseg struka i bokova (u cm) i odaberite intenzitet tjelesne aktivnosti.<br />
+                                * <em>Opseg struka i bokova i masno tkivo nisu obavezni.</em><br />
+                                Za nastavak kliknite na dugme <strong>Naprijed</strong> ili <em>tab</em> <strong>Izračun</strong>
+                            </p>
+                        </div>
+                        <div>
+                            <img src="./assets/img/ppweb/help/ulazni_podaci.png" class="img-thumbnail m10" />
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="bodyfat">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">Izračun masnog tkiva</h4>
+                            <p>
+                                Izračuna masnog tkiva pomoću mjerenja kaliperom dostupan je samo za korisnike <strong>PREMIUM</strong> paketa.<br />
+                                Metode mjerenja:
+                                <ul>
+                                    <li>Mjerenje na 3 točke prema Jackson/Pollock</li>
+                                    <li>Mjerenje na 4 točke prema Jackson/Pollock</li>
+                                    <li>Mjerenje na 7 točaka prema Jackson/Pollock</li>
+                                    <li>Mjerenje prema Durnin/Womersley</li>
+                                </ul>
+                            </p>
+                        </div>
+                        <div class="p10">
+                            <img src="../app/assets/img/updates/bodyfatcalculator1.png" class="img-thumbnail" />
+                        </div>
+                        <div class="p10">
+                            <img src="../app/assets/img/updates/bodyfatcalculator2.png" class="img-thumbnail" />
+                        </div>
+                        <div class="alert alert-danger mt10">
+                            <em class="text-danger mt10">
+                                <strong>* Napomena:</strong> Postotak masnog tkiva se koristi za izračun bazalnog metabolizma (<strong>BMR</strong>) prema <strong>Katch-McArdle</strong> metodi.
+                            </em>
+                        </div>
+                        <div class="p10">
+                            <img src="../app/assets/img/updates/bmrequationsbodyfat.png" class="img-thumbnail" />
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="detailpal">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">Detaljni izračun energetske potrošnje</h4>
+                            <p>
+                                Ako želite preciznije odrediti dnevnu energetsku potrošnju kliknite na <strong>Detaljni izračun energetske potrošnje</strong><br />
+                                Klikom na <strong>Detaljni izračun energetske potrošnje</strong> otvara se prozor u kojemu je moguće izračunati detaljan izračun dnevne potrošnje.<br />
+                                Potrebno je unijeti sve aktivnosti i njihovo trajanje u periodu od 0:00 do 24:00.<br />
+                            </p>
+                        </div>
+                        <div>
+                            <img src="./assets/img/ppweb/help/detaljni_izracun.png" class="img-thumbnail m10" />
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="anthropometricmeasures">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">Praćenje antropometrijskih parametara</h4>
+                            <p>
+                                Klikom na <em>tab</em> <strong>Praćenje antropometrijskih parametara</strong> otvara se prozor u kojemu se prate antropometrijski parametri u grafičkom i tabelarnom prikazu.<br />
+                                Podaci koji se prate su masa, visina, opseg struka i opseg bokova. <br />
+                                <strong>Cilj</strong> je tjelesna masa koju aplikacija daje kao preporučenu tjelesnu masu na osnovi ulaznih parametara.
+                                Uz pretpostavku da je 1 kg masnog tkiva jednako 7000 kcal, i da je dnevni deficit <em>(energetska potrošnja - preporučena energetska potrošnja + dodatna tjelesna aktivnost)</em> jednako 500 kcal
+                                dolazi se do gubitka tjelesne mase od 2 kg mjesečno.
+                            </p>
+                        </div>
+                        <div>
+                            <img src="./assets/img/ppweb/help/pracenje_antropometrijskih_parametara.png" class="img-thumbnail m10" />
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="calculation">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">Izračun</h4>
+                            <ul>
+                                <li>
+                                    Nakon unesenih ulaznih podataka aplikacija daje izračun za indeks tjelesna mase (BMI), bazalni metabolizam (BMR), ukupnu dnevnu energetsku potrošnju (TEE), omjer opsega struka i bokova (WHR)
+                                    te preporuke za primjerenu tjelesnu masu, energetsku vrijednost jelovnika i dodatnu energetsku potrošnju.
+                                </li>
+                                <li>
+                                    Aplikacija na osnovi ulaznih parametara određuje <strong>Cilj</strong>: redukciju tjelesne mase, zadržavanje postojeće tjelesne mase, povećanje tjelesne mase ili povećanje mišićne mase.<br />
+                                    * <em>Sami možete odabrati neki drugi cilj, npr. ako program preporuči zadržavanje postojeće tjelesne mase vi možete odabrati povećanje mišićne mase, ali ne možete odabrati povećanje tjelesne mase ako osoba već ima povišenu tjelesnu masu.</em>
+                                </li>
+                                <li>Ako želite koristiti vlastite preporuke za energetski unos i dodatnu energetsku potrošnju, u sekciji <strong>Moje Preporuke</strong> unesite vlastite vrijednosti i kliknite na dugme <strong>Spremi</strong>.</li>
+                                <li>Za nastavak kliknite na dugme <strong>Naprijed</strong> ili <em>tab</em> <strong>DODATNA AKTIVNOST</strong></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <img src="./assets/img/ppweb/help/izracun.png" class="img-thumbnail m10" />
+                        </div>
+                        <div>
+                            Korisnici STANDARD i PREMIUM paketa imaju mogućnost odabira između četiri jednadžbe za izračun bazalnog metabolizma (BMR):
+                            <ul>
+                                <li>Mifflin - St Jeor</li>
+                                <li>Harris - Benedict (Roza and Shizgal)</li>
+                                <li>Harris - Benedict</li>
+                                <li>Owen</li>
+                            </ul>
+                            U START verziji bazalni metabolizam se računa prema Mifflin - St Jeor metodi
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="additionalactivities">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">Dodatna tjelesna aktivnost</h4>
+                            <ul>
+                                <li>
+                                    Ukoliko aplikacija na osnovu ulaznih podataka da preporuku za dodatnu energetsku potrošnju, u <em>prozoru</em> <strong>Dodatna aktivnost</strong>
+                                    odabirete dodatnu tjelesnu aktivnost.
+                                </li>
+                                <li>Klikom na odabranu aktivnosti program izračunava vrijeme potrebno za potrošnju kalorija (<em>dodatna energetska potrošnja</em>).</li>
+                            </ul>
+                        </div>
+                        <ul>
+                            <li>Možete odabrati i više od jedne aktivnosti s time da je potrebno ručno promijeniti trajanje aktivnosti. Važno je da je suma kalorijske vrijednosti odabranih aktivnosti jednaka ili približna preporučenoj dodatnoj energetskoj potrošnji.</li>
+                        </ul>
+                        <div class="alert alert-danger mt10">
+                            <strong>* Napomena: </strong><em>Osobe sa zdravstvenim problemima ili sumnjom na njih, prije odabira dijete moraju se posavjetovati sa svojim liječnikom.</em>
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="diet">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">Dijeta</h4>
+                            <ul>
+                                <li>U <em>prozoru</em> <strong>Dijeta</strong> aplikacija automatski nudi redukcijsku dijetu ili normalnu prehranu ovisno o indeksu tjelesne mase (BMI).</li>
+                                <li>Moguće je odabrati i druge vrste prehrane i dijete ovisno o potrebama ili zdravstvenom stanju.</li>
+                            </ul>
+                            <div class="alert alert-danger mt10">
+                                <strong>Napomena: </strong><em>Osobe sa zdravstvenim problemima ili sumnjom na njih, prije odabira dodatne tjelesne aktivnosti moraju se posavjetovati sa svojim liječnikom.</em>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="meals">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">Obroci</h4>
+                            <h5 class="text-uppercase">Standardni obroci</h5>
+                            <ul>
+                                <li>U <em>prozoru</em> <strong>Obroci</strong>, sekcija <strong>Standardni Obroci</strong> odaberite željenu kombinaciju obroka.</li>
+                            </ul>
+                            <div class="alert alert-danger mt10">
+                                <strong>Napomena: </strong><em>Doručak, ručak i večera su obavezni.</em>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="text-uppercase">Moji obroci (<em>Samo <strong>PREMIUM paket</strong></em>)</h5>
+                            <p>
+                                Korisnici <strong>PREMIUM peketa</strong> osim standardnih obroka mogu kreirati i vlastite obroke sa vlastitim nazivima i preporukama.<br />
+                                Broj obroka je limitiran na 8 dok je minimalni broj obroka 3.<br />
+                                Moje obroke možete spremiti za kasnije korištenje. Aplikacija automatski sprema <em>moje obroke</em> za svakog klijenta posebno.
+                            </p>
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="menus">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">Izrada jelovnika</h4>
+                            <ul>
+                                <li>Nakon što smo izračunali preporučenu energetsku potrošnju, odabrali dijetu i definirali obroke možemo pristupiti izradi dnevnog jelovnika.</li>
+                                <li>Sučelju za izradu jelovnika pristupamo klikom na <em>tab</em> <strong>Jelovnik</strong></li>
+                            </ul>
+                            <div>
+                                <img src="./assets/img/ppweb/help/jelovnik.png" class="img-thumbnail m10" />
+                            </div>
+                            <ul>
+                                <li>Za odabir namirnica kliknite na <em>tipku</em> <strong>Dodaj namirnicu</strong>.</li>
+                            </ul>
+                        </div>
+                        <ul>
+                            <li>U novom prozoru moguće je pretraživati namirnice po nazivu i po skupinama namirnica.</li>
+                            <li>Odabranoj namirnici možete promijeniti količinu, masu i odabrati termičku obradu.</li>
+                        </ul>
+                        <div>
+                            <img src="./assets/img/ppweb/help/namirnice_popup.png" class="img-thumbnail m10" />
+                        </div>
+                        <ul>
+                            <li>Klikom na <em>dugme</em> <strong>Dodaj</strong> odabrana namirnica se uvrštava u selektirani obrok.</li>
+                        </ul>
+                        <ul>
+                            <li>Prilikom izrade jelovnika vodi se računa da odabrane vrijednosti jelovnika budu unutar ili približno preporučenim vrijednostima</li>
+                            <li>
+                                Vrijednosti koje se prate su: energetska vrijednost jelovnika, energetska vrijednost obroka, broj jediničnih serviranja pojedine skupine namirnica
+                                mikro i makronutritivne vrijednosti i energetska vrijednost ostalih namirnica.
+                            </li>
+                            <li>Preporučene i odabrane vrijednosti su prikazane grafički i numerički, sa naznačenim odabranim i preporučenim vrijednostima.</li>
+                        </ul>
+                        <div>
+                            <img src="./assets/img/ppweb/help/analitika1.png" class="img-thumbnail m10" />
+                        </div>
+                        <div>
+                            <img src="./assets/img/ppweb/help/analitika2.png" class="img-thumbnail m10" />
+                        </div>
+                        <div>
+                            <ul>
+                                <li>Uz svaki obrok je moguće dodati opis npr. naziv i pripremu jela.</li>
+                            </ul>
+                            <img src="./assets/img/ppweb/help/opis_priprema_jela.png" class="img-thumbnail" />
+                            <div class="alert alert-danger mt10">
+                                <strong>Napomena: </strong>
+                                <em>
+                                    Uključivanje ili isključivanje naziva i opisa jela moguće je samo ako su se u opisu jela koristili <strong>separatori</strong>.
+                                    Za odvajanje naziva jela od njegovog opisa koristi se separator <strong class="bg-primary p5">~</strong> (<kbd>Alt+1(!)</kbd>).
+                                    Ako imate više jela unutar jednog obroka, jela odvajajte separatorom <strong class="bg-primary p5">|</strong> (<kbd>Alt+w</kbd>).
+                                    Separatore koristite samo ako u ispisu želite odvojeno isključiti ili uključiti naziv jela i opis jela i kod ispisa tjednih jelovnika
+                                    kada je potrebno ispisati samo naziv jela za pojedini obrok.
+                                </em>
+                            </div>
+                            <img src="./assets/img/ppweb/help/opis_jela.png" class="img-thumbnail" />
+                        </div>
+                        <ul>
+                            <li>Za prikaz mikro-nutrijenata i ostalih parametara kliknite na <em>tab</em> <strong>Analiza</strong></li>
+                            <li>Kada su ukupne vrijednosti jelovnika unutar preporučenih, jelovnik je gotov.</li>
+                            <li>Jelovnik je moguće spremiti u bazu i kasnije ga koristiti kao predložak za izradu novog jelovnika.</li>
+                        </ul>
+                        <p>Postoje dvije opcije spremanja jelovnika: kao <strong>Jelovnik</strong> i kao <strong>Recept</strong></p>
+                        <div>
+                            <img src="./assets/img/ppweb/help/spremi_jelovnik_opcije.png" class="img-thumbnail m10" />
+                        </div>
+                        <h4 class="text-uppercase">Ispis</h4>
+                        <ul>
+                            <li>Klikom na tipku <strong>PDF</strong> otvara se prozor u kojemu možete kreirati PDF datoteku.</li>
+                            <li>
+                                Kada je jelovnik izrađen za grupu korisnika sa jednakom energetskom potrošnjom, npr. učenički domovi,
+                                moguće je odabrati broj konzumentat tog jelovnika, pri čemu se dobiva ukupna količina namirnica za odabrani broj korisnika.
+                            </li>
+                            <li>Također, moguće je mijenjati postavke ispisa na način da možete odabrati koje podatke želite prikazati u ispisu, a koje ne.</li>
+                            <li>Klikom na tipku <strong>Košarica</strong> ispisuje se shopping lista namirnica sa ukupnim količinama i cijenama.</li>
+                            <li>
+                                Jelovnik možete poslati direktno na e-mail klijenta klikom na tipku <strong>Ispis</strong> nakon čega se otvara prozor sa prikazom i opcijama ispisa.
+                                <!--Za slanje jelovnika kliknuti na tipku <strong>Pošalji</strong>. Ako e-mail želite poslati kao PDF-datoteku, prije slanja kliknuti na tipku <strong>Kreiraj PDF</strong>.-->
+                            </li>
+                        </ul>
+                        <hr />
+                    </div>
+                    <div id="weeklymenu">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">Tjedni jelovnik</h4>
+                            <ul>
+                                <li>Klikom na <em>tab</em> <strong>Tjedni Jelovnik</strong> otvara se sučelje za izradu tjednih jelovnika.</li>
+                                <li>Upisati naziv jelovnika i za svaki dan u tjednu odabrati prethodno izrađene dnevne jelovnike.</li>
+                            </ul>
+                            <div>
+                                <img src="./assets/img/ppweb/help/tjedni_jelovnik.png" class="img-thumbnail m10" />
+                            </div>
+                            <div class="alert alert-danger mt10">
+                                <strong>Napomena: </strong><em>Dnevni jelovnici koje se koriste za izradu tjednog jelovnika moraju imati isti raspored obroka.</em>
+                            </div>
+                            <ul>
+                                <li>U <strong>Postavkama ispisa</strong> odabrati veličinu i orijentaciju stranice i vrijednosti koje želimo da budu vidljive u ispisu.</li>
+                            </ul>
+                            <div class="alert alert-danger mt10">
+                                <strong>Napomena: </strong>
+                                <p>
+                                    Za prikaz samo naziva jela u pojedinom obroku, kod izrade dnevnih jelovnika potrebno je odvojiti naziva jela od njegovog opisa korištenjem separator <strong class="p5">~</strong> <kbd>Alt+1(!)</kbd>.
+                                    Ako imate više jela unutar jednog obroka, jela odvajajte separatorom <strong class="p5">|</strong> <kbd>Alt+w</kbd>.<br />
+                                    Npr: Naziv jela 1~Opis jela 1|Naziv jela 2~Opis jela 2.
+                                </p>
+                            </div>
+                            <div class="p10">
+                                <img src="../app/assets/img/updates/separatorweeklymenu.png" class="img-thumbnail" />
+                            </div>
+                            <div class="p10">
+                                <img src="../app/assets/img/updates/weeklymenupdf.png" class="img-thumbnail" />
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="myfoods">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">Moje namirnice</h4>
+                            <ul>
+                                <li>Aplikacija daje mogućnost unosa vlastitih namirnica i njihovih makro i mikronutritivnih vrijednosti.</li>
+                                <li>
+                                    Kod izrade jelovnika <strong>Mojim namirnicama</strong> možete pristupiti klikom na skupinu <strong>Moje namirnice</strong>.
+                                </li>
+                            </ul>
+                            <div class="alert alert-danger mt10">
+                                <strong>Napomena: </strong><em>
+                                    Ukoliko prilikom unosa vlastite namirnice ne odaberete vrijednost jediničnog serviranja za tu namirnicu, namirnica će biti svrstana u kategoriju
+                                    ostale namirnice.
+                                </em>
+                            </div>
+                        </div>
+                        <div>
+                            <img src="./assets/img/ppweb/help/moje_namirnice.png" class="img-thumbnail" />
+                        </div>
+                        <hr />
+                    </div>
+                    <div id="usda">
+                        <div class="pt60">
+                            <h4 class="text-uppercase">USDA baza namirnica</h4>
+                            <div>
+                                <p>
+                                    Korisnicima PREMIUM paketa omogućen je pristup USDA bazi namirnica (<em>nacionalna baza podataka nutritivnih sastojaka namirnica američkog ministarstva poljoprivrede</em>). Baza sadrži nutritivne vrijednosti 313191 namirnica.
+                                </p>
+                                <p>
+                                    Za pristup bazi potrebno je kliknuti na dugme <strong>USDA</strong> u <em>tabu</em> <strong>Moje Namirnice</strong>.
+                                </p>
+                                <div class="p10">
+                                    <img src="../app/assets/img/updates/usda1.png" class="img-thumbnail" />
+                                </div>
+                                <p>Odabrati namirnicu i mjeru i kliknuti na dugme <strong>KOPIRAJ NAMIRNICU U MOJE NAMIRNICE</strong>.</p>
+                                <div class="p10">
+                                    <img src="../app/assets/img/updates/usda2.png" class="img-thumbnail" />
+                                </div>
+                                <p>Baza je na engleskom jeziku pa je namirnicu i mjeru potrebno prevesti. Odabrati skupinu namirnica, jedinično serviranje i kliknuti na dugme <strong>Spremi</strong>.</p>
+                                <div class="p10">
+                                    <img src="../app/assets/img/updates/usda3.png" class="img-thumbnail" />
+                                </div>
+                                Nakon što se namirnica spremi pristupa joj se na isti način kao i ostalim namirnicama.
+                                <div class="p10">
+                                    <img src="../app/assets/img/updates/usda4.png" class="img-thumbnail" />
+                                </div>
+                                <div class="p10">
+                                    <img src="../app/assets/img/updates/usda5.png" class="img-thumbnail" />
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                        <div id="myrecipes">
+                            <div class="pt60">
+                                <h4 class="text-uppercase">Moji recepti</h4>
+                                <p>Recepte je moguće izrađivati na dva načina:</p>
+                                <ul>
+                                    <li>Klikom na <strong>MOJI RECEPTI</strong> u lijevom izborniku ili</li>
+                                    <li>Preko prozora za izradu jelovnika <strong>JELOVNIK</strong></li>
+                                </ul>
+                                <p>Kada recept izrađujemo u prozoru <strong>JELOVNIK</strong> namirnice unosimo u jedan od obroka, npr. doručak.</p>
+                                <div class="alert alert-danger mt10">
+                                    <em>* Napomena: Samo one namirnice koje se nalaze u trenutnom selektiranom obroku će se spremiti u recept.</em><br />
+                                    Nakon što unesete sve namirnice kliknite na tipku <strong>Spremi Kao Recept</strong>.
+                                </div>
+                                <p>
+                                    U prozoru <strong>MOJI RECEPTI</strong> upišite naziv i opis recepta i kliknite na tipku <strong>Spremi</strong>.
+                                </p>
+                            </div>
+                            <div class="mt10">
+                                <img src="./assets/img/ppweb/help/moji_recepti1.png" class="img-thumbnail" />
+                            </div>
+                            <div class="mt10">
+                                <img src="./assets/img/ppweb/help/moji_recepti2.png" class="img-thumbnail" />
+                            </div>
+                            <div class="p10">
+                                <p>Postoje dva načina spremanja recepata:</p>
+                                <ol>
+                                    <li>Standardno spremanje</li>
+                                    <li>Spremanje recepta kao namirnice</li>
+                                </ol>
+                                <p>
+                                    Uobičajeno je da kada recept uvrstimo u jelovnik, vidimo sve njegove sastavne namirnice. Ako želimo da u jelovniku bude vidljiv samo naziv recepta i njegove ukupne vrijednosti
+                                    onda to radimo na način da nakon izrade recepta kliknemo na tipku <strong>Spremi Kao Namirnicu</strong>. Recept će biti automatski spremljen i kao recept u <strong>Moje Recepte</strong> sa svim njegovim sastavnim namirnicama
+                                    i kao pojedinačna namirnica u <strong>Moje Namirnice</strong> sa ukupnom sumom nutrijenata iz tog recepta.
+                                </p>
+                                <p class="text-success">
+                                    <em>
+                                        <strong>Primjer:</strong> Čaj sa medom možemo spremiti kao <strong>Moju Namirnicu</strong> klikom na dugme <strong>Spremi Kao Namirnicu</strong><br />
+                                        Namirnica (recept) će automatski biti spremljena i u <strong>Moje Namirnice</strong> i u <strong>Moje Recepte</strong>. Ako želimo u jelovniku prikazati taj recept bez
+                                        njegovih sastavnih namirnica onda taj recept odaberemo iz rubrike <strong>Moje Namirnice</strong>. U protivnom, ako želimo da u jelovniku budu vidljive sve namirnice iz tog recepta onda
+                                        recept dodamo klasično klikom na <strong>Dodaj Recept</strong>.
+                                    </em>
+                                </p>
+                                <div class="alert alert-danger mt10">
+                                    <em class="text-danger">
+                                        <strong>* Napomena:</strong>
+                                        Kada brišemo recept onda se automatski briše i recept spremljen u <strong>Moje Namirnice</strong>. Ali ako taj isti recept brišemo u <strong>Mojim Namirnicama</strong> onda on
+                                        ostaje sačuvan u <strong>Mojim Receptima</strong>.<br />
+                                        Ako želimo urediti recept spremljen u <strong>Moje Namirnice</strong> onda ga otvaramo u prozoru <strong>Moji Recepti</strong>.
+                                    </em>
+                                </div>
+                                <div class="p10">
+                                    <p>1.</p>
+                                    <img src="./assets/img/ppweb/help/recept_kao_namirnica1.png" class="img-responsive" />
+                                </div>
+                                <div class="p10">
+                                    <p>2.</p>
+                                    <img src="./assets/img/ppweb/help/recept_kao_namirnica2.png" class="img-responsive" />
+                                </div>
+                                <div class="p10">
+                                    <p>3.</p>
+                                    <img src="./assets/img/ppweb/help/recept_kao_namirnica3.png" class="img-responsive" />
+                                </div>
+                                <div class="p10">
+                                    <p>4.</p>
+                                    <img src="./assets/img/ppweb/help/recept_kao_namirnica4.png" class="img-responsive" />
+                                </div>
+                            </div>
+
+                            <hr />
+                        </div>
+                        <div id="prices">
+                            <div class="pt60">
+                                <h4 class="text-uppercase">Cijene</h4>
+                                <p>U prozoru <strong>CIJENE</strong> odaberite namirnicu iz izbornika, upišite neto cijenu i masu i kliknite na dugme <strong>Spremi</strong>.</p>
+                                Napomene:
+                                <ul>
+                                    <li>
+                                        <em>Potrebno je unositi neto cijene. Npr. kod krumpira je potrebno unaprijed uračunati gubitak na masi kod guljenja kore.</em>
+                                    </li>
+                                    <li>
+                                        <em>
+                                            Ako želite dobiti ukupnu cijenu namirnica unutar jednog jelovnika vodite računa o tome da imate spremljene jedinične cijene za sve namirnice.
+                                            Na primjeru sa slike imamo tri namirnice: kruh, sirni namaz i bananu. cijena je 1.54 kn zato što u bazi imamo spremljenu jediničnu cijenu samo za bananu.
+                                        </em>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mt10">
+                                <img src="./assets/img/ppweb/help/cijene1.png" class="img-thumbnail" />
+                            </div>
+                            <div class="mt10">
+                                <img src="./assets/img/ppweb/help/cijene2.png" class="img-thumbnail" />
+                            </div>
+                            <hr />
+                        </div>
+                        <div id="shoppinglist">
+                            <div class="pt60">
+                                <h4 class="text-uppercase">Košarica</h4>
+                                <p>
+                                    Klikom na <strong>Košarica</strong>, iz trenutnog jelovnika se kreira popis namirnica (shopping lista) sa grupiranim namirnicama i ukupnim količinama, masom i cijenama ako su dostupne (vidi <em>tab</em> <strong>Cijene</strong>).
+                                </p>
+                            </div>
+                            <div class="mt10">
+                                <img src="./assets/img/ppweb/help/kosarica1.png" class="img-thumbnail" />
+                            </div>
+                            <p>
+                                Kao što se vidi u primjeru na slici u jelovnik je dodana 1 kriška kruha i dvije banane kao odvojene namirnice. Pogram automatski rekalkulira i grupira namirnice.
+                                U ovom slučaju za 20 konzumenata imamo 20 kriški kruha što je program preračunao u 1.5 štruce.
+                            </p>
+                            <div class="mt10">
+                                <img src="./assets/img/ppweb/help/kosarica2.png" class="img-thumbnail" />
+                            </div>
+                            <hr />
+                        </div>
+                        <div id="newuser">
+                            <div class="pt60">
+                                <h4 class="text-uppercase">Novi korisnik</h4>
+                                <p>
+                                    Korisnici STANDARD i PREMIUM paketa imaju mogućnost registracije dodatnog korisnika.
+                                    U STANDARD paketu moguće je dodati jednog dodatnog korisnika, a u PREMIUM paketu 4 dodatna korisnika.<br />
+                                    Svi korisnici mogu pristupiti zajedničkoj bazi podataka unutar grupe (bazi klijenata, bazi mojih namirnica, bazi mojih jelovnika i bazi mojih recepata).<br />
+                                </p>
+                            </div>
+                            <div class="mt10">
+                                <img src="./assets/img/ppweb/help/novi_korisnik1.png" class="img-thumbnail" />
+                            </div>
+                            <div class="mt10">
+                                <img src="./assets/img/ppweb/help/novi_korisnik2.png" class="img-thumbnail" />
+                            </div>
+                            <div class="pt20">
+                                <h5 class="text-uppercase">Administracijska prava korisnika</h5>
+                                <p>
+                                    Prilikom registracije dodatnog korisnika mogu se postaviti njegova administracijska prava.<br />
+                                    Postoje tri vrste administratora: <strong><em>Supervizor</em></strong>,  <strong><em>Administrator</em></strong> i <strong><em>Student</em></strong>.<br />
+                                    <strong><em>Supervizor</em></strong> može dodavati i brisati korisnike, ima pristup svim klijentima, jelovnicima, receptima i namirnica spremljenih od strane svih članova unutar grupe.<br />
+                                    <strong><em>Administrator</em></strong> ima pristup svim jelovnicima unutar grupe korisnika ali može uređivati i spremati samo jelovnike koje je sam izradio i ima pristup samo klijentima koje je sam spremio u aplikaciju. Administrator ima pristup svim receptima i namirnicama spremljenih od strane ostalih članova grupe.<br />
+                                    <strong><em>Student</em></strong> ima pristup svim funkcijama programa koja ima i administrator osim što nema pravo pristupa administracijskom sučelju, ne može slati jelovnike na email klijenta i ne može koristiti kalendar.<br />
+                                    Administratorska prava se mogu mijenjati u <em>Korisničkom profilu</em>.
+                                </p>
+                                <div class="mt10">
+                                    <img src="./assets/img/ppweb/help/korisnici.png" class="img-thumbnail" />
+                                </div>
+                                <div class="mt10">
+                                    <img src="./assets/img/ppweb/help/administratorska_prava.png" class="img-thumbnail" />
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                        <!--<div id="settings">
+                            <div class="pt60">
+                                <h4 class="text-uppercase">Postavke</h4>
+                                <ul>
+                                    <li>Postavke jezika</li>
+                                    <li>Postavke valute</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <img src="./assets/img/ppweb/help/.jpg" class="img-thumbnail" />
+                            </div>
+                            <hr />
+                        </div>
+                        <div id="additionaloptions">
+                            <div class="pt60">
+                                <h4 class="text-uppercase">Dodatne opcije</h4>
+                            </div>
+                            <div>
+                                <img src="./assets/img/ppweb/help/.jpg" class="img-thumbnail" />
+                            </div>
+                            <hr />
+                        </div>-->
+                    </div>
+                    <div class="text-center navbar-fixed-bottom" style="padding:0px 0px 10px 0px">
+                        <a href="#home" class="text-primary" title="Na vrh"><span class="fa fa-chevron-up fa-2x"></span></a>
                     </div>
                 </div>
-                <hr />
             </div>
-            <!--<div id="settings">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Postavke</h4>
-                    <ul>
-                        <li>Postavke jezika</li>
-                        <li>Postavke valute</li>
-                    </ul>
-                </div>
-                <div>
-                    <img src="./assets/img/ppweb/help/.jpg" class="img-thumbnail" />
-                </div>
-                <hr />
-            </div>
-            <div id="additionaloptions">
-                <div class="pt60">
-                    <h4 class="text-uppercase">Dodatne opcije</h4>
-                </div>
-                <div>
-                    <img src="./assets/img/ppweb/help/.jpg" class="img-thumbnail" />
-                </div>
-                <hr />
-            </div>-->
         </div>
-        <div class="text-center navbar-fixed-bottom" style="padding:0px 0px 10px 0px">
-            <a href="#home" class="text-primary" title="Na vrh"><span class="fa fa-chevron-up fa-2x"></span></a>
+        <div class="footer pt60 bg-grey text-right">
+            <span class="text-small m10">Copyright © 2020 IG PROG</span>
         </div>
-    </div>
-    </div>
-    </div>
-    <div class="footer pt60 bg-grey text-right">
-        <span class="text-small m10">Copyright © 2020 IG PROG</span>
     </div>
 
     <script src="assets/js/main.js?v=1.0.0"></script>
