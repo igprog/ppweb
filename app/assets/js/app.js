@@ -482,6 +482,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
             return false;
         }*/
+        if (x.hip == '') { x.hip = 0; }
+        if (x.waist == '') { x.waist = 0; }
+        if (x.bodyFat.bodyFatPerc == '') { x.bodyFat.bodyFatPerc = 0; }
         x.userId = $rootScope.user.userId;
         x.clientId = x.clientId == null ? $rootScope.client.clientId : x.clientId;
         x.date = functions.dateToString(x.date);
@@ -3799,7 +3802,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 .controller('menuCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'charts', '$timeout', 'functions', '$translate', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, charts, $timeout, functions, $translate, $state) {
     if ($rootScope.clientData === undefined) {
-        //$rootScope.newTpl = 'assets/partials/meals.html';
         $state.go('meals');
         $rootScope.selectedNavItem = 'meals';
         return false;
@@ -3826,7 +3828,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $rootScope.selectedFoods = $rootScope.selectedFoods == undefined ? [] : $rootScope.selectedFoods;
 
     if ($rootScope.clientData.meals.length < 3) {
-        //$rootScope.newTpl = 'assets/partials/meals.html';
         $state.go('meals');
         $rootScope.selectedNavItem = 'meals';
         functions.alert($translate.instant('choose at least 3 meals'), '');
@@ -3838,14 +3839,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             if (clientData.myMeals.data != null) {
                 if (clientData.myMeals.data.meals.length >= 2 && $rootScope.isMyMeals == true) {
                     clientData.meals = clientData.myMeals.data.meals;
-                    energyPerc = clientData.myMeals.data.energyPerc; // $rootScope.myMeals.data.energyPerc;
+                    energyPerc = clientData.myMeals.data.energyPerc;
                 }
             }
         }
         $http({
             url: $sessionStorage.config.backend + webService + '/GetRecommendations',
             method: "POST",
-            data: { client: clientData, myRecommendedEnergyIntake: $rootScope.myCalculation.recommendedEnergyIntake, myMealsEnergyPerc: energyPerc }
+            data: { client: clientData, recommendedEnergyIntake: $rootScope.calculation.recommendedEnergyIntake,  myRecommendedEnergyIntake: $rootScope.myCalculation.recommendedEnergyIntake, myMealsEnergyPerc: energyPerc }
         })
        .then(function (response) {
            $rootScope.recommendations = JSON.parse(response.data.d);
@@ -3859,6 +3860,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
            }
        });
     };
+    getRecommendations($rootScope.clientData);
 
     var init = function () {
         $http({
