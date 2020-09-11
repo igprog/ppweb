@@ -63,10 +63,10 @@
                         <td>
                             <a ng-disabled="addFoodBtn" href="" class="btn btn-primary" ng-click="openFoodPopup(null,null)"><i ng-class="addFoodBtnIcon"></i> {{'add food' | translate}}</a>
                         </td>
-                        <td colspan="4" class="text-right border-top">
+                        <th colspan="4" class="text-right border-top">
                             <label>{{'total' | translate}}:</label>
-                        </td>
-                        <td class="text-right border-top"><label>{{totals.energy}} kcal</label></td>
+                        </th>
+                        <th class="text-right border-top"><label>{{totals.energy}} kcal</label></th>
                         <!--<td class="text-right"><label>{{getTotEnergy(recipe.data.selectedFoods) | number : 1}} kcal</label></td>-->
                     </tr>
                 </table>

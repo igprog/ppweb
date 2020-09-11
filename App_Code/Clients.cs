@@ -23,6 +23,7 @@ public class Clients : System.Web.Services.WebService {
     DataBase db = new DataBase();
     Users.CheckUser c = new Users.CheckUser();
     Translate t = new Translate();
+    Calculations C = new Calculations();
 
     public Clients() {
     }
@@ -333,6 +334,8 @@ public class Clients : System.Web.Services.WebService {
                             x.isActive = reader.GetValue(9) == DBNull.Value ? 1 : reader.GetInt32(9);
                             x.note = reader.GetValue(10) == DBNull.Value ? "" : reader.GetString(10);
                             x.profileImg = GetProfileImg(userId, x.clientId);
+                            x.clientData = new ClientsData.NewClientData();
+                            x.clientData.age = C.Age(x.birthDate);
                             xx.Add(x);
                         }
                     }   

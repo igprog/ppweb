@@ -11,11 +11,17 @@
   });
 
   // Close any open menu accordions when window is resized below 768px
-  $(window).resize(function() {
+  var collapse = function () {
       if ($(window).width() < 768) {
+          $(".sidebar").toggleClass("toggled");
           $('.sidebar .collapse').collapse('hide');
       };
+  }
+
+  $(window).resize(function () {
+      collapse();
   });
+  collapse();
 
   // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
   $('body.fixed-nav .sidebar').on('mousewheel DOMMouseScroll wheel', function(e) {

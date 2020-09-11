@@ -1972,6 +1972,7 @@
   "client database is empty": "База клијената је празна",
   "add client": "Додај клијента",
   "old version": "стара верзија",
-  "remove": "Бриши"
+  "remove": "Бриши",
+  "menu_": "Изборник"
 
 }
