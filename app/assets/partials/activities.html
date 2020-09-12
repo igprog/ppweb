@@ -7,14 +7,14 @@
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <p>{{'recommended additional energy expenditure' | translate}}: <span class="h5 font-weight-bold text-gray-800">{{calculation.recommendedEnergyExpenditure}} {{'kcal' | translate}}</span></p>
+                <p>{{'recommended additional energy expenditure' | translate}}: <span class="h5 font-weight-bold text-gray-800 text-nowrap">{{calculation.recommendedEnergyExpenditure}} {{'kcal' | translate}}</span></p>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
                 <fieldset class="fieldset-border">
                     <legend class="fieldset-border">{{'choose additional physical activity' | translate}}</legend>
-                    <div class="d-none d-sm-block">
+                    <div>
                         <div class="input-group">
                             <input ng-model="searchValue" class="form-control search" type="text" placeholder="{{'search' | translate}}..." autofocus />
                             <span class="input-group-append">
@@ -38,14 +38,14 @@
                             </table>
                         </div>
                     </div>
-                    <div class="d-block d-sm-none">
+                    <!--<div class="d-block d-sm-none">
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>{{'select activity' | translate}}...</label>
                             <md-select ng-model="x" ng-change="openPopup(x)">
                                 <md-option ng-value="x" ng-repeat="x in activities | filter:{activity:searchValue} | orderBy:order | filter:{isSport:1}">{{x.activity}}</md-option>
                             </md-select>
                         </md-input-container>
-                    </div>
+                    </div>-->
                 </fieldset>
             </div>
             <div class="col-sm-6">

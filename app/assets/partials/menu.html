@@ -64,10 +64,10 @@
                                 <tbody class="small">
                                     <tr ng-if="currentMenu.data.selectedFoods.length>0">
                                         <th colspan="8"></th>
-                                        <th class="text-right border-bottom">{{'energy' | translate}} <span class="small">(<em>{{'kcal' | translate}}</em>)</span></th>
-                                        <th class="text-right border-bottom">{{'carbs' | translate}}. <span class="small">(<em>{{'g' | translate}}</em>)</span></th>
-                                        <th class="text-right border-bottom">{{'prot' | translate}}. <span class="small">(<em>{{'g' | translate}}</em>)</span></th>
-                                        <th class="text-right border-bottom">{{'fats' | translate}}. <span class="small">(<em>{{'g' | translate}}</em>)</span></th>
+                                        <th class="text-right border-bottom">{{'energy' | translate}}<br /> <span class="small text-nowrap">(<em>{{'kcal' | translate}}</em>)</span></th>
+                                        <th class="text-right border-bottom">{{'carbs' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
+                                        <th class="text-right border-bottom">{{'prot' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
+                                        <th class="text-right border-bottom">{{'fats' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
                                     </tr>
                                     <tr ng-if="currentMenu.data.selectedFoods.length>0" ng-repeat="x in currentMenu.data.selectedFoods | filter:filterMeal track by $index" ng-class="getFoodGroupClass(x.foodGroup.code)" title="{{x.foodGroup.title}}">
                                         <td>
@@ -133,10 +133,10 @@
                                                 <i class="fa fa-info-circle text-info" style="cursor:pointer" ng-click="openColorGroupsInfoPopup()"></i>
                                             </div>
                                         </td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top" style="vertical-align:top"><span class="font-weight-bold">{{totals.mealsTotal[$index].energy.val | number:1}}</span> <br /><span class="small"><em>({{totals.mealsTotal[$index].energy.perc| number:1}} %)</em></span></td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top" style="vertical-align:top"><span class="font-weight-bold">{{totals.mealsTotal[$index].carbohydrates.val | number:1}}</span> <br /><span class="small"><em>({{totals.mealsTotal[$index].carbohydrates.perc| number:1}} %)</em></span></td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top" style="vertical-align:top"><span class="font-weight-bold">{{totals.mealsTotal[$index].proteins.val | number:1}}</span> <br /><span class="small"><em>({{totals.mealsTotal[$index].proteins.perc| number:1}} %)</em></span></td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top" style="vertical-align:top"><span class="font-weight-bold">{{totals.mealsTotal[$index].fats.val | number:1}}</span> <br /><span class="small"><em>({{totals.mealsTotal[$index].fats.perc| number:1}} %)</em></span></td>
+                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top" style="vertical-align:top"><span class="font-weight-bold">{{totals.mealsTotal[$index].energy.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].energy.perc| number:1}} %)</em></span></td>
+                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top" style="vertical-align:top"><span class="font-weight-bold">{{totals.mealsTotal[$index].carbohydrates.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].carbohydrates.perc| number:1}} %)</em></span></td>
+                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top" style="vertical-align:top"><span class="font-weight-bold">{{totals.mealsTotal[$index].proteins.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].proteins.perc| number:1}} %)</em></span></td>
+                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top" style="vertical-align:top"><span class="font-weight-bold">{{totals.mealsTotal[$index].fats.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].fats.perc| number:1}} %)</em></span></td>
                                     </tr>
                                 </tbody>
                             </table>

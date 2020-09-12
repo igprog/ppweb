@@ -19,6 +19,9 @@
   }
 
   $(window).resize(function () {
+      var w = $(window).width();
+      if ($(window).width() == w) return;
+      w = $(window).width();
       collapse();
   });
   collapse();

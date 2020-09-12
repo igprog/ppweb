@@ -27,7 +27,7 @@
                 <tr class="bg-light">
                     <th></th>
                     <th></th>
-                    <th class="text-right">{{'value' | translate}}</th>
+                    <th class="text-right">{{'calculation' | translate}}</th>
                     <th></th>
                     <th>{{'note' | translate}}</th>
                     <th class="text-center">{{'recommendations' | translate}}</th>
@@ -179,7 +179,7 @@
                     </td>
                     <td style="max-width:160px; min-width:130px">
                         <div class="input-group">
-                            <input type="text" ng-model="goalWeightValue" class="form-control text-right" allow-only-numbers ng-change="changeGoalWeightValue(goalWeightValue)">
+                            <input type="text" ng-model="goalWeightValue" style="max-width:150px" class="form-control text-right" allow-only-numbers ng-change="changeGoalWeightValue(goalWeightValue)">
                             <div class="input-group-append">
                                 <span class="input-group-text">{{'kg' | translate}}</span>
                             </div>
@@ -240,11 +240,11 @@
                         </div>
                     </td>
                     <td>
-                        <span class="font-weight-bold pr-2">{{calculation.recommendedEnergyIntake | number:0}} {{'kcal' | translate}}</span>
+                        <span class="font-weight-bold text-nowrap pr-2">{{calculation.recommendedEnergyIntake | number:0}} {{'kcal' | translate}}</span>
                     </td>
-                    <td style="width:220px" class="bg-light pl-2">
+                    <td style="max-width:160px; min-width:150px" class="bg-light pl-2">
                         <div class="input-group">
-                            <input type="number" ng-model="myCalculation.recommendedEnergyIntake" style="max-width:160px; min-width:130px" class="form-control text-right bg-light" allow-only-numbers>
+                            <input type="number" ng-model="myCalculation.recommendedEnergyIntake" style="max-width:150px" class="form-control text-right bg-light" allow-only-numbers>
                             <div class="input-group-append">
                                 <span class="input-group-text">{{'kcal' | translate}}</span>
                             </div>
@@ -252,8 +252,8 @@
                     </td>
                     <td rowspan="2" class="bg-light pl-2">
                         <div class="text-capitalize mt-2">
-                            <button class="btn btn-outline-primary mt-1 mb-1" ng-click="saveMyCalculation(myCalculation)"><i class="fa fa-floppy-o"></i> {{'save' | translate}}</button>
-                            <button class="btn btn-outline-danger text-capitalize mt-1 mb-1" ng-click="clearMyCalculation()"><span><i class="fa fa-times"></i> {{'clear' | translate}}</span></button>
+                            <button class="btn btn-outline-primary btn-circle mt-1 mb-1" title="{{'save' | translate}}" ng-click="saveMyCalculation(myCalculation)"><i class="fa fa-floppy-o"></i></button>
+                            <button class="btn btn-outline-danger btn-circle mt-1 mb-1" title="{{'clear' | translate}}" ng-click="clearMyCalculation()"><span><i class="fa fa-times"></i></span></button>
                         </div>
                     </td>
                 </tr>
@@ -264,11 +264,11 @@
                             {{'additional energy expenditure' | translate}}
                         </div>
                     <td>
-                        <span class="font-weight-bold pr-2">{{calculation.recommendedEnergyExpenditure | number:0}} {{'kcal' | translate}}</span>
+                        <span class="font-weight-bold text-nowrap pr-2">{{calculation.recommendedEnergyExpenditure | number:0}} {{'kcal' | translate}}</span>
                     </td>
-                    <td style="width:220px" class="bg-light pl-2">
+                    <td style="max-width:160px; min-width:150px" class="bg-light pl-2">
                         <div class="input-group">
-                            <input type="number" ng-model="myCalculation.recommendedEnergyExpenditure" style="max-width:160px; min-width:130px" class="form-control text-right bg-light" allow-only-numbers>
+                            <input type="number" ng-model="myCalculation.recommendedEnergyExpenditure" style="max-width:150px" class="form-control text-right bg-light" allow-only-numbers>
                             <div class="input-group-append">
                                 <span class="input-group-text">{{'kcal' | translate}}</span>
                             </div>

@@ -555,10 +555,11 @@ public class Foods : System.Web.Services.WebService {
     public string GetRecommendations(ClientsData.NewClientData client, string recommendedEnergyIntake, string myRecommendedEnergyIntake, List<MealsRecommendationEnergy> myMealsEnergyPerc) {
         Recommendations x = new Recommendations();
         Calculations c = new Calculations();
-        if (!string.IsNullOrEmpty(recommendedEnergyIntake)) {
-            x.energy = Convert.ToInt32(recommendedEnergyIntake);
+
+        if (!string.IsNullOrEmpty(myRecommendedEnergyIntake)) {
+            x.energy = Convert.ToInt32(myRecommendedEnergyIntake);
         } else {
-            x.energy = string.IsNullOrEmpty(myRecommendedEnergyIntake) ? c.RecommendedEnergyIntake(client) : Convert.ToInt32(myRecommendedEnergyIntake);
+            x.energy = string.IsNullOrEmpty(recommendedEnergyIntake) ? c.RecommendedEnergyIntake(client) : Convert.ToInt32(recommendedEnergyIntake);
         }
 
         //TODO

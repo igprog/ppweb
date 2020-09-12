@@ -199,7 +199,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
             int i = 1;
             int currPage = 1;
-            int rowsPerPage = 42;
+            int rowsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["RowsPerPage"]); // 51; // 42;
             menuPage = string.Format("{0}: {1}", t.Tran("page", lang), currPage);
             bool firstPage = true;
             foreach (string m in orderedMeals) {
