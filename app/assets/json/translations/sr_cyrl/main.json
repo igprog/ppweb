@@ -1973,6 +1973,8 @@
   "add client": "Додај клијента",
   "old version": "стара верзија",
   "remove": "Бриши",
-  "menu_": "Изборник"
+  "menu_": "Изборник",
+  "you are offline": "Niste na mreži",
+  "check your connection and try again": "Проверите везу и покушајте поново"
 
 }

@@ -1967,8 +1967,9 @@
   "add client": "Add Client",
   "old version": "old version",
   "remove": "Remove",
-  "menu_": "Menu"
-
+  "menu_": "Menu",
+  "you are offline": "You are offline",
+  "check your connection and try again": "Check your connection and try again"
 
 
 }

@@ -851,6 +851,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         $scope.changeQuantity = function (x, type) {
+            if (!functions.checkOnline()) { return false };
             isEditMode = false;
             if (x.quantity > 0.0001 && isNaN(x.quantity) == false && x.mass > 0.0001 && isNaN(x.mass) == false) {
                 var currentFood = $scope.food.food;  // << in case where user change food title
@@ -931,12 +932,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 .controller('loginCtrl', ['$scope', '$http', '$localStorage', '$sessionStorage', '$window', '$rootScope', 'functions', '$translate', '$mdDialog', '$state', function ($scope, $http, $localStorage, $sessionStorage, $window, $rootScope, functions, $translate, $mdDialog, $state) {
     var webService = 'Users.asmx';
 
-    //$scope.toggleTpl = function (x) {
-    //    $scope.tpl = x;
-    //}
-    //$scope.toggleTpl('loginTpl');
-
     $scope.login = function (u, p) {
+        if (!functions.checkOnline()) { return false };
         $scope.errorMesage = null;
         if (functions.isNullOrEmpty(u) || functions.isNullOrEmpty(p)) {
             $scope.errorLogin = true;
@@ -3958,6 +3955,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.toggleAnalytics('chartsTpl');
 
     $scope.changeQuantity = function (x, type, idx) {
+        if (!functions.checkOnline()) { return false };
         if (x.quantity > 0.0001 && isNaN(x.quantity) == false && x.mass > 0.0001 && isNaN(x.mass) == false) {
 			$scope.selectedThermalTreatment = null; //TODO
             angular.forEach($rootScope.currentMenu.data.selectedFoods[idx].thermalTreatments, function (value, key) {
@@ -3993,6 +3991,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.openFoodPopup = function (x, idx) {
+        if (!functions.checkOnline()) { return false };
         $scope.addFoodBtn = true;
         $scope.addFoodBtnIcon = 'fa fa-spinner fa-spin';
         if ($rootScope.user.licenceStatus == 'demo' && $rootScope.currentMenu.data.selectedFoods.length > 9) {
@@ -6330,6 +6329,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.openFoodPopup = function (food, idx) {
+        if (!functions.checkOnline()) { return false };
         $scope.addFoodBtn = true;
         $scope.addFoodBtnIcon = 'fa fa-spinner fa-spin';
         $mdDialog.show({
