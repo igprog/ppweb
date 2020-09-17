@@ -69,13 +69,6 @@ angular.module('functions', [])
             sel.removeAllRanges();
             sel.addRange(range);
             document.execCommand('copy');
-        },
-        checkOnline: function () {
-            var check = navigator.onLine;
-            if (!check) {
-                this.alert($translate.instant('you are offline'), $translate.instant('check your connection and try again'));
-            }
-            return check;
         }
     }
 }]);
