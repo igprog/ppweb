@@ -431,6 +431,9 @@
   "profile image": "Профилна слика",
   "attach the image": "Приложите слику",
   "enter the activation code": "Упишите активацијски код",
-  "menu_": "Изборник"
+  "menu_": "Изборник",
+  "you are offline": "Niste na mreži",
+  "check your connection and try again": "Проверите везу и покушајте поново",
+  "total nutritional values": "Укупне нутритивне вредности"
 
 }

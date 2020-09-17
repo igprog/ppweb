@@ -126,5 +126,9 @@
   "client": "Client",
   "diet": "Diet",
   "enter the activation code": "Enter the Activation Code",
-  "menu_": "Menu"
+  "menu_": "Menu",
+  "you are offline": "You are offline",
+  "check your connection and try again": "Check your connection and try again",
+  "total nutritional values": "Total nutritional values"
+
 }

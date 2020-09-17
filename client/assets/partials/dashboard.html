@@ -136,7 +136,7 @@
                                 <a ui-sref="menu" ui-sref-active="active" class="list-group-item list-group-item-action" ng-click="getMenu(x)">{{$index+1}} {{x.title}}</a>
                             </div>
                         </div>
-                        <div class="text-right">
+                        <div ng-if="menus.length>5" class="text-right">
                             <a ui-sref="menus" ui-sref-active="active" href="">{{'show all' | translate}}...</a>
                         </div>
                     </div>

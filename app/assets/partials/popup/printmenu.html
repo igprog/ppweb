@@ -198,10 +198,10 @@
                         <th class="border-bottom"></th>
                         <th class="border-bottom"></th>
                         <th class="border-bottom"></th>
-                        <th class="text-right col-width border-bottom">{{'energy' | translate}}<br /><em>({{'kcal' | translate}})</em></th>
-                        <th class="text-right col-width border-bottom">{{'carbs' | translate}}<br /><em>({{'g' | translate}})</em></th>
-                        <th class="text-right col-width border-bottom">{{'prot' | translate}}<br /><em>({{'g' | translate}})</em></th>
-                        <th class="text-right col-width border-bottom">{{'fats' | translate}}<br /><em>({{'g' | translate}})</em></th>
+                        <th class="text-right col-width border-bottom">{{'energy' | translate}}<br /><em class="small">({{'kcal' | translate}})</em></th>
+                        <th class="text-right col-width border-bottom">{{'carbs' | translate}}<br /><em class="small">({{'g' | translate}})</em></th>
+                        <th class="text-right col-width border-bottom">{{'prot' | translate}}<br /><em class="small">({{'g' | translate}})</em></th>
+                        <th class="text-right col-width border-bottom">{{'fats' | translate}}<br /><em class="small">({{'g' | translate}})</em></th>
                     </tr>
                     <tr ng-if="y.meal.code==x.code" ng-repeat="y in foods track by $index">
                         <td style="width:30%">{{y.food}}</td>
@@ -215,10 +215,10 @@
                     </tr>
                     <tr ng-if="settings.showMealsTotal" class="border-top small">
                         <th class="text-right" colspan="4"><label><span>{{'meal total' | translate}}</span><span ng-if="consumers > 1"> ({{'per consumer' | translate}})</span>:</label></th>
-                        <th class="text-right col-width">{{totals.mealsTotal[$index].energy.val | number:1}}<br /><em class="small">({{totals.mealsTotal[$index].energy.perc| number:1}} %)</em></th>
-                        <th class="text-right col-width">{{totals.mealsTotal[$index].carbohydrates.val | number:1}}<br /><em class="small">({{totals.mealsTotal[$index].carbohydrates.perc| number:1}} %)</em></th>
-                        <th class="text-right col-width">{{totals.mealsTotal[$index].proteins.val | number:1}}<br /><em class="small">({{totals.mealsTotal[$index].proteins.perc| number:1}} %)</em></th>
-                        <th class="text-right col-width">{{totals.mealsTotal[$index].fats.val | number:1}}<br /><em class="small">({{totals.mealsTotal[$index].fats.perc| number:1}} %)</em></th>
+                        <th class="text-right col-width">{{totals.mealsTotal[$index].energy.val | number:1}}<br /><em class="small text-nowrap">({{totals.mealsTotal[$index].energy.perc| number:1}} %)</em></th>
+                        <th class="text-right col-width">{{totals.mealsTotal[$index].carbohydrates.val | number:1}}<br /><em class="small text-nowrap">({{totals.mealsTotal[$index].carbohydrates.perc| number:1}} %)</em></th>
+                        <th class="text-right col-width">{{totals.mealsTotal[$index].proteins.val | number:1}}<br /><em class="small text-nowrap">({{totals.mealsTotal[$index].proteins.perc| number:1}} %)</em></th>
+                        <th class="text-right col-width">{{totals.mealsTotal[$index].fats.val | number:1}}<br /><em class="small text-nowrap">({{totals.mealsTotal[$index].fats.perc| number:1}} %)</em></th>
                     </tr>
                 </table>
             </div>
@@ -238,9 +238,9 @@
                 <tr class="border-top small">
                     <th class="text-right" colspan="4"><label><span>{{'total nutritional values' | translate}}</span><span ng-if="consumers > 1"> ({{'per consumer' | translate}})</span>:</label></th>
                     <th class="text-right bg-gray col-width">{{totals.energy | number:1}}<br /><em></em></th>
-                    <th class="text-right bg-gray col-width">{{totals.carbohydrates | number:1}}<br /><em class="small">({{totals.carbohydratesPercentage | number:1}} %)</em></th>
-                    <th class="text-right bg-gray col-width">{{totals.proteins | number:1}}<br /><em class="small">({{totals.proteinsPercentage | number:1}} %)</em></th>
-                    <th class="text-right bg-gray col-width">{{totals.fats | number:1}}<br /><em class="small">({{totals.fatsPercentage | number:1}} %)</em></th>
+                    <th class="text-right bg-gray col-width">{{totals.carbohydrates | number:1}}<br /><em class="small text-nowrap">({{totals.carbohydratesPercentage | number:1}} %)</em></th>
+                    <th class="text-right bg-gray col-width">{{totals.proteins | number:1}}<br /><em class="small text-nowrap">({{totals.proteinsPercentage | number:1}} %)</em></th>
+                    <th class="text-right bg-gray col-width">{{totals.fats | number:1}}<br /><em class="small text-nowrap">({{totals.fatsPercentage | number:1}} %)</em></th>
                 </tr>
             </table>
         </div>

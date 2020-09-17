@@ -126,6 +126,9 @@
   "client": "Klijent",
   "diet": "Dijeta",
   "enter the activation code": "Upišite aktivacijski kod",
-  "menu_": "Izbornik"
+  "menu_": "Izbornik",
+  "you are offline": "Niste na mreži",
+  "check your connection and try again": "Proverite vezu i pokušajte ponovo",
+  "total nutritional values": "Ukupne nutritivne vrednosti"
 
 }
