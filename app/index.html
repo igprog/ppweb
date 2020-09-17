@@ -53,7 +53,7 @@
 </head>
 <body ng-app="app" ng-controller="AppCtrl" style="height:auto">
 
-    <div ng-if="!online" class="text-center bg-danger text-white" ng-cloak>
+    <div ng-if="!online" class="fixed-top text-center bg-danger text-white" ng-cloak>
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <strong>{{'you are offline' | translate}}!</strong> {{'check your connection and try again' | translate}}.
     </div>
 

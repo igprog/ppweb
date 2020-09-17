@@ -26,9 +26,9 @@
             </div>
         </div>
         <div class="card-body">
-            <div ng-if="x.isSelected==1" ng-repeat="x in menu.data.meals track by $index" class="m10">
-                <label class="text-uppercase mt10">{{getMealTitle(x)}}</label>
-                <div ng-if="x.description" class="mt10">
+            <div ng-if="x.isSelected==1" ng-repeat="x in menu.data.meals track by $index" class="m-2">
+                <label class="text-uppercase mt-2">{{getMealTitle(x)}}</label>
+                <div ng-if="x.description" class="mt-2">
                     <em ng-if="!isSeparatedDes(x.description)&&settings.showDescription">{{x.description}}</em>
                     <div ng-if="isSeparatedDes(x.description)">
                         <div ng-repeat="y in getTitleDes(x.description) track by $index">
@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div ng-if="settings.showFoods" class="table-responsive mt-2">
-                    <table class="table table-sm table-borderless">
+                    <table class="table table-borderless table-sm">
                         <tr ng-if="settings.showMealsTotal">
                             <th class="border-bottom"></th>
                             <th class="border-bottom"></th>
@@ -76,10 +76,10 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th class="text-right col-width">{{'energy' | translate}}<br /><em>({{'kcal' | translate}})</em></th>
-                        <th class="text-right col-width">{{'carbs' | translate}}<br /><em>({{'g' | translate}})</em></th>
-                        <th class="text-right col-width">{{'prot' | translate}}<br /><em>({{'g' | translate}})</em></th>
-                        <th class="text-right col-width">{{'fats' | translate}}<br /><em>({{'g' | translate}})</em></th>
+                        <th class="text-right col-width">{{'energy' | translate}}<br /><em class="small">({{'kcal' | translate}})</em></th>
+                        <th class="text-right col-width">{{'carbs' | translate}}.<br /><em class="small">({{'g' | translate}})</em></th>
+                        <th class="text-right col-width">{{'prot' | translate}}.<br /><em class="small">({{'g' | translate}})</em></th>
+                        <th class="text-right col-width">{{'fats' | translate}}<br /><em class="small">({{'g' | translate}})</em></th>
                     </tr>
                     <tr class="border-top small">
                         <th class="text-right" colspan="4"><label><span>{{'total nutritional values' | translate}}</span><span ng-if="consumers > 1"> ({{'per consumer' | translate}})</span>:</label></th>
@@ -117,3 +117,18 @@
         </div>
     </div>-->
 </div>
+
+<style>
+    .col-width {
+        width: 80px;
+    }
+
+    .bg-gray {
+        background-color: #dbdbdb;
+    }
+
+    .border-bottom {
+        border-top: none !important;
+        border-bottom: 1px solid #dbdbdb;
+    }
+</style>
