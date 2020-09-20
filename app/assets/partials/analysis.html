@@ -35,27 +35,27 @@
                 <table class="table table-sm table-borderless">
                     <tr class="border-bottom">
                         <th>{{'meals' | translate}}</th>
-                        <th>{{'choosen' | translate}}</th>
-                        <th>{{'recommended' | translate}}</th>
-                        <th>{{'carbohydrates' | translate}}</th>
-                        <th>{{'proteins' | translate}}</th>
-                        <th>{{'fats' | translate}}</th>
+                        <th>{{'choosen' | translate}}<br /><span class="small">(<em>{{'kcal' | translate}}</em>)</span></th>
+                        <th>{{'recommended' | translate}}<br /><span class="small">(<em>{{'kcal' | translate}}</em>)</span></th>
+                        <th>{{'carbohydrates' | translate}}<br /><span class="small">(<em>{{'g' | translate}}</em>)</span></th>
+                        <th>{{'proteins' | translate}}<br /><span class="small">(<em>{{'g' | translate}}</em>)</span></th>
+                        <th>{{'fats' | translate}}<br /><span class="small">(<em>{{'g' | translate}}</em>)</span></th>
                     </tr>
                     <tr ng-repeat="x in totals.mealsTotal">
                         <td class="nowrap">{{x.title}}</td>
-                        <td><span class="font-weight-bold">{{x.energy.val | number:1}} {{'kcal' | translate}}</span> ({{x.energy.perc | number:1}} %) <i class="{{checkTotal(x.energy.perc, getMealRecommendation(x.code).energyMinPercentage, getMealRecommendation(x.code).energyMaxPercentage)}}"></i></td>
-                        <td>{{getMealRecommendation(x.code).energyMin}} - {{getMealRecommendation(x.code).energyMax}} {{'kcal' | translate}} ({{getMealRecommendation(x.code).energyMinPercentage}} - {{getMealRecommendation(x.code).energyMaxPercentage}} %)</td>
-                        <td>{{x.carbohydrates.val | number:1}} {{'g' | translate}} ({{x.carbohydrates.perc | number:1}} %)</td>
-                        <td>{{x.proteins.val | number:1}} {{'g' | translate}} ({{x.proteins.perc | number:1}} %)</td>
-                        <td>{{x.fats.val | number:1}} {{'g' | translate}} ({{x.fats.perc | number:1}} %)</td>
+                        <td class="text-nowrap"><span class="font-weight-bold">{{x.energy.val | number:1}}</span> ({{x.energy.perc | number:1}} %) <i class="{{checkTotal(x.energy.perc, getMealRecommendation(x.code).energyMinPercentage, getMealRecommendation(x.code).energyMaxPercentage)}}"></i></td>
+                        <td class="text-nowrap"><span>{{getMealRecommendation(x.code).energyMin}} - {{getMealRecommendation(x.code).energyMax}}</span> <span class="small">({{getMealRecommendation(x.code).energyMinPercentage}} - {{getMealRecommendation(x.code).energyMaxPercentage}} %)</span></td>
+                        <td class="text-nowrap">{{x.carbohydrates.val | number:1}} <span class="small">({{x.carbohydrates.perc | number:1}} %)</span></td>
+                        <td class="text-nowrap">{{x.proteins.val | number:1}} <span class="small">({{x.proteins.perc | number:1}} %)</span></td>
+                        <td class="text-nowrap">{{x.fats.val | number:1}} <span class="small">({{x.fats.perc | number:1}} %)</span></td>
                     </tr>
                     <tr class="border-top">
                         <td>{{'total' | translate}}</td>
-                        <td class="font-weight-bold lead">{{totals.energy | number:1}} {{'kcal' | translate}} <i class="{{checkEnergy(totals.energy, recommendations.energy)}}"></i></td>
-                        <td>{{recommendations.energy}} {{'kcal' | translate}}</td>
-                        <td><div class="font-weight-bold">{{totals.carbohydrates | number:1}} {{'g' | translate}}</div>({{totals.carbohydratesPercentage | number:1}} %)</td>
-                        <td><div class="font-weight-bold">{{totals.proteins | number:1}} {{'g' | translate}}</div>({{totals.proteinsPercentage | number:1}} %)</td>
-                        <td><div class="font-weight-bold">{{totals.fats | number:1}} {{'g' | translate}}</div>({{totals.fatsPercentage | number:1}} %)</td>
+                        <td class="font-weight-bold lead">{{totals.energy | number:1}} <i class="{{checkEnergy(totals.energy, recommendations.energy)}}"></i></td>
+                        <td>{{recommendations.energy}}</td>
+                        <td class="text-nowrap"><span class="font-weight-bold">{{totals.carbohydrates | number:1}}</span> <span class="small">({{totals.carbohydratesPercentage | number:1}} %)</span></td>
+                        <td class="text-nowrap"><span class="font-weight-bold">{{totals.proteins | number:1}}</span> <span class="small">({{totals.proteinsPercentage | number:1}} %)</span></td>
+                        <td class="text-nowrap"><span class="font-weight-bold">{{totals.fats | number:1}}</span> <span class="small">({{totals.fatsPercentage | number:1}} %)</span></td>
                     </tr>
                 </table>
             </div>
@@ -152,23 +152,23 @@
                         <table class="table table-sm table-borderless">
                             <tr class="border-bottom">
                                 <th></th>
-                                <th style="width:30%">{{'choosen' | translate}}</th>
-                                <th>{{'recommended' | translate}}</th>
+                                <th style="width:30%">{{'choosen' | translate}}<br /><span class="small">(<em>{{'g' | translate}}</em>)</span></th>
+                                <th>{{'recommended' | translate}}<br /><span class="small">(<em>%</em>)</span></th>
                             </tr>
                             <tr>
                                 <td>{{'carbohydrates' | translate}}</td>
-                                <td class="nowrap"><span class="font-weight-bold">{{totals.carbohydrates | number:1}} g</span>, ({{totals.carbohydratesPercentage | number:1}} %) <i class="{{checkTotal(totals.carbohydratesPercentage, recommendations.carbohydratesPercentageMin, recommendations.carbohydratesPercentageMax)}}"></i></td>
-                                <td>{{recommendations.carbohydratesPercentageMin | number:1}}-{{recommendations.carbohydratesPercentageMax | number:1}} %</td>
+                                <td class="text-nowrap"><span class="font-weight-bold">{{totals.carbohydrates | number:1}}</span> <span class="small">({{totals.carbohydratesPercentage | number:1}} %)</span> <i class="{{checkTotal(totals.carbohydratesPercentage, recommendations.carbohydratesPercentageMin, recommendations.carbohydratesPercentageMax)}}"></i></td>
+                                <td>{{recommendations.carbohydratesPercentageMin | number:1}}-{{recommendations.carbohydratesPercentageMax | number:1}}</td>
                             </tr>
                             <tr>
                                 <td>{{'proteins' | translate}}</td>
-                                <td class="nowrap"><span class="font-weight-bold">{{totals.proteins | number:1}} g</span>, ({{totals.proteinsPercentage | number:1}} %) <i class="{{checkTotal(totals.proteinsPercentage, recommendations.proteinsPercentageMin, recommendations.proteinsPercentageMax)}}"></i></td>
-                                <td>{{recommendations.proteinsPercentageMin | number:1}}-{{recommendations.proteinsPercentageMax | number:1}} %</td>
+                                <td class="text-nowrap"><span class="font-weight-bold">{{totals.proteins | number:1}}</span> <span class="small">({{totals.proteinsPercentage | number:1}} %)</span> <i class="{{checkTotal(totals.proteinsPercentage, recommendations.proteinsPercentageMin, recommendations.proteinsPercentageMax)}}"></i></td>
+                                <td>{{recommendations.proteinsPercentageMin | number:1}}-{{recommendations.proteinsPercentageMax | number:1}}</td>
                             </tr>
                             <tr>
                                 <td>{{'fats' | translate}}</td>
-                                <td class="nowrap"><span class="font-weight-bold">{{totals.fats | number:1}} g</span>, ({{totals.fatsPercentage | number:1}} %) <i class="{{checkTotal(totals.fatsPercentage, recommendations.fatsPercentageMin, recommendations.fatsPercentageMax)}}"></i></td>
-                                <td>{{recommendations.fatsPercentageMin | number:1}}-{{recommendations.fatsPercentageMax | number:1}} %</td>
+                                <td class="text-nowrap"><span class="font-weight-bold">{{totals.fats | number:1}}</span> <span class="small">({{totals.fatsPercentage | number:1}} %)</span> <i class="{{checkTotal(totals.fatsPercentage, recommendations.fatsPercentageMin, recommendations.fatsPercentageMax)}}"></i></td>
+                                <td>{{recommendations.fatsPercentageMin | number:1}}-{{recommendations.fatsPercentageMax | number:1}}</td>
                             </tr>
                         </table>
                     </div>
