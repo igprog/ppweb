@@ -75,144 +75,147 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <!-- Nav Item - Dashboard -->
-            <div class="nav-item active">
-                <a ui-sref="dashboard" ui-sref-active="active" class="nav-link" >
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>{{'dashboard' | translate}}</span>
-                </a>
-            </div>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <div ng-if="client.clientId" class="nav-item">
-                <div ng-controller="clientsCtrl" class="p-2 text-center small">
-                    <a href="" ng-click="edit(client)" title="{{'client' | translate}}" class="decoration-none">
-                        <div>
-                            <i ng-if="!client.profileImg" class="fa fa-user-circle fa-3x"></i>
-                            <img ng-if="client.profileImg" src="../upload/users/{{client.userId}}/clients/{{client.clientId}}/profileimg/{{client.profileImg}}" alt="{{client.profileImg}}" style="height:3rem;width:3rem" class="img-circle rounded-circle" />
-                        </div>
-                        <div class="text-light pt-2">
-                            {{client.firstName}} {{client.lastName}}, {{'age' | translate}}: {{clientData.age}}
-                        </div>
+            <div ng-hide="user.licenceStatus==='expired'">
+                <!-- Nav Item - Dashboard -->
+                <div class="nav-item active">
+                    <a ui-sref="dashboard" ui-sref-active="active" class="nav-link">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>{{'dashboard' | translate}}</span>
                     </a>
                 </div>
+
+                <!-- Divider -->
                 <hr class="sidebar-divider">
-            </div>
 
-            <div class="nav-item">
-                <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#clients" aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-users"></i><span>{{'clients' | translate}}</span>
-                </a>
-                <div id="clients" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded" ng-controller="clientsCtrl">
-                        <a href="" class="collapse-item" ng-click="newClient()"><i class="fas fa-user-plus"></i><span class="pl-2">{{'new client' | translate}}</span></a>
-                        <a href="" class="collapse-item" ng-click="search()"><i class="fas fa-search"></i><span class="pl-2">{{'search clients' | translate}}</span></a>
+                <div ng-if="client.clientId" class="nav-item">
+                    <div ng-controller="clientsCtrl" class="p-2 text-center small">
+                        <a href="" ng-click="edit(client)" title="{{'client' | translate}}" class="decoration-none">
+                            <div>
+                                <i ng-if="!client.profileImg" class="fa fa-user-circle fa-3x"></i>
+                                <img ng-if="client.profileImg" src="../upload/users/{{client.userId}}/clients/{{client.clientId}}/profileimg/{{client.profileImg}}" alt="{{client.profileImg}}" style="height:3rem;width:3rem" class="img-circle rounded-circle" />
+                            </div>
+                            <div class="text-light pt-2">
+                                {{client.firstName}} {{client.lastName}}, {{'age' | translate}}: {{clientData.age}}
+                            </div>
+                        </a>
+                    </div>
+                    <hr class="sidebar-divider">
+                </div>
+
+                <div class="nav-item">
+                    <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#clients" aria-expanded="true" aria-controls="collapsePages">
+                        <i class="fas fa-fw fa-users"></i><span>{{'clients' | translate}}</span>
+                    </a>
+                    <div id="clients" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded" ng-controller="clientsCtrl">
+                            <a href="" class="collapse-item" ng-click="newClient()"><i class="fas fa-user-plus"></i><span class="pl-2">{{'new client' | translate}}</span></a>
+                            <a href="" class="collapse-item" ng-click="search()"><i class="fas fa-search"></i><span class="pl-2">{{'search clients' | translate}}</span></a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="nav-item">
-                <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#cretemenus" aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-concierge-bell"></i><span>{{'nutrition program' | translate}}</span>
-                </a>
-                <div id="cretemenus" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a ui-sref="clientsdata" ui-sref-active="active" class="collapse-item"><i class="fas fa-weight"></i><span class="pl-2">{{'input data' | translate}}</span></a>
-                        <a ui-sref="calculation" ui-sref-active="active" class="collapse-item"><i class="fas fa-calculator"></i><span class="pl-2">{{'calculation' | translate}}</span></a>
-                        <a ui-sref="activities" ui-sref-active="active" class="collapse-item"><i class="fas fa-bicycle"></i><span class="pl-2">{{'additional activities' | translate}}</span></a>
-                        <a ui-sref="diets" ui-sref-active="active" class="collapse-item"><i class="fas fa-heartbeat"></i><span class="pl-2">{{'diets' | translate}}</span></a>
-                        <a ui-sref="meals" ui-sref-active="active" class="collapse-item"><i class="fas fa-list-ol"></i><span class="pl-2">{{'meals' | translate}}</span></a>
-                        <a ui-sref="menu" ui-sref-active="active" class="collapse-item"><i class="fas fa-utensils"></i><span class="pl-2">{{'menu' | translate}}</span></a>
-                        <a ui-sref="analysis" ui-sref-active="active" class="collapse-item"><i class="fas fa-bar-chart"></i><span class="pl-2">{{'analysis' | translate}}</span></a>
+                <div class="nav-item">
+                    <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#cretemenus" aria-expanded="true" aria-controls="collapsePages">
+                        <i class="fas fa-fw fa-concierge-bell"></i><span>{{'nutrition program' | translate}}</span>
+                    </a>
+                    <div id="cretemenus" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a href="" ng-click="toggleNewTpl('clientsdata')" ng-class="selectedNavItem=='clientsdata'?'collapse-item active':'collapse-item'"><i class="fas fa-weight"></i><span class="pl-2">{{'input data' | translate}}</span></a>
+                            <a href="" ng-click="toggleNewTpl('calculation')" ng-class="selectedNavItem=='calculation'?'collapse-item active':'collapse-item'"><i class="fas fa-calculator"></i><span class="pl-2">{{'calculation' | translate}}</span></a>
+                            <a href="" ng-click="toggleNewTpl('activities')" ng-class="selectedNavItem=='activities'?'collapse-item active':'collapse-item'"><i class="fas fa-bicycle"></i><span class="pl-2">{{'additional activities' | translate}}</span></a>
+                            <a href="" ng-click="toggleNewTpl('diets')" ng-class="selectedNavItem=='diets'?'collapse-item active':'collapse-item'"><i class="fas fa-heartbeat"></i><span class="pl-2">{{'diets' | translate}}</span></a>
+                            <a href="" ng-click="toggleNewTpl('meals')" ng-class="selectedNavItem=='meals'?'collapse-item active':'collapse-item'"><i class="fas fa-list-ol"></i><span class="pl-2">{{'meals' | translate}}</span></a>
+                            <a href="" ng-click="toggleNewTpl('menu')" ng-class="selectedNavItem=='menu'?'collapse-item active':'collapse-item'"><i class="fas fa-utensils"></i><span class="pl-2">{{'menu' | translate}}</span></a>
+                            <a href="" ng-click="toggleNewTpl('analysis')" ng-class="selectedNavItem=='analysis'?'collapse-item active':'collapse-item'"><i class="fas fa-bar-chart"></i><span class="pl-2">{{'analysis' | translate}}</span></a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <hr class="sidebar-divider d-none d-md-block">
+                <hr class="sidebar-divider d-none d-md-block">
 
-            <div class="nav-item">
-                <a ui-sref="myfoods" ui-sref-active="active" class="nav-link" href="">
-                    <i class="fas fa-fw fa-apple-alt"></i>
-                    <span>{{'my foods' | translate}}</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a ui-sref="myrecipes" ui-sref-active="active" class="nav-link" href="">
-                    <i class="fas fa-fw fa-receipt"></i>
-                    <span>{{'my recipes' | translate}}</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a ui-sref="prices" ui-sref-active="active" class="nav-link" href="">
-                    <i class="fas fa-fw fa-usd"></i>
-                    <span>{{'prices' | translate}}</span>
-                </a>
-            </div>
+                <div class="nav-item">
+                    <a ui-sref="myfoods" ui-sref-active="active" class="nav-link" href="">
+                        <i class="fas fa-fw fa-apple-alt"></i>
+                        <span>{{'my foods' | translate}}</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a ui-sref="myrecipes" ui-sref-active="active" class="nav-link" href="">
+                        <i class="fas fa-fw fa-receipt"></i>
+                        <span>{{'my recipes' | translate}}</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a ui-sref="prices" ui-sref-active="active" class="nav-link" href="">
+                        <i class="fas fa-fw fa-usd"></i>
+                        <span>{{'prices' | translate}}</span>
+                    </a>
+                </div>
 
-            <hr class="sidebar-divider d-none d-md-block">
+                <hr class="sidebar-divider d-none d-md-block">
 
-            <div ng-if="loginUser.adminType<2" class="nav-item">
-                <a ui-sref="scheduler" ui-sref-active="active" class="nav-link">
-                    <i class="fas fa-fw fa-calendar-alt"></i>
-                    <span>{{'calendar' | translate}}</span>
-                </a>
-            </div>
+                <div ng-if="loginUser.adminType<2" class="nav-item">
+                    <a ui-sref="scheduler" ui-sref-active="active" class="nav-link">
+                        <i class="fas fa-fw fa-calendar-alt"></i>
+                        <span>{{'calendar' | translate}}</span>
+                    </a>
+                </div>
 
-            <div ng-if="isLogin&&loginUser.adminType<2" class="nav-item">
-                <a ui-sref="clientapp" ui-sref-active="active" class="nav-link">
-                    <i class="fas fa-fw fa-mobile-alt"></i>
-                    <span>{{'client app' | translate}}</span>
-                </a>
-            </div>
+                <div ng-if="isLogin&&loginUser.adminType<2" class="nav-item">
+                    <a ui-sref="clientapp" ui-sref-active="active" class="nav-link">
+                        <i class="fas fa-fw fa-mobile-alt"></i>
+                        <span>{{'client app' | translate}}</span>
+                    </a>
+                </div>
 
-            <hr class="sidebar-divider d-none d-md-block">
+                <hr class="sidebar-divider d-none d-md-block">
 
-            <div class="nav-item">
-                <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#useraccount" aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-user-cog"></i><span>{{'user account' | translate}}</span>
-                </a>
-                <div id="useraccount" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a ng-if="loginUser.adminType<2" ui-sref="user" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-user"></i><span class="pl-2">{{'my profile' | translate}}</span></a>
-                        <a ng-if="loginUser.adminType===0" ui-sref="users" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-users"></i><span class="pl-2">{{'users' | translate}}</span></a>
-                        <a ng-if="loginUser.adminType===0" ui-sref="newuser" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-user-plus"></i><span class="pl-2">{{'new user' | translate}}</span></a>
-                        <a ui-sref="order" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-cart-arrow-down"></i><span class="pl-2">{{user.licenceStatus!=='demo'?('renew subscription' | translate):('activate full version' | translate)}}</span></a>
-                        <a href="" data-toggle="modal" data-target="#logoutModal" class="collapse-item"><i class="fa fa-sign-out-alt"></i><span class="pl-2">{{'logout' | translate}}</span></a>
+                <div class="nav-item">
+                    <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#useraccount" aria-expanded="true" aria-controls="collapsePages">
+                        <i class="fas fa-fw fa-user-cog"></i><span>{{'user account' | translate}}</span>
+                    </a>
+                    <div id="useraccount" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a ng-if="loginUser.adminType<2" ui-sref="user" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-user"></i><span class="pl-2">{{'my profile' | translate}}</span></a>
+                            <a ng-if="loginUser.adminType===0" ui-sref="users" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-users"></i><span class="pl-2">{{'users' | translate}}</span></a>
+                            <a ng-if="loginUser.adminType===0" ui-sref="newuser" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-user-plus"></i><span class="pl-2">{{'new user' | translate}}</span></a>
+                            <a ui-sref="order" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-cart-arrow-down"></i><span class="pl-2">{{user.licenceStatus!=='demo'?('renew subscription' | translate):('activate full version' | translate)}}</span></a>
+                            <a href="" data-toggle="modal" data-target="#logoutModal" class="collapse-item"><i class="fa fa-sign-out-alt"></i><span class="pl-2">{{'logout' | translate}}</span></a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div ng-if="isLogin&&loginUser.adminType<2&&config.debug" class="nav-item">
-                <a ui-sref="settings" ui-sref-active="active" title="{{'settings' | translate}}" class="nav-link">
-                    <i class="fas fa-fw fa-cogs"></i>
-                    <span>{{'settings' | translate}}</span>
-                </a>
-            </div>
+                <div ng-if="isLogin&&loginUser.adminType<2&&config.debug" class="nav-item">
+                    <a ui-sref="settings" ui-sref-active="active" title="{{'settings' | translate}}" class="nav-link">
+                        <i class="fas fa-fw fa-cogs"></i>
+                        <span>{{'settings' | translate}}</span>
+                    </a>
+                </div>
 
-            <div ng-if="config.language!=='en'" class="nav-item">
-                <a href="../uputa.html" target="_blank" title="{{'help' | translate}}" class="nav-link">
-                    <i class="fas fa-fw fa-question"></i>
-                    <span>{{'help' | translate}}</span>
-                </a>
-            </div>
+                <div ng-if="config.language!=='en'" class="nav-item">
+                    <a href="../uputa.html" target="_blank" title="{{'help' | translate}}" class="nav-link">
+                        <i class="fas fa-fw fa-question"></i>
+                        <span>{{'help' | translate}}</span>
+                    </a>
+                </div>
 
-            <div class="nav-item">
-                <a ui-sref="info" ui-sref-active="active" class="nav-link">
-                    <i class="fas fa-fw fa-info"></i>
-                    <span>{{'info' | translate}}</span>
-                </a>
-            </div>
+                <div class="nav-item">
+                    <a ui-sref="info" ui-sref-active="active" class="nav-link">
+                        <i class="fas fa-fw fa-info"></i>
+                        <span>{{'info' | translate}}</span>
+                    </a>
+                </div>
 
-            <div ng-if="loginUser.adminType<2" class="nav-item">
-                <a href="" ng-click="reportABug()" title="{{'report a bug' | translate}}" class="nav-link">
-                    <i class="fas fa-fw fa-bug"></i>
-                    <span>{{'report a bug' | translate}}</span>
-                </a>
-            </div>
+                <div ng-if="loginUser.adminType<2" class="nav-item">
+                    <a href="" ng-click="reportABug()" title="{{'report a bug' | translate}}" class="nav-link">
+                        <i class="fas fa-fw fa-bug"></i>
+                        <span>{{'report a bug' | translate}}</span>
+                    </a>
+                </div>
 
-            <hr class="sidebar-divider">
+                <hr class="sidebar-divider">
+
+            </div>
 
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -245,7 +248,7 @@
                     <ul ng-show="isLogin" class="navbar-nav ml-auto">
 
                         <!-- Nav Item - Apointments -->
-                        <li class="nav-item dropdown no-arrow mx-1" title="{{'appointments' | translate}}" ng-cloak>
+                        <li ng-hide="user.licenceStatus==='expired'" class="nav-item dropdown no-arrow mx-1" title="{{'appointments' | translate}}" ng-cloak>
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <span ng-if="activeEvents.length>0" class="badge badge-danger badge-counter">{{activeEvents.length}}</span>
@@ -269,7 +272,7 @@
                             </div>
                         </li>
 
-                        <li ng-if="config.showlanguages" class="nav-item dropdown no-arrow" ng-cloak>
+                        <li ng-hide="user.licenceStatus==='expired'" ng-if="config.showlanguages" class="nav-item dropdown no-arrow" ng-cloak>
                             <a href="" class="nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{currLanguageTitle | translate}}</span>
                                 <i class="fa fa-globe"></i>
@@ -292,11 +295,11 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     {{'my profile' | translate}}
                                 </a>
-                                <a ng-click="toggleTpl('users')" class="dropdown-item" href="">
+                                <a ng-hide="user.licenceStatus==='expired'" ng-click="toggleTpl('users')" class="dropdown-item" href="">
                                     <i class="fas fa-users fa-sm fa-fw mr-2 text-gray-400"></i>
                                     {{'users' | translate}}
                                 </a>
-                                <a ng-click="toggleTpl('newuser')" class="dropdown-item" href="">
+                                <a ng-hide="user.licenceStatus==='expired'" ng-click="toggleTpl('newuser')" class="dropdown-item" href="">
                                     <i class="fas fa-user-plus fa-sm fa-fw mr-2 text-gray-400"></i>
                                     {{'new user' | translate}}
                                 </a>
