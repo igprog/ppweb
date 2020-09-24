@@ -959,10 +959,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $http({
             url: $rootScope.config.backend + webService + '/Login',
             method: "POST",
-            data: {
-                userName: u,
-                password: p
-            }
+            data: { userName: u, password: p }
         })
         .then(function (response) {
             if (JSON.parse(response.data.d).userId != null) {
@@ -1031,7 +1028,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
      }
 
      $scope.signup = function () {
-         //$rootScope.currTpl = 'assets/partials/signup.html';
          $state.go('signup');
      }
 

@@ -14,7 +14,7 @@
                             <fieldset class="fieldset-border">
                                 <legend class="fieldset-border">{{'activity duration' | translate}}:</legend>
                                 <div>
-                                    <table>
+                                    <table style="width:100%">
                                         <tr>
                                             <td class="text-right">{{'from' | translate}}: </td>
                                             <td>{{from.hour}}:{{from.min}} h</td>
@@ -22,8 +22,8 @@
                                         <tr>
                                             <td class="text-right">{{'to' | translate}}: </td>
                                             <td class="form-inline">
-                                                <select ng-model="to.hour" class="form-control" ng-options="x for x in hours" ng-click="selectHours()"></select><span class="pl-1 pr-1">h</span>
-                                                <select ng-model="to.min" class="form-control ml-1" ng-options="x for x in minutes"></select><span class="pl-1">min</span>
+                                                <select ng-model="to.hour" class="form-control" style="max-width:68px" ng-options="x for x in hours" ng-click="selectHours()"></select><span class="pl-1 pr-1">h</span>
+                                                <select ng-model="to.min" class="form-control ml-1" style="max-width:68px" ng-options="x for x in minutes"></select><span class="pl-1">min</span>
                                             </td>
                                         </tr>
                                     </table>
