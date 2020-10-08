@@ -256,8 +256,8 @@ table {
 th {
     background: white;
     position: sticky;
+    position: -webkit-sticky; /* Safari */
     top: 0;
-    /*box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);*/
     box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.4);
 }
 /*****Fixed Table Header*****/

@@ -1,5 +1,4 @@
 ﻿/*!
 style.css
 (c) 2020 IG PROG, www.igprog.hr
-*/
- .pointer{cursor:pointer}.guage{height:180px;width:180px;margin:0 auto!important}.chart-line-35{position:relative;height:35vh}.chart-line-40{position:relative;height:40vh}@media (max-width:767px){.guage{height:140px;width:140px;margin:0 auto!important}.chart-line-35{position:relative;height:30vh}.chart-line-40{position:relative;height:45vh}.container,.container-fluid{padding-left:5px!important;padding-right:5px!important}}
+*/.pointer{cursor:pointer}.guage{height:180px;width:180px;margin:0 auto!important}.chart-line-35{position:relative;height:35vh}.chart-line-40{position:relative;height:40vh}table{text-align:left;position:relative;border-collapse:collapse}th{background:#fff;position:sticky;position:-webkit-sticky;top:0;box-shadow:0 1px 1px -1px rgba(0,0,0,.4)}@media (max-width:767px){.guage{height:140px;width:140px;margin:0 auto!important}.chart-line-35{position:relative;height:30vh}.chart-line-40{position:relative;height:45vh}.container,.container-fluid{padding-left:5px!important;padding-right:5px!important}}

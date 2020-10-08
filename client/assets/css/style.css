@@ -23,6 +23,21 @@ style.css
     height:40vh;
 }
 
+/*****Fixed Table Header*****/
+table {
+    text-align: left;
+    position: relative;
+    border-collapse: collapse;
+}
+th {
+    background: white;
+    position: sticky;
+    position: -webkit-sticky; /* Safari */
+    top: 0;
+    box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.4);
+}
+/*****Fixed Table Header*****/
+
 @media (max-width: 767px) {
     .guage {
         height:140px;

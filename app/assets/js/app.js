@@ -117,12 +117,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.today = new Date();
     $rootScope.unitSystem = 1;
 
-    /***** Back button and refresh page Alert *****/
-    /*window.onbeforeunload = function () {
-        return "Your work will be lost.";
-    };*/
-    /*********/
-
     if ((navigator.userAgent.indexOf("MSIE") !== -1 ) || (!!document.documentMode === true )) {
         $rootScope.browserMsg = {
             title: 'you are currently using internet explorer. some functionality may not work properly',
@@ -1876,7 +1870,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             });
         };
 
-
     }
 
     $scope.edit = function (x) {
@@ -1895,6 +1888,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.search = function () {
+        $scope.toggleTpl('inputData');
         $scope.openSearchPopup();
     }
 

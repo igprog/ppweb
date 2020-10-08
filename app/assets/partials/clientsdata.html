@@ -23,7 +23,7 @@
              <div ng-if="client.clientId">
                  <ul class="nav nav-tabs">
                      <li class="nav-item" ng-click="toggleTpl('inputData')"><a href="" ng-class="clientDataTpl=='inputData'?'nav-link active':'nav-link'" ><i class="fa fa-thermometer-half"></i> <span class="d-none d-sm-inline text-capitalize">{{'parameters' | translate}}</span></a></li>
-                     <li class="nav-item"  ng-click="getClientLog(client)" ><a href="" ng-class="clientDataTpl=='clientStatictic'?'nav-link active':'nav-link'"><i class="fa fa-line-chart"></i> <span class="d-none d-sm-inline text-capitalize">{{'tracking of anthropometric measures' | translate}}</span></a></li>
+                     <li class="nav-item" ng-click="getClientLog(client)"><a href="" ng-class="clientDataTpl=='clientStatictic'?'nav-link active':'nav-link'"><i class="fa fa-line-chart"></i> <span class="d-none d-sm-inline text-capitalize">{{'tracking of anthropometric measures' | translate}}</span></a></li>
                  </ul>
              </div>
              <div ng-include="clientDataTpl" class="mt-3"></div>
@@ -293,7 +293,7 @@
                 </div>-->
             </div>
         </div>
-        <div class="table-responsive table-scroll">
+        <div class="table-responsive" style="height:60vh">
             <table class="table table-sm table-borderless">
                 <thead>
                     <tr class="border-bottom">
@@ -321,8 +321,8 @@
                             <input type="text" ng-model="x.height" class="form-control" style="min-width:60px" allow-only-numbers>
                         </td>
                         <td style="max-width:180px">
-                            <div class="input-group">
-                                <input ng-model="x.weight" class="form-control" style="min-width:60px" allow-only-numbers />
+                            <div class="input-group" style="position:static">
+                                <input ng-model="x.weight" class="form-control" style="min-width:60px;position:static" allow-only-numbers />
                                 <div class="input-group-append">
                                     <span class="input-group-text" style="min-width:70px">
                                         <small>
@@ -333,8 +333,8 @@
                             </div>
                         </td>
                         <td style="max-width:180px">
-                            <div class="input-group">
-                                <input ng-model="x.waist" class="form-control" style="min-width:60px" allow-only-numbers />
+                            <div class="input-group" style="position:static">
+                                <input ng-model="x.waist" class="form-control" style="min-width:60px;position:static" allow-only-numbers />
                                 <div class="input-group-append">
                                     <span class="input-group-text" style="min-width:70px">
                                         <small>
@@ -345,8 +345,8 @@
                             </div>
                         </td>
                         <td style="max-width:180px">
-                            <div class="input-group">
-                                <input ng-model="x.hip" class="form-control" style="min-width:60px" allow-only-numbers />
+                            <div class="input-group" style="position:static">
+                                <input ng-model="x.hip" class="form-control" style="min-width:60px;position:static" allow-only-numbers />
                                 <div class="input-group-append">
                                     <span class="input-group-text" style="min-width:70px">
                                         <small>
