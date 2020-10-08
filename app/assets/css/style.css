@@ -247,6 +247,21 @@ a[class*="btn-default"], button[class*="btn-default"], input[class*="search"] {
     max-height: 220px;
 }
 
+/*****Fixed Table Header*****/
+table {
+    text-align: left;
+    position: relative;
+    border-collapse: collapse;
+}
+th {
+    background: white;
+    position: sticky;
+    top: 0;
+    /*box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);*/
+    box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.4);
+}
+/*****Fixed Table Header*****/
+
 @media (max-width: 767px) {
     .loginBox {
         padding:20px;
@@ -302,6 +317,8 @@ a[class*="btn-default"], button[class*="btn-default"], input[class*="search"] {
         min-height:90%;
     }
 }
+
+
 
 /*.text-capitalize-first::first-letter {
     text-transform: uppercase !important;

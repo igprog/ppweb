@@ -64,11 +64,11 @@
                                 </tr>
                             </table>
                         </div>
-                        <div class="text-right mr-4">
+                        <div class="text-right mr-4 mt-2">
                             <a href="" class="btn btn-outline-primary" ng-click="loadMore(searchValue)"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</a>
                         </div>
                     </div>
-                    <div ng-if="appMenues==true" class="table-responsive">
+                    <div ng-if="appMenues==true" class="table-responsive" style="height:70vh">
                         <table class="table table-hover table-borderless">
                             <tr ng-if="config.debug">
                                 <td><label><input ng-model="toTranslate" type="checkbox" ng-checked="setToTranslate(toTranslate)" /> {{'translate to' | translate}}: </label></td>

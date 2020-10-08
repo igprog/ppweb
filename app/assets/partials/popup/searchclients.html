@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" style="height:70vh">
                 <table class="table table-hover table-sm table-borderless pointer">
                     <thead>
                         <tr class="text-capitalize border-bottom">
@@ -50,7 +50,7 @@
                     <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
                 </div>
             </div>
-            <div class="text-right mr-4">
+            <div class="text-right mr-4 mt-2">
                 <a href="" ng-if="limit<d.length+1" class="btn btn-outline-primary" ng-click="loadMore()"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</a>
             </div>
         </div>
