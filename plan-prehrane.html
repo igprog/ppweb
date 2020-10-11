@@ -334,7 +334,7 @@
         </div>
         <hr />
         <div>
-            <span class="pull-left">Copyright © 2018 IG PROG</span>
+            <span class="pull-left">Copyright © <span id="year"></span> IG PROG</span>
         </div>
     </footer>
 
@@ -350,6 +350,8 @@
             text: "Podijeli sa: ",
             url: "https://www.programprehrane.com/plan-prehrane.html"
         });
+        var d = new Date();
+        document.getElementById("year").innerHTML = d.getFullYear();
     </script>
 </body>
 </html>

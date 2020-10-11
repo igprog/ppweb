@@ -135,9 +135,13 @@
         </div>
         <hr />
         <div>
-            <span class="pull-left">Copyright © 2018 IG PROG</span>
+            <span class="pull-left">Copyright © <span id="year"></span> IG PROG</span>
         </div>
     </footer>
     <script src="assets/js/main.js"></script>
+    <script>
+        var d = new Date();
+        document.getElementById("year").innerHTML = d.getFullYear();
+    </script>
 </body>
 </html>
