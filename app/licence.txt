@@ -1,4 +1,5 @@
 ﻿**************** KORISNIČKA LICENCA ****************
+--------------- Program Prehrane Web ---------------
 
 KORISNIČKA LICENCA definira prava KORISNIKA koja se odnose na upotrebu WEB APLIKACIJE PROGRAM PREHRANE WEB (https://www.programprehrane.com/app), čiji je nositelj autorskih prava IG PROG, obrt za računalno programiranje, vl. Igor Gašparović (VLASNIK).
 Predmetna licenca nije ekskluzivna, odnosno KORISNIKU daje samo točno definirana prava, ovdje opisana.
@@ -14,7 +15,7 @@ Ova KORISNIČKA LICENCA vam daje slijedeća prava:
 Pravo korištenja
 
 KORISNIK ima pravo KORISTITI APLIKACIJU na proizvoljnom broju računala, s time da WEB APLIKACIJU može istovremeno UPOTREBLJAVATI onoliko KORISNIKA, za koliko ima pridobivenih licenci.
-Korisnik nema pravo prijenosa prava iz i u svezi ovog ugovora na treće osobe, kao što nema pravo odustati ili prenijeti taj ugovor, djelomično ili u cijelosti, na treće osobe, ili im ustupiti pravo korištenja predmeta licence (podlicenca).
+KORISNIK nema pravo prijenosa prava iz i u svezi ovog ugovora na treće osobe, kao što nema pravo odustati ili prenijeti taj ugovor, djelomično ili u cijelosti, na treće osobe, ili im ustupiti pravo korištenja predmeta licence (podlicenca).
 
 Pravo na registraciju dodatnih korisnika
 
@@ -23,7 +24,7 @@ Nije dozoljeno dijeliti ili prodavati licence drugim osobama. Ukoliko VLASNIK sa
 
 Pravo na podršku
 
-Kao korisnik imate pravo na podršku, koju vrši sam VLASNIK ili preko ovlaštenih osoba. Za podršku, VLASNIK ili ovlaštena osoba imaju pravo na povrat troškova nastalih pružanjem iste, a visina kojih je određena važečim cjenikom.
+Kao KORISNIK imate pravo na besplatnu tehničku podršku, koju vrši sam VLASNIK ili preko ovlaštenih osoba. Za individualnu podršku na lokaciji KORISNIKA, VLASNIK ili ovlaštena osoba imaju pravo na povrat troškova nastalih pružanjem iste, a visina kojih je određena važečim cjenikom.
 Podatke, koje VLASNIK ili ovlaštena osoba prime u okviru podrške, VLASNIK može upotrebljavati za svoje poslovne svrhe, vezano na podršku, dijagnostiku ili daljnji razvoj. VLASNIK ili ovlaštena osoba neće upotrebljavati te podatke na način, koji bi identificirao korisnika.
 
 Pravo na otklanjanje GREŠAKA
@@ -33,6 +34,9 @@ U slučaju otkrića GREŠKE u WEB APLIKACIJI, VLASNIK ju je dužan otkloniti.
 Otklanjanje grešaka je uređeno AUTOMATSKIM OSVJEŽAVANJEM.
 U slučaju da VLASNIK ne otkloni GREŠKU i ako ista u znatnoj mjeri utječe na funkcionalnost APLIKACIJE, KORISNIK može zahtijevati raskid UGOVORA i povrat dijela uplaćenog iznosa za licencu.
 
+Pravo na jednostrani raskid ugovora
+
+KORISNIK ima pravo, ne navodeći razloge za to, jednostrano raskinuti ugovor u roku od 14 dana od aktivacije prema Zakonu o zaštiti potrošaća čl.72, st.1.
     
 Dodatne odredbe
 
@@ -44,6 +48,7 @@ Vaše podatke sigurno spremamo u našu bazu podataka te koristimo sve dostupne t
 Kupac ima pravo da u svakom trenutku zatraži prestanak obrade svojih korisničkih podataka od strane VLASNIK-a.
 VLASNIK će zatim u cijelosti prestati sa obradom korisničkih podataka i ukloniti korisnika iz baze podataka.
 KORISNIK može na vlastiti zahtjev zatražiti brisanje svojih osobnih podataka iz baze VLASNIK-a trgovine putem naših web stranica, telefonskim putem ili putem e-maila.
+KORISNIK može trajno izbrisati svoj profil i putem korisničkog računa unutar WEB APLIKACIJE.
 Prilikom registracije na www.programprehrane.com biti ćete dužni kreirati lozinku koju morate zadržati samo za sebe i ne dijeliti je s drugim osobama.
 Preporučujemo da koristite jedinstvenu lozinku za pristup našem sustavu. Ako znate ili sumnjate da još netko zna Vašu lozinku, ljubazno Vas molimo da nas kontaktirate putem e-maila info@programprehrane.com, a kako bismo Vam dali upute za izmjenu Vaše lozinke.
 Ukoliko postoji bilo kakva sumnja da postoji propust u sigurnosti, VLASNIK ima pravo od Vas tražiti da promijenite lozinku ili može blokirati Vaš korisnički račun. Sve stranice i podstranice programprehrane.com na kojima se vrši razmjena povjerljivih podataka (lozinka, plaćanje putem interneta..) zaštićene su uporabom SSL sigurnosnog protokola.
@@ -51,6 +56,7 @@ SSL enkripcija je standardna tehnologija zaštite podataka koja omogućava sigur
 Ukoliko postoji bilo kakva sumnja da postoji propust u sigurnosti ili su tajni korisnički podaci ugroženi, VLASNIK je dužan obavijestiti registrirane korisnike o tim događajima u roku od 48h.
 
 Vaši osobni podaci
+
 Vašu e-adresu i ostale podatke ne prodajemo, ne iznajmljujemo i ne stavljamo trećim pravnim i fizičkim osobama na raspolaganje bez vašeg pristanka jer je to protivno našoj politici o privatnosti.
 VLASNIK se drži stroge politike »no spam«. VLASNIK ne odgovara za slučajnu pogrešku ili pogrešku zbog više sile ili drugih objektivnih okolnosti kojima se uzrokuje slučajno kršenje zajamčene zaštite vaših podataka, ali jamči da će pogreška biti otklonjena, ako je to moguće, čim prije.
 Prikupljamo samo one osobne podatke koji su nam dobrovoljno dostavljeni. Ne zahtijevamo od vas da nam pošaljete te podatke kako bismo vam omogućili pristup na svoje stranice i ne tražimo da otkrijete više podataka no što je doista potrebno za sudjelovanje u nekoj aktivnosti na našim stranicama.
@@ -63,7 +69,7 @@ OSVJEŽAVANJE je zamjena (nadogradnja) starih verzija izvršnih datoteka, eventu
 Autorska prava
 
 Sva autorska prava pripadaju VLASNIKU.
-Zbog toga, korisnik se prema WEB APLIKACIJI mora odnositi kao prema svakom drugom autorskim pravima zaštićenom materijalu, s jedinom iznimkom, da može upotrebljavati WEB APLIKACIJU na onoliko uređaja, koliko ima pridobivenih licenci.
+Zbog toga, KORISNIK se prema WEB APLIKACIJI mora odnositi kao prema svakom drugom autorskim pravima zaštićenom materijalu, s jedinom iznimkom, da može upotrebljavati WEB APLIKACIJU na onoliko uređaja, koliko ima pridobivenih licenci.
 KORISNIK ne smije kopirati tiskanu dokumentaciju koja prati ili je dio WEB APLIKACIJE ili dijelove izvornog KOD-a bez pisanog odobrenja VLASNIKA.
 U slučaju da treća osoba prisvaja bilo kakva autorska prava nad WEB APLIKACIJOM, odnosno KORISNIKU onemogućava mirno korištenje licence, KORISNIK o tome mora neodgodivo obavijestiti VLASNIKA i zahtijevati od njega da mu u primjerenom roku omogući mirno korištenje licence.
 To pravo se ukida nakon jedne godine od dana kada je saznao za prava treće osobe.
@@ -78,7 +84,7 @@ WEB APLIKACIJA djeluje u okviru specifikacija i namjene programa, na način koji
 Ograničenje i isključenje odgovornosti, NAKNADA ŠTETE
 
 VLASNIKOVA cjelokupna odgovornost i korisnikovo jedino pravo na NAKNADU ŠTETE je da u slučaju iz »Ograničene garancije« po prosudbi VLASNIKA:
-VLASNIK ne može popraviti WEB APLIKACIJU nakon što ju je KORISNIK reklamirao VLASNIKU
+VLASNIK ne može popraviti WEB APLIKACIJU nakon što ju je KORISNIK reklamirao VLASNIKU.
 Odštetni zahtjev nema osnove ako je do greške, koja je dovela do uvažavanja »Ograničene garancije« došlo zbog nesreće, zloupotrebe, pogrešne upotrebe ili više sile, na što VLASNIK nije imao utjecaja.
 IZNOS NAKANADE ŠTETE ne može biti viši od vrijednosti kupljene licence.
 
