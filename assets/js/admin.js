@@ -159,12 +159,12 @@ angular.module('app', [])
             $scope.loadingChart = false;
     }
 
-    var load = function () {
+    var load = function (limit) {
         $scope.loading = true;
         $http({
             url: $rootScope.config.backend + 'Users.asmx/Load',
             method: 'POST',
-            data: { limit: $scope.limit, page: $scope.page }
+            data: { limit: limit, page: $scope.page }
         })
         .then(function (response) {
             $scope.loading = false;
@@ -176,14 +176,14 @@ angular.module('app', [])
         });
     }
 
-    $scope.search = function (searchQuery, showActive) {
+    $scope.search = function (searchQuery, showActive, limit) {
         $scope.loading = true;
         $scope.showUsers = true;
         $scope.page = 1;
         $http({
             url: $rootScope.config.backend + 'Users.asmx/Search',
             method: 'POST',
-            data: { query: searchQuery, limit: $scope.limit, page: $scope.page, activeUsers: showActive }
+            data: { query: searchQuery, limit: limit, page: $scope.page, activeUsers: showActive }
         })
         .then(function (response) {
             $scope.d = JSON.parse(response.data.d);
@@ -194,7 +194,7 @@ angular.module('app', [])
             alert(response.data.d);
         });
     }
-    $scope.search(null, false);
+    $scope.search(null, false, $scope.limit);
 
     $scope.update = function (user) {
         $http({
@@ -203,7 +203,7 @@ angular.module('app', [])
             data: { x: user }
         })
         .then(function (response) {
-            load();
+            load($scope.limit);
             total($scope.year);
             alert(response.data.d);
         },
@@ -242,7 +242,7 @@ angular.module('app', [])
             data: { x: user }
         })
         .then(function (response) {
-            load();
+            load($scope.limit);
             total($scope.year);
             alert(response.data.d);
         },
@@ -263,15 +263,15 @@ angular.module('app', [])
         $scope.idxEnd = $scope.d.length;
     }
 
-    $scope.nextPage = function() {
+    $scope.nextPage = function (limit) {
         $scope.page = $scope.page + 1;
-        load();
+        load(limit);
     }
 
-    $scope.prevPage = function () {
+    $scope.prevPage = function (limit) {
         if ($scope.page > 1) {
             $scope.page = $scope.page - 1;
-            load();
+            load(limit);
         }
     }
 

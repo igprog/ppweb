@@ -81,28 +81,29 @@
             <h2>Program Prehrane Web</h2>
             <div>
                 <ul class="nav nav-tabs">
-                    <li ng-class="showUsers==true?'active':''" ng-click="search(searchQuery, showActive)"><a href=""><i class="fa fa-users"></i> Korisnici</a></li>
+                    <li ng-class="showUsers==true?'active':''" ng-click="search(searchQuery, showActive, limit)"><a href=""><i class="fa fa-users"></i> Korisnici</a></li>
                     <li ng-class="showUsers==false?'active':''" ng-click="total(year)"><a href=""><i class="fa fa-bar-chart"></i> Analitika</a></li>
                 </ul>
             </div>
             <div ng-if="showUsers">
                 <h3>Korisnici</h3>
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-md-3">
                         <form>
                             <div class="input-group">
                                 <input ng-model="searchQuery" type="text" class="form-control" placeholder="Pretraži...">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-default" type="submit" ng-click="search(searchQuery, showActive)">
+                                    <button class="btn btn-default" type="submit" ng-click="search(searchQuery, showActive, limit)">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <div class="col-sm-4 checkbox">
+                    <div class="col-md-9 checkbox">
                         <label class="p5"><input type="checkbox" ng-model="showDetails" />Prikaži detalje / uredi</label>
-                        <label class="p5"><input type="checkbox" ng-model="showActive" ng-click="search(searchQuery, showActive)" />Prikaži aktivne</label>
+                        <label class="p5"><input type="checkbox" ng-model="showActive" ng-click="search(searchQuery, showActive, limit)" />Prikaži aktivne</label>
+                        <label class="p5">Limit: <input ng-model="limit" class="form-control" /></label>
                     </div>
                 </div>
                 <div ng-if="loading" class="text-center text-primary">
@@ -110,11 +111,11 @@
                     <div><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
                 </div>
                 <div ng-if="!loading" style="margin-bottom:2px">
-                    <button class="btn btn-default" ng-click="prevPage()"><i class="fa fa-arrow-left"></i> Nazad</button>
+                    <button class="btn btn-default" ng-click="prevPage(limit)"><i class="fa fa-arrow-left"></i> Nazad</button>
                     <span class="badge">{{page}}</span>
-                    <button class="btn btn-default" ng-click="nextPage()">Naprijed <i class="fa fa-arrow-right"></i></button>
+                    <button class="btn btn-default" ng-click="nextPage(limit)">Naprijed <i class="fa fa-arrow-right"></i></button>
                 </div>
-                <div ng-if="!loading" class="table-responsive table-scroll">
+                <div ng-if="!loading" class="table-responsive" style="height:70vh">
                     <table class="table table-condensed text-small">
                         <tr>
                             <th></th>
@@ -449,7 +450,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="table-responsive table-scroll" style="max-height:600px">
+                <div class="table-responsive table-scroll" style="height:70vh">
                     <table class="table table-condensed text-small">
                         <tr>
                             <td colspan="6"></td>
@@ -650,6 +651,23 @@
             $('[data-toggle="popover"]').popover();
         });
     </script>
+
+    <style>
+        /*****Fixed Table Header*****/
+        table {
+            text-align: left;
+            position: relative;
+            border-collapse: collapse;
+        }
+        th {
+            background: white;
+            position: sticky;
+            position: -webkit-sticky; /* Safari */
+            top: 0;
+            box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.4);
+        }
+        /*****Fixed Table Header*****/
+    </style>
   
    
 </body>
