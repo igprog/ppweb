@@ -72,7 +72,7 @@
   ],
   "showupdatedes": true,
   "showlanguages": true,
-  "showsendmenu":  false,
+  "showsendmenu": false,
   "packages": [
     {
       "title": "START",
@@ -88,5 +88,7 @@
     }
   ],
   "showmenuslimit": 20,
-  "showfoodgroupscolors": false
+  "showfoodgroupscolors": false,
+  "instagram": "program_prehrane",
+  "instagram_url": "https://www.instagram.com/program_prehrane/"
 }

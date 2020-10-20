@@ -247,6 +247,10 @@
                     <!-- Topbar Navbar -->
                     <ul ng-show="isLogin" class="navbar-nav ml-auto">
 
+                        <li class="nav-item dropdown no-arrow" ng-cloak>
+                            <a href="{{config.instagram_url}}" class="nav-link" title="{{'follow us on instagram' | translate}} - @{{config.instagram}}" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+                        </li>
+
                         <!-- Nav Item - Apointments -->
                         <li ng-hide="user.licenceStatus==='expired'" class="nav-item dropdown no-arrow mx-1" title="{{'appointments' | translate}}" ng-cloak>
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

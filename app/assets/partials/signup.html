@@ -2,9 +2,7 @@
     <div class="container pb-5">
         <div class="card o-hidden border-0 shadow-lg pb-5">
             <div class="card-body p-0">
-                <!-- Nested Row within Card Body -->
                 <div class="row">
-                    <!--<div class="col-lg-5 d-none d-lg-block bg-register-image_"></div>-->
                     <div class="col-lg-12">
                         <div ng-show="!showAlert" class="p-5">
                             <div class="text-center">
@@ -45,16 +43,6 @@
                                         <a href="{{config.appurl}}{{config.language=='en'?'eula.html':'licence.txt'}}" target="_blank">{{'terms and conditions' | translate}}</a>
                                     </md-input-container>
                                 </div>
-                                <!--<a href="login.html" class="btn btn-primary btn-user btn-block">
-                                    Register Account
-                                </a>-->
-                                <!--<hr>
-                                <a href="index.html" class="btn btn-google btn-user btn-block">
-                                    <i class="fab fa-google fa-fw"></i> Register with Google
-                                </a>
-                                <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                                    <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                                </a>-->
                             </form>
                             <div class="m-2">
                                 <button ng-disabled="signupdisabled||signingUp" type="submit" form="signupform" class="btn btn-primary btn-user btn-block rounded-pill" ng-click="signup()"><i class="fa fa-{{signingUp===true?'spinner fa-spin':'check'}}"></i> <span class="text-capitalize">{{'register' | translate}}</span></button>
@@ -79,63 +67,4 @@
             </div>
         </div>
     </div>
-
-
-    <!--<div ng-if="showAlert" class="alert alert-success text-center">
-        <h3><span class="fa fa-check fa-lg"></span> {{alertMessage | translate}}.</h3>
-        <div class="mt10">
-            <a href="" ng-controller="loginCtrl" class="btn btn-success btn-lg" ng-click="login(newUser.userName, newUser.password)"><i class="fa fa-sign-in"></i> <span class="text-uppercase">{{'enter application' | translate}}</span></a>
-        </div>
-    </div>
-    <div ng-show="!showAlert" class="pt10">
-        <form id="signupform">
-            <div layout-gt-sm="row">
-                <md-input-container class="md-block m2" flex-gt-sm>
-                    <label>{{'first name' | translate}}</label>
-                    <input ng-model="newUser.firstName" type="text" required>
-                </md-input-container>
-            </div>
-            <div layout-gt-sm="row">
-                <md-input-container class="md-block m2" flex-gt-sm>
-                    <label>{{'last name' | translate}}</label>
-                    <input ng-model="newUser.lastName" type="text" required>
-                </md-input-container>
-            </div>
-            <div layout-gt-sm="row">
-                <md-input-container class="md-block m2" flex-gt-sm>
-                    <label>{{'email' | translate}}</label>
-                    <input name="email" ng-model="newUser.email" minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" required />
-                </md-input-container>
-            </div>
-            <div layout-gt-sm="row">
-                <md-input-container class="md-block m2" flex-gt-sm>
-                    <label>{{'confirm email' | translate}}</label>
-                    <input ng-model="emailConfirm" type="text" minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" required>
-                </md-input-container>
-            </div>
-            <div layout-gt-sm="row">
-                <md-input-container class="md-block m2" flex-gt-sm>
-                    <label>{{'password' | translate}}</label>
-                    <input ng-model="newUser.password" type="password" required autocomplete="new-password">
-                </md-input-container>
-            </div>
-            <div layout-gt-sm="row">
-                <md-input-container class="md-block m2" flex-gt-sm>
-                    <label>{{'confirm password' | translate}}</label>
-                    <input ng-model="passwordConfirm" type="password" required autocomplete="new-password">
-                </md-input-container>
-            </div>
-            <div layout-gt-sm="row">
-                <md-input-container class="md-block m2" flex-gt-sm>
-                    <md-checkbox md-no-ink aria-label={{'terms and conditions' | translate}} ng-model="accept" class="md-primary">
-                        {{'i agree to the' | translate}}
-                    </md-checkbox>
-                    <a href="{{config.appurl}}{{config.language=='en'?'eula.html':'licence.txt'}}" target="_blank">{{'terms and conditions' | translate}}</a>
-                </md-input-container>
-            </div>
-        </form>
-        <div class="m2">
-            <button ng-disabled="signupdisabled||signingUp" type="submit" form="signupform" class="btn btn-primary btn-block text-capitalize" ng-click="signup()"><i class="fa fa-{{signingUp===true?'spinner fa-spin':'check'}}"></i> {{'register' | translate}}</button>
-        </div>
-    </div>-->
 </div>
