@@ -9,6 +9,20 @@
         gtag('js', new Date());
         gtag('config', 'UA-43413032-1');
     </script>-->
+
+    <!--Start of Tawk.to Script-->
+    <!--<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/5f9030f2fd4ff5477ea7bc43/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+    </script>-->
+    <!--End of Tawk.to Script-->
     <title>Program Prehrane | Web Aplikacija</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -97,7 +111,7 @@
             <div class="col-md-8 col-md-offset-2">
                 <a href="#about" style="text-decoration:none" title="program prehrane">
                     <h1 class="main-text">Program Prehrane Web</h1>
-                    <h2 class="lead"><strong>Aplikacija za izradu plana prehrane i tjelesne aktivnost</strong></h2>
+                    <h2 class="lead"><strong>Web aplikacija za nutricioniste</strong></h2>
                 </a>
                 <div class="text-left">
                     <a href="../app/" class="btn btn-default m10 main-border" style="width:260px" title="ulaz u aplikaciju"><i class="fa fa-sign-in fa-2x"></i> <span class="lead"> Ulaz za Korisnike</span></a>
@@ -398,16 +412,16 @@
 
     <div ng-include="'./assets/partials/info.html'"></div>
 
-    <footer class="container-fluid text-right pt60">
+    <footer class="container-fluid text-center pt60">
         <div class="navbar-fixed-bottom m10" style="margin-bottom:40px">
             <a href="#home" title="Na vrh">
-                <span class="fa fa-chevron-up fa-2x"></span>
+                <span class="fa fa-chevron-up fa-3x"></span>
             </a>
         </div>
         <hr />
         <!--<p>Program Prehrane je deponiran u Hrvatskoj autorskoj agenciji - Centru za intelektualno vlasništvo d.o.o. u Zagrebu.</p>-->
         <div ng-cloak>
-            <span class="pull-right">Copyright © {{year}} IG PROG</span>
+            <span class="small">Copyright © {{year}} <a href="https://www.igprog.hr" title="igprog.hr">IG PROG</a></span>
         </div>
     </footer>
 
@@ -418,9 +432,8 @@
     <script>
         $("body").floatingSocialShare({
             buttons: [
-              "facebook", "google-plus", "linkedin", "pinterest", "twitter"
+              "facebook", "google-plus", "linkedin"
             ],
-            twitter_counter: true,
             text: "Podijeli sa: ",
             url: "https://www.programprehrane.com/"
         });
