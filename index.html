@@ -126,6 +126,7 @@ s0.parentNode.insertBefore(s1,s0);
                 </a>
             </div>
         </div>
+
     </div>
     <div class="container text-center">
         <div class="row p10">
@@ -413,7 +414,7 @@ s0.parentNode.insertBefore(s1,s0);
     <div ng-include="'./assets/partials/info.html'"></div>
 
     <footer class="container-fluid text-center pt60">
-        <div class="navbar-fixed-bottom m10" style="margin-bottom:40px">
+        <div class="navbar-fixed-bottom m10" style="margin-bottom:60px">
             <a href="#home" title="Na vrh">
                 <span class="fa fa-chevron-up fa-3x"></span>
             </a>
@@ -432,11 +433,22 @@ s0.parentNode.insertBefore(s1,s0);
     <script>
         $("body").floatingSocialShare({
             buttons: [
-              "facebook", "google-plus", "linkedin"
+              "facebook", "google-plus", "linkedin", "pinterest", "twitter"
             ],
             text: "Podijeli sa: ",
             url: "https://www.programprehrane.com/"
         });
     </script>
+
+    <style type="text/css">
+        @media only screen and (max-width: 961px) {
+            #floatingSocialShare .content-left,
+            #floatingSocialShare .content-right,
+            #floatingSocialShare .top-left,
+            #floatingSocialShare .top-right {
+                width: 60%;
+            }
+        }
+    </style>
 </body>
 </html>
