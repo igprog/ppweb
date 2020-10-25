@@ -245,10 +245,21 @@
                     </button>
 
                     <!-- Topbar Navbar -->
+                    <ul ng-show="!isLogin&&config.instagram.show" class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown no-arrow" ng-cloak>
+                            <a href="{{config.instagram.url}}" class="nav-link ml-3 text-right" title="{{'follow us on instagram' | translate}} - {{config.instagram.name}}" target="_blank">
+                                {{'follow us on instagram' | translate}} <br />
+                                <div>
+                                    <i class="fab fa-instagram fa-2x ml-2"></i>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+
                     <ul ng-show="isLogin" class="navbar-nav ml-auto">
 
-                        <li class="nav-item dropdown no-arrow" ng-cloak>
-                            <a href="{{config.instagram_url}}" class="nav-link" title="{{'follow us on instagram' | translate}} - @{{config.instagram}}" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+                        <li ng-if="config.instagram.show" class="nav-item dropdown no-arrow" ng-cloak>
+                            <a href="{{config.instagram.url}}" class="nav-link" title="{{'follow us on instagram' | translate}} - {{config.instagram.name}}" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
                         </li>
 
                         <!-- Nav Item - Apointments -->

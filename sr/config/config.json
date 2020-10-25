@@ -13,9 +13,12 @@
   "oib": 58331314923,
   "email": "info@programprehrane.com",
   "phone": "+385 98 330 966",
-  "instagram": "program_prehrane",
-  "instagram_url": "https://www.instagram.com/program_prehrane/",
   "language": "sr",
   "freetrial": false,
-  "menus": [ "jelovnik1", "jelovnik2", "jelovnik3", "jelovnik4" ]
+  "menus": [ "jelovnik1", "jelovnik2", "jelovnik3", "jelovnik4" ],
+  "instagram": {
+    "name": "@program_prehrane",
+    "url": "https://www.instagram.com/program_prehrane/",
+    "show": true
+  }
 }

@@ -89,6 +89,9 @@
   ],
   "showmenuslimit": 20,
   "showfoodgroupscolors": false,
-  "instagram": "program_prehrane",
-  "instagram_url": "https://www.instagram.com/program_prehrane/"
+  "instagram": {
+    "name": "@program_prehrane",
+    "url": "https://www.instagram.com/program_prehrane/",
+    "show": true
+  }
 }
