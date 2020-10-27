@@ -34,7 +34,6 @@ public class Clients : System.Web.Services.WebService {
         public string birthDate { get; set; }
 
         public Gender gender = new Gender();
-
         public string phone { get; set; }
         public string email { get; set; }
         public string userId { get; set; }
@@ -214,7 +213,7 @@ public class Clients : System.Web.Services.WebService {
                 connection.Close();
             }  
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return ("error: " + e); }
+        } catch (Exception e) { return (e.Message); }
     }
 
     [WebMethod]
@@ -222,15 +221,16 @@ public class Clients : System.Web.Services.WebService {
         try {
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
-                string sql = @"delete from clients where clientId = @clientId;
-                        delete from clientsdata where clientId = @clientId";
+                string sql = string.Format(@"DELETE FROM clients WHERE clientId = '{0}';
+                        DELETE FROM clientsdata WHERE clientId = '{0}'", clientId);
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                    command.Parameters.Add(new SQLiteParameter("clientId", clientId));
                     command.ExecuteNonQuery();
                 } 
                 connection.Close();
+                Files f = new Files();
+                f.DeleteClientFolder(userId, clientId);
             } 
-        } catch (Exception e) { return ("error: " + e); }
+        } catch (Exception e) { return (e.Message); }
         return JsonConvert.SerializeObject(GetClients(userId, user, null, null), Formatting.None);
     }
 

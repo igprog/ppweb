@@ -104,6 +104,13 @@ public class Files : System.Web.Services.WebService {
         }
     }
 
+    public void DeleteClientFolder(string userId, string clientId) {
+        string path = Server.MapPath(string.Format("~/upload/users/{0}/clients/{1}", userId, clientId));
+        if (Directory.Exists(path)) {
+            Directory.Delete(path, true);
+        }
+    }
+
     public void SaveFile(string userId, string fileName, string value) {
         try {
             string path = string.Format("~/App_Data/users/{0}", userId);

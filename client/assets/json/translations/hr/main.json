@@ -121,13 +121,14 @@
   "period": "Period",
   "statistics": "Statistika",
   "profile image": "Profilna slika",
-  "attach the image": "Priložite sliku",
+  "attach the image": "Priloži sliku",
   "client": "Klijent",
   "diet": "Dijeta",
   "enter the activation code": "Upišite aktivacijski kod",
   "menu_": "Izbornik",
   "you are offline": "Niste na mreži",
   "check your connection and try again": "Provjerite vezu i pokušajte ponovo",
-  "total nutritional values": "Ukupne nutritivne vrijednosti"
+  "total nutritional values": "Ukupne nutritivne vrijednosti",
+  "remove image": "Briši sliku"
 
 }

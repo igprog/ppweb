@@ -429,11 +429,12 @@
   "period": "Период",
   "statistics": "Статистика",
   "profile image": "Профилна слика",
-  "attach the image": "Приложите слику",
+  "attach the image": "Приложи слику",
   "enter the activation code": "Упишите активацијски код",
   "menu_": "Изборник",
   "you are offline": "Niste na mreži",
   "check your connection and try again": "Проверите везу и покушајте поново",
-  "total nutritional values": "Укупне нутритивне вредности"
+  "total nutritional values": "Укупне нутритивне вредности",
+  "remove image": "Бриши слику"
 
 }

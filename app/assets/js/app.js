@@ -1839,11 +1839,18 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                    functions.alert($translate.instant(JSON.parse(response.data.d).message), '');
                    return false;
                }
-               $mdDialog.hide(JSON.parse(response.data.d).data);
+               $scope.d = JSON.parse(response.data.d).data;
+               //$mdDialog.hide(JSON.parse(response.data.d).data);
            },
            function (response) {
                functions.alert($translate.instant(response.data.d), '');
            });
+        }
+
+        $scope.forward = function (d) {
+            if (d.clientId !== null) {
+                $mdDialog.hide(d);
+            }
         }
 
         $scope.remove = function (x) {
@@ -1869,6 +1876,42 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }, function () {
             });
         };
+
+        /********* Profile Image *********/
+        $scope.uploadImg = function () {
+            var content = new FormData(document.getElementById("formUpload"));
+            $http({
+                url: $sessionStorage.config.backend + '/UploadProfileImg.ashx',
+                method: 'POST',
+                headers: { 'Content-Type': undefined },
+                data: content,
+            }).then(function (response) {
+                $scope.d.profileImg = response.data;
+            },
+           function (response) {
+               alert($translate.instant(response.data));
+           });
+        }
+
+        $scope.removeProfileImg = function (x) {
+            if (confirm($translate.instant('remove image') + '?')) {
+                removeProfileImg(x);
+            }
+        }
+
+        var removeProfileImg = function (x) {
+            $http({
+                url: $sessionStorage.config.backend + 'Files.asmx/DeleteProfileImg',
+                method: 'POST',
+                data: { x: x },
+            }).then(function (response) {
+                $scope.d.profileImg = response.data.d;
+            },
+           function (response) {
+               alert($translate.instant(response.data.d));
+           });
+        }
+        /********* Profile Image *********/
 
     }
 

@@ -19,6 +19,9 @@ public class UploadProfileImg : IHttpHandler {
                     string folderPath = context.Server.MapPath(string.Format("~/upload/users/{0}/clients/{1}/profileimg", userId, clientId));
                     if (!Directory.Exists(folderPath)) {
                         Directory.CreateDirectory(folderPath);
+                    } else {
+                        Directory.Delete(folderPath, true);
+                        Directory.CreateDirectory(folderPath);
                     }
                     file.SaveAs(fname);
                     context.Response.Write(string.Format("{0}?v={1}", file.FileName, DateTime.Now.Ticks));
