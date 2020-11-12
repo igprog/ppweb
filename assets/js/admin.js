@@ -1,6 +1,6 @@
 ﻿/*!
 admin.js
-(c) 2018-2019 IG PROG, www.igprog.hr
+(c) 2018-2020 IG PROG, www.igprog.hr
 */
 angular.module('app', [])
 
@@ -525,6 +525,23 @@ angular.module('app', [])
         } else {
             $scope.i.paidAmount = 0;
             $scope.i.paidDate = '';
+        }
+    }
+
+    $scope.removeInvoice = function (x, year, search) {
+        if (confirm("Briši rčun br." + x.number + ", Iznos: " + x.total + "?")) {
+            $http({
+                url: $rootScope.config.backend + 'Invoice.asmx/Delete',
+                method: 'POST',
+                data: { x: x }
+            })
+            .then(function (response) {
+                $scope.load(year, search);
+                alert(response.data.d);
+            },
+            function (response) {
+                alert(response.data.d);
+            });
         }
     }
 

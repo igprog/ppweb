@@ -192,6 +192,22 @@ public class Invoice : System.Web.Services.WebService {
         }
     }
 
+    [WebMethod]
+    public string Delete(NewInvoice x) {
+        try {
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                connection.Open();
+                string sql = string.Format("DELETE FROM invoices WHERE id = '{0}'", x.id);
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+            return "ok";
+        } catch (Exception e) { return (e.Message); }
+    }
+
+
     #endregion WebMethods
 
     #region Methods

@@ -114,6 +114,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 .controller('AppCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$rootScope', '$localStorage', '$sessionStorage', '$window', '$http', '$translate', '$translatePartialLoader', 'functions', '$state', function ($scope, $mdDialog, $timeout, $q, $log, $rootScope, $localStorage, $sessionStorage, $window, $http, $translate, $translatePartialLoader, functions, $state) {
     $rootScope.loginUser = $sessionStorage.loginuser;
     $rootScope.user = $sessionStorage.user;
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     $scope.today = new Date();
     $rootScope.unitSystem = 1;
 
@@ -1142,7 +1146,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 }])
 
-.controller("schedulerCtrl", ['$scope', '$localStorage', '$http', '$rootScope', '$timeout', '$sessionStorage', '$mdDialog', 'functions', '$translate', function ($scope, $localStorage, $http, $rootScope, $timeout, $sessionStorage, $mdDialog, functions, $translate) {
+.controller("schedulerCtrl", ['$scope', '$localStorage', '$http', '$rootScope', '$timeout', '$sessionStorage', '$mdDialog', 'functions', '$translate', '$window', function ($scope, $localStorage, $http, $rootScope, $timeout, $sessionStorage, $mdDialog, functions, $translate, $window) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
     var webService = 'Scheduler.asmx';
     $scope.id = '#myScheduler';
     $scope.room = 0;
@@ -1357,6 +1364,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('userCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate, $state) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     var webService = 'Users.asmx';
 
     $scope.adminTypes = [
@@ -1567,7 +1578,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
        });
     }
     isLogoExists();
-
+    debugger;
     $scope.logo = '../upload/users/' + $rootScope.user.userGroupId + '/logo.png?v=' + new Date().getTime();
     $scope.upload = function () {
         if ($rootScope.user.adminType != 0) { return false; }
@@ -1638,7 +1649,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 //-------------- Program Prehrane Controllers---------------
-.controller('dashboardCtrl', ['$scope', '$http', '$sessionStorage', '$rootScope', 'functions', '$translate', '$timeout', '$state', function ($scope, $http, $sessionStorage, $rootScope, functions, $translate, $timeout, $state) {
+.controller('dashboardCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', 'functions', '$translate', '$timeout', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, functions, $translate, $timeout, $state) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
     var getUser = function () {
         if ($rootScope.user === null) { return false;}
         $http({
@@ -1684,6 +1698,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('clientsCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', '$timeout', 'charts', '$filter', 'functions', '$translate', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, $timeout, charts, $filter, functions, $translate) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
     var webService = 'Clients.asmx';
     $scope.displayType = 0;
 
@@ -2319,9 +2336,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     };
 
-    //$rootScope.setClientLogGraphData = function (type, clientLogsDays) {
-    //    setClientLogGraphData(type, clientLogsDays);
-    //}
     $scope.setClientLogGraphData = function (type, clientLogsDays) {
         setClientLogGraphData(type, clientLogsDays);
     }
@@ -2759,173 +2773,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 }])
 
-//.controller('detailCalculationOfEnergyExpenditureCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', '$timeout', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate, $timeout) {
-//    $rootScope.totalDailyEnergyExpenditure = {
-//        value: 0,
-//        duration: 0
-//    }
-
-//    var init = function () {
-//        $http({
-//            url: $sessionStorage.config.backend + 'DetailEnergyExpenditure.asmx/Init',
-//            method: "POST",
-//            data: ''
-//        })
-//      .then(function (response) {
-//          $scope.dailyActivity = JSON.parse(response.data.d);
-//      },
-//      function (response) {
-//          functions.alert($translate.instant(response.data.d), '');
-//      });
-//    }
-//    init();
-
-//    var setTime = function (h) {
-//        $scope.hours = [];
-//        $scope.minutes = [];
-//        for (i = h; i < 25; i++) {
-//            $scope.hours.push(i);
-//        }
-//        for (i = 0; i < 60; i = i + 5) {
-//            $scope.minutes.push(i);
-//        }
-//    }
-
-//    var initTime = function () {
-//        $scope.from = {
-//            hour: 0,
-//            min: 0
-//        };
-//        $scope.to = {
-//            hour: 0,
-//            min: 0
-//        }
-//        setTime(0);
-//    }
-//    initTime();
-
-//    $scope.clearDailyActivities = function () {
-//        $rootScope.clientData.dailyActivities.activities = [];
-//        $rootScope.clientData.dailyActivities.energy = 0;
-//        $rootScope.clientData.dailyActivities.duration = 0;
-//        $rootScope.totalDailyEnergyExpenditure.value = 0;
-//        $rootScope.totalDailyEnergyExpenditure.duration = 0;
-//        $scope.save($rootScope.clientData.dailyActivities.activities);
-//        initTime();
-//    }
-
-//    $rootScope.detailCalculationOfEnergyExpenditure = function () {
-//        $rootScope.showDetailCalculationOfEnergyExpenditure = !$rootScope.showDetailCalculationOfEnergyExpenditure;
-//        init();
-//        //$scope.clearDailyActivities();
-//    }
-
-//    var totalEnergy = function () {
-//        var e = 0;
-//        angular.forEach($rootScope.clientData.dailyActivities.activities, function (value, key) {
-//            e = e + value.energy;
-//        })
-//        return e;
-//    }
-
-//    var totalDuration = function () {
-//        var d = 0;
-//        angular.forEach($rootScope.clientData.dailyActivities.activities, function (value, key) {
-//            d = d + value.duration;
-//        })
-//        return d;
-//    }
-
-//    $scope.confirmActivity = function (x) {
-//        if (timeDiff($scope.from, $scope.to) == 0) {
-//            functions.alert($translate.instant('the start time and end of activity can not be the same'), '');
-//            return false;
-//        }
-//        $scope.dailyActivity.id = angular.fromJson(x).id;
-//        $scope.dailyActivity.activity = angular.fromJson(x).activity;
-//        //$scope.dailyActivity.from = $scope.from.hour + ':' + $scope.from.minute;
-//        $scope.dailyActivity.from.hour = $scope.from.hour;
-//        $scope.dailyActivity.from.min = $scope.from.min;
-//        // $scope.dailyActivity.to = $scope.to.hour + ':' + $scope.to.minute;
-//        $scope.dailyActivity.to.hour = $scope.to.hour;
-//        $scope.dailyActivity.to.min = $scope.to.min;
-//        $scope.dailyActivity.duration = timeDiff($scope.from, $scope.to);
-//        $scope.dailyActivity.energy = energy(timeDiff($scope.from, $scope.to), angular.fromJson(x).factorKcal);
-
-//        $rootScope.clientData.dailyActivities.activities.push(angular.copy($scope.dailyActivity));
-//        $rootScope.totalDailyEnergyExpenditure.value = totalEnergy(); // $scope.totalDailyEnergyExpenditure + $scope.dailyActivity.energy;
-//        $rootScope.clientData.dailyActivities.energy = $rootScope.totalDailyEnergyExpenditure.value;
-//        $rootScope.totalDailyEnergyExpenditure.duration = totalDuration();
-//        $rootScope.clientData.dailyActivities.duration = $rootScope.totalDailyEnergyExpenditure.duration;
-
-//        $scope.from = angular.copy($scope.to);
-//        setTime($scope.from.hour);
-//    }
-
-//    var timeDiff = function (from, to) {
-//        return (to.hour * 60 + to.min) - (from.hour * 60 + from.min);
-//    }
-
-//    var energy = function (duration, factor) {
-//        return duration * factor;
-//    }
-
-//    $scope.save = function (x) {
-//        if ($rootScope.user.licenceStatus == 'demo') {
-//            functions.demoAlert('this function is not available in demo version');
-//            return false;
-//        }
-//        $http({
-//            url: $sessionStorage.config.backend + 'DetailEnergyExpenditure.asmx/Save',
-//            method: "POST",
-//            data: { userId: $rootScope.user.userGroupId, clientId: $rootScope.client.clientId, activities: x }
-//        })
-//      .then(function (response) {
-//          $rootScope.clientData.dailyActivities = JSON.parse(response.data.d);
-//      },
-//      function (response) {
-//          functions.alert($translate.instant(response.data.d), '');
-//      });
-//    }
-
-//    var getTotal = function () {
-//        if ($rootScope.clientData === undefined) {
-//            return false;
-//        }
-//        if ($rootScope.clientData.dailyActivities.activities == null) {
-//            $rootScope.clientData.dailyActivities.activities = [];
-//        }
-//        if ($rootScope.clientData.dailyActivities.activities.length > 0) {
-//            $rootScope.totalDailyEnergyExpenditure.value = totalEnergy();
-//            $rootScope.totalDailyEnergyExpenditure.duration = totalDuration();
-//            var lastActivity = $rootScope.clientData.dailyActivities.activities[$rootScope.clientData.dailyActivities.activities.length - 1];
-//            $scope.from = {
-//                hour: lastActivity.to.hour,
-//                min: lastActivity.to.min
-//            };
-//            $scope.to = {
-//                hour: lastActivity.to.hour,
-//                min: lastActivity.to.min
-//            }
-//            setTime(lastActivity.to.hour);
-//        }
-//    }
-//    $timeout(function () {  // TODO, ne ucita prvi put 
-//        getTotal();
-//    }, 1000);
-
-
-//    $scope.selectHours = function () {
-//        if ($scope.to.hour == 24) {
-//            $scope.to.min = 0;
-//            $scope.minutes = [];
-//            $scope.minutes.push(0);
-//        }
-//    }
-
-//}])
-
 .controller('calculationCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'charts', '$timeout', 'functions', '$translate', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, charts, $timeout, functions, $translate) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     var webService = 'Calculations.asmx';
 
     $scope.getBmiClass = function (x) {
@@ -3284,6 +3136,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('activitiesCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate, $state) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     var webService = 'Activities.asmx';
     $scope.orderdirection = '-';
     $scope.orderby = function (x) {
@@ -3383,6 +3239,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('dietsCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $state) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     var webService = 'Diets.asmx';
    
     var get = function (x) {
@@ -3477,6 +3337,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('mealsCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate, $state) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     if ($rootScope.clientData === undefined) {
         $state.go('clientsdata');
         $rootScope.selectedNavItem = 'clientsdata';
@@ -3554,6 +3418,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('myMealsCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     var webService = 'MyMeals.asmx';
     var init = function () {
         $http({
@@ -3843,6 +3711,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('menuCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'charts', '$timeout', 'functions', '$translate', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, charts, $timeout, functions, $translate, $state) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     if ($rootScope.clientData === undefined) {
         $state.go('meals');
         $rootScope.selectedNavItem = 'meals';
@@ -5871,6 +5743,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('myFoodsCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', '$timeout', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate, $timeout) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     var webService = 'MyFoods.asmx';
     $scope.unit = null;
 
@@ -6303,6 +6179,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('myRecipesCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     var webService = 'Recipes.asmx';
     $scope.addFoodBtnIcon = 'fa fa-plus';
     $scope.addFoodBtn = false;
@@ -6896,7 +6776,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 }])
 
-.controller('pricesCtrl', ['$scope', '$http', '$sessionStorage', '$rootScope', '$translate', 'functions', '$mdDialog', function ($scope, $http, $sessionStorage, $rootScope, $translate, functions, $mdDialog) {
+.controller('pricesCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$translate', 'functions', '$mdDialog', function ($scope, $http, $sessionStorage, $window, $rootScope, $translate, functions, $mdDialog) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     var webService = 'Prices.asmx';
     $scope.foodListType = 0;
     $scope.getFoodList = function (x) {
@@ -6999,7 +6883,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 }])
 
-.controller('orderCtrl', ['$scope', '$http', '$rootScope', '$translate', 'functions', function ($scope, $http, $rootScope, $translate, functions) {
+.controller('orderCtrl', ['$scope', '$http', '$window', '$rootScope', '$translate', 'functions', function ($scope, $http, $window, $rootScope, $translate, functions) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     $scope.application = $translate.instant('nutrition program web');
     $scope.version = 'STANDARD';
     $scope.userType = 1;
@@ -7200,7 +7088,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 }])
 
-.controller('settingsCtrl', ['$scope', '$http', '$rootScope', '$translate', '$sessionStorage', 'functions', function ($scope, $http, $rootScope, $translate, $sessionStorage, functions) {
+.controller('settingsCtrl', ['$scope', '$http', '$window', '$rootScope', '$translate', '$sessionStorage', 'functions', function ($scope, $http, $window, $rootScope, $translate, $sessionStorage, functions) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     var webService = 'Files.asmx';
     if(angular.isDefined($sessionStorage.settings)){$rootScope.settings = $sessionStorage.settings;}
 
@@ -7974,6 +7866,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('clientAppCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', '$timeout', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate, $timeout) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
     var webService = 'ClientApp.asmx';
     $scope.show = false;
     $scope.showTitle = $translate.instant('show access data');
