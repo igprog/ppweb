@@ -1976,6 +1976,8 @@
   "profile image": "Profile Image",
   "you can upload a profile picture after saving the client": "You can upload a profile picture after saving the client",
   "remove image": "remove image",
-  "attach the image": "Attach the Image"
+  "attach the image": "Attach the Image",
+  "loading":  "Loading",
+  "please wait": "Please wait"
 
 }

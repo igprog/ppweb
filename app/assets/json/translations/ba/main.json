@@ -1985,5 +1985,7 @@
   "profile image": "Profilna slika",
   "you can upload a profile picture after saving the client": "Profilnu sliku možete učitati nakon što spremite klijenta",
   "remove image": "Briši sliku",
-  "attach the image": "Priloži sliku"
+  "attach the image": "Priloži sliku",
+  "loading": "Učitavanje",
+  "please wait": "Molimo sačekajte"
 }

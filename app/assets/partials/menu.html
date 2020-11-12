@@ -5,9 +5,7 @@
             <li class="nav-item" ng-click="toggleMenu('dailyMenuTpl')"><a href="#" ng-class="menuTpl=='dailyMenuTpl'?'nav-link active':'nav-link'"><i class="fa fa-utensils"></i> <span class="text-capitalize">{{'daily menu' | translate}}</span></a></li>
             <li class="nav-item" ng-click="toggleMenu('weeklyMenuTpl')"><a href="#" ng-class="menuTpl=='weeklyMenuTpl'?'nav-link active':'nav-link'"><i class="fa fa-files-o"></i> <span class="text-capitalize">{{'weekly menu' | translate}}</span></a></li>
         </ul>
-        <div ng-if="loading" layout="row" layout-sm="column" layout-align="space-around" class="mt-5">
-            <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
-        </div>
+        <loading-directive value="loading"></loading-directive>
         <div ng-include="menuTpl" style="padding-top:20px"></div>
     </div>
 </div>
@@ -55,9 +53,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div ng-if="loading" layout="row" layout-sm="column" layout-align="space-around">
-                        <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
-                    </div>
+                    <loading-directive value="loading"></loading-directive>
                     <div ng-show="!loading" class="pt-1" style="min-height:50vh">
                         <div class="table-responsive">
                             <table class="table table-sm table-borderless">
@@ -175,9 +171,7 @@
 
 <script type="text/ng-template" id="weeklyMenuTpl">
     <div ng-controller="weeklyMenuCtrl">
-        <div ng-if="loading" layout="row" layout-sm="column" layout-align="space-around" class="text-center">
-            <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
-        </div>
+        <loading-directive value="loading"></loading-directive>
         <div ng-if="!loading" class="card">
             <div class="card-header text-capitalize">
                 <button ng-click="new()" class="btn btn-outline-primary"><i class="fa fa-file"></i> <span class="d-none d-sm-inline">{{'new' | translate}} {{'menu' | translate}}</span></button>

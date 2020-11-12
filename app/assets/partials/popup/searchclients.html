@@ -46,9 +46,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <div ng-if="loading" layout="row" layout-sm="column" layout-align="space-around" class="text-center m-5">
-                    <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
-                </div>
+                <loading-directive value="loading"></loading-directive>
             </div>
             <div class="text-right mr-4 mt-2">
                 <a href="" ng-if="limit<d.length+1" class="btn btn-outline-primary" ng-click="loadMore()"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</a>

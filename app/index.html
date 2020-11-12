@@ -351,9 +351,10 @@
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <div ng-if="loading" layout="row" layout-sm="column" layout-align="space-around" class="text-center">
+                    <loading-directive value="loading" showdesc="true"></loading-directive>
+                    <!--<div ng-if="loading" layout="row" layout-sm="column" layout-align="space-around" class="text-center">
                         <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
-                    </div>
+                    </div>-->
                     <div ng-if="browserMsg" class="alert alert-danger alert-dismissable text-center m-2" style="height:auto !important" ng-cloak>
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                         <strong>

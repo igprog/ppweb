@@ -9,7 +9,7 @@ md-dialog {
     max-height: 80%;
 }
 
-.nowrap{
+.nowrap {
     white-space: nowrap;
     width: 1px;
 }
@@ -219,13 +219,13 @@ a[class*="btn-default"], button[class*="btn-default"], input[class*="search"] {
     background-color: #cccbb1;
 }
 .bg-otherfoods {
-    background-color: #a18e6a;
+    background-color: #ffe7dc;
 }
 .bg-mixedfoods {
     background-color: #dcbce6;
 }
 .bg-preparedmeals {
-    background-color: #73b3d1;
+    background-color: #c1e1f1;
 }
 
 .decoration-none {

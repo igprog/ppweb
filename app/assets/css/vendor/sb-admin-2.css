@@ -2274,7 +2274,8 @@ fieldset:disabled a.btn {
 .btn-primary:hover {
   color: #fff;
   background-color: #2e59d9;
-  border-color: #2653d4;
+  /*border-color: #2653d4;*/
+  border-color: #1465a2;
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -2559,7 +2560,8 @@ fieldset:disabled a.btn {
   /*background-image: linear-gradient(180deg, #85BC5E  10%, #558632  100%);*/
   background-image: linear-gradient(180deg, #9ae8ea 10%, #1465a2  100%);
   background-size: cover;
-  border-color: #85BC5E;
+  /*border-color: #85BC5E;*/
+  border-color: #9ae8ea;
 }
 
 .btn-outline-primary:focus, .btn-outline-primary.focus {
@@ -4623,7 +4625,8 @@ input[type="button"].btn-block {
   padding: 0.5rem 0.75rem;
   margin-left: -1px;
   line-height: 1.25;
-  color: #4e73df;
+  /*color: #4e73df;*/
+  color: #5394c5;
   background-color: #fff;
   border: 1px solid #dddfeb;
 }
@@ -4656,8 +4659,10 @@ input[type="button"].btn-block {
 .page-item.active .page-link {
   z-index: 1;
   color: #fff;
-  background-color: #4e73df;
-  border-color: #4e73df;
+  /*background-color: #4e73df;*/
+  background-color: #5394c5;
+  /*border-color: #4e73df;*/
+  border-color: #5394c5;
 }
 
 .page-item.disabled .page-link {

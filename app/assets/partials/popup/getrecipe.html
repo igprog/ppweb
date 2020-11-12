@@ -9,9 +9,7 @@
         </md-toolbar>
         <md-dialog-content>
             <div class="md-dialog-content">
-                <div ng-if="loading" layout="row" layout-sm="column" layout-align="space-around" class="text-center">
-                    <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
-                </div>
+                <loading-directive value="loading"></loading-directive>
                 <div class="text-right text-capitalize">
                     <a href="" class="btn btn-outline-primary" ng-click="toggleMyRecipeTpl()"><i class="fa fa-file-text"></i> {{'create recipe' | translate}}</a>
                 </div>

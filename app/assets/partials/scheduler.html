@@ -25,9 +25,7 @@
                     </md-option>
                 </md-select>
             </md-input-container>
-            <div ng-if="loading" layout="row" layout-sm="column" layout-align="space-around" class="text-center m-5">
-                <md-progress-circular ng-disabled="!loading" md-mode="indeterminate"></md-progress-circular>
-            </div>
+            <loading-directive value="loading"></loading-directive>
             <div id="wrapper">
                 <div ng-if="uid===null" id="myScheduler"></div>
                 <div ng-if="uid===x.userId" id="{{x.userId}}" ng-repeat="x in users"></div>

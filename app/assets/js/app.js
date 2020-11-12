@@ -8211,6 +8211,17 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 }])
 
+.directive('loadingDirective', function ()  {
+    return {
+        restrict: 'E',
+        scope: {
+            value: '=',
+            showdesc: '='
+        },
+        templateUrl: './assets/partials/directive/loading.html'
+    };
+})
+
 
 ;
 
