@@ -43,12 +43,12 @@
                     </div>
                     <div>
                         <div class="d-block d-sm-none">
-                            <select ng-model="currentMeal" ng-change="toggleMeals(currentMeal)" class="form-control text-capitalize">
+                            <select ng-model="currentMeal" ng-change="toggleMeals(currentMeal)" class="form-control">
                                 <option ng-selected="x.code===currentMeal?true:false" value="{{x.code}}" ng-if="x.isSelected==1" ng-repeat="x in currentMenu.data.meals">{{getMealTitle(x)}}</option>
                             </select>
                         </div>
                         <div class="d-none d-sm-inline">
-                            <ul class="nav nav-tabs text-capitalize">
+                            <ul class="nav nav-tabs">
                                 <li class="nav-item" ng-click="toggleMeals(x.code)" ng-if="x.isSelected==1" ng-repeat="x in currentMenu.data.meals"><a href="" ng-class="x.code===currentMeal?'nav-link active':'nav-link'">{{getMealTitle(x)}}</a></li>
                             </ul>
                         </div>

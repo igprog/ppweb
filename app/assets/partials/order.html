@@ -57,8 +57,8 @@
                 <div class="row m-1 h5 mt-2">
                     <div class="col-sm-2 text-capitalize">{{'price' | translate}}:</div>
                     <div class="col-sm-6">
-                        <h3 ng-if="config.language!=='en'" class="lead">{{user.price}} kn ({{user.priceEur | number:2}} €)</h3>
-                        <h3 ng-if="config.language==='en'" class="lead">{{user.price / config.usd | number:2}} €</h3>
+                        <h3 ng-if="config.language!=='en'" class="lead font-weight-bold">{{user.price}} kn ({{user.priceEur | number:2}} €)</h3>
+                        <h3 ng-if="config.language==='en'" class="lead font-weight-bold">{{user.price / config.usd | number:2}} €</h3>
                     </div>
                 </div>
                 <hr />

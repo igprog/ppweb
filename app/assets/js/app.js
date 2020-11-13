@@ -1578,7 +1578,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
        });
     }
     isLogoExists();
-    debugger;
+
     $scope.logo = '../upload/users/' + $rootScope.user.userGroupId + '/logo.png?v=' + new Date().getTime();
     $scope.upload = function () {
         if ($rootScope.user.adminType != 0) { return false; }
@@ -1697,10 +1697,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 }])
 
-.controller('clientsCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', '$timeout', 'charts', '$filter', 'functions', '$translate', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, $timeout, charts, $filter, functions, $translate) {
+.controller('clientsCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', '$timeout', 'charts', '$filter', 'functions', '$translate', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, $timeout, charts, $filter, functions, $translate, $state) {
     if ($rootScope.user === undefined) {
         $window.location.href = '/app/#/login';
     }
+    $rootScope.selectedNavItem = $state.current.name;
     var webService = 'Clients.asmx';
     $scope.displayType = 0;
 
@@ -2773,10 +2774,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 }])
 
-.controller('calculationCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'charts', '$timeout', 'functions', '$translate', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, charts, $timeout, functions, $translate) {
+.controller('calculationCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'charts', '$timeout', 'functions', '$translate', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, charts, $timeout, functions, $translate, $state) {
     if ($rootScope.user === undefined) {
         $window.location.href = '/app/#/login';
     }
+    $rootScope.selectedNavItem = $state.current.name;
 
     var webService = 'Calculations.asmx';
 
@@ -3139,6 +3141,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     if ($rootScope.user === undefined) {
         $window.location.href = '/app/#/login';
     }
+    $rootScope.selectedNavItem = $state.current.name;
 
     var webService = 'Activities.asmx';
     $scope.orderdirection = '-';
@@ -3242,6 +3245,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     if ($rootScope.user === undefined) {
         $window.location.href = '/app/#/login';
     }
+    $rootScope.selectedNavItem = $state.current.name;
 
     var webService = 'Diets.asmx';
    
@@ -3340,6 +3344,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     if ($rootScope.user === undefined) {
         $window.location.href = '/app/#/login';
     }
+    $rootScope.selectedNavItem = $state.current.name;
 
     if ($rootScope.clientData === undefined) {
         $state.go('clientsdata');
@@ -3714,6 +3719,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     if ($rootScope.user === undefined) {
         $window.location.href = '/app/#/login';
     }
+    $rootScope.selectedNavItem = $state.current.name;
 
     if ($rootScope.clientData === undefined) {
         $state.go('meals');
@@ -7051,10 +7057,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
            if (response.data.d == 'error') {
                $scope.showAlert = false;
                $scope.showPaymentDetails = false;
-               $scope.sendicon = 'fa fa-paper-plane-o';
+               $scope.sendicon = 'fa fa-angle-double-right';
                $scope.sendicontitle = $translate.instant('send');
                $scope.isSendButtonDisabled = false;
-               functions.alert($translate.instant('order is not sent'), '');
+               functions.alert($translate.instant('order is not sent') + '. ' + $translate.instant('please try again') + '.', '');
            } else {
                $scope.showAlert = true;
                $scope.showPaymentDetails = true;

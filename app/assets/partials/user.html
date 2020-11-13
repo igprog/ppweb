@@ -10,9 +10,9 @@
             </div>
             <div>
                 <fieldset class="fieldset-border">
-                    <legend class="fieldset-border text-capitalize">{{'user data' | translate}}</legend>
+                    <legend class="fieldset-border">{{'user data' | translate}}</legend>
                     <form autocomplete="off">
-                        <div layout-gt-sm="row" class="text-capitalize">
+                        <div layout-gt-sm="row">
                             <md-input-container ng-if="user.userId && config.debug" class="md-block" flex-gt-sm>
                                 <label>{{'id' | translate}}</label>
                                 <input ng-model="user.userId" type="text" disabled>
@@ -26,7 +26,7 @@
                                 <input ng-model="user.lastName">
                             </md-input-container>
                         </div>
-                        <div layout-gt-sm="row" class="text-capitalize">
+                        <div layout-gt-sm="row">
                             <md-input-container class="md-block" flex-gt-sm>
                                 <label>{{'company name' | translate}}</label>
                                 <input ng-disabled="loginUser.adminType==0?false:true" ng-model="user.companyName">
@@ -36,7 +36,7 @@
                                 <input ng-disabled="loginUser.adminType==0?false:true" ng-model="user.pin">
                             </md-input-container>
                         </div>
-                        <div layout-gt-sm="row" class="text-capitalize">
+                        <div layout-gt-sm="row">
                             <md-input-container class="md-block" flex-gt-sm>
                                 <label>{{'address' | translate}}</label>
                                 <input ng-model="user.address">
@@ -54,7 +54,7 @@
                                 <input ng-model="user.country">
                             </md-input-container>
                         </div>
-                        <div layout-gt-sm="row" class="text-capitalize">
+                        <div layout-gt-sm="row">
                             <md-input-container class="md-block" flex-gt-sm>
                                 <label>{{'phone' | translate}}</label>
                                 <input ng-model="user.phone">
@@ -68,7 +68,7 @@
                 </fieldset>
                 <div ng-if="user.userType>=1" class="mt-2">
                     <fieldset class="fieldset-border">
-                        <legend class="fieldset-border text-capitalize">{{'headers print' | translate}}</legend>
+                        <legend class="fieldset-border">{{'headers print' | translate}}</legend>
                         <div class="row">
                             <div class="col-sm-6">
                                 <fieldset class="fieldset-border">
@@ -86,7 +86,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 pl-1">
-                                                <button ng-disabled="user.adminType!=0" type="submit" class="btn btn-outline-primary text-capitalize"><i class="fa fa-upload"></i> {{'upload' | translate}}</button>
+                                                <button ng-disabled="user.adminType!=0" type="submit" class="btn btn-outline-primary"><i class="fa fa-upload"></i> {{'upload' | translate}}</button>
                                             </div>
                                         </div>
                                         <script>
@@ -96,9 +96,9 @@
                                             });
                                         </script>
                                     </form>
-                                    <div ng-if="showLogo" class="text-capitalize mt10">
+                                    <div ng-if="showLogo" class="text-capitalize mt-2">
                                         <img ng-if="showLogo" src="{{logo}}" class="img-thumbnail" width="200" />
-                                        <button ng-disabled="user.adminType!=0" class="btn btn-outline-danger text-capitalize" ng-click="removeLogo(user)"><i class="fa fa-trash-alt"></i> {{'delete' | translate}}</button>
+                                        <button ng-disabled="user.adminType!=0" class="btn btn-outline-danger" ng-click="removeLogo(user)"><i class="fa fa-trash-alt"></i> {{'delete' | translate}}</button>
                                     </div>
                                 </fieldset>
                             </div>
@@ -112,9 +112,9 @@
                     </fieldset>
                 </div>
                 <fieldset class="fieldset-border">
-                    <legend class="fieldset-border text-capitalize">{{'account settings' | translate}}</legend>
-                    <div>
-                        <label style="margin-bottom:30px;font-weight:100; color:gray" class="text-capitalize small">
+                    <legend class="fieldset-border">{{'account settings' | translate}}</legend>
+                    <div class="text-capitalize">
+                        <label style="margin-bottom:30px;font-weight:100; color:gray" class="small">
                             {{'package' | translate}}: <strong class="text-uppercase large">{{user.package}}</strong>
                         </label>
                     </div>
@@ -125,7 +125,7 @@
                     </div>
                     <hr />
                     <div ng-if="user.userType>0" class="row">
-                        <div class="col-sm-4 text-capitalize">
+                        <div class="col-sm-4">
                             <md-input-container class="md-block" flex-gt-sm>
                                 <label style="margin-bottom:30px;font-weight:100; color:gray" class="small">{{'admin type' | translate}}</label>
                                 <select ng-disabled="loginUser.adminType==0?false:true" ng-model="user.adminType" class="form-control">
@@ -144,7 +144,7 @@
                         </div>
                     </div>
                     <form autocomplete="off">
-                        <div layout-gt-sm="row" class="text-capitalize">
+                        <div layout-gt-sm="row">
                             <div class="form-inline">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>{{'user name' | translate}}</label>
@@ -164,7 +164,7 @@
                                 </div> 
                             </div> 
                         </div>
-                        <div layout-gt-sm="row" class="text-capitalize pt-2">
+                        <div layout-gt-sm="row" class="pt-2">
                             <md-input-container class="md-block" flex-gt-sm>
                                 <label>{{'activation date' | translate}}</label>
                                 <input ng-disabled="!config.debug" ng-model="user.activationDate" type="text">
