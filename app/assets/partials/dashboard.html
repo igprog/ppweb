@@ -83,9 +83,9 @@
         </div>
     </div>
 
-    <div ng-if="loginUser.adminType<2" class="mt-4">
+    <div ng-if="loginUser.adminType<2">
         <div class="row">
-            <div class="col-lg-8" ng-controller="clientsCtrl">
+            <div class="col-lg-8 pt-4" ng-controller="clientsCtrl">
                 <div class="card shadow h-100" style="max-height:80vh">
                     <div class="card-header d-flex flex-row align-items-center justify-content-between">
                         <label class="text-capitalize">{{'clients' | translate}}</label>
@@ -152,7 +152,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4 pt-4">
                 <div class="card shadow h-100" style="max-height:80vh">
                     <div class="card-header d-flex flex-row align-items-center justify-content-between">
                         <label class="text-capitalize">{{'appointments' | translate}}</label>
@@ -213,7 +213,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 pt-4">
+            <div class="col-lg-4 pt-4">
                 <div class="card shadow h-100" style="max-height:80vh">
                     <div class="card-header">
                         <label>{{'license info' | translate}}</label>
@@ -237,6 +237,43 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-4 pt-4">
+                <div class="card shadow h-100" style="max-height:80vh">
+                    <div class="card-header">
+                        <label>{{'network information' | translate}}</label>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{'connection' | translate}}
+                                <span ng-if="online" class="text-success" title="{{'online' | translate}}"><i class="fa fa-check"></i></span>
+                                <span ng-if="!online" class="text-danger font-weight-bold"><i class="fa fa-exclamation-triangle"></i> {{'offline' | translate}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{'speed' | translate}}
+                                <span class="text-uppercase text-{{connection.downlink<1.35?'danger font-weight-bold':'main'}}"><i class="fa fa-{{connection.downlink<1.35?'frown font-weight-bold':''}}"></i> {{connection.effectiveType}}</span>
+                            </li>
+                        </ul>
+                        <div class="text-center pt-4">
+                            <div>
+                                <table class="table table-borderless table-sm">
+                                    <tr>
+                                        <td>
+                                            <button ng-click="testInternetSpeed()" class="btn btn-outline-primary"><i class="fa fa-tachometer-alt"></i> <span class="no-wrap">{{'test speed' | translate}}</span></button>
+                                        </td>
+                                        <td>
+                                            <loading-directive value="loadingSpeedTest"></loading-directive>
+                                            <div ng-hide="loadingSpeedTest" id="connectionChart" class="guage"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
        
     </div>

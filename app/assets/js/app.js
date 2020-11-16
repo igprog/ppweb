@@ -99,6 +99,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 .run(function($window, $rootScope) {
     $rootScope.online = navigator.onLine;
+
     $window.addEventListener("offline", function () {
         $rootScope.$apply(function() {
             $rootScope.online = false;
@@ -127,6 +128,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             description: 'for a better experience in using the application, please use some of the modern browsers such as google chrome, mozilla firefox, microsoft edge etc.'
         };
     }
+
+    /***** Check internet speed  *****/
+    $rootScope.connection = null;
+    var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (connection) {
+        $rootScope.connection = connection;
+    }
+    /***** Check internet speed  *****/
 
     if (angular.isDefined($sessionStorage.user)) {
         if ($sessionStorage.user !== null) {
@@ -1649,7 +1658,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 //-------------- Program Prehrane Controllers---------------
-.controller('dashboardCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', 'functions', '$translate', '$timeout', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, functions, $translate, $timeout, $state) {
+.controller('dashboardCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', 'functions', '$translate', '$timeout', '$state', 'charts', function ($scope, $http, $sessionStorage, $window, $rootScope, functions, $translate, $timeout, $state, charts) {
     if ($rootScope.user === undefined) {
         $window.location.href = '/app/#/login';
     }
@@ -1694,6 +1703,39 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 	} else {
         $state.go('login');
 	}
+
+    /***** Internet speed test *****/
+	$scope.loadingSpeedTest = false;
+	var connectionChart = function () {
+	    $scope.loadingSpeedTest = true;
+	    google.charts.load('current', { 'packages': ['gauge'] });
+	    $timeout(function () {
+	        var id = 'connectionChart';
+	        var value = $rootScope.connection.downlink;
+	        var unit = 'Mbps';
+	        var options = {
+	            title: 'Mbps',
+	            min: 0,
+	            max: 10,
+	            greenFrom: 1.35,
+	            greenTo: 10,
+	            yellowFrom: 1,
+	            yellowTo: 1.35,
+	            redFrom: 0,
+	            redTo: 1,
+	            minorTicks: 0.1
+	        };
+	        google.charts.setOnLoadCallback(charts.guageChart(id, value, unit, options));
+	        $scope.loadingSpeedTest = false;
+	    }, 1500);
+	}
+
+	$scope.testInternetSpeed = function() {
+	    connectionChart();
+	}
+    /***** Internet speed test *****/
+
+
 
 }])
 
@@ -3154,6 +3196,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.energy = 0;
 
     if ($rootScope.activities == undefined) { $rootScope.loadActivities(); };
+
     if (angular.isDefined($rootScope.appCalculation) && angular.isDefined($rootScope.myCalculation)) {
         if (!functions.isNullOrEmpty($rootScope.myCalculation.recommendedEnergyExpenditure)) {
             $rootScope.calculation.recommendedEnergyExpenditure = $rootScope.myCalculation.recommendedEnergyExpenditure;
@@ -3248,6 +3291,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $rootScope.selectedNavItem = $state.current.name;
 
     var webService = 'Diets.asmx';
+
+    if ($rootScope.diets == undefined) { $rootScope.loadDiets(); };
    
     var get = function (x) {
         $http({
@@ -3729,6 +3774,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     var webService = 'Foods.asmx';
     $scope.addFoodBtnIcon = 'fa fa-plus';
     $scope.addFoodBtn = false;
+
+    if ($rootScope.foods == undefined) { $rootScope.loadFoods(); };
 
     function initPrintSettings() {
         $http({

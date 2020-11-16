@@ -1977,7 +1977,7 @@
   "you are offline": "Niste na mreži",
   "check your connection and try again": "Проверите везу и покушајте поново",
   "follow us on instagram": "Пратите нас на Инстаграму",
-  "from now on, you can follow the news and notifications on our instagram profile": "Од сада на нашем Инстаграм профилу можете пратити вести и обавештења",
+  "instagram_notification": "Вести и обавештења можете да пратите и на нашем Инстаграм профилу",
   "sign in": "Пријава",
   "profile image": "Профилна слика",
   "you can upload a profile picture after saving the client": "Профилну слику можете да учитати након што спремите клијента",
@@ -1985,5 +1985,9 @@
   "attach the image": "Приложи слику",
   "loading": "Учитавање",
   "please wait": "Молимо сачекајте",
-  "please try again": "Молимо покушајте поново"
+  "please try again": "Молимо покушајте поново",
+  "network information": "Информације о мрежи",
+  "connection": "Bеза",
+  "speed": "Брзина",
+  "test speed": "Провери брзину"
 }
