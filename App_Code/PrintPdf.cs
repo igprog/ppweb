@@ -39,7 +39,7 @@ public class PrintPdf : System.Web.Services.WebService {
     static string menuTitle = null;
     static string menuAuthor = null;
     static string menuDate = null;
-    static PrintMenuSettings printMenuSettings = new PrintMenuSettings();
+    static PrintMenuSettings menuSettings = new PrintMenuSettings();
 
     Color bg_light_blue = new Color(222, 243, 255);
     Color bg_light_gray = new Color(240, 240, 240);
@@ -178,7 +178,7 @@ public class PrintPdf : System.Web.Services.WebService {
             string filePath = Path.Combine(path, string.Format("{0}.pdf", fileName));
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
             writer.PageEvent = new PDFFooter();
-            printMenuSettings = settings;
+            menuSettings = settings;
 
             doc.Open();
 
@@ -2173,13 +2173,13 @@ IBAN HR8423400091160342496
             PdfPTable table = new PdfPTable(2);
             table.TotalWidth = 530f;
 
-            table.AddCell(new PdfPCell(new Phrase(printMenuSettings.showAuthor ?  menuAuthor : "", font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
-            table.AddCell(new PdfPCell(new Phrase(printMenuSettings.showTitle ? menuTitle : "", font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, HorizontalAlignment = 2, BorderColor = Color.GRAY });
+            table.AddCell(new PdfPCell(new Phrase(menuSettings.showAuthor ?  menuAuthor : "", font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
+            table.AddCell(new PdfPCell(new Phrase(menuSettings.showTitle ? menuTitle : "", font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, HorizontalAlignment = 2, BorderColor = Color.GRAY });
             table.WriteSelectedRows(0, -1, 30, document.Bottom + 12, writer.DirectContent);
 
             table = new PdfPTable(2);
             table.TotalWidth = 530f;
-            table.AddCell(new PdfPCell(new Phrase(printMenuSettings.showDate ? menuDate : "", font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
+            table.AddCell(new PdfPCell(new Phrase(menuSettings.showDate ? menuDate : "", font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
             table.AddCell(new PdfPCell(new Phrase(menuPage, font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, HorizontalAlignment = 2, BorderColor = Color.GRAY });
             table.WriteSelectedRows(0, -1, 30, document.Bottom, writer.DirectContent);
 
