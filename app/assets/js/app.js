@@ -4161,7 +4161,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
         }
 
-        $scope.settings = d.settings;
+        //$scope.settings = d.settings;
         //$scope.pdfLink == null;
         //$scope.creatingPdf = false;
         $scope.printMenuPdf = function (consumers, date, author) {

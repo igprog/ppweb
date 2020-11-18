@@ -39,12 +39,14 @@ public class PrintPdf : System.Web.Services.WebService {
     static string menuTitle = null;
     static string menuAuthor = null;
     static string menuDate = null;
+    static PrintMenuSettings printMenuSettings = new PrintMenuSettings();
 
     Color bg_light_blue = new Color(222, 243, 255);
     Color bg_light_gray = new Color(240, 240, 240);
 
     string landscape = "L";
     string portrait = "P";
+
 
     public PrintPdf() {
     }
@@ -176,6 +178,7 @@ public class PrintPdf : System.Web.Services.WebService {
             string filePath = Path.Combine(path, string.Format("{0}.pdf", fileName));
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
             writer.PageEvent = new PDFFooter();
+            printMenuSettings = settings;
 
             doc.Open();
 
@@ -495,7 +498,8 @@ public class PrintPdf : System.Web.Services.WebService {
 
             int i = 0;
             foreach (var m in totals.mealsTotal) {
-                AppendMealDistribution(tblMeals, totals, recommendations, lang, i, m);
+                AppendMealDistribution(tblMeals, totals, recommendations, lang, i, m, currentMenu.data.meals);
+                //AppendMealDistribution(tblMeals, totals, recommendations, lang, i, m);
                 i++;
             }
 
@@ -1539,7 +1543,7 @@ IBAN HR8423400091160342496
     private void AppendMeal(Document doc, List<Foods.NewFood> meal, List<Meals.NewMeal> meals, string lang, Foods.Totals totals, PrintMenuSettings settings) {
         if (meal.Count > 0) {
             if (meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
-                string mealtitle = string.Format(@"{0}:", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title), lang)).ToUpper();
+                string mealtitle = string.Format(@"{0}:", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, meals), lang)).ToUpper();
                 doc.Add(new Paragraph(mealtitle, GetFont(true)));
                 rowCount = rowCount + 1;
                 string description = meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
@@ -1566,7 +1570,8 @@ IBAN HR8423400091160342496
         StringBuilder sb = new StringBuilder();
         if (meal.Count > 0) {
             if (meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
-                sb.AppendLine(string.Format(@"{0}", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title), lang)).ToUpper());
+                sb.AppendLine(string.Format(@"{0}", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, meals), lang)).ToUpper());
+                //sb.AppendLine(string.Format(@"{0}", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title), lang)).ToUpper());
                 rowCount = rowCount + 1;
                 string description = meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
                 if (!string.IsNullOrWhiteSpace(description)) {
@@ -1837,9 +1842,10 @@ IBAN HR8423400091160342496
         }
     }
 
-    private void AppendMealDistribution(PdfPTable tblMeals, Foods.Totals totals, Foods.Recommendations recommendations, string lang, int i, Foods.MealsTotal meal) {
+    private void AppendMealDistribution(PdfPTable tblMeals, Foods.Totals totals, Foods.Recommendations recommendations, string lang, int i, Foods.MealsTotal meal, List<Meals.NewMeal> meals) {
         if (totals.mealsTotal[i].energy.val > 0) {
-            tblMeals.AddCell(new PdfPCell(new Phrase(t.Tran(GetMealTitle(meal.code, meal.title), lang), GetFont())) { Border = 0 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(t.Tran(GetMealTitle(meal.code, meal.title, meals), lang), GetFont())) { Border = 0 });
+            //tblMeals.AddCell(new PdfPCell(new Phrase(t.Tran(GetMealTitle(meal.code, meal.title), lang), GetFont())) { Border = 0 });
             tblMeals.AddCell(new PdfPCell(new Phrase(Math.Round(Convert.ToDouble(totals.mealsTotal[i].energy.val), 1).ToString() + " " + t.Tran("kcal", lang) + " (" + Math.Round(Convert.ToDouble(totals.mealsTotal[i].energy.perc), 1).ToString() + " %)", GetFont(CheckTotal(totals.mealsTotal[i].energy.perc, recommendations.mealsRecommendationEnergy[i].meal.energyMinPercentage, recommendations.mealsRecommendationEnergy[i].meal.energyMaxPercentage)))) { Border = 0 });
             tblMeals.AddCell(new PdfPCell(new Phrase(Math.Round(Convert.ToDouble(recommendations.mealsRecommendationEnergy[i].meal.energyMin), 1).ToString() + "-" + recommendations.mealsRecommendationEnergy[i].meal.energyMax.ToString() + " " + t.Tran("kcal", lang) + " (" + recommendations.mealsRecommendationEnergy[i].meal.energyMinPercentage.ToString() + "-" + recommendations.mealsRecommendationEnergy[i].meal.energyMaxPercentage.ToString() + " %)", GetFont(7))) { Border = 0 });
             tblMeals.AddCell(new PdfPCell(new Phrase(Math.Round(Convert.ToDouble(totals.mealsTotal[i].carbohydrates.val), 1).ToString() + " " + t.Tran("g", lang) + " (" + Math.Round(Convert.ToDouble(totals.mealsTotal[i].carbohydrates.perc), 1).ToString() + " %)", GetFont(7))) { Border = 0 });
@@ -1848,17 +1854,34 @@ IBAN HR8423400091160342496
         }
     }
 
-    private string GetMealTitle(string code, string title) {
+    private string GetMealTitle(string code, string title, List<Meals.NewMeal> meals) {
+        string x = null;
         switch (code) {
-            case "B": return "breakfast";
-            case "MS": return "morning snack";
-            case "L": return "lunch";
-            case "AS": return "afternoon snack";
-            case "D": return "dinner";
-            case "MBS": return "meal before sleep";
-            default: return title;
+            case "B": x = "breakfast"; break;
+            case "MS": x = "morning snack"; break;
+            case "L": x = "lunch"; break;
+            case "AS": x = "afternoon snack"; break;
+            case "D": x = "dinner"; break;
+            case "MBS": x = "meal before sleep"; break;
+            //default: title = title;
         }
+        if (string.IsNullOrEmpty(x)) {
+            x = meals.Find(a => a.code == code).title;
+        }
+        return x;
     }
+
+    //private string GetMealTitle(string code, string title) {
+    //    switch (code) {
+    //        case "B": return "breakfast";
+    //        case "MS": return "morning snack";
+    //        case "L": return "lunch";
+    //        case "AS": return "afternoon snack";
+    //        case "D": return "dinner";
+    //        case "MBS": return "meal before sleep";
+    //        default: return title;
+    //    }
+    //}
 
     private void AppendDayMeal(PdfPTable table, List<string> menuList, int consumers, string userId, PrintMenuSettings settings, string lang) {
         try {
@@ -2149,15 +2172,27 @@ IBAN HR8423400091160342496
             base.OnEndPage(writer, document);
             PdfPTable table = new PdfPTable(2);
             table.TotalWidth = 530f;
-            table.AddCell(new PdfPCell(new Phrase(menuAuthor, font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
-            table.AddCell(new PdfPCell(new Phrase(menuTitle, font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, HorizontalAlignment = 2, BorderColor = Color.GRAY });
+
+            table.AddCell(new PdfPCell(new Phrase(printMenuSettings.showAuthor ?  menuAuthor : "", font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
+            table.AddCell(new PdfPCell(new Phrase(printMenuSettings.showTitle ? menuTitle : "", font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, HorizontalAlignment = 2, BorderColor = Color.GRAY });
             table.WriteSelectedRows(0, -1, 30, document.Bottom + 12, writer.DirectContent);
 
             table = new PdfPTable(2);
             table.TotalWidth = 530f;
-            table.AddCell(new PdfPCell(new Phrase(menuDate, font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
+            table.AddCell(new PdfPCell(new Phrase(printMenuSettings.showDate ? menuDate : "", font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
             table.AddCell(new PdfPCell(new Phrase(menuPage, font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, HorizontalAlignment = 2, BorderColor = Color.GRAY });
             table.WriteSelectedRows(0, -1, 30, document.Bottom, writer.DirectContent);
+
+            //BUG 
+            //table.AddCell(new PdfPCell(new Phrase(menuAuthor, font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
+            //table.AddCell(new PdfPCell(new Phrase(menuTitle, font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, HorizontalAlignment = 2, BorderColor = Color.GRAY });
+            //table.WriteSelectedRows(0, -1, 30, document.Bottom + 12, writer.DirectContent);
+
+            //table = new PdfPTable(2);
+            //table.TotalWidth = 530f;
+            //table.AddCell(new PdfPCell(new Phrase(menuDate, font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
+            //table.AddCell(new PdfPCell(new Phrase(menuPage, font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, HorizontalAlignment = 2, BorderColor = Color.GRAY });
+            //table.WriteSelectedRows(0, -1, 30, document.Bottom, writer.DirectContent);
 
 
             //base.OnEndPage(writer, document);
