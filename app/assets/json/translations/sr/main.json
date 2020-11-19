@@ -1992,5 +1992,6 @@
   "network information": "Informacije o mreži",
   "connection": "Veza",
   "speed": "Brzina",
-  "test speed": "Proveri brzinu"
+  "test speed": "Proveri brzinu",
+  "bad_connection_alert": "Ваша интернетска веза је спора што може утицати на перформансе апликације"
 }

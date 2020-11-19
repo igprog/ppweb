@@ -1349,7 +1349,7 @@
   "error": "error",
   "new": "New",
   "open": "open",
-  "add food": "add food",
+  "add food": "Add Food",
   "total": "Total",
   "description": "description",
   "distribution of energy value per meals": "Distribution of energy value per meals",
@@ -1642,10 +1642,10 @@
   "show mass": "show mass",
   "orientation": "orientation",
   "my recipes": "my recipes",
-  "add recipe": "add recipe",
-  "new recipe": "new recipe",
-  "recipe": "recipe",
-  "recipes": "recipes",
+  "add recipe": "Add Recipe",
+  "new recipe": "New Recipe",
+  "recipe": "Recipe",
+  "recipes": "Recipes",
   "enter recipe title": "Enter recipe title",
   "you do not have any recipes": "You do not have any recipes",
   "create recipe": "create recipe",
@@ -1983,6 +1983,7 @@
   "network information": "Network information",
   "connection": "Veza",
   "speed": "Brzina",
-  "test speed": "Test speed"
+  "test speed": "Test speed",
+  "bad_connection_alert": "Your internet connection is slow which may affect the performance of the application"
 
 }

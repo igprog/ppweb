@@ -243,10 +243,10 @@
                         <label>{{'network information' | translate}}</label>
                     </div>
                     <div class="card-body">
-                        <ul class="list-group list-group-flush">
+                        <ul class="list-group list-group-flush text-capitalize">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 {{'connection' | translate}}
-                                <span ng-if="online" class="text-success" title="{{'online' | translate}}"><i class="fa fa-check"></i></span>
+                                <span ng-if="online" class="text-success" title="{{'online' | translate}}"><i class="fa fa-check"></i> {{'online' | translate}}</span>
                                 <span ng-if="!online" class="text-danger font-weight-bold"><i class="fa fa-exclamation-triangle"></i> {{'offline' | translate}}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -254,11 +254,14 @@
                                 <span class="text-uppercase text-{{connection.downlink<1.35?'danger font-weight-bold':'main'}}"><i class="fa fa-{{connection.downlink<1.35?'frown font-weight-bold':''}}"></i> {{connection.effectiveType}}</span>
                             </li>
                         </ul>
+                        <div ng-if="connection.downlink<1.35" class="text-danger p-2">
+                            <em>{{'bad_connection_alert' | translate}}.</em>
+                        </div>
                         <div class="text-center pt-4">
                             <div>
                                 <table class="table table-borderless table-sm">
                                     <tr>
-                                        <td>
+                                        <td style="width:80%">
                                             <button ng-click="testInternetSpeed()" class="btn btn-outline-primary"><i class="fa fa-tachometer-alt"></i> <span class="no-wrap">{{'test speed' | translate}}</span></button>
                                         </td>
                                         <td>
@@ -273,9 +276,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-       
     </div>
     <json-directive data="user" desc="'user'"></json-directive>
     <json-directive data="clients" desc="'clients'"></json-directive>
