@@ -254,8 +254,8 @@
                                 <span class="text-uppercase text-{{connection.downlink<1.35?'danger font-weight-bold':'main'}}"><i class="fa fa-{{connection.downlink<1.35?'frown font-weight-bold':''}}"></i> {{connection.effectiveType}}</span>
                             </li>
                         </ul>
-                        <div ng-if="connection.downlink<1.35" class="text-danger p-2">
-                            <em>{{'bad_connection_alert' | translate}}.</em>
+                        <div ng-if="connection.downlink<1.35" class="alert alert-danger">
+                            <i class="fa fa-exclamation-triangle"></i><em> {{'bad_connection_alert' | translate}}.</em>
                         </div>
                         <div class="text-center pt-4">
                             <div>
