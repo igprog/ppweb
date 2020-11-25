@@ -1930,9 +1930,14 @@ public class Foods : System.Web.Services.WebService {
                 break;
             #endregion hr
 
+                //TODO: ba
+
             #region sr
             case "šoljica":
                 unit = SmartUnit(qty, unit, "šoljice", "šoljica");
+                break;
+            case "šolja":
+                unit = SmartUnit(qty, unit, "šolje", "šolja");
                 break;
             case "parče":
                 unit = SmartUnit(qty, unit, "parčeta", "parčeta");
@@ -1955,13 +1960,49 @@ public class Foods : System.Web.Services.WebService {
             case "flaša":
                 unit = SmartUnit(qty, unit, "flaše", "flaša");
                 break;
-            case "vekla":
-                unit = SmartUnit(qty, unit, "vekle", "vekli");
+            case "vekna":
+                unit = SmartUnit(qty, unit, "vekne", "vekni");
                 break;
             case "pakovanje":
                 unit = SmartUnit(qty, unit, "pakovanja", "pakovanja");
                 break;
             #endregion sr
+
+            #region sr_cyrl
+            case "шољица":
+                unit = SmartUnit(qty, unit, "шољице", "шољица");
+                break;
+            case "шоља":
+                unit = SmartUnit(qty, unit, "шоље", "шоља");
+                break;
+            case "парче":
+                unit = SmartUnit(qty, unit, "парчета", "парчета");
+                break;
+            case "чајна кашика":
+                unit = SmartUnit(qty, unit, "чајне кашике", "чајних кашика");
+                break;
+            case "супена кашика":
+                unit = SmartUnit(qty, unit, "супене кашике", "супених кашика");
+                break;
+            case "мало парче":
+                unit = SmartUnit(qty, unit, "мала парчета", "малих парчета");
+                break;
+            case "велико парче":
+                unit = SmartUnit(qty, unit, "велика парчета", "великих парчета");
+                break;
+            case "кашичица":
+                unit = SmartUnit(qty, unit, "кашичице", "кашичица");
+                break;
+            case "флаша":
+                unit = SmartUnit(qty, unit, "флаше", "флаша");
+                break;
+            case "векна":
+                unit = SmartUnit(qty, unit, "векне", "векни");
+                break;
+            case "паковање":
+                unit = SmartUnit(qty, unit, "паковања", "паковања");
+                break;
+            #endregion sr_cyrl
 
             #region en
             case "cup":
@@ -2042,8 +2083,12 @@ public class Foods : System.Web.Services.WebService {
         if (unit == "štruce") { unit = "štruca"; }
         if (unit == "pakiranja") { unit = "pakiranje"; }
         #endregion hr
+
+        //TODO: ba
+
         #region sr
         if (unit == "šoljice") { unit = "šoljica"; }
+        if (unit == "šolje") { unit = "šolja"; }
         if (unit == "parčeta") { unit = "parče"; }
         if (unit == "čajne kašike" || unit == "čajnih kašika") { unit = "čajna kašika"; }
         if (unit == "supene kašike" || unit == "supenih kašika") { unit = "supena kašika"; }
@@ -2051,9 +2096,23 @@ public class Foods : System.Web.Services.WebService {
         if (unit == "velika parčeta" || unit == "velikih parčeta") { unit = "veliko parče"; }
         if (unit == "kašičice") { unit = "kašičica"; }
         if (unit == "flaše") { unit = "flaša"; }
-        if (unit == "vekle" || unit == "vekli") { unit = "vekla"; }
+        if (unit == "vekne" || unit == "vekni") { unit = "vekna"; }
         if (unit == "pakovanja") { unit = "pakovanje"; }
         #endregion sr
+
+        #region sr_cyrl
+        if (unit == "шољице") { unit = "шољица"; }
+        if (unit == "шоље") { unit = "шоља"; }
+        if (unit == "парчета") { unit = "парче"; }
+        if (unit == "чајне кашике" || unit == "чајних кашика") { unit = "чајна кашика"; }
+        if (unit == "супене кашике" || unit == "супених кашика") { unit = "супена кашика"; }
+        if (unit == "мала парчета" || unit == "малих парчета") { unit = "мало парче"; }
+        if (unit == "велика парчета" || unit == "великих парчета") { unit = "велико парче"; }
+        if (unit == "кашичице") { unit = "кашичица"; }
+        if (unit == "флаше") { unit = "флаша"; }
+        if (unit == "векне" || unit == "векни") { unit = "векна"; }
+        if (unit == "паковања") { unit = "паковање"; }
+        #endregion sr_cyrl
 
         #region en
         if (unit == "cups") { unit = "cup"; }
