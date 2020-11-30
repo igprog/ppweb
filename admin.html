@@ -201,6 +201,9 @@
             <div ng-if="!showUsers">
                 <div class="row mt20">
                     <div class="col-sm-4">
+                        <div>
+                            <select ng-model="year" ng-options="x for x in years" ng-change="total(year)" class="form-control"></select>
+                        </div>
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">Statistika</legend>
                             <table class="table table-condensed">
@@ -247,7 +250,6 @@
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">
                                 Statistika po mjesecima
-                                <select ng-model="year" ng-options="x for x in years" ng-change="total(year)"></select>
                             </legend>
                             <!--<div>
                                 <div ng-if="loadingChart" class="text-center text-primary">

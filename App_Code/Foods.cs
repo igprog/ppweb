@@ -1930,8 +1930,6 @@ public class Foods : System.Web.Services.WebService {
                 break;
             #endregion hr
 
-                //TODO: ba
-
             #region sr
             case "šoljica":
                 unit = SmartUnit(qty, unit, "šoljice", "šoljica");
@@ -2083,8 +2081,6 @@ public class Foods : System.Web.Services.WebService {
         if (unit == "štruce") { unit = "štruca"; }
         if (unit == "pakiranja") { unit = "pakiranje"; }
         #endregion hr
-
-        //TODO: ba
 
         #region sr
         if (unit == "šoljice") { unit = "šoljica"; }

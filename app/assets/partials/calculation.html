@@ -169,7 +169,7 @@
                     <td>
                     </td>
                 </tr>
-                <tr>
+                <!--<tr>
                     <td><i class="fa fa-bullseye"></i></td>
                     <td>
                         <div class="font-weight-bold text-nowrap">
@@ -188,7 +188,6 @@
                     <td></td>
                     <td class="border-left-main shadow">
                         <md-input-container class="md-block" flex-gt-xs style="margin-top:0px">
-                            <!--<label>{{'goal' | translate}}</label>-->
                             <md-select ng-model="calculation.goal.code">
                                 <md-option ng-value="x.code" ng-disabled="x.isDisabled" ng-repeat="x in goals track by $index" ng-click="getGoal(x)">
                                     <md-checkbox ng-checked="x.code===calculation.goal.code" class="md-primary" aria-label="bmr">
@@ -215,10 +214,68 @@
                     <td class="text-center">
                         {{calculation.recommendedWeight.min | number:0}} - {{calculation.recommendedWeight.max | number:0}} {{'kg' | translate}}
                     </td>
+                </tr>-->
+                <tr class="bg-light">
+                    <td colspan="8" style="min-height:30px"></td>
                 </tr>
+                <tr>
+                    <td><i class="fa fa-bullseye"></i></td>
+                    <td>
+                        <div class="font-weight-bold text-nowrap">
+                            {{'goal' | translate}}
+                        </div>
+                    </td>
+                    <td class="border-left-main shadow" colspan="2">
+                        <md-input-container class="md-block" flex-gt-xs style="margin-top:0px">
+                            <md-select ng-model="calculation.goal.code">
+                                <md-option ng-value="x.code" ng-disabled="x.isDisabled" ng-repeat="x in goals track by $index" ng-click="getGoal(x)">
+                                    <md-checkbox ng-checked="x.code===calculation.goal.code" class="md-primary" aria-label="bmr">
+                                        <span class="{{x.isDisabled?'text-muted':''}}">{{x.title | translate}}</span>
+                                    </md-checkbox>
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-weight"></i></td>
+                    <td>
+                        <div class="font-weight-bold text-nowrap">
+                            {{'targeted mass' | translate}}
+                            <span custom-popover popover-html="{{'targeted_mass_info' | translate}}" popover-placement="bottom" popover-label=""></span>
+                        </div>
+                    </td>
+                    <td style="max-width:160px; min-width:130px">
+                        <div class="input-group">
+                            <input type="text" ng-model="goalWeightValue" style="max-width:150px" class="form-control text-right" allow-only-numbers ng-change="changeGoalWeightValue(goalWeightValue)">
+                            <div class="input-group-append">
+                                <span class="input-group-text">{{'kg' | translate}}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td></td>
+                    <td>
+                    </td>
+                    <td class="text-center">
+                        {{calculation.recommendedWeight.min | number:0}} - {{calculation.recommendedWeight.max | number:0}} {{'kg' | translate}}
+                    </td>
+                </tr>
+                <!--<tr>
+                    <td><i class="fa fa-weight"></i></td>
+                    <td>
+                        <div class="font-weight-bold text-nowrap">
+                            {{'recommended weight' | translate}}
+                        </div>
+                    </td>
+                    <td></td>
+                    <td style="width:140px"></td>
+                    <td></td>
+                    <td class="text-center">
+                        {{calculation.recommendedWeight.min | number:0}} - {{calculation.recommendedWeight.max | number:0}} {{'kg' | translate}}
+                    </td>
+                </tr>-->
             </table>
         </div>
-
         <div class="table-responsive">
             <table class="table table-sm mt-5">
                 <tr class="bg-light">

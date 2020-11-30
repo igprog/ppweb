@@ -335,7 +335,7 @@ public class Users : System.Web.Services.WebService {
     [WebMethod]
     public string Load(int? limit, int? page) {
         try {
-            return JsonConvert.SerializeObject(GetUsers(limit, page), Formatting.None);
+            return JsonConvert.SerializeObject(GetUsers(limit, page, null), Formatting.None);
         } catch (Exception e) {
             return (e.Message);
         }
@@ -346,7 +346,7 @@ public class Users : System.Web.Services.WebService {
         try {
             Totals x = new Totals();
             ClientApp ca = new ClientApp();
-            List<NewUser> users = GetUsers(null, null);
+            List<NewUser> users = GetUsers(null, null, year);
             x.active = users.Where(a => a.isActive == true).Count();
             x.demo = users.Where(a => a.isActive == false && a.activationDate == a.expirationDate).Count();
             x.expired = users.Where(a => a.licenceStatus == expired && G.DateDiff(a.activationDate, a.expirationDate) > 15).Count();
@@ -363,29 +363,29 @@ public class Users : System.Web.Services.WebService {
         }
     }
 
-    [WebMethod]
-    public string TotalList() {
-        try {
-            List<Totals> xx = new List<Totals>();
-            List<NewUser> users = GetUsers(null, null);
-            int i = 1;
-            foreach (NewUser u in users) {
-                Totals x = new Totals();
-                x.active = users.Take(i).Where(a => a.isActive == true).Count();
-                x.demo = users.Take(i).Where(a => a.isActive == false && a.activationDate == a.expirationDate).Count();
-                x.expired = users.Take(i).Where(a => a.isActive == false && Convert.ToDateTime(a.activationDate) < Convert.ToDateTime(a.expirationDate)).Count();
-                x.licence = users.Take(i).Where(a => a.isActive == true && a.userId == a.userGroupId && G.DateDiff(a.activationDate, a.expirationDate) > 15).Count();
-                x.subuser = users.Take(i).Where(a => a.isActive == true && a.userId != a.userGroupId).Count();
-                x.total = users.Take(i).Count();
-                x.licencepercentage = x.total == x.subuser ? 0 : Math.Round((Convert.ToDouble(x.licence) / (x.total - x.subuser) * 100), 1);
-                xx.Add(x);
-                i++;
-            }
-            return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) {
-            return (e.Message);
-        }
-    }
+    //[WebMethod]
+    //public string TotalList() {
+    //    try {
+    //        List<Totals> xx = new List<Totals>();
+    //        List<NewUser> users = GetUsers(null, null);
+    //        int i = 1;
+    //        foreach (NewUser u in users) {
+    //            Totals x = new Totals();
+    //            x.active = users.Take(i).Where(a => a.isActive == true).Count();
+    //            x.demo = users.Take(i).Where(a => a.isActive == false && a.activationDate == a.expirationDate).Count();
+    //            x.expired = users.Take(i).Where(a => a.isActive == false && Convert.ToDateTime(a.activationDate) < Convert.ToDateTime(a.expirationDate)).Count();
+    //            x.licence = users.Take(i).Where(a => a.isActive == true && a.userId == a.userGroupId && G.DateDiff(a.activationDate, a.expirationDate) > 15).Count();
+    //            x.subuser = users.Take(i).Where(a => a.isActive == true && a.userId != a.userGroupId).Count();
+    //            x.total = users.Take(i).Count();
+    //            x.licencepercentage = x.total == x.subuser ? 0 : Math.Round((Convert.ToDouble(x.licence) / (x.total - x.subuser) * 100), 1);
+    //            xx.Add(x);
+    //            i++;
+    //        }
+    //        return JsonConvert.SerializeObject(xx, Formatting.None);
+    //    } catch (Exception e) {
+    //        return (e.Message);
+    //    }
+    //}
 
     [WebMethod]
     public string Search(string query, int? limit, int? page, bool activeUsers) {
@@ -938,16 +938,24 @@ public class Users : System.Web.Services.WebService {
         }
     }
 
-    private List<NewUser> GetUsers(int? limit, int? page) {
+    private List<NewUser> GetUsers(int? limit, int? page, int? year) {
         List<NewUser> xx = new List<NewUser>();
         string limitSql = "";
+        string yearSql = "";
+        if (year != null) {
+            yearSql = string.Format("WHERE substr(activationDate, INSTR(activationDate, ' ')-4, 4) = '{0}'", year);
+        }
         if (limit != null && page != null) {
             limitSql = string.Format("LIMIT {0} OFFSET {1}", limit, (page - 1) * limit);
         }
         string sql = string.Format(@"
                     SELECT userId, userType, firstName, lastName, companyName, address, postalCode, city, country, pin, phone, email, userName, password, adminType, userGroupId, activationDate, expirationDate, isActive, iPAddress, rowid
-                    FROM users
-                    ORDER BY rowid DESC {0}", limitSql);
+                    FROM users {0}
+                    ORDER BY rowid DESC {1}", yearSql, limitSql);
+        //string sql = string.Format(@"
+        //            SELECT userId, userType, firstName, lastName, companyName, address, postalCode, city, country, pin, phone, email, userName, password, adminType, userGroupId, activationDate, expirationDate, isActive, iPAddress, rowid
+        //            FROM users
+        //            ORDER BY rowid DESC {0}", limitSql);
         using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
             connection.Open();
             using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {

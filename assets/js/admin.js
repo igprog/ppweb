@@ -130,34 +130,34 @@ angular.module('app', [])
         total(year);
     }
 
-    function drawChart() {
-        $scope.loadingChart = true;
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Mjesec');
-        data.addColumn('number', 'Registracije');
-        data.addColumn('number', 'Aktivacije');
-        data.addColumn('number', 'Postotak');
+    //function drawChart() {
+    //    $scope.loadingChart = true;
+    //    var data = new google.visualization.DataTable();
+    //    data.addColumn('string', 'Mjesec');
+    //    data.addColumn('number', 'Registracije');
+    //    data.addColumn('number', 'Aktivacije');
+    //    data.addColumn('number', 'Postotak');
 
-            var tl = $scope.t.monthly;
-            angular.forEach(tl, function (value, key) {
-                data.addRows([
-                       [value.month, value.registration, value.activation, value.percentage]
-                ]);
-            })
-            var options = {
-                chart: {
-                    title: 'Pregled registracija i aktivacija'
-                },
-                height: (tl.length * 55) + 2,
-                chartArea: {
-                    height: tl.length * 55,
-                    width: 350
-                }
-            };
-            var chart = new google.visualization.BarChart(document.getElementById('chart_ppweb'));
-            chart.draw(data, options);
-            $scope.loadingChart = false;
-    }
+    //        var tl = $scope.t.monthly;
+    //        angular.forEach(tl, function (value, key) {
+    //            data.addRows([
+    //                   [value.month, value.registration, value.activation, value.percentage]
+    //            ]);
+    //        })
+    //        var options = {
+    //            chart: {
+    //                title: 'Pregled registracija i aktivacija'
+    //            },
+    //            height: (tl.length * 55) + 2,
+    //            chartArea: {
+    //                height: tl.length * 55,
+    //                width: 350
+    //            }
+    //        };
+    //        var chart = new google.visualization.BarChart(document.getElementById('chart_ppweb'));
+    //        chart.draw(data, options);
+    //        $scope.loadingChart = false;
+    //}
 
     var load = function (limit) {
         $scope.loading = true;
@@ -204,7 +204,7 @@ angular.module('app', [])
         })
         .then(function (response) {
             load($scope.limit);
-            total($scope.year);
+            //total($scope.year);
             alert(response.data.d);
         },
         function (response) {
@@ -243,7 +243,7 @@ angular.module('app', [])
         })
         .then(function (response) {
             load($scope.limit);
-            total($scope.year);
+            //total($scope.year);
             alert(response.data.d);
         },
         function (response) {
