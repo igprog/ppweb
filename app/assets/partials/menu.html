@@ -318,12 +318,12 @@
                     <div class="col chart-box">
                         <span>{{'energy' | translate}}</span>
                         <div id="energyChart" class="guage"></div>
-                        <span class="text-primary text-xs"><em>{{'recommended' | translate}}: {{recommendations.energy | number:0}} {{'kcal' | translate}}</em></span>
+                        <span class="text-primary text-xs text-lowercase"><em>{{'recommended' | translate}}: {{recommendations.energy | number:0}} {{'kcal' | translate}}</em></span>
                     </div>
                     <div class="col chart-box">
                         <span>{{'other foods' | translate}}</span>
                         <div id="otherFoodChart" class="guage"></div>
-                        <span class="text-primary text-xs"><em>{{'acceptable' | translate}}: {{recommendations.servings.otherFoodsEnergy | number:0}} {{'kcal' | translate}}</em></span>
+                        <span class="text-primary text-xs text-lowercase"><em>{{'acceptable' | translate}}: {{recommendations.servings.otherFoodsEnergy | number:0}} {{'kcal' | translate}}</em></span>
                     </div>
                 </div>
             </div>
@@ -339,19 +339,19 @@
                         <span>{{'carbohydrates' | translate}}</span>
                         <div id="carbohydratesChart" class="guage"></div>
                         <div class="text-xs">{{totals.carbohydrates | number:1}} g <span>({{totals.carbohydratesPercentage | number:1}} %)</span></div>
-                        <em class="text-primary text-xs">{{'recommended' | translate}}: {{recommendations.carbohydratesPercentageMin | number:0}}-{{recommendations.carbohydratesPercentageMax | number:0}}%</em>
+                        <em class="text-primary text-xs text-lowercase">{{'recommended' | translate}}: {{recommendations.carbohydratesPercentageMin | number:0}}-{{recommendations.carbohydratesPercentageMax | number:0}}%</em>
                     </div>
                     <div class="col chart-box">
                         <span>{{'proteins' | translate}}</span>
                         <div id="proteinsChart" class="guage"></div>
                         <div class="text-xs">{{totals.proteins | number:1}} g <span>({{totals.proteinsPercentage | number:1}} %)</span></div>
-                        <em class="text-primary text-xs">{{'recommended' | translate}}: {{recommendations.proteinsPercentageMin | number:0}}-{{recommendations.proteinsPercentageMax | number:0}}%</em>
+                        <em class="text-primary text-xs text-lowercase">{{'recommended' | translate}}: {{recommendations.proteinsPercentageMin | number:0}}-{{recommendations.proteinsPercentageMax | number:0}}%</em>
                     </div>
                     <div class="col chart-box">
                         <span>{{'fats' | translate}}</span>
                         <div id="fatsChart" class="guage"></div>
                         <div class="text-xs">{{totals.fats | number:1}} g <span>({{totals.fatsPercentage | number:1}} %)</span></div>
-                        <em class="text-primary text-xs">{{'recommended' | translate}}: {{recommendations.fatsPercentageMin | number:0}}-{{recommendations.fatsPercentageMax | number:0}}%</em>
+                        <em class="text-primary text-xs text-lowercase">{{'recommended' | translate}}: {{recommendations.fatsPercentageMin | number:0}}-{{recommendations.fatsPercentageMax | number:0}}%</em>
                     </div>
                 </div>
             </div>
@@ -401,185 +401,22 @@
                         <span>{{'saturated fats' | translate}}</span>
                         <div id="saturatedFatsChart" class="guage"></div>
                         <div>{{totals.saturatedFats | number:1}} g </div>
-                        <em class="text-primary text-xs">{{'acceptable' | translate}}: {{recommendations.saturatedFats.ui | number:0}} g</em>
+                        <em class="text-primary text-xs text-lowercase">{{'acceptable' | translate}}: {{recommendations.saturatedFats.ui | number:0}} g</em>
                     </div>
                     <div class="col chart-box">
                         <span>{{'trifluoroacetic acid' | translate}}</span>
                         <div id="trifluoroaceticAcidChart" class="guage"></div>
                         <div>{{totals.trifluoroaceticAcid | number:1}} g</div>
-                        <em class="text-primary text-xs">{{'acceptable' | translate}}: {{recommendations.trifluoroaceticAcid.ui | number:0}} g</em>
+                        <em class="text-primary text-xs text-lowercase">{{'acceptable' | translate}}: {{recommendations.trifluoroaceticAcid.ui | number:0}} g</em>
                     </div>
                     <div class="col chart-box">
                         <span>{{'cholesterol' | translate}}</span>
                         <div id="cholesterolChart" class="guage"></div>
                         <div>{{totals.cholesterol | number:1}} mg </div>
-                        <em class="text-primary text-xs">{{'acceptable' | translate}}: {{recommendations.cholesterol.ui | number:0}} mg</em>
+                        <em class="text-primary text-xs text-lowercase">{{'acceptable' | translate}}: {{recommendations.cholesterol.ui | number:0}} mg</em>
                     </div>
                 </div>
             </div>
-        </div>
-
-    </div>
-
-
-    <div class="row text-small">
-        <div class="col-lg-6">
-
-            <!--<div class="panel panel-default">
-                <table class="table table-bordered table-condensed text-small text-center">
-                    <tr>
-                        <td class="bg-subpanel">
-                            <span class="text-uppercase">{{'energy value' | translate}}</span>
-                            <span custom-popover popover-html="{{'energy_value_info' | translate}}" popover-placement="bottom" popover-label=""></span>
-                        </td>
-                        <td rowspan="3" style="width:120px"><div id="energyChart" class="guage"></div></td>
-                    </tr>
-                    <tr>
-                        <td class="text-success"><span style="font-size:24px">{{totals.energy | number:0}} {{'kcal' | translate}}</span></td>
-                    </tr>
-                    <tr>
-                        <td class="text-primary"><em>{{'recommended' | translate}}: {{recommendations.energy | number:0}} {{'kcal' | translate}}</em></td>
-                    </tr>
-                </table>
-            </div>-->
-
-
-            <!--<div class="panel panel-default">
-                <table class="table table-bordered table-condensed text-small text-center">
-                    <tr>
-                        <td class="bg-subpanel"><span class="text-uppercase">{{'other foods' | translate}}</span></td>
-                        <td rowspan="3" style="width:120px"><div id="otherFoodChart" class="guage"></div></td>
-                    </tr>
-                    <tr>
-                        <td class="text-danger"><span style="font-size:24px">{{totals.servings.otherFoodsEnergy | number:0}} {{'kcal' | translate}}</span></td>
-                    </tr>
-                    <tr>
-                        <td class="text-primary"><em>{{'acceptable' | translate}}: {{recommendations.servings.otherFoodsEnergy | number:0}} {{'kcal' | translate}}</em></td>
-                    </tr>
-                </table>
-            </div>-->
-
-
-            <!--<div class="panel panel-default text-center">
-                <div class="panel-heading bg-subpanel"><span class="text-uppercase">{{'unit servings' | translate}}</span></div>
-                <div class="panel-body">
-                    <div class="row">
-                        <canvas id="servChart" class="chart chart-bar"
-                                chart-data="servGraphData.data" chart-labels="servGraphData.labels" chart-colors="servGraphData.colors" height="200"
-                                chart-series="servGraphData.series" chart-dataset-override="servGraphData.datasetOverride"></canvas>
-                    </div>
-                </div>
-            </div>-->
-
-
-            <!--<div class="panel panel-default text-center">
-                <div class="panel-heading bg-subpanel"><span class="text-uppercase">{{'distribution of energy value per meals' | translate}}</span></div>
-                <div class="panel-body">
-                    <div class="row">
-                        <canvas id="mealsChart" class="chart chart-bar"
-                                chart-data="mealsGraphData_menu.data" chart-labels="mealsGraphData_menu.labels" chart-colors="mealsGraphData_menu.colors" height="200"
-                                chart-series="mealsGraphData_menu.series" chart-options="mealsGraphData_menu.options" chart-dataset-override="mealsGraphData_menu.datasetOverride"></canvas>
-                    </div>
-                </div>
-            </div>-->
-
-            <!--<div class="panel panel-default text-center">
-                <div class="panel-heading bg-subpanel"><span class="text-uppercase">{{'distribution of nutrients per meals' | translate}}</span></div>
-                <div class="panel-body">
-                    <div class="row">
-                        <canvas id="mealsNutriChart" class="chart chart-bar"
-                                chart-data="mealsNutriGraphData_menu.data" chart-labels="mealsNutriGraphData_menu.labels" chart-colors="mealsNutriGraphData_menu.colors" height="200"
-                                chart-series="mealsNutriGraphData_menu.series" chart-options="mealsNutriGraphData_menu.options" chart-dataset-override="mealsNutriGraphData_menu.datasetOverride"></canvas>
-                    </div>
-                </div>
-            </div>-->
-
-        </div>
-        <div class="col-lg-6">
-            <!--<div class="panel panel-default">
-                <table class="table table-bordered table-condensed text-small text-center">
-                    <tr>
-                        <td class="bg-subpanel"><span class="text-uppercase">{{'carbohydrates' | translate}}</span></td>
-                        <td rowspan="3" style="width:120px"><div id="carbohydratesChart" class="guage"></div></td>
-                    </tr>
-                    <tr>
-                        <td class="text-success"><span style="font-size:24px">{{totals.carbohydrates | number:1}} g </span><span>({{totals.carbohydratesPercentage | number:1}} %)</span></td>
-                    </tr>
-                    <tr>
-                        <td class="text-primary"><em>{{'recommended' | translate}}: {{recommendations.carbohydratesPercentageMin | number:0}}-{{recommendations.carbohydratesPercentageMax | number:0}}%</em></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="panel panel-default">
-                <table class="table table-bordered table-condensed text-small text-center">
-                    <tr>
-                        <td class="bg-subpanel"><span class="text-uppercase">{{'proteins' | translate}}</span></td>
-                        <td rowspan="3" style="width:120px"><div id="proteinsChart" class="guage"></div></td>
-                    </tr>
-                    <tr>
-                        <td class="text-success"><span style="font-size:24px">{{totals.proteins | number:1}} g </span><span>({{totals.proteinsPercentage | number:1}} %)</span></td>
-                    </tr>
-                    <tr>
-                        <td class="text-primary"><em>{{'recommended' | translate}}: {{recommendations.proteinsPercentageMin | number:0}}-{{recommendations.proteinsPercentageMax | number:0}}%</em></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="panel panel-default">
-                <table class="table table-bordered table-condensed text-small text-center">
-                    <tr>
-                        <td class="bg-subpanel"><span class="text-uppercase">{{'fats' | translate}}</span></td>
-                        <td rowspan="3" style="width:120px"><div id="fatsChart" class="guage"></div></td>
-                    </tr>
-                    <tr>
-                        <td class="text-success"><span style="font-size:24px">{{totals.fats | number:1}} g </span><span>({{totals.fatsPercentage | number:1}} %)</span></td>
-                    </tr>
-                    <tr>
-                        <td class="text-primary"><em>{{'recommended' | translate}}: {{recommendations.fatsPercentageMin | number:0}}-{{recommendations.fatsPercentageMax | number:0}}%</em></td>
-                    </tr>
-                </table>
-            </div>-->
-            <!--<div class="panel panel-default">
-                <table class="table table-bordered table-condensed text-small text-center">
-                    <tr>
-                        <td class="bg-subpanel"><span class="text-uppercase">{{'saturated fats' | translate}}</span></td>
-                        <td rowspan="3" style="width:120px"><div id="saturatedFatsChart" class="guage"></div></td>
-                    </tr>
-                    <tr>
-                        <td class="text-danger"><span style="font-size:24px">{{totals.saturatedFats | number:1}} g </span></td>
-                    </tr>
-                    <tr>
-                        <td class="text-primary"><em>{{'acceptable' | translate}}: {{recommendations.saturatedFats.ui | number:0}} g</em></td>
-                    </tr>
-                </table>
-            </div>-->
-            <!--<div class="panel panel-default">
-                <table class="table table-bordered table-condensed text-small text-center">
-                    <tr>
-                        <td class="bg-subpanel"><span class="text-uppercase">{{'trifluoroacetic acid' | translate}}</span></td>
-                        <td rowspan="3" style="width:120px"><div id="trifluoroaceticAcidChart" class="guage"></div></td>
-                    </tr>
-                    <tr>
-                        <td class="text-danger"><span style="font-size:24px">{{totals.trifluoroaceticAcid | number:1}} g</span></td>
-                    </tr>
-                    <tr>
-                        <td class="text-primary"><em>{{'acceptable' | translate}}: {{recommendations.trifluoroaceticAcid.ui | number:0}} g</em></td>
-                    </tr>
-                </table>
-            </div>-->
-            <!--<div class="panel panel-default">
-                <table class="table table-bordered table-condensed text-small text-center">
-                    <tr>
-                        <td class="bg-subpanel"><span class="text-uppercase">{{'cholesterol' | translate}}</span></td>
-                        <td rowspan="3" style="width:120px"><div id="cholesterolChart" class="guage"></div></td>
-                    </tr>
-                    <tr>
-                        <td class="text-danger"><span style="font-size:24px">{{totals.cholesterol | number:1}} mg </span></td>
-                    </tr>
-                    <tr>
-                        <td class="text-primary"><em>{{'acceptable' | translate}}: {{recommendations.cholesterol.ui | number:0}} mg</em></td>
-                    </tr>
-                </table>
-            </div>-->
         </div>
     </div>
 </script>

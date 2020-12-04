@@ -4735,8 +4735,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 [$translate.instant('carbohydrates'), $translate.instant('proteins'), $translate.instant('fats')],
                 [t.carbohydratesPercentage, t.proteinsPercentage, t.fatsPercentage],
                 [$translate.instant('carbohydrates') + ' (%)', $translate.instant('proteins') + ' (%)', $translate.instant('fats') + ' (%)'],
-                ['#45b7cd', '#ff6384', '#33cc33'],
-                { responsive: true, maintainAspectRatio: true, legend: { display: true },
+                ['#f2f20f', '#28c1e0', '#ed722f'],
+                { responsive: true, maintainAspectRatio: false, legend: { display: true, position: 'right',"labels": {"fontSize": 14} },
                 scales: {
                     xAxes: [{ display: false, scaleLabel: { display: false }, ticks: { beginAtZero: true } }],
                     yAxes: [{ display: false, scaleLabel: { display: false }, ticks: { beginAtZero: true } }]}
@@ -5514,12 +5514,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return false;
         }
         $scope.creatingPdf1 = true;
+        var img = imageData();
+
         if (angular.isDefined($rootScope.currentMenu)) {
             var currentMenu = angular.copy($rootScope.currentMenu);
             $http({
                 url: $sessionStorage.config.backend + 'PrintPdf.asmx/MenuDetailsPdf',
                 method: "POST",
-                data: { userId: $sessionStorage.usergroupid, currentMenu: currentMenu, calculation: $rootScope.calculation, totals: $rootScope.totals, recommendations: $rootScope.recommendations, lang: $rootScope.config.language, headerInfo: $rootScope.user.headerInfo }
+                data: { userId: $sessionStorage.usergroupid, currentMenu: currentMenu, calculation: $rootScope.calculation, totals: $rootScope.totals, recommendations: $rootScope.recommendations, lang: $rootScope.config.language, imageData: img, headerInfo: $rootScope.user.headerInfo }
             })
             .then(function (response) {
                 var fileName = response.data.d;
@@ -5540,10 +5542,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             currentMenu.title = $rootScope.weeklyMenu.title;
             currentMenu.note = $rootScope.weeklyMenu.note;
             currentMenu.diet = $rootScope.weeklyMenu.diet.diet;
+            var img = imageData();
             $http({
                 url: $sessionStorage.config.backend + 'PrintPdf.asmx/MenuDetailsPdf',
                 method: "POST",
-                data: { userId: $sessionStorage.usergroupid, currentMenu: currentMenu, calculation: $rootScope.calculation, totals: $rootScope.totals, recommendations: $rootScope.recommendations, lang: $rootScope.config.language, headerInfo: $rootScope.user.headerInfo }
+                data: { userId: $sessionStorage.usergroupid, currentMenu: currentMenu, calculation: $rootScope.calculation, totals: $rootScope.totals, recommendations: $rootScope.recommendations, lang: $rootScope.config.language, imageData: img, headerInfo: $rootScope.user.headerInfo }
             })
             .then(function (response) {
                 var fileName = response.data.d;
@@ -5557,10 +5560,32 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
     }
 
+    var imageData = function () {
+        var img = [];
+        if ($scope.showCharts) {
+            img = getImageData(img, "mealsChart");
+            img = getImageData(img, "mealsNutriChart");
+            img = getImageData(img, "servChart");
+            img = getImageData(img, "pieChart");
+            img = getImageData(img, "parametersGraphDataOther");
+            img = getImageData(img, "parametersGraphDataUI");
+            img = getImageData(img, "parametersGraphDataMDA");
+            img = getImageData(img, "parametersGraphData");
+        }
+        return img;
+    }
+    var getImageData = function (img, id) {
+        if (document.getElementById(id) != null) {
+            img.push(document.getElementById(id).toDataURL("image/png").replace(/^data:image\/(png|jpg);base64,/, ""));
+        }
+        return img;
+    }
+
+    $scope.showCharts = true;
     $scope.pdfLink == null;
     $scope.creatingPdf1 = false;
     $scope.printMenuDetailsPdf = function () {
-        if ($rootScope.menuTpl == 'dailyMenuTpl') {
+        if ($rootScope.menuTpl === 'dailyMenuTpl') {
             printDailyMenu();
         } else {
             printWeeklyMenu();
@@ -5789,8 +5814,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
     $scope.mealDescHelp(false);
 
-    $scope.chartResp = function (w, w_resp) {
-        return window.innerWidth < 767 ? w_resp : w;
+    $scope.chartResp = function (h, h_resp) {
+        return window.innerWidth < 767 ? h_resp : h;
     }
 
 }])

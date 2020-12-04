@@ -312,12 +312,10 @@ public class Foods : System.Web.Services.WebService {
     }
 
     public class InitData {
-
        public NewFood food = new NewFood();
        public List<string> units { get; set; }
        public List<FoodGroup> foodGroups { get; set; }
     }
-
     #endregion
 
     #region WebMethods

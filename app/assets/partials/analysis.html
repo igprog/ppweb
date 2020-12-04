@@ -3,17 +3,29 @@
     <div class="bg-white p-3" ng-cloak>
         <div class="container mt-2">
             <div class="row">
-                <div class="col-sm-6 text-uppercase">
-                    <label ng-if="menuTpl=='dailyMenuTpl'">{{'daily menu' | translate}}</label>
-                    <label ng-if="menuTpl=='weeklyMenuTpl'">{{'weekly menu' | translate}} ({{'average' | translate}})</label>
+                <div class="col-xl-6 text-uppercase">
+                    <label ng-if="menuTpl=='dailyMenuTpl'"><u>{{'daily menu' | translate}}</u></label>
+                    <label ng-if="menuTpl=='weeklyMenuTpl'"><u>{{'weekly menu' | translate}} ({{'average' | translate}})</u></label>
                 </div>
-                <div class="col-sm-6">
-                    <div class="text-right">
-                        <a ng-if="pdfLink==null" href="" ng-click="printMenuDetailsPdf()" class="btn btn-outline-primary text-capitalize" ng-disabled="creatingPdf1==true"><i class="fa fa-{{creatingPdf1==true?'spinner fa-spin':'file-pdf-o'}}"></i> {{'create pdf' | translate}}</a>
-                        <a ng-if="pdfLink!=null" href="{{pdfLink}}" class="btn btn-danger text-capitalize" download ng-click="hidePdfLink()">
-                            <i class="fa fa-file-pdf-o"></i> {{'take pdf' | translate}}
-                        </a>
-                    </div>
+                <div class="col-xl-6">
+                    <fieldset class="fieldset-border" style="padding:0px 5px 5px 5px !important;">
+                        <legend class="fieldset-border text-capitalize mb-0">{{'print' | translate}}</legend>
+                        <div class="row">
+                            <div class="col-8 text-center">
+                                <md-input-container class="m-0">
+                                    <md-checkbox ng-model="showCharts" class="md-primary m-0">
+                                        {{'include charts' | translate}}
+                                    </md-checkbox>
+                                </md-input-container>
+                            </div>
+                            <div class="col-4 text-right">
+                                <a ng-if="pdfLink==null" href="" ng-click="printMenuDetailsPdf()" class="btn btn-outline-primary text-capitalize" ng-disabled="creatingPdf1==true"><i class="fa fa-{{creatingPdf1==true?'spinner fa-spin':'file-pdf-o'}}"></i> {{'create pdf' | translate}}</a>
+                                <a ng-if="pdfLink!=null" href="{{pdfLink}}" class="btn btn-danger text-capitalize" download ng-click="hidePdfLink()">
+                                    <i class="fa fa-file-pdf-o"></i> {{'take pdf' | translate}}
+                                </a>
+                            </div>
+                        </div>
+                    </fieldset>
                 </div>
             </div>
             <div>
@@ -41,7 +53,7 @@
                         <th>{{'proteins' | translate}}<br /><span class="small">(<em>{{'g' | translate}}</em>)</span></th>
                         <th>{{'fats' | translate}}<br /><span class="small">(<em>{{'g' | translate}}</em>)</span></th>
                     </tr>
-                    <tr ng-repeat="x in totals.mealsTotal">
+                    <tr ng-if="x.energy.val>0" ng-repeat="x in totals.mealsTotal">
                         <td class="nowrap">{{x.title}}</td>
                         <td class="text-nowrap"><span class="font-weight-bold">{{x.energy.val | number:1}}</span> ({{x.energy.perc | number:1}} %) <i class="{{checkTotal(x.energy.perc, getMealRecommendation(x.code).energyMinPercentage, getMealRecommendation(x.code).energyMaxPercentage)}}"></i></td>
                         <td class="text-nowrap"><span>{{getMealRecommendation(x.code).energyMin}} - {{getMealRecommendation(x.code).energyMax}}</span> <span class="small">({{getMealRecommendation(x.code).energyMinPercentage}} - {{getMealRecommendation(x.code).energyMaxPercentage}} %)</span></td>
@@ -59,34 +71,23 @@
                     </tr>
                 </table>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
+            <div ng-if="showCharts" class="row">
+                <div class="col-lg-6">
                     <canvas id="mealsChart" class="chart chart-bar"
                             chart-data="mealsGraphData_analysis.data" chart-labels="mealsGraphData_analysis.labels" chart-colors="mealsGraphData_analysis.colors"
                             chart-series="mealsGraphData_analysis.series" chart-options="mealsGraphData_analysis.options" chart-dataset-override="mealsGraphData_analysis.datasetOverride"></canvas>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-lg-6">
                     <canvas id="mealsNutriChart" class="chart chart-bar"
                             chart-data="mealsNutriGraphData_analysis.data" chart-labels="mealsNutriGraphData_analysis.labels" chart-colors="mealsNutriGraphData_analysis.colors"
                             chart-series="mealsNutriGraphData_analysis.series" chart-options="mealsNutriGraphData_analysis.options" chart-dataset-override="mealsNutriGraphData_analysis.datasetOverride"></canvas>
                 </div>
-                <!--<div class="col-sm-6">
-                    <canvas id="mealsChart" class="chart chart-bar"
-                            chart-data="mealsGraphData_analysis.data" chart-labels="mealsGraphData_analysis.labels" chart-colors="mealsGraphData_analysis.colors" height="220"
-                            chart-series="mealsGraphData_analysis.series" chart-options="mealsGraphData_analysis.options" chart-dataset-override="mealsGraphData_analysis.datasetOverride"></canvas>
-                </div>
-                <div class="col-sm-6">
-                    <canvas id="mealsNutriChart" class="chart chart-bar"
-                            chart-data="mealsNutriGraphData_analysis.data" chart-labels="mealsNutriGraphData_analysis.labels" chart-colors="mealsNutriGraphData_analysis.colors" height="220"
-                            chart-series="mealsNutriGraphData_analysis.series" chart-options="mealsNutriGraphData_analysis.options" chart-dataset-override="mealsNutriGraphData_analysis.datasetOverride"></canvas>
-                </div>-->
             </div>
-            
         </fieldset>
         <fieldset class="fieldset-border">
             <legend class="fieldset-border">{{'unit servings' | translate}}</legend>
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-lg-6">
                     <div class="table-responsive">
                         <table class="table table-sm table-borderless">
                             <tr class="border-bottom">
@@ -137,7 +138,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div ng-if="showCharts" class="col-lg-6">
                     <canvas id="servChart" class="chart chart-bar"
                             chart-data="servGraphData.data" chart-labels="servGraphData.labels" chart-colors="servGraphData.colors"
                             chart-series="servGraphData.series" chart-options="servGraphData.options" chart-dataset-override="servGraphData.datasetOverride"></canvas>
@@ -147,7 +148,7 @@
         <fieldset class="fieldset-border">
             <legend class="fieldset-border text-capitalize">{{'macronutrients' | translate}}</legend>
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-lg-6">
                     <div class="table-responsive">
                         <table class="table table-sm table-borderless">
                             <tr class="border-bottom">
@@ -173,7 +174,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div ng-if="showCharts" class="col-lg-6">
                     <canvas id="pieChart" class="chart chart-pie"
                             chart-data="pieGraphData.data" chart-labels="pieGraphData.labels"
                             chart-series="pieGraphData.series" chart-options="pieGraphData.options" chart-colors="pieGraphData.colors"></canvas>
@@ -193,10 +194,10 @@
         </div>
         <div class="d-none d-sm-block pt-3">
             <div class="row">
-                <div class="col-sm-5">
+                <div class="col-xl-5">
                     <ng-include src="'parametersTableTpl'"></ng-include>
                 </div>
-                <div class="col-sm-7">
+                <div ng-if="showCharts" class="col-xl-7">
                     <ng-include src="'parametersChartTpl'"></ng-include>
                 </div>
             </div>
@@ -216,42 +217,23 @@
 <script type="text/ng-template" id="parametersChartTpl">
     <div class="pt-4">
         <div>
-            <canvas class="chart-horizontal-bar" chart-type="parametersGraphDataOther.type" chart-data="parametersGraphDataOther.data" chart-labels="parametersGraphDataOther.labels" height="{{chartResp(120, 160)}}"
+            <canvas id="parametersGraphDataOther" class="chart-horizontal-bar" chart-type="parametersGraphDataOther.type" chart-data="parametersGraphDataOther.data" chart-labels="parametersGraphDataOther.labels" height="{{chartResp(120, 160)}}"
                     chart-series="parametersGraphDataOther.series" chart-options="parametersGraphDataOther.options" chart-colors="parametersGraphDataOther.colors"></canvas>
         </div>
         <div>
-            <canvas class="chart-horizontal-bar" chart-type="parametersGraphDataUI.type" chart-data="parametersGraphDataUI.data" chart-labels="parametersGraphDataUI.labels" height="{{chartResp(80, 110)}}"
+            <canvas id="parametersGraphDataUI" class="chart-horizontal-bar" chart-type="parametersGraphDataUI.type" chart-data="parametersGraphDataUI.data" chart-labels="parametersGraphDataUI.labels" height="{{chartResp(80, 125)}}"
                     chart-series="parametersGraphDataUI.series" chart-options="parametersGraphDataUI.options" chart-colors="parametersGraphDataUI.colors"></canvas>
         </div>
         <div>
-            <canvas class="chart-horizontal-bar" chart-type="parametersGraphDataMDA.type" chart-data="parametersGraphDataMDA.data" chart-labels="parametersGraphDataMDA.labels" height="{{chartResp(80, 130)}}"
+            <canvas id="parametersGraphDataMDA" class="chart-horizontal-bar" chart-type="parametersGraphDataMDA.type" chart-data="parametersGraphDataMDA.data" chart-labels="parametersGraphDataMDA.labels" height="{{chartResp(85, 135)}}"
                     chart-series="parametersGraphDataMDA.series" chart-options="parametersGraphDataMDA.options" chart-colors="parametersGraphDataMDA.colors"></canvas>
         </div>
         <div>
-            <canvas class="chart-horizontal-bar" chart-type="parametersGraphData.type" chart-data="parametersGraphData.data" chart-labels="parametersGraphData.labels" height="{{chartResp(350, 420)}}"
+            <canvas id="parametersGraphData" class="chart-horizontal-bar" chart-type="parametersGraphData.type" chart-data="parametersGraphData.data" chart-labels="parametersGraphData.labels" height="{{chartResp(365, 430)}}"
                     chart-series="parametersGraphData.series" chart-options="parametersGraphData.options" chart-colors="parametersGraphData.colors"></canvas>
         </div>
     </div>
 </script>
-
-<!--<script type="text/ng-template" id="parametersChartTpl">
-    <div class="chart-resp">
-        <canvas class="chart-horizontal-bar" chart-type="parametersGraphDataOther.type" chart-data="parametersGraphDataOther.data" chart-labels="parametersGraphDataOther.labels" height="120"
-                chart-series="parametersGraphDataOther.series" chart-options="parametersGraphDataOther.options" chart-colors="parametersGraphDataOther.colors"></canvas>
-    </div>
-    <div class="chart-resp">
-        <canvas class="chart-horizontal-bar" chart-type="parametersGraphDataUI.type" chart-data="parametersGraphDataUI.data" chart-labels="parametersGraphDataUI.labels" height="80"
-                chart-series="parametersGraphDataUI.series" chart-options="parametersGraphDataUI.options" chart-colors="parametersGraphDataUI.colors"></canvas>
-    </div>
-    <div class="chart-resp">
-        <canvas class="chart-horizontal-bar" chart-type="parametersGraphDataMDA.type" chart-data="parametersGraphDataMDA.data" chart-labels="parametersGraphDataMDA.labels" height="80"
-                chart-series="parametersGraphDataMDA.series" chart-options="parametersGraphDataMDA.options" chart-colors="parametersGraphDataMDA.colors"></canvas>
-    </div>
-    <div class="chart-resp">
-        <canvas class="chart-horizontal-bar" chart-type="parametersGraphData.type" chart-data="parametersGraphData.data" chart-labels="parametersGraphData.labels" height="350"
-                chart-series="parametersGraphData.series" chart-options="parametersGraphData.options" chart-colors="parametersGraphData.colors"></canvas>
-    </div>
-</script>-->
 
 <script type="text/ng-template" id="parametersTableTpl">
     <div>
@@ -268,8 +250,8 @@
             <table class="table table-bordered table-sm">
                 <tr>
                     <th></th>
-                    <th class="nowrap">{{'unit' | translate}}</th>
-                    <th>{{'choosen' | translate}}</th>
+                    <th class="nowrap text-capitalize">{{'unit' | translate}}</th>
+                    <th class="text-capitalize">{{'choosen' | translate}}</th>
                     <th class="text-uppercase">{{'mda' | translate}}</th>
                     <th class="text-uppercase">{{'ul' | translate}}</th>
                     <th class="text-uppercase">{{'rda' | translate}}</th>

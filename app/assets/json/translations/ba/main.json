@@ -1378,9 +1378,9 @@
   "parameters": "parametri",
   "unit": "mjera",
   "choosen": "odabrano",
-  "mda": "mda",
-  "ui": "ui",
-  "rda": "rda",
+  "mda": "MDA",
+  "ui": "UI",
+  "rda": "RDA",
   "starch": "škrob",
   "total sugar": "ukupni šećeri",
   "glucose": "glukoza",
@@ -1592,7 +1592,7 @@
   "recommended dietary allowance": "preporučena dnevna količina",
   "minimum dietary allowance": "minimalna dnevna potreba",
   "upper intake level": "najveći prihvatljiv dnevni unos",
-  "ul": "ul",
+  "ul": "UL",
   "food title": "naziv namirnice",
   "clear": "briši",
   "show password": "prikaži lozinku",
@@ -1993,6 +1993,7 @@
   "connection": "Veza",
   "speed": "Brzina",
   "test speed": "Provjeri brzinu",
-  "bad_connection_alert": "Vaša internetska veza je spora što može utjecati na performanse aplikacije"
+  "bad_connection_alert": "Vaša internetska veza je spora što može utjecati na performanse aplikacije",
+  "include charts": "Uključi grafove"
 
 }

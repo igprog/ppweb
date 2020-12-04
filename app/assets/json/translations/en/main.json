@@ -1371,9 +1371,9 @@
   "parameters": "parameters",
   "unit": "unit",
   "choosen": "choosen",
-  "mda": "mda",
-  "ui": "ui",
-  "rda": "rda",
+  "mda": "MDA",
+  "ui": "UI",
+  "rda": "RDA",
   "starch": "starch",
   "total sugar": "total sugar",
   "glucose": "glucose",
@@ -1585,7 +1585,7 @@
   "recommended dietary allowance": "recommended dietary allowance",
   "minimum dietary allowance": "minimum dietary allowance",
   "upper intake level": "upper intake level",
-  "ul": "ul",
+  "ul": "UL",
   "food title": "food title",
   "clear": "clear",
   "show password": "show password",
@@ -1984,6 +1984,7 @@
   "connection": "Veza",
   "speed": "Brzina",
   "test speed": "Test speed",
-  "bad_connection_alert": "Your internet connection is slow which may affect the performance of the application"
+  "bad_connection_alert": "Your internet connection is slow which may affect the performance of the application",
+  "include charts": "Include charts"
 
 }

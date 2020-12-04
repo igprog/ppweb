@@ -23,8 +23,8 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table table-sm text-small">
-                <tr class="bg-light">
+            <table class="table table-sm table-borderless text-small">
+                <tr class="border-bottom">
                     <th></th>
                     <th></th>
                     <th class="text-right">{{'calculation' | translate}}</th>
@@ -35,7 +35,7 @@
                 <tr>
                     <td><i class="fa fa-bed"></i></td>
                     <td>
-                    <div class="font-weight-bold">BMR</div>
+                    <div class="font-weight-bold">BMR:</div>
                         <em class="small text-muted">({{'basal metabolic rate' | translate}})</em>
                     </td>
                     <td class="font-weight-bold text-right">{{calculation.bmr | number:0}} {{'kcal' | translate}}</td>
@@ -46,7 +46,7 @@
                 <tr>
                     <td><i class="fa fa-fire"></i></td>
                     <td>
-                        <div class="font-weight-bold">TEE</div>
+                        <div class="font-weight-bold">TEE:</div>
                         <em class="small text-muted">({{'total energy expenditure' | translate}})</em>
                     </td>
                     <td class="font-weight-bold text-right">{{calculation.tee | number:0}} {{'kcal' | translate}}</td>
@@ -57,7 +57,7 @@
                 <tr>
                     <td><i class="fa fa-weight"></i></td>
                     <td>
-                        <div class="font-weight-bold">BMI</div>
+                        <div class="font-weight-bold">BMI:</div>
                         <em class="small text-muted">({{'body mass index' | translate}})</em>
                     </td>
                     <td class="font-weight-bold text-right">
@@ -81,7 +81,7 @@
                 <tr ng-if="calculation.whr.value>0">
                     <td><i class="fa fa-ruler-combined"></i></td>
                     <td>
-                        <div class="font-weight-bold">WHR</div>
+                        <div class="font-weight-bold">WHR:</div>
                         <em class="small text-muted">({{'waist–hip ratio' | translate}})</em>
                     </td>
                     <td class="font-weight-bold text-right">
@@ -106,11 +106,11 @@
                 <tr ng-if="calculation.waist.value>0">
                     <td><i class="fa fa-ruler-horizontal"></i></td>
                     <td>
-                        <div class="font-weight-bold text-nowrap">{{'waist' | translate}}</div>
+                        <div class="font-weight-bold text-nowrap">{{'waist' | translate}}:</div>
                         <em class="small text-muted"> ({{'waist–hip ratio' | translate}})</em>
                     </td>
                     <td class="font-weight-bold text-right">
-                        {{calculation.waist.value | number:1}} cm
+                        {{calculation.waist.value | number:1}} {{'cm' | translate}}
                     </td>
                     <td style="width:140px">
                         <div id="waistChart" class="guage"></div>
@@ -131,7 +131,7 @@
                 <tr ng-if="calculation.bodyFat.bodyFatPerc>0">
                     <td><i class="fa fa-percentage"></i></td>
                     <td>
-                        <div class="font-weight-bold">BF</div>
+                        <div class="font-weight-bold">BF:</div>
                         <em class="small text-muted">({{'body fat' | translate}})</em>
                     </td>
                     <td class="text-right">
@@ -157,7 +157,7 @@
                 <tr ng-if="calculation.bodyFat.bodyFatPerc>0">
                     <td><i class="fa fa-male"></i></td>
                     <td>
-                        <div class="font-weight-bold">LBM</div>
+                        <div class="font-weight-bold">LBM:</div>
                         <em class="small text-muted"> ({{'lean body mass' | translate}})</em>
                     </td>
                     <td class="font-weight-bold text-right">
@@ -222,7 +222,7 @@
                     <td><i class="fa fa-bullseye"></i></td>
                     <td>
                         <div class="font-weight-bold text-nowrap">
-                            {{'goal' | translate}}
+                            {{'goal' | translate}}:
                         </div>
                     </td>
                     <td class="border-left-main shadow" colspan="2">
@@ -241,7 +241,7 @@
                     <td><i class="fa fa-weight"></i></td>
                     <td>
                         <div class="font-weight-bold text-nowrap">
-                            {{'targeted mass' | translate}}
+                            {{'targeted mass' | translate}}:
                             <span custom-popover popover-html="{{'targeted_mass_info' | translate}}" popover-placement="bottom" popover-label=""></span>
                         </div>
                     </td>
@@ -276,12 +276,17 @@
                 </tr>-->
             </table>
         </div>
+        <hr />
         <div class="table-responsive">
-            <table class="table table-sm mt-5">
-                <tr class="bg-light">
+            <table class="table table-sm table-borderless mt-3">
+                <tr class="border-bottom">
                     <th></th>
                     <th colspan="3"></th>
-                    <th class="pr-2">{{'recommendations' | translate}}</th>
+                    <th class="text-right pr-4">
+                        <div class="pr-2">
+                            {{'recommendations' | translate}}
+                        </div>
+                    </th>
                     <th colspan="2" class="pl-2 bg-light">
                         <div class="text-capitalize">
                             {{'my recommendations' | translate}}
@@ -293,13 +298,15 @@
                     <td><i class="fa fa-utensils"></i></td>
                     <td colspan="3">
                         <div class="font-weight-bold">
-                            {{'recommended energy intake' | translate}}
+                            {{'recommended energy intake' | translate}}:
                         </div>
                     </td>
-                    <td>
-                        <span class="font-weight-bold text-nowrap pr-2">{{calculation.recommendedEnergyIntake | number:0}} {{'kcal' | translate}}</span>
+                    <td class="pr-4">
+                        <div class="border text-right bg-main text-white p-2">
+                            <span class="font-weight-bold text-nowrap pr-2">{{calculation.recommendedEnergyIntake | number:0}} {{'kcal' | translate}}</span>
+                        </div>
                     </td>
-                    <td style="max-width:160px; min-width:150px" class="bg-light pl-2">
+                    <td style="max-width:160px; min-width:150px" class="bg-light border-bottom pl-2">
                         <div class="input-group">
                             <input type="number" ng-model="myCalculation.recommendedEnergyIntake" style="max-width:150px" class="form-control text-right bg-light" allow-only-numbers>
                             <div class="input-group-append">
@@ -318,10 +325,12 @@
                     <td><i class="fa fa-running"></i></td>
                     <td colspan="3">
                         <div class="font-weight-bold">
-                            {{'additional energy expenditure' | translate}}
+                            {{'additional energy expenditure' | translate}}:
                         </div>
-                    <td>
-                        <span class="font-weight-bold text-nowrap pr-2">{{calculation.recommendedEnergyExpenditure | number:0}} {{'kcal' | translate}}</span>
+                    <td class="pr-4">
+                        <div class="border text-right bg-main text-white p-2">
+                            <span class="font-weight-bold text-nowrap pr-2">{{calculation.recommendedEnergyExpenditure | number:0}} {{'kcal' | translate}}</span>
+                        </div>
                     </td>
                     <td style="max-width:160px; min-width:150px" class="bg-light pl-2">
                         <div class="input-group">

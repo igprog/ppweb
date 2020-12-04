@@ -1374,9 +1374,9 @@
   "parameters": "параметри",
   "unit": "мера",
   "choosen": "одабрано",
-  "mda": "мда",
-  "ui": "уи",
-  "rda": "рда",
+  "mda": "МДА",
+  "ui": "УИ",
+  "rda": "РДА",
   "starch": "скроб",
   "total sugar": "укупни шећери",
   "glucose": "глукоза",
@@ -1589,7 +1589,7 @@
   "recommended dietary allowance": "препоручена дневна количина",
   "minimum dietary allowance": "минимална дневна потреба",
   "upper intake level": "највећи прихватљив дневни унос",
-  "ul": "ул",
+  "ul": "УЛ",
   "food title": "назив намирнице",
   "clear": "бриши",
   "show password": "прикажи лозинку",
@@ -1989,5 +1989,6 @@
   "network information": "Информације о мрежи",
   "connection": "Bеза",
   "speed": "Брзина",
-  "test speed": "Провери брзину"
+  "test speed": "Провери брзину",
+  "include charts": "Укључи графове"
 }
