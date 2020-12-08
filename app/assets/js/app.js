@@ -5627,10 +5627,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         return recommendations;
     }
 
-    $scope.toggleParamTpl = function (x) {
-        $scope.parametersTpl = x;
-    }
-    $scope.toggleParamTpl('parametersChartTpl');
+    //$scope.toggleParamTpl = function (x) {
+    //    $scope.parametersTpl = x;
+    //}
+    //$scope.toggleParamTpl('parametersChartTpl');
 
     $scope.checkTotal = function (total, min, max) {
         var icon = 'pull-right fa fa-';

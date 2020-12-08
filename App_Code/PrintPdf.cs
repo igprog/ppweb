@@ -479,19 +479,18 @@ public class PrintPdf : System.Web.Services.WebService {
 
             doc.Open();
             AppendHeader(doc, userId, headerInfo);
-            doc.Add(new Paragraph(t.Tran("manu analysis", lang).ToUpper(), GetFont(10)));
 
-            string menu = string.Format(@"
-{0}: {1}
-{2}: {3}
-{4}: {5}"
-            , t.Tran("title", lang), currentMenu.title
-            , t.Tran("note", lang), currentMenu.note
-            , t.Tran("diet", lang), t.Tran(currentMenu.diet, lang));
+            PdfPTable tblTitle = new PdfPTable(1);
+            tblTitle.WidthPercentage = 100f;
+            tblTitle.AddCell(new PdfPCell(new Phrase(t.Tran("manu analysis", lang).ToUpper(), GetFont(10))) { Border = PdfPCell.NO_BORDER, Padding = 2, HorizontalAlignment = PdfPCell.ALIGN_CENTER });
+            doc.Add(tblTitle);
 
-            doc.Add(new Paragraph(menu, GetFont()));
-            doc.Add(new Chunk(line));
-            doc.Add(Chunk.NEWLINE);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(string.Format("{0}: {1}", t.Tran("title", lang), currentMenu.title));
+            sb.AppendLine(string.Format("{0}: {1}", t.Tran("note", lang), currentMenu.note));
+            sb.AppendLine(string.Format("{0}: {1}", t.Tran("diet", lang), t.Tran(currentMenu.diet, lang)));
+            doc.Add(new Paragraph(sb.ToString(), GetFont(8)));
+
             doc.Add(Chunk.NEWLINE);
 
             doc.Add(new Paragraph(t.Tran("energy value", lang).ToUpper(), GetFont(10)));
@@ -511,14 +510,14 @@ public class PrintPdf : System.Web.Services.WebService {
                 i++;
             }
 
-            tblMeals.AddCell(new PdfPCell(new Phrase(t.Tran("total", lang), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
-            tblMeals.AddCell(new PdfPCell(new Phrase(totals.energy.ToString() + " " + t.Tran("kcal", lang), GetFont(CheckEnergy(totals.energy, recommendations.energy)))) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
-            tblMeals.AddCell(new PdfPCell(new Phrase(recommendations.energy.ToString() + " " + t.Tran("kcal", lang), GetFont(7))) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
-            tblMeals.AddCell(new PdfPCell(new Phrase(totals.carbohydrates.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
-            tblMeals.AddCell(new PdfPCell(new Phrase(totals.proteins.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
-            tblMeals.AddCell(new PdfPCell(new Phrase(totals.fats.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(t.Tran("total", lang), GetFont())) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(totals.energy.ToString() + " " + t.Tran("kcal", lang), GetFont(CheckEnergy(totals.energy, recommendations.energy)))) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(recommendations.energy.ToString() + " " + t.Tran("kcal", lang), GetFont(7))) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(totals.carbohydrates.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(totals.proteins.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(totals.fats.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+
             doc.Add(tblMeals);
-            doc.Add(Chunk.NEWLINE);
 
             if (imageData.Length > 0) {
                 PdfPTable tblChart1 = new PdfPTable(2);
@@ -964,19 +963,18 @@ public class PrintPdf : System.Web.Services.WebService {
 
             doc.Open();
             AppendHeader(doc, userId, headerInfo);
-            doc.Add(new Paragraph(t.Tran("manu analysis", lang).ToUpper(), GetFont(10)));
 
-            string menu = string.Format(@"
-{0}: {1}
-{2}: {3}
-{4}: {5}"
-            , t.Tran("title", lang), currentMenu.title
-            , t.Tran("note", lang), currentMenu.note
-            , t.Tran("diet", lang), t.Tran(currentMenu.diet, lang));
+            PdfPTable tblTitle = new PdfPTable(1);
+            tblTitle.WidthPercentage = 100f;
+            tblTitle.AddCell(new PdfPCell(new Phrase(t.Tran("manu analysis", lang).ToUpper(), GetFont(10))) { Border = PdfPCell.NO_BORDER, Padding = 2, HorizontalAlignment = PdfPCell.ALIGN_CENTER });
+            doc.Add(tblTitle);
 
-            doc.Add(new Paragraph(menu, GetFont()));
-            doc.Add(new Chunk(line));
-            doc.Add(Chunk.NEWLINE);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(string.Format("{0}: {1}", t.Tran("title", lang), currentMenu.title));
+            sb.AppendLine(string.Format("{0}: {1}", t.Tran("note", lang), currentMenu.note));
+            sb.AppendLine(string.Format("{0}: {1}", t.Tran("diet", lang), t.Tran(currentMenu.diet, lang)));
+            doc.Add(new Paragraph(sb.ToString(), GetFont(8)));
+
             doc.Add(Chunk.NEWLINE);
 
             doc.Add(new Paragraph(t.Tran("energy value", lang).ToUpper(), GetFont(10)));
@@ -996,12 +994,13 @@ public class PrintPdf : System.Web.Services.WebService {
                 i++;
             }
 
-            tblMeals.AddCell(new PdfPCell(new Phrase(t.Tran("total", lang), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
-            tblMeals.AddCell(new PdfPCell(new Phrase(totals.energy.ToString() + " " + t.Tran("kcal", lang), GetFont(CheckEnergy(totals.energy, recommendations.energy)))) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
-            tblMeals.AddCell(new PdfPCell(new Phrase(recommendations.energy.ToString() + " " + t.Tran("kcal", lang), GetFont(7))) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
-            tblMeals.AddCell(new PdfPCell(new Phrase(totals.carbohydrates.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
-            tblMeals.AddCell(new PdfPCell(new Phrase(totals.proteins.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
-            tblMeals.AddCell(new PdfPCell(new Phrase(totals.fats.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 25, PaddingTop = 10 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(t.Tran("total", lang), GetFont())) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(totals.energy.ToString() + " " + t.Tran("kcal", lang), GetFont(CheckEnergy(totals.energy, recommendations.energy)))) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(recommendations.energy.ToString() + " " + t.Tran("kcal", lang), GetFont(7))) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(totals.carbohydrates.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(totals.proteins.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+            tblMeals.AddCell(new PdfPCell(new Phrase(totals.fats.ToString() + " " + t.Tran("g", lang), GetFont(7))) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 25 });
+
             doc.Add(tblMeals);
             doc.Add(Chunk.NEWLINE);
 
