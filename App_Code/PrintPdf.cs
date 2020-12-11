@@ -160,15 +160,15 @@ public class PrintPdf : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string MenuPdf(string userId, Menues.NewMenu currentMenu, Foods.Totals totals, int consumers, string lang, PrintMenuSettings settings, string date, string author, string headerInfo) {
+    public string MenuPdf(string userId, Menues.NewMenu currentMenu, Foods.Totals totals, int consumers, string lang, PrintMenuSettings settings, string date, string author, string headerInfo, int rowsPerPage) {
         if (settings.printStyle == 0) {
-            return MenuPdf_tbl(userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo);
+            return MenuPdf_tbl(userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo, rowsPerPage);
         } else {
             return MenuPdf_old(userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo);
         }
     }
 
-    public string MenuPdf_tbl(string userId, Menues.NewMenu currentMenu, Foods.Totals totals, int consumers, string lang, PrintMenuSettings settings, string date, string author, string headerInfo) {
+    public string MenuPdf_tbl(string userId, Menues.NewMenu currentMenu, Foods.Totals totals, int consumers, string lang, PrintMenuSettings settings, string date, string author, string headerInfo, int rowsPerPage) {
         try {
             var doc = new Document();
             string path = Server.MapPath(string.Format("~/upload/users/{0}/pdf/", userId));
@@ -202,7 +202,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
             int i = 1;
             int currPage = 1;
-            int rowsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["RowsPerPage"]); // 51; // 42;
+            //int rowsPerPage = Convert.ToInt32(ConfigurationManager.AppSettings["RowsPerPage"]); // 51; // 42;
             menuPage = string.Format("{0}: {1}", t.Tran("page", lang), currPage);
             bool firstPage = true;
             foreach (string m in orderedMeals) {

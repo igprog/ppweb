@@ -411,15 +411,16 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
 
     var consumers = 1;
 
+    $scope.rowsPerPage = 51;
     $scope.pdfLink = null;
     $scope.creatingPdf = false;
-    $scope.createMenuPdf = function () {
+    $scope.createMenuPdf = function (rowsPerPage) {
         $scope.pdfLink = null;
         $scope.creatingPdf = true;
         $http({
             url: $sessionStorage.config.backend + 'PrintPdf.asmx/MenuPdf',
             method: "POST",
-            data: { userId: $scope.userId, currentMenu: $scope.menu, totals: $scope.totals, consumers: consumers, lang: $scope.config.language, settings: $scope.settings, date: null, author: null, headerInfo: null }
+            data: { userId: $scope.userId, currentMenu: $scope.menu, totals: $scope.totals, consumers: consumers, lang: $scope.config.language, settings: $scope.settings, date: null, author: null, headerInfo: null, rowsPerPage: rowsPerPage }
         })
         .then(function (response) {
             var fileName = response.data.d;
@@ -430,6 +431,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
             $scope.creatingPdf = false;
             alert(response.data.d)
         });
+    }
+
+    $scope.hidePdfLink = function () {
+        $scope.pdfLink = null;
     }
 
     $scope.isSeparatedDes = function (x) {

@@ -1985,6 +1985,7 @@
   "speed": "Brzina",
   "test speed": "Test speed",
   "bad_connection_alert": "Your internet connection is slow which may affect the performance of the application",
-  "include charts": "Include charts"
+  "include charts": "Include charts",
+  "rows per page": "Rows per page"
 
 }

@@ -262,6 +262,10 @@ th {
 }
 /*****Fixed Table Header*****/
 
+.slider {
+  opacity: 0.7;
+}
+
 @media (max-width: 767px) {
     .loginBox {
         padding:20px;
@@ -287,11 +291,11 @@ th {
         left:100%;
         margin-left: -60px;
     }
-    fieldset.fieldset-border {
+    /*fieldset.fieldset-border {
         border: none !important;
         padding: 0 !important;
         margin: 10px 0px 0px 0px !important;
-    }
+    }*/
     .container, .container-fluid {
         padding-left:5px !important;
         padding-right:5px !important;

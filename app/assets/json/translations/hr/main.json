@@ -1994,5 +1994,6 @@
   "speed": "Brzina",
   "test speed": "Provjeri brzinu",
   "bad_connection_alert": "Vaša internetska veza je spora što može utjecati na performanse aplikacije",
-  "include charts": "Uključi grafove"
+  "include charts": "Uključi grafove",
+  "rows per page": "Redova po stranici"
 }

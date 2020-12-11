@@ -20,12 +20,12 @@
     </div>
     <div ng-if="menus.length>0" class="table-responsive mt-2" style="height:70vh">
         <table class="table table-sm table-hover">
-            <tr class="text-capitalize">
+            <tr>
                 <th></th>
-                <th>{{'number' | translate}}</th>
-                <th style="width:50%">{{'title' | translate}}</th>
-                <th>{{'date' | translate}}</th>
-                <th class="text-right">{{'energy' | translate}} ({{'kcal' | translate}})</th>
+                <th class="text-capitalize">{{'number' | translate}}</th>
+                <th class="text-capitalize" style="width:50%">{{'title' | translate}}</th>
+                <th class="text-capitalize">{{'date' | translate}}</th>
+                <th class="text-right"><span class="text-capitalize">{{'energy' | translate}}</span> ({{'kcal' | translate}})</th>
             </tr>
             <tr ui-sref="menu" ui-sref-active="active" ng-repeat="x in menus | filter: searchMenu" ng-click="getMenu(x)" class="pointer">
                 <td><button class="btn btn-outline-primary btn-circle"><i class="fa fa-eye"></i></button></td>

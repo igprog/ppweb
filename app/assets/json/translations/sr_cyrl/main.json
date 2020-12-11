@@ -1990,5 +1990,6 @@
   "connection": "Bеза",
   "speed": "Брзина",
   "test speed": "Провери брзину",
-  "include charts": "Укључи графове"
+  "include charts": "Укључи графове",
+  "rows per page": "Редова по страници"
 }

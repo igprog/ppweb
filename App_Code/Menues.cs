@@ -70,25 +70,30 @@ public class Menues : System.Web.Services.WebService {
         data.selectedInitFoods = new List<Foods.NewFood>();
         data.meals = new List<Meals.NewMeal>();
         x.data = data;
-
-        string json = JsonConvert.SerializeObject(x, Formatting.None);
-        return json;
+        return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
     [WebMethod]
-    public string Load(string userId, int limit, int offset, string search) {
+    public string Load(string userId, int limit, int offset, string search, string clientId) {
         try {
             db.CreateDataBase(userId, db.menues);
             List<NewMenu> xx = new List<NewMenu>();
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
-                string sql = string.Format(@"SELECT id, title, diet, date, note, userId, clientId, userGroupId, energy
-                        FROM menues
-                        {0}
-                        ORDER BY rowid DESC LIMIT {1} OFFSET {2} "
-                        , !string.IsNullOrWhiteSpace(search) ? string.Format("WHERE title LIKE '%{0}%' OR note LIKE '%{0}%' OR energy LIKE '{0}%'", search) : ""
-                        , limit
-                        , offset);
+                string whereSql = null;
+                if (!string.IsNullOrWhiteSpace(search) && string.IsNullOrEmpty(clientId)) {
+                    whereSql = string.Format("WHERE title LIKE '%{0}%' OR note LIKE '%{0}%' OR energy LIKE '{0}%'", search);
+                } else if (!string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
+                    whereSql = string.Format("WHERE clientId = '{1}' AND (title LIKE '%{0}%' OR note LIKE '%{0}%' OR energy LIKE '{0}%')", search, clientId);
+                } else if (string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
+                    whereSql = string.Format("WHERE clientId = '{0}'", clientId);
+                } else {
+                    whereSql = null;
+                }
+
+                string sql = string.Format(@"SELECT id, title, diet, date, note, userId, clientId, userGroupId, energy FROM menues {0}
+                                            ORDER BY rowid DESC LIMIT {1} OFFSET {2} ", whereSql , limit , offset);
+
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     Clients.Client client = new Clients.Client();
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
@@ -100,7 +105,11 @@ public class Menues : System.Web.Services.WebService {
                             x.date = reader.GetValue(3) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(3);
                             x.note = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
                             x.userId = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5);
-                            x.client = (reader.GetValue(6) == DBNull.Value || reader.GetValue(7) == DBNull.Value) ? new Clients.NewClient() : client.GetClient(reader.GetString(7), reader.GetString(6));
+                            if (!string.IsNullOrEmpty(clientId)) {
+                                x.client = client.GetClient(userId, clientId);
+                            } else {
+                                x.client = (reader.GetValue(6) == DBNull.Value || reader.GetValue(7) == DBNull.Value) ? new Clients.NewClient() : client.GetClient(reader.GetString(7), reader.GetString(6));
+                            }
                             x.userGroupId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
                             x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
                             xx.Add(x);
@@ -113,42 +122,6 @@ public class Menues : System.Web.Services.WebService {
         } catch (Exception e) { return (e.Message); }
     }
 
-
-    //OLD
-    //[WebMethod]
-    //public string Load(string userId) {
-    //    try {
-    //        //TODO:  limit 15
-    //        db.CreateDataBase(userId, db.menues);
-    //        List<NewMenu> xx = new List<NewMenu>();
-    //        using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
-    //            connection.Open();
-    //            string sql = @"SELECT id, title, diet, date, note, userId, clientId, userGroupId, energy
-    //                    FROM menues
-    //                    ORDER BY rowid DESC";
-    //            using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-    //                Clients.Client client = new Clients.Client();
-    //                using (SQLiteDataReader reader = command.ExecuteReader()) {
-    //                    while (reader.Read()) {
-    //                        NewMenu x = new NewMenu();
-    //                        x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-    //                        x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-    //                        x.diet = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-    //                        x.date = reader.GetValue(3) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(3);
-    //                        x.note = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-    //                        x.userId = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5);
-    //                        x.client = (reader.GetValue(6) == DBNull.Value || reader.GetValue(7) == DBNull.Value) ? new Clients.NewClient() : client.GetClient(reader.GetString(7), reader.GetString(6));
-    //                        x.userGroupId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
-    //                        x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
-    //                        xx.Add(x);
-    //                    }
-    //                }
-    //            }
-    //            connection.Close();
-    //        }
-    //        return JsonConvert.SerializeObject(xx, Formatting.None);
-    //    } catch (Exception e) { return (e.Message); }
-    //}
 
     [WebMethod]
     public string LoadClientMenues(string userId, string clientId) {
@@ -171,7 +144,8 @@ public class Menues : System.Web.Services.WebService {
                             x.date = reader.GetValue(3) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(3);
                             x.note = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
                             x.userId = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5);
-                            x.client = (reader.GetValue(6) == DBNull.Value || reader.GetValue(7) == DBNull.Value) ? new Clients.NewClient() : client.GetClient(reader.GetString(7), reader.GetString(6));
+                            //x.client = (reader.GetValue(6) == DBNull.Value || reader.GetValue(7) == DBNull.Value) ? new Clients.NewClient() : client.GetClient(reader.GetString(7), reader.GetString(6));
+                            x.client = client.GetClient(userId, clientId);
                             x.userGroupId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
                             x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
                             xx.Add(x);
