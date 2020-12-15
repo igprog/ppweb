@@ -1980,7 +1980,7 @@ IBAN HR8423400091160342496
             if (!string.IsNullOrWhiteSpace(invoice.note)) {
                 Paragraph title = new Paragraph();
                 title.SpacingBefore = 20f;
-                title.Font = GetFont();
+                title.Font = GetFont(9, Font.ITALIC);
                 title.Add(invoice.note);
                 doc.Add(title);
                 spacing = spacing - 40f;
@@ -2028,24 +2028,26 @@ IBAN HR8423400091160342496
 
     private void AppendMeal(Document doc, List<Foods.NewFood> meal, List<Meals.NewMeal> meals, string lang, Foods.Totals totals, PrintMenuSettings settings) {
         if (meal.Count > 0) {
-            if (meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
-                string mealtitle = string.Format(@"{0}:", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, meals), lang)).ToUpper();
-                doc.Add(new Paragraph(mealtitle, GetFont(true)));
-                rowCount = rowCount + 1;
-                string description = meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
-                if (!string.IsNullOrWhiteSpace(description)) {
-                    StringBuilder sb = new StringBuilder();
-                    sb = AppendMealDescription(sb, description, settings);
-                    doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
-                }
-                if (settings.showFoods) {
-                    foreach (Foods.NewFood food in meal) {
-                        AppendFoodsTbl(doc, food, settings, lang);
+            if (meals.Find(a => a.code == meal[0].meal.code)!= null) {
+                if (meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
+                    string mealtitle = string.Format(@"{0}:", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, meals), lang)).ToUpper();
+                    doc.Add(new Paragraph(mealtitle, GetFont(true)));
+                    rowCount = rowCount + 1;
+                    string description = meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
+                    if (!string.IsNullOrWhiteSpace(description)) {
+                        StringBuilder sb = new StringBuilder();
+                        sb = AppendMealDescription(sb, description, settings);
+                        doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
                     }
-                }
-                if (settings.showMealsTotal) {
-                    if (totals != null) {
-                        AppendMealTotalTbl(doc, totals.mealsTotal, meal[0].meal.code, settings, lang);
+                    if (settings.showFoods) {
+                        foreach (Foods.NewFood food in meal) {
+                            AppendFoodsTbl(doc, food, settings, lang);
+                        }
+                    }
+                    if (settings.showMealsTotal) {
+                        if (totals != null) {
+                            AppendMealTotalTbl(doc, totals.mealsTotal, meal[0].meal.code, settings, lang);
+                        }
                     }
                 }
             }

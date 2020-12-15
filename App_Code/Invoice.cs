@@ -45,6 +45,7 @@ public class Invoice : System.Web.Services.WebService {
         public double paidAmount { get; set; }
         public double restToPaid { get; set; }
         public string paidDate { get; set; }
+        public bool isElectronicBill { get; set; }
     }
 
     public class Item {
@@ -93,8 +94,8 @@ public class Invoice : System.Web.Services.WebService {
         x.paidAmount = 0;
         x.restToPaid = 0;
         x.paidDate = null;
-        string json = JsonConvert.SerializeObject(x, Formatting.None);
-        return json;
+        x.isElectronicBill = true;
+        return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
     [WebMethod]
@@ -121,8 +122,8 @@ public class Invoice : System.Web.Services.WebService {
         x.paidAmount = 0;
         x.paidDate = null;
         x.restToPaid = 0;
-        string json = JsonConvert.SerializeObject(x, Formatting.None);
-        return json;
+        x.isElectronicBill = true;
+        return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
     [WebMethod]
@@ -159,6 +160,7 @@ public class Invoice : System.Web.Services.WebService {
                             x.paidAmount = reader.GetValue(17) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(17));
                             x.paidDate = reader.GetValue(18) == DBNull.Value ? null : reader.GetString(18);
                             x.restToPaid = x.paidAmount - x.total;
+                            x.isElectronicBill = true;
                             xx.data.Add(x);
                         }
                     } 
@@ -170,18 +172,19 @@ public class Invoice : System.Web.Services.WebService {
                 }
                 connection.Close();
             } 
-            string json = JsonConvert.SerializeObject(xx, Formatting.None);
-            return json;
-        } catch (Exception e) { return ("Error: " + e); }
+            return JsonConvert.SerializeObject(xx, Formatting.None);
+        } catch (Exception e) { return (e.Message); }
     }
 
     [WebMethod]
     public string Save(NewInvoice x, string pdf) {
-            try {
+        try {
             SavePdf(x, pdf);
             return SaveToDb(x);
-        } catch (Exception e) { return ("Error: " + e); }
-        } 
+        } catch (Exception e) {
+            return (e.Message);
+        }
+    }
 
     [WebMethod]
     public string SaveDb(NewInvoice x) {
