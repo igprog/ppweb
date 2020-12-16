@@ -46,6 +46,7 @@ public class Invoice : System.Web.Services.WebService {
         public double restToPaid { get; set; }
         public string paidDate { get; set; }
         public bool isElectronicBill { get; set; }
+        public bool showSignature { get; set; }
     }
 
     public class Item {
@@ -94,7 +95,8 @@ public class Invoice : System.Web.Services.WebService {
         x.paidAmount = 0;
         x.restToPaid = 0;
         x.paidDate = null;
-        x.isElectronicBill = true;
+        x.isElectronicBill = false;
+        x.showSignature = true;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -122,7 +124,8 @@ public class Invoice : System.Web.Services.WebService {
         x.paidAmount = 0;
         x.paidDate = null;
         x.restToPaid = 0;
-        x.isElectronicBill = true;
+        x.isElectronicBill = false;
+        x.showSignature = true;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -160,7 +163,8 @@ public class Invoice : System.Web.Services.WebService {
                             x.paidAmount = reader.GetValue(17) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(17));
                             x.paidDate = reader.GetValue(18) == DBNull.Value ? null : reader.GetString(18);
                             x.restToPaid = x.paidAmount - x.total;
-                            x.isElectronicBill = true;
+                            x.isElectronicBill = false;
+                            x.showSignature = true;
                             xx.data.Add(x);
                         }
                     } 

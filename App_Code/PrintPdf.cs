@@ -27,6 +27,7 @@ public class PrintPdf : System.Web.Services.WebService {
     Font courier = new Font(Font.COURIER, 9f);
     string logoPPPath = HttpContext.Current.Server.MapPath(string.Format("~/app/assets/img/logo.png"));
     string logoPathIgProg = HttpContext.Current.Server.MapPath(string.Format("~/assets/img/logo_igprog.png"));
+    string signaturePath = HttpContext.Current.Server.MapPath(string.Format("~/assets/img/signature_ig.png"));
 
     iTextSharp.text.pdf.draw.LineSeparator line = new iTextSharp.text.pdf.draw.LineSeparator(0f, 100f, Color.GRAY, Element.ALIGN_LEFT, 1);
 
@@ -1993,6 +1994,13 @@ IBAN HR8423400091160342496
             sign_table.AddCell(new PdfPCell(new Phrase("Odgovorna osoba:", GetFont())) { Border = PdfPCell.NO_BORDER, Padding = 0, PaddingTop = 5, HorizontalAlignment = PdfPCell.ALIGN_CENTER });
             sign_table.AddCell(new PdfPCell(new Phrase("", GetFont())) { Border = PdfPCell.NO_BORDER, Padding = 0, PaddingTop = 5, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
             sign_table.AddCell(new PdfPCell(new Phrase("Igor Gašparović", GetFont())) { Border = PdfPCell.NO_BORDER, Padding = 0, PaddingTop = 5, HorizontalAlignment = PdfPCell.ALIGN_CENTER });
+
+            if (invoice.showSignature) {
+                Image signature = Image.GetInstance(signaturePath);
+                signature.ScalePercent(9f);
+                sign_table.AddCell(new PdfPCell(new Phrase("", GetFont())) { Border = PdfPCell.NO_BORDER, Padding = 0, PaddingTop = 5, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
+                sign_table.AddCell(new PdfPCell(new PdfPCell(signature)) { Border = PdfPCell.NO_BORDER, Padding = 0, PaddingTop = 5, HorizontalAlignment = PdfPCell.ALIGN_CENTER });
+            }
 
             sign_table.WidthPercentage = 100f;
             float[] sign_widths = new float[] { 4f, 1f };

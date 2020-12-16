@@ -365,8 +365,10 @@ angular.module('app', [])
 
     $scope.setNote = function (i) {
         if (i.isElectronicBill) {
+            i.showSignature = false;
             i.note = 'Račun je ispostavljen elektroničkim putem i pravovaljan je bez potpisa i pečata.';
         } else {
+            i.showSignature = true;
             i.note = null;
         }
     }
@@ -381,7 +383,6 @@ angular.module('app', [])
      .then(function (response) {
          $rootScope.i = JSON.parse(response.data.d);
          $rootScope.i.dateAndTime = getLocalDateAndTime();
-         //$scope.setNote($rootScope.i);
          initForm();
      },
      function (response) {
