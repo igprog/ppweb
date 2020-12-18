@@ -1,17 +1,18 @@
 ﻿<div class="container" ng-cloak>
     <div class="card">
-        <div class="card-header text-capitalize">
+        <div class="card-header">
             <h4>{{'my recipes' | translate}}</h4>
-            <hr />
-            <button class="btn btn-outline-primary text-capitalize" ng-click="new()"><i class="fa fa-file"></i> <span class="d-none d-sm-inline">{{'new recipe' | translate}}</span></button>
-            <button class="btn btn-outline-primary" ng-click="search()"><i class="fa fa-search"></i> <span class="d-none d-sm-inline">{{'search' | translate}}</span></button>
-            <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'save as recipe' | translate}}" ng-click="save(recipe)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save' | translate}}</span></button>
-            <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'save as food' | translate}}" ng-click="saveRecipeAsMyFood(recipe)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save as food' | translate}}</span></button>
-            <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'show recipe preview' | translate}}" ng-click="printRecipePreview(recipe)"><i class="fa fa-print"></i> <span class="d-none d-sm-inline">{{'print' | translate}}</span></button>
-            <button ng-disabled="recipe.id==null" href="" class="btn btn-outline-danger text-capitalize" ng-click="remove(recipe)"><i class="fa fa-trash-alt"></i> <span class="d-none d-sm-inline">{{'delete' | translate}}</span></button>
         </div>
         <div class="card-body p-4">
-            <div class="text-capitalize">
+            <div>
+                <button class="btn btn-outline-primary" ng-click="new()"><i class="fa fa-file"></i> <span class="d-none d-sm-inline">{{'new recipe' | translate}}</span></button>
+                <button class="btn btn-outline-primary" ng-click="search()"><i class="fa fa-search"></i> <span class="d-none d-sm-inline">{{'search' | translate}}</span></button>
+                <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'save as recipe' | translate}}" ng-click="save(recipe)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save' | translate}}</span></button>
+                <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'save as food' | translate}}" ng-click="saveRecipeAsMyFood(recipe)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save as food' | translate}}</span></button>
+                <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'show recipe preview' | translate}}" ng-click="printRecipePreview(recipe)"><i class="fa fa-print"></i> <span class="d-none d-sm-inline">{{'print' | translate}}</span></button>
+                <button ng-disabled="recipe.id==null" href="" class="btn btn-outline-danger text-capitalize" ng-click="remove(recipe)"><i class="fa fa-trash-alt"></i> <span class="d-none d-sm-inline">{{'delete' | translate}}</span></button>
+            </div>
+            <div class="pt-4">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>{{'recipe title' | translate}}</label>
                     <input ng-model="recipe.title" type="text">
@@ -35,12 +36,12 @@
             </div>
             <div class="table-responsive mt-4">
                 <table class="table table-sm table-borderless">
-                    <tr class="text-capitalize border-bottom">
+                    <tr class="border-bottom">
                         <th></th>
-                        <th style="width:40%">{{'food' | translate}}</th>
-                        <th>{{'quantity' | translate}}</th>
+                        <th class="text-capitalize" style="width:40%">{{'food' | translate}}</th>
+                        <th class="text-capitalize">{{'quantity' | translate}}</th>
                         <th>{{'unit' | translate}}</th>
-                        <th class="text-right">{{'mass' | translate}}</th>
+                        <th class="text-right text-capitalize">{{'mass' | translate}}</th>
                         <th class="nowrap"><span class="pl-2">{{'thermal treatment' | translate}}</span></th>
                         <th class="nowrap text-right">{{'energy' | translate}}</th>
                     </tr>
@@ -54,20 +55,19 @@
                         <td>{{x.unit}}</td>
                         <td class="text-right">{{x.mass}} {{'g' | translate}}</td>
                         <td>
-                            <span ng-if="x.isSelected==true" ng-repeat="x in x.thermalTreatments" class="pl10">{{x.thermalTreatment.title}}</span>
+                            <span ng-if="x.isSelected==true" ng-repeat="x in x.thermalTreatments" class="pl-2">{{x.thermalTreatment.title}}</span>
                         </td>
                         <td class="text-right">{{x.energy}} {{'kcal' | translate}}</td>
                     </tr>
-                    <tr class="text-capitalize">
+                    <tr>
                         <td></td>
                         <td>
                             <a ng-disabled="addFoodBtn" href="" class="btn btn-primary" ng-click="openFoodPopup(null,null)"><i ng-class="addFoodBtnIcon"></i> {{'add food' | translate}}</a>
                         </td>
-                        <th colspan="4" class="text-right border-top">
-                            <label>{{'total' | translate}}:</label>
-                        </th>
-                        <th class="text-right border-top"><label>{{totals.energy}} kcal</label></th>
-                        <!--<td class="text-right"><label>{{getTotEnergy(recipe.data.selectedFoods) | number : 1}} kcal</label></td>-->
+                        <td colspan="4" class="text-right border-top">
+                            <strong>{{'total' | translate}}:</strong>
+                        </td>
+                        <td class="text-right border-top"><strong>{{totals.energy}} {{'kcal' | translate}}</strong></td>
                     </tr>
                 </table>
             </div>
