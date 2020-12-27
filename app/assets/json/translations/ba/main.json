@@ -1861,8 +1861,9 @@
   "edit and save as my food": "Uredi i spremi kao moju namirnicu",
   "show in print": "Prikaži u ispisu",
   "dish title": "naziv jela",
-  "total energy and nutritional value of the meals": "ukupna energetska i nutritivna vrijednost obroka",
-  "total energy and nutritional value of the meanu": "ukupna energetska i nutritivna vrijednost jelovnika",
+  "total energy and nutritional value of the meals": "Ukupna energetska i nutritivna vrijednost obroka",
+  "total energy and nutritional value of the meanu": "Ukupna energetska i nutritivna vrijednost jelovnika",
+  "total energy and nutritional value of the recipe": "Ukupna energetska i nutritivna vrijednost recepta",
   "copy": "kopiraj",
   "bugmsg1": "Ako imate prijedlog za poboljšanje aplikacije ili želite prijaviti BUG, ovdje možete dati kratki opis.",
   "bugmsg2": "Odgovorit ćemo Vam u najskorijem roku.",
@@ -1995,6 +1996,10 @@
   "test speed": "Provjeri brzinu",
   "bad_connection_alert": "Vaša internetska veza je spora što može utjecati na performanse aplikacije",
   "include charts": "Uključi grafove",
-  "rows per page": "Redova po stranici"
+  "rows per page": "Redova po stranici",
+  "recipe image": "Slika recepta",
+  "you can upload a recipe picture after saving the recipe": "Sliku recepta možete učitati nakon što spremite recept",
+  "image": "Slika",
+  "max upload file size is 1.5 MB": "Maksimalna veličina datoteke je 1.5 MB"
 
 }

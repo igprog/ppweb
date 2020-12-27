@@ -19,33 +19,18 @@
                 <div class="row small">
                     <div class="col-sm-3">
                         <fieldset class="fieldset-border">
-                            <legend class="fieldset-border text-capitalize">{{'number of consumers' | translate}}</legend>
+                            <legend class="fieldset-border">{{'number of consumers' | translate}}</legend>
                             <input ng-model="consumers" type="number" min="1" class="form-control" style="max-width:100px" ng-change="changeNumberOfConsumers(consumers)" allow-only-numberss>
                         </fieldset>
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">{{'show in print' | translate}}</legend>
-                            <!--<md-input-container class="md-block">
-                                <md-checkbox ng-model="settings.showClientData" class="md-primary">
-                                    {{'client data' | translate}}
-                                </md-checkbox>
-                            </md-input-container>-->
-                            <!--<md-input-container class="md-block">
-                                <md-checkbox ng-model="settings.showTitle" class="md-primary">
-                                    {{'dish title' | translate}}
-                                </md-checkbox>
-                            </md-input-container>-->
                             <md-input-container class="md-block">
-                                <md-checkbox ng-model="settings.showDescription" class="md-primary">
+                                <md-checkbox ng-model="settings.showDescription" class="md-primary text-capitalize">
                                     {{'description' | translate}}
                                 </md-checkbox>
                             </md-input-container>
-                            <!--<md-input-container class="md-block">
-                                <md-checkbox ng-model="settings.showFoods" class="md-primary">
-                                    {{'foods' | translate}}
-                                </md-checkbox>
-                            </md-input-container>-->
                             <md-input-container class="md-block">
-                                <md-checkbox ng-disabled="!settings.showFoods" ng-model="settings.showQty" class="md-primary">
+                                <md-checkbox ng-disabled="!settings.showFoods" ng-model="settings.showQty" class="md-primary text-capitalize">
                                     {{'quantity' | translate}}
                                 </md-checkbox>
                             </md-input-container>
@@ -59,28 +44,23 @@
                                     {{'unit servings' | translate}}
                                 </md-checkbox>
                             </md-input-container>
-                            <!--<md-input-container class="md-block">
-                                <md-checkbox ng-model="settings.showMealsTotal" class="md-primary">
-                                    {{'total energy and nutritional value of the meals' | translate}}
-                                </md-checkbox>
-                            </md-input-container>-->
                             <md-input-container class="md-block">
                                 <md-checkbox ng-model="settings.showTotals" class="md-primary">
-                                    {{'total energy and nutritional value of the meanu' | translate}}
+                                    {{'total energy and nutritional value of the recipe' | translate}}
                                 </md-checkbox>
                             </md-input-container>
-                            <!--<md-input-container class="md-block">
-                                <md-checkbox ng-model="settings.showActivities" class="md-primary">
-                                    {{'additional activity' | translate}}
+                            <md-input-container class="md-block">
+                                <md-checkbox ng-model="settings.showImg" class="md-primary text-capitalize">
+                                    {{'image' | translate}}
                                 </md-checkbox>
-                            </md-input-container>-->
+                            </md-input-container>
                             <md-input-container class="md-block">
                                 <md-checkbox ng-model="settings.showPrice" class="md-primary">
                                     {{'price' | translate}}
                                 </md-checkbox>
                             </md-input-container>
                             <md-input-container class="md-block" style="margin-bottom:2px">
-                                <md-checkbox ng-model="settings.showDate" class="md-primary" style="margin-bottom:2px">
+                                <md-checkbox ng-model="settings.showDate" class="md-primary text-capitalize" style="margin-bottom:2px">
                                     {{'date' | translate}}
                                 </md-checkbox>
                             </md-input-container>
@@ -88,7 +68,7 @@
                                 <input ng-model="date" class="form-control" ng-change="setDate(date)" />
                             </div>
                             <md-input-container class="md-block" style="margin-bottom:2px">
-                                <md-checkbox ng-model="settings.showAuthor" class="md-primary" style="margin-bottom:2px">
+                                <md-checkbox ng-model="settings.showAuthor" class="md-primary text-capitalize" style="margin-bottom:2px">
                                     {{'author' | translate}}
                                 </md-checkbox>
                             </md-input-container>
@@ -101,58 +81,32 @@
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border text-capitalize">{{'recipe' | translate}}</legend>
                             <div id="menu_container">
-                                <!--<div ng-if="settings.showClientData">
-                                    <p>{{currentMenu.client.firstName}} {{currentMenu.client.lastName}}</p>
-                                    <p>
-                                        {{'height' | translate}}: {{currentMenu.client.clientData.height}} cm, {{'weight' | translate}}: {{currentMenu.client.clientData.weight}} kg
-                                        <span ng-if="currentMenu.client.clientData.waist>0">, {{'waist' | translate}}: {{currentMenu.client.clientData.waist}} cm</span><span ng-if="clientData.hip>0">, {{'hip' | translate}}: {{clientData.hip}} cm</span>
-                                    </p>
-                                    <p>{{currentMenu.client.clientData.diet.diet | translate}}</p>
-                                    <hr />
-                                </div>-->
-                                <strong><span class="text-uppercase">{{'recipe' | translate}}:</span> {{recipe.title}}</strong>
-                                <div ng-if="settings.showDescription" class="mt10">
-                                    <label class="text-uppercase">{{'description' | translate}}:</label>
-                                    <p>{{recipe.description}}</p>
+                                <div class="row">
+                                    <div ng-if="settings.showImg&&recipe.recipeImg" class="col-xl-5 pt-3">
+                                        <img class="rounded" src="../upload/users/{{userId}}/recipes/{{recipe.id}}/recipeimg/{{recipe.recipeImg}}" alt="{{recipe.recipeImg}}" style="width:100%">
+                                        <!--<img class="rounded" src="../upload/users/{{userId}}/recipes/{{recipe.id}}/recipeimg/{{recipe.recipeImg}}" alt="{{recipe.recipeImg}}" style="height:15rem;width:15rem">-->
+                                    </div>
+                                    <div class="col-xl-7 pt-3">
+                                        <h4>{{recipe.title}}</h4>
+                                        <div ng-if="settings.showDescription" class="pt-3">
+                                            <label class="text-uppercase font-weight-bold">{{'description, recipe preparation' | translate}}:</label>
+                                            <p>{{recipe.description}}</p>
+                                        </div>
+                                    </div>
                                 </div>
+                                <!--<img ng-if="settings.showImg&&recipe.recipeImg" class="rounded" src="../upload/users/{{userId}}/recipes/{{recipe.id}}/recipeimg/{{recipe.recipeImg}}" alt="{{recipe.recipeImg}}" style="height:15rem;width:15rem">
+                                <div ng-if="settings.showDescription" class="mt-3">
+                                    <label class="text-uppercase font-weight-bold">{{'description' | translate}}:</label>
+                                    <p>{{recipe.description}}</p>
+                                </div>-->
+                                <hr />
                                 <p ng-if="consumers > 1">{{'number of consumers' | translate}}: <strong>{{consumers}}</strong></p>
-
-                                <div ng-if="settings.showFoods" class="mt10">
-                                    <label class="text-uppercase">{{'ingredients' | translate}}:</label>
+                                <div ng-if="settings.showFoods" class="mt-2">
+                                    <label class="text-uppercase font-weight-bold">{{'ingredients' | translate}}:</label>
                                     <div ng-repeat="y in foods track by $index">
                                         - {{y.food}}<span ng-if="settings.showQty">, {{y.quantity}} {{y.unit}}</span><span ng-if="settings.showMass">, {{y.mass>999?(y.mass/1000).toFixed(1):y.mass}} {{y.mass>999?('kg' | translate):('g' | translate)}}</span> <span ng-if="settings.showServ&&getServDescription(y.servings)!=''">, ({{getServDescription(y.servings)}})</span>
                                     </div>
-                                    <!--<div ng-repeat="y in recipe.data.selectedFoods track by $index">
-                                        - {{y.food}}<span ng-if="settings.showQty">, {{y.quantity}} {{y.unit}}</span><span ng-if="settings.showMass">, {{y.mass>999?(y.mass/1000).toFixed(1):y.mass}} {{y.mass>999?('kg' | translate):('g' | translate)}}</span> <span ng-if="settings.showServ&&getServDescription(y.servings)!=''">, ({{getServDescription(y.servings)}})</span>
-                                    </div>-->
                                 </div>
-
-
-
-                                <!--<div ng-if="x.isSelected==1" ng-repeat="x in recipe.data.meals track by $index" class="m10">
-                                    <label class="text-uppercase mt10">{{getMealTitle(x)}}</label>
-                                    <div ng-if="x.description" class="mt10">
-                                        <em ng-if="!isSeparatedDes(x.description)&&settings.showDescription">{{x.description}}</em>
-                                        <div ng-if="isSeparatedDes(x.description)">
-                                            <div ng-repeat="y in getTitleDes(x.description)">
-                                                <div ng-if="settings.showTitle">{{y.title}}</div>
-                                                <em ng-if="settings.showDescription">{{y.description}}</em>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div ng-if="settings.showFoods" class="mt10">
-                                        <div ng-if="y.meal.code==x.code" ng-repeat="y in foods track by $index">
-                                            - {{y.food}}<span ng-if="settings.showQty">, {{y.quantity}} {{y.unit}}</span><span ng-if="settings.showMass">, {{y.mass>999?(y.mass/1000).toFixed(1):y.mass}} {{y.mass>999?('kg' | translate):('g' | translate)}}</span> <span ng-if="settings.showServ&&getServDescription(y.servings)!=''">, ({{getServDescription(y.servings)}})</span>
-                                        </div>
-                                    </div>
-                                    <div ng-if="settings.showMealsTotal" class="mt10">
-                                        {{'energy' | translate}}: {{totals.mealsTotal[$index].energy.val | number:1}} {{'kcal' | translate}} ({{totals.mealsTotal[$index].energy.perc| number:1}} %),&nbsp;
-                                        {{'carbohydrates' | translate}}: {{totals.mealsTotal[$index].carbohydrates.val | number:1}} {{'g' | translate}} ({{totals.mealsTotal[$index].carbohydrates.perc| number:1}} %),&nbsp;
-                                        {{'proteins' | translate}}: {{totals.mealsTotal[$index].proteins.val | number:1}} {{'g' | translate}} ({{totals.mealsTotal[$index].proteins.perc| number:1}} %),&nbsp;
-                                        {{'fats' | translate}}: {{totals.mealsTotal[$index].fats.val | number:1}} {{'g' | translate}} ({{totals.mealsTotal[$index].fats.perc| number:1}} %)
-                                    </div>
-                                </div>-->
-
                                 <div ng-if="settings.showTotals">
                                     <hr />
                                     <label><span class="text-uppercase">{{'total' | translate}}</span><span ng-if="consumers > 1"> ({{'per consumer' | translate}})</span>:</label>
@@ -161,20 +115,10 @@
                                     <p>{{'proteins' | translate}}: <span>{{totals.proteins | number:1}} g, ({{totals.proteinsPercentage | number:1}} %)</span></p>
                                     <p>{{'fats' | translate}}: <span>{{totals.fats | number:1}} g, ({{totals.fatsPercentage | number:1}} %)</span></p>
                                 </div>
-
                                 <div ng-if="totals.price.value>0 && settings.showPrice">
                                     <hr />
                                     <em class="text-primary"><span class="text-capitalize">{{'price' | translate}}</span>: <span>{{totals.price.value | number:2}}</span> <span class="text-uppercase">{{config.currency}}</span></em>
                                 </div>
-
-                                <!--<div ng-if="currentMenu.client.clientData.activities.length > 0 && settings.showActivities">
-                                    <hr />
-                                    <label class="text-uppercase">{{'additional activity' | translate}}:</label>
-                                    <ul ng-repeat="x in currentMenu.client.clientData.activities">
-                                        <li>{{x.activity}} - {{x.duration}} min, {{x.energy | number:0}} kcal</li>
-                                    </ul>
-                                </div>-->
-
                                 <div ng-if="settings.showAuthor||settings.showDate">
                                     <hr />
                                     <div class="row">

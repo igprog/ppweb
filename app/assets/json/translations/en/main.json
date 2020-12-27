@@ -1852,8 +1852,9 @@
   "edit and save as my food": "Edit and save as my food",
   "show in print": "Show in print",
   "dish title": "dish title",
-  "total energy and nutritional value of the meals": "total energy and nutritional value of the meals",
-  "total energy and nutritional value of the meanu": "total energy and nutritional value of the meanu",
+  "total energy and nutritional value of the meals": "Total energy and nutritional value of the meals",
+  "total energy and nutritional value of the meanu": "Total energy and nutritional value of the meanu",
+  "total energy and nutritional value of the recipe": "Total energy and nutritional value of the recipe",
   "copy": "copy",
   "bugmsg1": "If you have any suggestion for improving the application or You want to report a BUG, you can give a brief description here.",
   "bugmsg2": "We will reply to you as soon as possible.",
@@ -1986,6 +1987,10 @@
   "test speed": "Test speed",
   "bad_connection_alert": "Your internet connection is slow which may affect the performance of the application",
   "include charts": "Include charts",
-  "rows per page": "Rows per page"
+  "rows per page": "Rows per page",
+  "recipe image": "recipe image",
+  "you can upload a recipe picture after saving the recipe": "You can upload a recipe picture after saving the recipe",
+  "image": "Image",
+  "max upload file size is 1.5 MB": "Max upload file size is 1.5 MB"
 
 }

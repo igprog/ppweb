@@ -84,6 +84,25 @@ public class Files : System.Web.Services.WebService {
             }
         } catch (Exception e) { return (e.Message); }
     }
+
+    [WebMethod]
+    public string DeleteRecipeImg(Recipes.NewRecipe x, string userId) {
+        try {
+            string img = null;
+            if (x.recipeImg.Contains("?")) {
+                img = x.recipeImg.Remove(x.recipeImg.IndexOf("?"));
+            } else {
+                img = x.recipeImg;
+            }
+            string path = string.Format("~/upload/users/{0}/recipes/{1}/recipeimg/{2}", userId, x.id, img);
+            if (File.Exists(Server.MapPath(path))) {
+                File.Delete(Server.MapPath(path));
+                return null;
+            } else {
+                return "no file";
+            }
+        } catch (Exception e) { return (e.Message); }
+    }
     #endregion WebMethods
 
     #region Methods
@@ -111,6 +130,13 @@ public class Files : System.Web.Services.WebService {
         }
     }
 
+    public void DeleteRecipeFolder(string userId, string id) {
+        string path = Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}", userId, id));
+        if (Directory.Exists(path)) {
+            Directory.Delete(path, true);
+        }
+    }
+
     public void SaveFile(string userId, string fileName, string value) {
         try {
             string path = string.Format("~/App_Data/users/{0}", userId);
@@ -130,8 +156,6 @@ public class Files : System.Web.Services.WebService {
             }
         } catch (Exception e) { return ("Error: " + e); }
     }
-
-
     #endregion Methods
 
 

@@ -35,6 +35,7 @@ public class Recipes : System.Web.Services.WebService {
         public JsonFile data = new JsonFile();
 
         public List<CodeMeal> mealGroups = new List<CodeMeal>();
+        public string recipeImg { get; set; }
     }
 
     public class JsonFile {
@@ -66,6 +67,7 @@ public class Recipes : System.Web.Services.WebService {
         data.selectedInitFoods = new List<Foods.NewFood>();
         x.data = data;
         x.mealGroups = InitMealGroups();
+        x.recipeImg = null;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -89,6 +91,7 @@ public class Recipes : System.Web.Services.WebService {
                 x.description = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
                 x.energy = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
                 x.mealGroup = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
+                x.recipeImg = GetRecipeImg(userId, x.id);
                 xx.Add(x);
             }
             connection.Close();
@@ -116,6 +119,7 @@ public class Recipes : System.Web.Services.WebService {
                 x.energy = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
                 x.mealGroup = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
                 x.data = JsonConvert.DeserializeObject<JsonFile>(GetJsonFile(userId, x.id));
+                x.recipeImg = GetRecipeImg(userId, x.id);
                 x.mealGroups = InitMealGroups();
             }
             connection.Close();
@@ -168,6 +172,8 @@ public class Recipes : System.Web.Services.WebService {
             MyFoods mf = new MyFoods();
             mf.Delete(userId, id);
             /*******************************************************************/
+            Files f = new Files();
+            f.DeleteRecipeFolder(userId, id);
         } catch (Exception e) { return (e.Message); }
         return "OK";
     }
@@ -386,6 +392,25 @@ public class Recipes : System.Web.Services.WebService {
         x.title = "dinner";
         xx.Add(x);
         return xx;
+    }
+
+    public static string GetRecipeImg(string userId, string id) {
+        string x = null;
+        string path = HttpContext.Current.Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg", userId, id));
+        if (Directory.Exists(path)) {
+            string[] ss = Directory.GetFiles(path);
+            x = ss.Select(a => string.Format("{0}?v={1}", Path.GetFileName(a), DateTime.Now.Ticks)).FirstOrDefault();
+        }
+        return x;
+    }
+
+    public string GetRecipeImgFile(string path) {
+        string x = null;
+        if (Directory.Exists(path)) {
+            string[] ss = Directory.GetFiles(path);
+            x = ss.Select(a => string.Format("{0}?v={1}", Path.GetFileName(a), DateTime.Now.Ticks)).FirstOrDefault();
+        }
+        return x;
     }
     #endregion Methods
 

@@ -69,6 +69,7 @@ public class PrintPdf : System.Web.Services.WebService {
         public bool showDate;
         public bool showAuthor;
         public int printStyle;  // 0 = New Style (table style); 1 = Old style
+        public bool showImg;
     }
 
     #region WebMethods
@@ -91,6 +92,7 @@ public class PrintPdf : System.Web.Services.WebService {
         x.showDate = true;
         x.showAuthor = true;
         x.printStyle = 0;
+        x.showImg = false;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -113,6 +115,7 @@ public class PrintPdf : System.Web.Services.WebService {
         x.showDate = true;
         x.showAuthor = true;
         x.printStyle = 0;
+        x.showImg = false;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -135,6 +138,7 @@ public class PrintPdf : System.Web.Services.WebService {
         x.showDate = true;
         x.showAuthor = true;
         x.printStyle = 0;
+        x.showImg = true;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -1703,15 +1707,48 @@ public class PrintPdf : System.Web.Services.WebService {
             //    ShowClientData(doc, recipe.client, lang);
             //}
             doc.Add(new Paragraph(" ", GetFont()));
-            doc.Add(new Paragraph(string.Format("{0}: {1}", t.Tran("recipe", lang).ToUpper(), recipe.title), GetFont(12)));
+            //doc.Add(new Paragraph(string.Format("{0}: {1}", t.Tran("recipe", lang).ToUpper(), recipe.title), GetFont(12)));
+            //doc.Add(new Paragraph(string.Format("{0}", t.Tran("recipe", lang).ToUpper(), recipe.title), GetFont(12)));
+            doc.Add(new Paragraph(string.Format("{0}", recipe.title), GetFont(16)));
             doc.Add(new Paragraph(" ", GetFont()));
-            if (settings.showDescription) {
-                doc.Add(new Paragraph("", GetFont()));
-                doc.Add(new Paragraph(string.Format("{0}:", t.Tran("description", lang).ToUpper()), GetFont(12)));
-                doc.Add(new Paragraph(recipe.description, GetFont(8)));
+
+            PdfPTable table = new PdfPTable(2);
+            table.WidthPercentage = 100f;
+            //table.SetWidths(new float[] { 1f, 2f });
+            if (settings.showImg) {
+                string imgPath = Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg", userId, recipe.id));
+                string imgFileName, imgPathFile = null;
+                if (Directory.Exists(imgPath)) {
+                    string[] ss = Directory.GetFiles(imgPath);
+                    imgFileName = ss.Select(a => string.Format("{0}{1}", Path.GetFileNameWithoutExtension(a), Path.GetExtension(a))).FirstOrDefault();
+                    imgPathFile = Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg/{2}", userId, recipe.id, imgFileName));
+                }
+                if (File.Exists(imgPathFile)) {
+                    Image img = Image.GetInstance(imgPathFile);
+                    //img.Alignment = Image.ALIGN_RIGHT;
+                    img.ScaleToFit(280f, 130f);
+                    //img.SpacingAfter = 2f;
+                    //doc.Add(img);
+                    table.AddCell(new PdfPCell(img) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, PaddingBottom = 10 });
+                } else {
+                    table.AddCell(new PdfPCell(new Phrase("", GetFont())) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, PaddingBottom = 10 });
+                }
+                if (settings.showDescription) {
+                    table.AddCell(new PdfPCell(new Phrase(recipe.description, GetFont(10))) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, PaddingBottom = 10 });
+                } else {
+                    table.AddCell(new PdfPCell(new Phrase("", GetFont())) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, PaddingBottom = 10 });
+                }
             }
-            
-            if(consumers > 1) {
+
+            if (settings.showDescription && !settings.showImg) {
+                doc.Add(new Paragraph("", GetFont()));
+                doc.Add(new Paragraph(string.Format("{0}:", t.Tran("description, recipe preparation", lang).ToUpper()), GetFont(12)));
+                doc.Add(new Paragraph(recipe.description, GetFont(8)));
+            } 
+
+            doc.Add(table);
+
+            if (consumers > 1) {
                 doc.Add(new Paragraph(t.Tran("number of consumers", lang) + ": " + consumers, GetFont(8)));
             }
 

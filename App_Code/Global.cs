@@ -26,7 +26,6 @@ namespace Igprog {
             } catch (Exception e) {
                 return 0;
             }
-            
         }
 
         public int DateDiff(string date) {

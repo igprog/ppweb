@@ -6467,6 +6467,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     var getMyRecipesPopupCtrl = function ($scope, $mdDialog, $http) {
         $scope.limit = 20;
+        $scope.userId = $rootScope.user.userGroupId;
 
         $scope.loadMore = function () {
             $scope.limit += 20;
@@ -6690,6 +6691,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.config = d.config;
         $scope.author = d.user.firstName + ' ' + d.user.lastName;
         $scope.date = new Date(new Date()).toLocaleDateString();
+        $scope.userId = d.user.userGroupId;
 
         $scope.cancel = function () {
             $mdDialog.cancel();
@@ -6845,6 +6847,42 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
            alert(response.data.d)
        });
     }
+
+    /********* Recipe Image *********/
+    $scope.uploadImg = function () {
+        var content = new FormData(document.getElementById("formUpload"));
+        $http({
+            url: $sessionStorage.config.backend + '/UploadRecipeImgHandler.ashx',
+            method: 'POST',
+            headers: { 'Content-Type': undefined },
+            data: content,
+        }).then(function (response) {
+            $scope.recipe.recipeImg = response.data;
+        },
+       function (response) {
+           alert($translate.instant(response.data));
+       });
+    }
+
+    $scope.removeRecipeImg = function (x) {
+        if (confirm($translate.instant('remove image') + '?')) {
+            removeRecipeImg(x);
+        }
+    }
+
+    var removeRecipeImg = function (x) {
+        $http({
+            url: $sessionStorage.config.backend + 'Files.asmx/DeleteRecipeImg',
+            method: 'POST',
+            data: { x: x, userId: $rootScope.user.userGroupId },
+        }).then(function (response) {
+            $scope.recipe.recipeImg = response.data.d;
+        },
+       function (response) {
+           alert($translate.instant(response.data.d));
+       });
+    }
+    /********* Recipe Image *********/
 
 
 }])

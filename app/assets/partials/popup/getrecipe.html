@@ -53,7 +53,33 @@
                             </md-checkbox>
                         </div>
                     </div>
-                    <div class="table-responsive mt-2">
+                    <div class="card border-left-main shadow mt-3" ng-repeat="x in d | filter:searchValue | filter:{'mealGroup':mealGroup} | limitTo:limit" ng-click="confirm(x, showDescription)">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center py-2 pointer">
+                                <div class="col mr-2">
+                                    <div class="h5 mb-0 text-gray-800">
+                                        <div class="row">
+                                            <div class="col-lg-2 pb-2">
+                                                <div ng-if="!x.recipeImg" class="text-center text-primary">
+                                                    <i class="fa fa-image fa-3x"></i>
+                                                </div>
+                                                <img ng-if="x.recipeImg" src="../upload/users/{{user.userId}}/recipes/{{x.id}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                                            </div>
+                                            <div class="col-lg-10">
+                                                <div class="h5 font-weight-bold text-main mb-1">{{x.title}}</div>
+                                                <p ng-if="showDescription">{{x.description.length > 150 ? x.description.substring(0, 147) + '...' : x.description}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right pointer">
+                                <p title="{{'energy' | translate}}"><i class="fa fa-fire"></i> {{x.energy | number:0}} {{'kcal' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="table-responsive mt-2">
                         <table class="table table-hover table-borderless">
                             <tr class="text-capitalize border-bottom">
                                 <th>{{'title' | translate}}</th>
@@ -64,31 +90,34 @@
                                 <td class="nowrap text-right"><span ng-if="x.energy>0">{{x.energy | number:0}} {{'kcal' | translate}}</span></td>
                             </tr>
                         </table>
-                        <!--TODO: Translate recipes-->
-                        <!--<table ng-if="appRecipes==true" class="table table-hover table-condensed">
-                            <tr ng-if="config.debug">
-                                <td><label><input ng-model="toTranslate" type="checkbox" ng-checked="setToTranslate(toTranslate)" /> {{'translate to' | translate}}: </label></td>
-                                <td ng-if="toTranslate==true">
-                                    <select ng-model="toLanguage" ng-change="setToLanguage(toLanguage)" class="form-control">
-                                        <option disabled="disabled" ng-selectd="true" value="">{{'choose language' | translate}}</option>
-                                        <option ng-repeat="x in config.languages" value="{{x.code}}">
-                                            {{x.title | translate}}
-                                        </option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{'title' | translate}}</th>
-                                <th>{{'description'| translate}}</th>
-                                <th>{{'energy'| translate}}</th>
-                            </tr>
-                            <tr ng-repeat="x in d | filter:searchValue" ng-click="confirm(x, showDescription)">
-                                <td class="nowrap">{{x.title}}</td>
-                                <td>{{x.description | translate}}</td>
-                                <td class="nowrap"><span ng-if="x.energy>0">{{x.energy | number:0}} {{'kcal' | translate}}</span></td>
-                            </tr>
-                        </table>-->
-                    </div>
+                    </div>-->
+
+                    <!--TODO: Translate recipes-->
+                    <!--<table ng-if="appRecipes==true" class="table table-hover table-condensed">
+                    <tr ng-if="config.debug">
+                        <td><label><input ng-model="toTranslate" type="checkbox" ng-checked="setToTranslate(toTranslate)" /> {{'translate to' | translate}}: </label></td>
+                        <td ng-if="toTranslate==true">
+                            <select ng-model="toLanguage" ng-change="setToLanguage(toLanguage)" class="form-control">
+                                <option disabled="disabled" ng-selectd="true" value="">{{'choose language' | translate}}</option>
+                                <option ng-repeat="x in config.languages" value="{{x.code}}">
+                                    {{x.title | translate}}
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{{'title' | translate}}</th>
+                        <th>{{'description'| translate}}</th>
+                        <th>{{'energy'| translate}}</th>
+                    </tr>
+                    <tr ng-repeat="x in d | filter:searchValue" ng-click="confirm(x, showDescription)">
+                        <td class="nowrap">{{x.title}}</td>
+                        <td>{{x.description | translate}}</td>
+                        <td class="nowrap"><span ng-if="x.energy>0">{{x.energy | number:0}} {{'kcal' | translate}}</span></td>
+                    </tr>
+                </table>-->
+
+
                     <div class="text-right">
                         <a href="" ng-if="limit<d.length+1" class="btn btn-outline-primary" ng-click="loadMore()"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</a>
                     </div>

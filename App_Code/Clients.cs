@@ -56,7 +56,6 @@ public class Clients : System.Web.Services.WebService {
         public string message { get; set; }
     }
 
-
     public class Client {
 
         public NewClient GetClient(string userId, string clientId) {

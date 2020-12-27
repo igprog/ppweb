@@ -12,25 +12,65 @@
                 <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'show recipe preview' | translate}}" ng-click="printRecipePreview(recipe)"><i class="fa fa-print"></i> <span class="d-none d-sm-inline">{{'print' | translate}}</span></button>
                 <button ng-disabled="recipe.id==null" href="" class="btn btn-outline-danger text-capitalize" ng-click="remove(recipe)"><i class="fa fa-trash-alt"></i> <span class="d-none d-sm-inline">{{'delete' | translate}}</span></button>
             </div>
-            <div class="pt-4">
-                <md-input-container class="md-block" flex-gt-sm>
-                    <label>{{'recipe title' | translate}}</label>
-                    <input ng-model="recipe.title" type="text">
-                </md-input-container>
-                <md-input-container class="md-block" flex-gt-sm>
-                    <label>{{'description, recipe preparation' | translate}}...</label>
-                    <textarea ng-model="recipe.description" rows="3" class="area"></textarea>
-                </md-input-container>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <md-input-container class="md-block mt-0" flex-gt-xs>
-                            <label>{{'meal group' | translate}}</label>
-                            <md-select ng-model="recipe.mealGroup">
-                                <md-option ng-value="x.code" ng-repeat="x in recipe.mealGroups track by $index">
-                                    <md-checkbox ng-checked="x.code==recipe.mealGroup" class="md-primary text-capitalize" aria-label="mealgroup">{{x.title | translate}}</md-checkbox>
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
+            <div class="row pt-4">
+                <div class="col-lg-7">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>{{'recipe title' | translate}}</label>
+                        <input ng-model="recipe.title" type="text">
+                    </md-input-container>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>{{'description, recipe preparation' | translate}}...</label>
+                        <textarea ng-model="recipe.description" rows="3" class="area"></textarea>
+                    </md-input-container>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <md-input-container class="md-block mt-0" flex-gt-xs>
+                                <label>{{'meal group' | translate}}</label>
+                                <md-select ng-model="recipe.mealGroup">
+                                    <md-option ng-value="x.code" ng-repeat="x in recipe.mealGroups track by $index">
+                                        <md-checkbox ng-checked="x.code==recipe.mealGroup" class="md-primary text-capitalize" aria-label="mealgroup">{{x.title | translate}}</md-checkbox>
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div>
+                                <label>{{'recipe image' | translate}}</label>
+                                <button ng-if="recipe.recipeImg" ng-click="removeRecipeImg(recipe)" class="btn btn-sm btn-outline-danger btn-circle float-right" title="{{'remove image' | translate}}"><i class="fa fa-times"></i></button>
+                            </div>
+                            <div ng-if="!recipe.recipeImg" class="text-center text-primary">
+                                <i class="fa fa-image fa-5x"></i>
+                            </div>
+                            <img ng-if="recipe.recipeImg" class="mx-auto d-block img-circle rounded-circle" src="../upload/users/{{user.userGroupId}}/recipes/{{recipe.id}}/recipeimg/{{recipe.recipeImg}}" alt="{{recipe.recipeImg}}" style="height:15rem;width:15rem">
+                        </div>
+                        <div class="card-footer">
+                            <form id="formUpload" ng-submit="uploadImg()" enctype="multipart/form-data" method="post">
+                                <input id="imgFolder" name="imgFolder" value="temp" type="text" hidden="hidden">
+                                <p class="text-muted small">*<em>{{'max upload file size is 1.5 MB' | translate}}.</em></p>
+                                <div class="custom-file mb-2">
+                                    <input id="userid" name="userid" ng-model="user.userGroupId" type="text" hidden="hidden">
+                                    <input id="recipeid" name="recipeid" ng-model="recipe.id" type="text" hidden="hidden">
+                                    <input ng-disabled="recipe.data.id===null" ng-model="recipe.recipeImg" name="UploadedFile" id="UploadedFile" type="file" accept="image/*" class="custom-file-input" style="background-color:transparent">
+                                    <label class="custom-file-label" for="UploadedFile">{{'attach the image' | translate}}</label>
+                                </div>
+                                <div class="text-right">
+                                    <button ng-disabled="recipe.id===null" type="submit" class="btn btn-outline-secondary text-capitalize"><i class="fa fa-upload"></i> {{'upload' | translate}}</button>
+                                </div>
+                                <div ng-if="recipe.id===null">
+                                    <p class="text-muted small">*<em>{{'you can upload a recipe picture after saving the recipe' | translate}}.</em></p>
+                                </div>
+                                <script>
+                                    $(".custom-file-input").on("change", function () {
+                                        var fileName = $(this).val().split("\\").pop();
+                                        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                    });
+                                </script>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
