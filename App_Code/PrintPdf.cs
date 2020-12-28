@@ -1714,7 +1714,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
             PdfPTable table = new PdfPTable(2);
             table.WidthPercentage = 100f;
-            //table.SetWidths(new float[] { 1f, 2f });
+            table.SetWidths(new float[] { 2f, 3f });
             if (settings.showImg) {
                 string imgPath = Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg", userId, recipe.id));
                 string imgFileName, imgPathFile = null;

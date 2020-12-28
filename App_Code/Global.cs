@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Web;
 
 /// <summary>
 /// Global
@@ -9,7 +12,7 @@ namespace Igprog {
         public Global() {
         }
 
-        /****************** Date ***********************/
+        #region Date
         public int DateDiff(DateTime date1, DateTime date2) {
             try {
                 return Convert.ToInt32(Math.Abs((date2 - date1).TotalDays));
@@ -48,7 +51,86 @@ namespace Igprog {
             string month_ = month < 10 ? string.Format("0{0}", month) : month.ToString();
             return string.Format("{0}-{1}-{2}", year, month_, day_);
         }
-        /*************************************************/
+        #endregion Date
+
+        #region ImageCompress
+        public static Bitmap GetBitmap(string path) {
+            Bitmap source = null;
+            try {
+                //byte[] imageData = System.IO.File.ReadAllBytes(path);
+                //System.IO.MemoryStream stream = new System.IO.MemoryStream(imageData, false);
+                //source = new Bitmap(stream);
+                //source = new Bitmap(HttpContext.Current.Server.MapPath(path));
+                source = new Bitmap(path);
+            } catch (Exception e) {
+                string err = e.Message;
+            }
+            return source;
+        }
+
+        //To change the compression, change the compression parameter to a value between 0 and 100. The higher number being higher quality and less compression.
+        public void CompressImage(string fullFilePath, string fileName, string destinationFolder, long compression) {
+            Bitmap bitmap = GetBitmap(fullFilePath);
+
+            using (bitmap) {
+                if (bitmap == null) {
+                    return;
+                }
+
+                bool encoderFound = false;
+                System.Drawing.Imaging.ImageCodecInfo encoder = null;
+
+                if (fileName.ToLower().EndsWith(".jpg") || fileName.ToLower().EndsWith(".jpeg")) {
+                    encoderFound = true;
+                    encoder = GetEncoder(System.Drawing.Imaging.ImageFormat.Jpeg);
+                } else if (fileName.ToLower().EndsWith(".bmp")) {
+                    encoderFound = true;
+                    encoder = GetEncoder(System.Drawing.Imaging.ImageFormat.Bmp);
+                } else if (fileName.ToLower().EndsWith(".tiff")) {
+                    encoderFound = true;
+                    encoder = GetEncoder(System.Drawing.Imaging.ImageFormat.Tiff);
+                } else if (fileName.ToLower().EndsWith(".gif")) {
+                    encoderFound = true;
+                    encoder = GetEncoder(System.Drawing.Imaging.ImageFormat.Gif);
+                } else if (fileName.ToLower().EndsWith(".png")) {
+                    encoderFound = true;
+                    encoder = GetEncoder(System.Drawing.Imaging.ImageFormat.Png);
+                }
+
+                if (encoderFound) {
+                    System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
+                    System.Drawing.Imaging.EncoderParameters myEncoderParameters = new System.Drawing.Imaging.EncoderParameters(1);
+                    System.Drawing.Imaging.EncoderParameter myEncoderParameter = new System.Drawing.Imaging.EncoderParameter(myEncoder, compression);
+                    myEncoderParameters.Param[0] = myEncoderParameter;
+                    string path = HttpContext.Current.Server.MapPath(string.Format("~/upload/"));
+                    bitmap.Save(System.IO.Path.Combine(destinationFolder, fileName), encoder, myEncoderParameters);
+                } else {
+                    bitmap.Save(System.IO.Path.Combine(destinationFolder, fileName));
+                }
+            }
+        }
+
+        public static ImageCodecInfo GetEncoder(string mimeType) {
+            ImageCodecInfo[] encoders;
+            encoders = ImageCodecInfo.GetImageEncoders();
+            for (int x = 0; x < encoders.Length; x++) {
+                if (encoders[x].MimeType == mimeType) {
+                    return encoders[x];
+                }
+            }
+            return null;
+        }
+
+        public static ImageCodecInfo GetEncoder(ImageFormat format) {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+            foreach (ImageCodecInfo codec in codecs) {
+                if (codec.FormatID == format.Guid) {
+                    return codec;
+                }
+            }
+            return null;
+        }
+        #endregion ImageCompress
 
     }
 }
