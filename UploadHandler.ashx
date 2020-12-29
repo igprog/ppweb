@@ -3,9 +3,10 @@
 using System;
 using System.Web;
 using System.IO;
+using Igprog;
 
 public class UploadHandler : IHttpHandler {
-
+    Global G = new Global();
     public void ProcessRequest (HttpContext context) {
         context.Response.ContentType = "text/plain";
         string userId = context.Request.Form["userid"];
@@ -15,12 +16,17 @@ public class UploadHandler : IHttpHandler {
                 HttpPostedFile file = files[i];
                 string fname = context.Server.MapPath(string.Format("~/upload/users/{0}/{1}", userId, "logo.png"));
                 if (!string.IsNullOrEmpty(file.FileName)) {
-                    string folderPath = context.Server.MapPath(string.Format("~/upload/users/{0}", userId));
-                    if (!Directory.Exists(folderPath)) {
-                        Directory.CreateDirectory(folderPath);
+                    int fileLength = file.ContentLength;
+                    if (fileLength <= G.KBToByte(2500)) {
+                        string folderPath = context.Server.MapPath(string.Format("~/upload/users/{0}", userId));
+                        if (!Directory.Exists(folderPath)) {
+                            Directory.CreateDirectory(folderPath);
+                        }
+                        file.SaveAs(fname);
+                        context.Response.Write("OK");
+                    } else {
+                        context.Response.Write("max upload file size is 2.5 MB");
                     }
-                    file.SaveAs(fname);
-                    context.Response.Write("OK");
                 } else {
                     context.Response.Write("please choose a file to upload");
                 }
