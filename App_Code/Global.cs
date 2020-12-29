@@ -130,7 +130,34 @@ namespace Igprog {
             }
             return null;
         }
-        #endregion ImageCompress
 
+        public int CompressionParam(int fileLength) {
+            //TODO
+            /***** higher fileLength higher quality and less compression *****/
+            int x = 0;
+            if (fileLength < 200000) {
+                x = 80;
+            } else if (fileLength > 200000 && fileLength <= 300000) {
+                x = 70;
+            } else if (fileLength > 300000 && fileLength <= 500000) {
+                x = 60;
+            } else if (fileLength > 500000 && fileLength <= 800000) {
+                x = 50;
+            } else if (fileLength > 800000 && fileLength <= 1000000) {
+                x = 45;
+            } else if (fileLength > 1000000 && fileLength <= 1500000) {
+                x = 40;
+            }else if (fileLength > 1500000 && fileLength <= 2000000) {
+                x = 35;
+            } else {
+                x = 30;
+            }
+            return x;
+        }
+
+        public int KBToByte(int x) {
+            return x * 1024;
+        }
+        #endregion ImageCompress
     }
 }
