@@ -42,34 +42,35 @@ public class Orders : System.Web.Services.WebService {
         public string orderDate { get; set; }
         public string additionalService { get; set; }
         public string note { get; set; }
+        public bool eInvoice { get; set; }
 
     }
 
     [WebMethod]
     public string Init() {
         NewUser x = new NewUser();
-            x.id = 0;
-            x.firstName = "";
-            x.lastName = "";
-            x.companyName = "";
-            x.address = "";
-            x.postalCode = "";
-            x.city = "";
-            x.country = "";
-            x.pin = null;
-            x.email = "";
-            x.ipAddress = HttpContext.Current.Request.UserHostAddress;
-            x.application = "";
-            x.version = "";
-            x.licence = "";
-            x.licenceNumber = "";
-            x.price = 0.0;
-            x.priceEur = 0.0;
-            x.orderDate = DateTime.Now.ToString();
-            x.additionalService = "";
-            x.note = "";
-        string json = JsonConvert.SerializeObject(x, Formatting.None);
-        return json;
+        x.id = 0;
+        x.firstName = "";
+        x.lastName = "";
+        x.companyName = "";
+        x.address = "";
+        x.postalCode = "";
+        x.city = "";
+        x.country = "";
+        x.pin = null;
+        x.email = "";
+        x.ipAddress = HttpContext.Current.Request.UserHostAddress;
+        x.application = "";
+        x.version = "";
+        x.licence = "";
+        x.licenceNumber = "";
+        x.price = 0.0;
+        x.priceEur = 0.0;
+        x.orderDate = DateTime.Now.ToString();
+        x.additionalService = "";
+        x.note = "";
+        x.eInvoice = false;
+        return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
     [WebMethod]
@@ -105,6 +106,7 @@ public class Orders : System.Web.Services.WebService {
                             x.orderDate = reader.GetValue(17) == DBNull.Value ? "" : reader.GetString(17);
                             x.additionalService = reader.GetValue(18) == DBNull.Value ? "" : reader.GetString(18);
                             x.note = reader.GetValue(19) == DBNull.Value ? "" : reader.GetString(19);
+                            x.eInvoice = false;
                             xx.Add(x);
                         }
                     }
@@ -112,12 +114,14 @@ public class Orders : System.Web.Services.WebService {
                 connection.Close();
             }  
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            return (e.Message);
+        }
     }
 
     [WebMethod]
     public string SendOrder(NewUser x, string lang) {
-            try {
+        try {
             string path = HttpContext.Current.Server.MapPath("~/App_Data/" + dataBase);
             db.CreateGlobalDataBase(path, db.orders);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
@@ -145,7 +149,7 @@ public class Orders : System.Web.Services.WebService {
                     command.Parameters.Add(new SQLiteParameter("additionalService", x.additionalService));
                     command.Parameters.Add(new SQLiteParameter("note", x.note));
                     command.ExecuteNonQuery();
-                } 
+                }
                 connection.Close();
             }
 
@@ -163,7 +167,10 @@ public class Orders : System.Web.Services.WebService {
             Mail m = new Mail();
             bool sent = m.SendOrder(x, lang);
             return sent == true ? t.Tran("order sent successfully", lang) : "error";
-            } catch (Exception e) { return ("Error: " + e); }
         }
+        catch (Exception e) {
+            return (e.Message);
+        }
+    }
 
 }

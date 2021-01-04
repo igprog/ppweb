@@ -162,7 +162,8 @@ public class Mail : System.Web.Services.WebService {
 <p>OIB: {7}</p>
 <p>Email: {8}</p>
 <p>Verzija: {9} {10}</p>
-<p>Licenca: {11} ({12})</p>"
+<p>Licenca: {11} ({12})</p>
+<p>e-Račun: {13}</p>"
         , user.firstName
         , user.lastName
         , user.companyName
@@ -175,7 +176,8 @@ public class Mail : System.Web.Services.WebService {
         , user.application
         , user.version
         , user.licenceNumber
-        , GetLicenceDuration(user.licence));
+        , GetLicenceDuration(user.licence)
+        , user.eInvoice ? "DA": "NE");
 
         bool sentToMe = SendMail(myEmail, messageSubject, messageBody, lang, null, true);
         //**************************************************

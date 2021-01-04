@@ -110,6 +110,14 @@
                                 <input ng-model="user.country" type="text" required>
                             </md-input-container>
                         </div>
+                        <div ng-if="userType==1&&config.language==='hr'" layout-gt-sm="row">
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <md-checkbox md-no-ink aria-label="uvjeti koristenja" ng-model="user.eInvoice" class="md-primary">
+                                    Želim <strong>e-Račun</strong>
+                                    <em class="text-muted">(obveznici primjene Zakona o javnoj nabavi)</em>
+                                </md-checkbox>
+                            </md-input-container>
+                        </div>
                         <div class="text-right">
                             <button class="btn btn-primary text-capitalize" ng-disabled="isSendButtonDisabled" ng-click="sendOrder(user)">{{sendicontitle}} <span ng-class="sendicon"></span></button>
                         </div>
