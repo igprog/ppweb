@@ -1,6 +1,6 @@
 ﻿/*!
 app.js
-(c) 2017-2020 IG PROG, www.igprog.hr
+(c) 2017-2021 IG PROG, www.igprog.hr
 */
 angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'chart.js', 'ngStorage', 'functions', 'charts'])
 

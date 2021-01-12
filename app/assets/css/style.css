@@ -1,6 +1,6 @@
 ﻿ /*!
 style.css
-(c) 2020 IG PROG, www.igprog.hr
+(c) 2020-2021 IG PROG, www.igprog.hr
 */
 
 
@@ -34,7 +34,7 @@ md-dialog {
 .background {
     background-color: #f4511e;
     color: black;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('../img/main.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('../img/main.jpg?v=1');
     background-repeat:no-repeat;
     background-size: cover; 
     height:100%;

@@ -48,6 +48,7 @@
                 <li>Nutricionisti</li>
                 <li>Poliklinike</li>
                 <li>Domovi zdravlja</li>
+                <li>Specijalizovane ordinacije</li>
                 <li>Apoteke</li>
                 <li>Škole</li>
                 <li>Đački domovi</li>
@@ -58,95 +59,97 @@
         <div class="col-sm-6">
             <img src="../assets/img/map.jpg" class="img-thumbnail m10" alt="map.jpg" />
         </div>
-        <div class="container text-justify">
-            <a href="" title="Korisnici aplikacije Program Prehrane" ng-click="toggleCustomers()">Korisnici <i class="fa fa-caret-{{showCustomers?'down':'right'}}" aria-hidden="true"></i></a>
-            <div ng-if="showCustomers" class="text-small">
-                PREHRAMBENO TEHNOLOŠKA ŠKOLA, ZAGREB *
-                SREDNJA ŠKOLA DUGA RESA *
-                STUDIO ZA SPORTSKE AKTIVNOSTI, BEOGRAD *
-                ŽENSKI ĐAČKI DOM, SPLIT *
-                POLJOPRIVREDNA, PREHRAMBENA I VETERINARSKA ŠKOLA STANKA OŽANIĆA, ZADAR *
-                UDRUGA OPTIMALNOM TEŽINOM DO ZDRAVLJA «VAGA», OSIJEK *
-                DJEČJA BOLNICA SREBRENJAK, ZAGREB *
-                ZAVOD ZA JAVNO ZDRAVLJE, SUBOTICA *
-                ORDINACIJA OPĆE MEDICINE - BOL *
-                PLETER-USLUGE d.o.o. *
-                ROSMARINUS d.o.o. *
-                SPORTPHARM d.o.o. *
-                DEFINICIJA HRANE d.o.o. *
-                PSIHIJATRIJSKA BOLNICA UGLJAN *
-                ZAVOD ZA JAVNO ZDRAVLJE SREMSKA MITROVICA *
-                ARBI d.o.o. *
-                POLIKLINIKA MATULIĆ *
-                ZAVOD ZA JAVNO ZDRAVLJE MEĐIMURSKE ŽUPANIJE *
-                CALLISTO BEAUTY *
-				API-FARMACIJA d.o.o. *
-                USTANOVA ZA ZDRAVSTVENU SKRB MEDIKOL *
-                LJEKARNA RIJEKA * OKTAL PHARM d.o.o. *
-                SPECIJALISTIČKA ORDINACIJA NATALIJA POPOVIĆ *
-                ALMAZOR d.o.o. *
-                POLIKLINIKA SCIPION *
-                POLIKLINIKA LABPLUS 2 *
-                UČENIČKI DOM IVANIĆ GRAD *
-                ZAVOD ZA JAVNO ZDRAVSTVO DUBROVAČKO-NERETVANSKE ŽUPANIJE *
-                UDRUGA KONTROLA TJELESNE TEŽINE *
-                STUDIO ZA NJEGU LICA I TIJELA AMBER *
-                STUDIO CORPORE SANO *
-                TAEKWONDO CLUB NOVI GRAD SARAJEVO *
-                POLIKLINIKA ANALIZA *
-                SREDNJA ŠKOLA BRAĆA RADIĆ KAŠTEL ŠTAFILIĆ NEHAJ *
-                SPARTACUS d.o.o. *
-                SPECIJALISTIČKA ORDINACIJA OBITELJSKE MEDICINE JADRANKA ŠOIĆ *
-                UNIVERZITET MODERNIH ZNANOSTI-CKM MOSTAR *
-                PRIJATELJI ŽIVOTINJA *
-                NUTRIFITO *
-                BOSOTINA d.o.o. *
-                KJU DOM ZA DJECU BEZ RODITELJSKOG STARANJA - SARAJEVO *
-                PROLIFE *
-                GLORIUS j.d.o.o. *
-                MEDICINSKA ŠKOLA ŠIBENIK *
-                BRUNICO d.o.o. *
-                ZDRAVA NAVIKA j.d.o.o. *
-                ZU LJEKARNE TRIPOLSKI *
-                ZU LJEKARNA PABLO *
-                TASHAFI d.o.o. *
-                INTERNATIONAL HEALTH COMPANY d.o.o. *
-                SPA SILVA *
-                KLINIČKI BOLNIČKI CENTAR SESTRE MILOSRDNICE *
-                ORIGO CENTAR d.o.o. *
-                DOM ZA STARIJE OSOBE KANTRIDA RIJEKA *
-                ZAVOD ZA JAVNO ZDRAVSTVO VARAŽDINSKE ŽUPANIJE *
-                THINK FIT j.d.o.o. *
-                DONNA MODERNA *
-                ALMAZOR d.o.o. *
-                PUČKO OTVORENO UČILIŠTE ZAGREB *
-                VISOKA ŠKOLA STRUKOVNIH STUDIJA ZA OBRAZOVANJE VASPITAČA I TRENERA U SUBOTICI *
-                NU3CO *
-                MF HERBA d.o.o. *
-				LJEKARNA ŠKOKO *
-                SOHO BITS * 
-				ALIMENTARIUS j.d.o.o. *
-                STRUKOVNA ŠKOLA PULA *
-                MED PLUS - USTANOVA ZA ZDRAVSTVENU SKRB *
-				NUTRIMEDIKO - Pula *
-                BIO SPORT d.o.o. *
-				ACTIVE LIFE j.d.o.o. *
-                LJEKARNA PABLO  *
-				NUTRICENTAR *
-				NUTRI-MA  *
-				OBRT ZA USLUGE OLJA  *
-				ENDIMET d.o.o.  *
-				NUTRIJENT  *
-				POLIKLINIKA POLANČEC  *
-				SVEUČILIŠNA KLINIČKA BOLNICA MOSTAR *
-				CONSULT - UP *
-                A.N.D.d.o.o. *
-				LJEKARNA ČEBULC *
-                GRADITELJSKA, PRIRODOSLOVNA I RUDARSKA ŠKOLA VARAŽDIN *
-				NUTRISKOP *
-				LEADCLOSERS d.o.o.
-                ...
-            </div>
+    </div>
+    <div class="container text-justify">
+        <a href="" title="Korisnici aplikacije Program Prehrane" ng-click="toggleCustomers()">Korisnici <i class="fa fa-caret-{{showCustomers?'down':'right'}}" aria-hidden="true"></i></a>
+        <div ng-if="showCustomers" class="text-small">
+            PREHRAMBENO TEHNOLOŠKA ŠKOLA, ZAGREB *
+            SREDNJA ŠKOLA DUGA RESA *
+            STUDIO ZA SPORTSKE AKTIVNOSTI, BEOGRAD *
+            ŽENSKI ĐAČKI DOM, SPLIT *
+            POLJOPRIVREDNA, PREHRAMBENA I VETERINARSKA ŠKOLA STANKA OŽANIĆA, ZADAR *
+            UDRUGA OPTIMALNOM TEŽINOM DO ZDRAVLJA «VAGA», OSIJEK *
+            DJEČJA BOLNICA SREBRENJAK, ZAGREB *
+            ZAVOD ZA JAVNO ZDRAVLJE, SUBOTICA *
+            ORDINACIJA OPĆE MEDICINE - BOL *
+            PLETER-USLUGE d.o.o. *
+            ROSMARINUS d.o.o. *
+            SPORTPHARM d.o.o. *
+            DEFINICIJA HRANE d.o.o. *
+            PSIHIJATRIJSKA BOLNICA UGLJAN *
+            ZAVOD ZA JAVNO ZDRAVLJE SREMSKA MITROVICA *
+            ARBI d.o.o. *
+            POLIKLINIKA MATULIĆ *
+            ZAVOD ZA JAVNO ZDRAVLJE MEĐIMURSKE ŽUPANIJE *
+            CALLISTO BEAUTY *
+            API-FARMACIJA d.o.o. *
+            USTANOVA ZA ZDRAVSTVENU SKRB MEDIKOL *
+            LJEKARNA RIJEKA * OKTAL PHARM d.o.o. *
+            SPECIJALISTIČKA ORDINACIJA NATALIJA POPOVIĆ *
+            ALMAZOR d.o.o. *
+            POLIKLINIKA SCIPION *
+            POLIKLINIKA LABPLUS 2 *
+            UČENIČKI DOM IVANIĆ GRAD *
+            ZAVOD ZA JAVNO ZDRAVSTVO DUBROVAČKO-NERETVANSKE ŽUPANIJE *
+            UDRUGA KONTROLA TJELESNE TEŽINE *
+            STUDIO ZA NJEGU LICA I TIJELA AMBER *
+            STUDIO CORPORE SANO *
+            TAEKWONDO CLUB NOVI GRAD SARAJEVO *
+            POLIKLINIKA ANALIZA *
+            SREDNJA ŠKOLA BRAĆA RADIĆ KAŠTEL ŠTAFILIĆ NEHAJ *
+            SPARTACUS d.o.o. *
+            SPECIJALISTIČKA ORDINACIJA OBITELJSKE MEDICINE JADRANKA ŠOIĆ *
+            UNIVERZITET MODERNIH ZNANOSTI-CKM MOSTAR *
+            PRIJATELJI ŽIVOTINJA *
+            NUTRIFITO *
+            BOSOTINA d.o.o. *
+            KJU DOM ZA DJECU BEZ RODITELJSKOG STARANJA - SARAJEVO *
+            PROLIFE *
+            GLORIUS j.d.o.o. *
+            MEDICINSKA ŠKOLA ŠIBENIK *
+            BRUNICO d.o.o. *
+            ZDRAVA NAVIKA j.d.o.o. *
+            ZU LJEKARNE TRIPOLSKI *
+            ZU LJEKARNA PABLO *
+            TASHAFI d.o.o. *
+            INTERNATIONAL HEALTH COMPANY d.o.o. *
+            SPA SILVA *
+            KLINIČKI BOLNIČKI CENTAR SESTRE MILOSRDNICE *
+            ORIGO CENTAR d.o.o. *
+            DOM ZA STARIJE OSOBE KANTRIDA RIJEKA *
+            ZAVOD ZA JAVNO ZDRAVSTVO VARAŽDINSKE ŽUPANIJE *
+            THINK FIT j.d.o.o. *
+            DONNA MODERNA *
+            ALMAZOR d.o.o. *
+            PUČKO OTVORENO UČILIŠTE ZAGREB *
+            VISOKA ŠKOLA STRUKOVNIH STUDIJA ZA OBRAZOVANJE VASPITAČA I TRENERA U SUBOTICI *
+            NU3CO *
+            MF HERBA d.o.o. *
+            LJEKARNA ŠKOKO *
+            SOHO BITS *
+            ALIMENTARIUS j.d.o.o. *
+            STRUKOVNA ŠKOLA PULA *
+            MED PLUS - USTANOVA ZA ZDRAVSTVENU SKRB *
+            NUTRIMEDIKO - Pula *
+            BIO SPORT d.o.o. *
+            ACTIVE LIFE j.d.o.o. *
+            LJEKARNA PABLO  *
+            NUTRICENTAR *
+            NUTRI-MA  *
+            OBRT ZA USLUGE OLJA  *
+            ENDIMET d.o.o.  *
+            NUTRIJENT  *
+            POLIKLINIKA POLANČEC  *
+            SVEUČILIŠNA KLINIČKA BOLNICA MOSTAR *
+            CONSULT - UP *
+            A.N.D.d.o.o. *
+            LJEKARNA ČEBULC *
+            GRADITELJSKA, PRIRODOSLOVNA I RUDARSKA ŠKOLA VARAŽDIN *
+            NUTRISKOP *
+            LEADCLOSERS d.o.o. *
+            USTANOVA DOBRI DOM GRADA ZAGREBA *
+            SPECIJALISTIČKA ORDINACIJA OBITELJSKE MEDICINE JADRANKA KARUZA
+            ...
         </div>
     </div>
 </div>
