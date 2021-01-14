@@ -378,8 +378,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     var validateForm = function () {
         if ($rootScope.clientData.clientId === null) {
-            //TODO:
-            //functions.alert($translate.instant('choose client'));
             return false;
         }
         if ($rootScope.clientData.height <= 0) {
@@ -410,7 +408,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 };
             }
             if ($rootScope.clientData.meals == null) {
-                //$rootScope.newTpl = 'assets/partials/meals.html';
                 $state.go('meals');
                 $rootScope.selectedNavItem = 'meals';
                 functions.alert($translate.instant('choose meals'), '');
@@ -418,13 +415,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
             if (x == 'menu' && $rootScope.clientData.meals.length > 0 && !$rootScope.isMyMeals && $rootScope.clientData.meals[0].code == 'B') {
                 if ($rootScope.clientData.meals[1].isSelected == false && $rootScope.clientData.meals[5].isSelected == true) {
-                    //$rootScope.newTpl = './assets/partials/meals.html';
                     $state.go('meals');
                     functions.alert($translate.instant('the selected meal combination is not allowed in the menu') + '!', $rootScope.clientData.meals[5].title + ' ' + $translate.instant('in this combination must be turned off') + '.');
                     return false;
                 }
                 if ($rootScope.clientData.meals[3].isSelected == false && $rootScope.clientData.meals[5].isSelected == true) {
-                    //$rootScope.newTpl = './assets/partials/meals.html';
                     $state.go('meals');
                     functions.alert($translate.instant('the selected meal combination is not allowed in the menu') + '!', $rootScope.clientData.meals[5].title + ' ' + $translate.instant('in this combination must be turned off') + '.');
                     return false;
@@ -467,7 +462,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $sessionStorage.islogin = false;
         $sessionStorage.usergroupid = null;
         $rootScope.mainMessage = null;
-        //$rootScope.currTpl = 'assets/partials/login.html';
         $state.go('login');
     }
 
@@ -476,7 +470,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return false;
         };
         if ($rootScope.clientData.meals == null) {
-            //$rootScope.newTpl = 'assets/partials/meals.html';
             $state.go('meals');
             $rootScope.selectedNavItem = 'meals';
             functions.alert($translate.instant('choose meals'), '');
@@ -484,13 +477,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
         if ($rootScope.clientData.meals.length > 0 && !$rootScope.isMyMeals && $rootScope.clientData.meals[0].code == 'B') {
             if ($rootScope.clientData.meals[1].isSelected == false && $rootScope.clientData.meals[5].isSelected == true) {
-                //$rootScope.newTpl = 'assets/partials/meals.html';
                 $state.go('meals');
                 functions.alert($translate.instant('the selected meal combination is not allowed in the menu') + '!', $rootScope.clientData.meals[5].title + ' ' + $translate.instant('in this combination must be turned off') + '.');
                 return false;
             }
             if ($rootScope.clientData.meals[3].isSelected == false && $rootScope.clientData.meals[5].isSelected == true) {
-                //$rootScope.newTpl = 'assets/partials/meals.html';
                 $state.go('meals');
                 functions.alert($translate.instant('the selected meal combination is not allowed in the menu') + '!', $rootScope.clientData.meals[5].title + ' ' + $translate.instant('in this combination must be turned off') + '.');
                 return false;
@@ -1025,7 +1016,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 $rootScope.loading = false;
                 $scope.errorLogin = true;
                 $scope.errorMesage = $translate.instant('wrong user name or password');
-                //$state.go('signup'); // $rootScope.currTpl = 'assets/partials/signup.html';  //<< Only for first registration
+                //$state.go('signup');  //<< Only for first registration
             }
         },
         function (response) {
