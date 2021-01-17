@@ -19,6 +19,7 @@ public class Orders : System.Web.Services.WebService {
     string usersDataBase = ConfigurationManager.AppSettings["UsersDataBase"];
     DataBase db = new DataBase();
     Translate t = new Translate();
+    Invoice I = new Invoice();
     public Orders() { 
     }
     public class NewUser {
@@ -43,7 +44,6 @@ public class Orders : System.Web.Services.WebService {
         public string additionalService { get; set; }
         public string note { get; set; }
         public bool eInvoice { get; set; }
-
     }
 
     [WebMethod]
@@ -120,8 +120,31 @@ public class Orders : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string SendOrder(NewUser x, string lang) {
+    public Global.Response SendOrder(NewUser x, string lang) {
+        Global.Response resp = new Global.Response();
         try {
+            Invoice.NewInvoice i = new Invoice.NewInvoice();
+            i.dateAndTime = DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
+            i.year = DateTime.Now.Year;
+            i.orderNumber = I.GetNextOrderNumber();
+            i.firstName = x.firstName;
+            i.lastName = x.lastName;
+            i.companyName = x.companyName;
+            i.address = x.address;
+            i.postalCode = x.postalCode;
+            i.city = x.city;
+            i.country = x.country;
+            i.pin = x.pin;
+            i.note = x.note;
+            i.items = new List<Invoice.Item>();
+            Invoice.Item item = new Invoice.Item();
+            item.title = string.Format("{0} - {1}", x.application, x.version);
+            item.qty = Convert.ToInt32(x.licenceNumber);
+            item.unitPrice = x.price;
+            i.total = x.price * item.qty;
+            i.items.Add(item);
+            i.showSignature = true;
+
             string path = HttpContext.Current.Server.MapPath("~/App_Data/" + dataBase);
             db.CreateGlobalDataBase(path, db.orders);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
@@ -164,12 +187,17 @@ public class Orders : System.Web.Services.WebService {
                 connection.Close();
             }
 
+            PrintPdf PDF = new PrintPdf();
+            string offerPdf = PDF.CreateInvoicePdf(i, false, x.priceEur, 0, true);
+            string offerPdfPath = !string.IsNullOrEmpty(offerPdf) ? string.Format("~/upload/invoice/temp/{0}.pdf", offerPdf) : null;
             Mail m = new Mail();
-            bool sent = m.SendOrder(x, lang);
-            return sent == true ? t.Tran("order sent successfully", lang) : "error";
+            resp = m.SendOrder(x, lang, offerPdfPath);
+            return resp;
         }
         catch (Exception e) {
-            return (e.Message);
+            resp.isSuccess = false;
+            resp.msg = e.Message;
+            return (resp);
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿/*!
 app.js
-(c) 2018-2020 IG PROG, www.igprog.hr
+(c) 2018-2021 IG PROG, www.igprog.hr
 */
 angular.module('app', ['ngMaterial'])
 
@@ -336,7 +336,7 @@ angular.module('app', ['ngMaterial'])
             data: { x: user, lang: $rootScope.config.language }
         })
        .then(function (response) {
-           if (response.data.d == 'error') {
+           if (!response.data.d.isSuccess) {
                $scope.showAlert = false;
                $scope.showPaymentDetails = false;
                $scope.isSendButtonDisabled = false;

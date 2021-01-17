@@ -12,6 +12,11 @@ namespace Igprog {
         public Global() {
         }
 
+        public class Response {
+            public bool isSuccess;
+            public string msg;
+        }
+
         #region Date
         public int DateDiff(DateTime date1, DateTime date2) {
             try {

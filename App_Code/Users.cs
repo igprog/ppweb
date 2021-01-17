@@ -622,7 +622,7 @@ public class Users : System.Web.Services.WebService {
                 response = t.Tran("user not found", lang);
             }
             else {
-                if (mail.SendMail(email, messageSubject, messageBody, lang, null, false)) {
+                if (mail.SendMail(email, messageSubject, messageBody, lang, null, false).isSuccess) {
                     response = t.Tran("reset password link has been sent to your email", lang);
                 } else {
                     response = t.Tran("error", lang);
@@ -795,7 +795,7 @@ public class Users : System.Web.Services.WebService {
                 response = t.Tran("user not found", lang);
             }
             else {
-                if (mail.SendMail(x.email, messageSubject, messageBody, lang, null, false)) {
+                if (mail.SendMail(x.email, messageSubject, messageBody, lang, null, false).isSuccess) {
                     response = t.Tran("delete user account link has been sent to your email", lang);
                 } else {
                     response = t.Tran("error", lang);

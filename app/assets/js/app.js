@@ -6999,6 +6999,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.showUserDetails = $rootScope.user.userName != '' ? false : true;
     $scope.showErrorAlert = false;
     $scope.showPaymentDetails = false;
+    $scope.alertMsg = null;
 
     $scope.login = function (u, p) {
         $http({
@@ -7150,14 +7151,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             data: { x: user, lang: $rootScope.config.language }
         })
        .then(function (response) {
-           if (response.data.d == 'error') {
+           if (!response.data.d.isSuccess) {
                $scope.showAlert = false;
                $scope.showPaymentDetails = false;
                $scope.sendicon = 'fa fa-angle-double-right';
                $scope.sendicontitle = $translate.instant('send');
                $scope.isSendButtonDisabled = false;
-               functions.alert($translate.instant('order is not sent') + '. ' + $translate.instant('please try again') + '.', '');
+               functions.alert($translate.instant('order is not sent') + '. ' + $translate.instant('please try again') + '.', $translate.instant('error') + ': ' + response.data.d.msg);
            } else {
+               $scope.alertMsg = response.data.d.msg;
                $scope.showAlert = true;
                $scope.showPaymentDetails = true;
            }

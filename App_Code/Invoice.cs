@@ -70,7 +70,7 @@ public class Invoice : System.Web.Services.WebService {
     public string Init() {
         NewInvoice x = new NewInvoice();
         x.id = null;
-        x.number = GetNextOrderNumber(DateTime.Now.Year);
+        x.number = GetNextInvoiceNumber(DateTime.Now.Year);
         x.fileName = null;
         x.orderNumber = 0;
         x.dateAndTime = DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
@@ -104,7 +104,7 @@ public class Invoice : System.Web.Services.WebService {
     public string InitPP(Orders.NewUser order) {
         NewInvoice x = new NewInvoice();
         x.id = null;
-        x.number = GetNextOrderNumber(DateTime.Now.Year);
+        x.number = GetNextInvoiceNumber(DateTime.Now.Year);
         x.fileName = null;
         x.orderNumber = order.id;
         x.dateAndTime = DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
@@ -283,14 +283,21 @@ public class Invoice : System.Web.Services.WebService {
         return xx;
     }
 
-    private int GetNextOrderNumber(int year) {
+    private int GetNextInvoiceNumber(int year) {
+        return GetNextNumber(string.Format("SELECT MAX(CAST(number as int)) FROM (SELECT number FROM invoices WHERE year = '{0}')", year));
+    }
+
+    public int GetNextOrderNumber() {
+        return GetNextNumber("SELECT MAX(CAST(rowid as int)) FROM (SELECT rowid FROM orders)");
+    }
+
+    private int GetNextNumber(string sql) {
         try {
             string path = Server.MapPath("~/App_Data/" + dataBase);
             db.CreateGlobalDataBase(path, db.invoices);
             int nextNumber = 0;
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
                 connection.Open();
-                string sql = string.Format("SELECT MAX(CAST(number as int)) FROM (SELECT number FROM invoices WHERE year = '{0}')", year);
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {

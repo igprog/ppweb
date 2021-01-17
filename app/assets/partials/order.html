@@ -110,7 +110,7 @@
                                 <input ng-model="user.country" type="text" required>
                             </md-input-container>
                         </div>
-                        <div ng-if="userType==1&&config.language==='hr'" layout-gt-sm="row">
+                        <div ng-show="(user.country.toLowerCase().startsWith('hr') || user.country.toLowerCase().startsWith('cr')) && userType==1" layout-gt-sm="row">
                             <md-input-container class="md-block" flex-gt-sm>
                                 <md-checkbox md-no-ink aria-label="uvjeti koristenja" ng-model="user.eInvoice" class="md-primary">
                                     Želim <strong>e-Račun</strong>
@@ -125,7 +125,7 @@
                 </div>
             </div>
             <div ng-if="showAlert" class="alert alert-success m-2">
-                <strong><span class="fa fa-smile-o fa-lg"></span> {{'the order have been sent successfully' | translate}}</strong>
+                <strong><span class="fa fa-smile-o fa-lg"></span> {{alertMsg}}</strong>
                 <p>{{'your account will be active within 24 hours of your payment or after you send payment confirmation on email' | translate}}: <strong><a href="{{config.language==='en'?config.email_en:config.email}}"> {{config.language==='en'?config.email_en:config.email}}</a></strong></p>
             </div>
         </div>

@@ -46,7 +46,7 @@ public class Mail : System.Web.Services.WebService {
 <p>{3}: {4}</p>
 <p>{5}: {6}</p>", t.Tran("new inquiry", lang), t.Tran("name", lang), name, t.Tran("email", lang), email, t.Tran("message", lang), message);
         try {
-            bool sent = SendMail(myEmail, messageSubject, messageBody, lang, null, true); /*SendMail(myEmail, messageSubject, messageBody, lang);*/
+            bool sent = SendMail(myEmail, messageSubject, messageBody, lang, null, true).isSuccess; /*SendMail(myEmail, messageSubject, messageBody, lang);*/
             return sent == true ? t.Tran("ok", lang) : t.Tran("mail is not sent", lang);
 
         } catch (Exception e) { return ("Error: " + e); }
@@ -139,15 +139,16 @@ public class Mail : System.Web.Services.WebService {
     [WebMethod]
     public string SendMessage(string sendTo, string messageSubject, string messageBody, string lang, bool send_cc) {
         try {
-            bool sent = SendMail(sendTo, messageSubject, messageBody, lang, null, send_cc);
+            bool sent = SendMail(sendTo, messageSubject, messageBody, lang, null, send_cc).isSuccess;
             return sent == true ? t.Tran("mail sent successfully", lang) : t.Tran("mail is not sent", lang);
         } catch (Exception e) { return (e.Message); }
     }
     #endregion WebMethods
 
     #region Methods
-    public bool SendOrder(Orders.NewUser user, string lang) {
-        bool sent = false;
+    public Global.Response SendOrder(Orders.NewUser user, string lang, string file) {
+        Global.Response resp = new Global.Response();
+        try {
         //*****************Send mail to me****************
         string messageSubject = "Nova narudžba";
         string messageBody = string.Format(
@@ -179,23 +180,33 @@ public class Mail : System.Web.Services.WebService {
         , GetLicenceDuration(user.licence)
         , user.eInvoice ? "DA": "NE");
 
-        bool sentToMe = SendMail(myEmail, messageSubject, messageBody, lang, null, true);
-        //**************************************************
+            resp = SendMail(myEmail, messageSubject, messageBody, lang, file, true);
+            //*****************Send mail to me****************
 
-        //************ Send mail to customer****************
-        messageSubject = (user.application == "Program Prehrane 5.0" ? user.application : t.Tran("nutrition program web", lang)) + " - " + t.Tran("payment details", lang);
-        messageBody = PaymentDetails(user, lang);
-        bool sentToCustomer = SendMail(user.email, messageSubject, messageBody, lang, null, false);
-        //**************************************************
-        if (sentToMe == false || sentToCustomer == false) {
-            sent = false;
-        } else {
-            sent = true;
+            //************ Send mail to customer****************
+            messageSubject = (user.application == "Program Prehrane 5.0" ? user.application : t.Tran("nutrition program web", lang)) + " - " + t.Tran("payment details", lang);
+            messageBody = PaymentDetails(user, lang);
+            resp = SendMail(user.email, messageSubject, messageBody, lang, file, false);
+            //************ Send mail to customer****************
+            //if (sentToMe == false || sentToCustomer == false) {
+            //    resp.isSuccess = false;
+            //} else {
+            //    resp.isSuccess = true;
+            //}
+            if (resp.isSuccess) {
+                resp.msg = t.Tran("the order have been sent successfully", lang);
+            }
+            
+            return resp;
+        } catch (Exception e) {
+            resp.isSuccess = false;
+            resp.msg = e.Message;
+            return resp;
         }
-        return sent;
     }
 
-    public bool SendMail(string sendTo, string subject, string body, string lang, string file, bool send_cc) {
+    public Global.Response SendMail(string sendTo, string subject, string body, string lang, string file, bool send_cc) {
+        Global.Response resp = new Global.Response();
         try {
             string footer = "";
             if (lang == "en") {
@@ -256,9 +267,12 @@ public class Mail : System.Web.Services.WebService {
             smtp.Credentials = Credentials;
             smtp.EnableSsl = EnableSsl;
             smtp.Send(mail);
-            return true;
+            resp.isSuccess = true;
+            return resp;
         } catch (Exception e) {
-            return false;
+            resp.isSuccess = false;
+            resp.msg = e.Message;
+            return resp;
         }
     }
 
@@ -345,6 +359,7 @@ public class Mail : System.Web.Services.WebService {
 <p>{0},</p>
 <p>{1} <b>{2} {3}</b>.</p>
 <p>{4}: <a href=""mailto:nutrition.plan@yahoo.com"">nutrition.plan@yahoo.com</a></p> 
+<p>Please find the offer attached to this email.</p> 
 <br />
 <b>{5}:</b>
 <hr/>
@@ -383,7 +398,8 @@ public class Mail : System.Web.Services.WebService {
 @"
 <p>Poštovani/a,</p>
 <p>Zahvaljujemo na Vašem interesu za <b>{0} {1}</b>.</p>
-<p>{6}.</p> 
+<p>{6}.</p>
+<p>Ponudu se nalazi u privitku.</p> 
 <br />
 <b>Podaci za uplatu:</b>
 <hr/>
