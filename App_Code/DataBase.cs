@@ -248,7 +248,9 @@ namespace Igprog {
         #region CreateTable (web page)
         public void Orders(string path) {
             string sql = @"CREATE TABLE IF NOT EXISTS orders
-                (firstName NVARCHAR(50),
+                (id VARCHAR (50) PRIMARY KEY,
+                orderNumber VARCHAR (50),
+                firstName NVARCHAR(50),
                 lastName NVARCHAR(50),
                 companyName NVARCHAR(50),
                 address NVARCHAR(50),

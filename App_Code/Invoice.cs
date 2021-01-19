@@ -47,6 +47,10 @@ public class Invoice : System.Web.Services.WebService {
         public string paidDate { get; set; }
         public bool isElectronicBill { get; set; }
         public bool showSignature { get; set; }
+        public int docType { get; set; }
+        public bool isForeign { get; set; }
+        public double totPrice_eur { get; set; }
+        public int clientLeftSpacing { get; set; }
     }
 
     public class Item {
@@ -61,7 +65,12 @@ public class Invoice : System.Web.Services.WebService {
         public double paidAmount { get; set; }
         public double restToPaid { get; set; }
         public int[] years { get; set; }
+    }
 
+    public enum DocType {
+        invoice,  // 0
+        offer,  // 1
+        preInvoice  // 2
     }
     #endregion Class
 
@@ -97,16 +106,20 @@ public class Invoice : System.Web.Services.WebService {
         x.paidDate = null;
         x.isElectronicBill = false;
         x.showSignature = true;
+        x.docType = 0;
+        x.isForeign = false;
+        x.totPrice_eur = 0;
+        x.clientLeftSpacing = 300;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
     [WebMethod]
-    public string InitPP(Orders.NewUser order) {
+    public string InitPP(Orders.NewOrder order) {
         NewInvoice x = new NewInvoice();
         x.id = null;
         x.number = GetNextInvoiceNumber(DateTime.Now.Year);
         x.fileName = null;
-        x.orderNumber = order.id;
+        x.orderNumber = order.orderNumber;
         x.dateAndTime = DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
         x.year = DateTime.Now.Year;
         x.firstName = order.firstName;
@@ -126,6 +139,10 @@ public class Invoice : System.Web.Services.WebService {
         x.restToPaid = 0;
         x.isElectronicBill = false;
         x.showSignature = true;
+        x.docType = 0;
+        x.isForeign = false;
+        x.totPrice_eur = 0;
+        x.clientLeftSpacing = 300;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -165,6 +182,10 @@ public class Invoice : System.Web.Services.WebService {
                             x.restToPaid = x.paidAmount - x.total;
                             x.isElectronicBill = false;
                             x.showSignature = true;
+                            x.docType = 0;
+                            x.isForeign = false;
+                            x.totPrice_eur = 0;
+                            x.clientLeftSpacing = 300;
                             xx.data.Add(x);
                         }
                     } 
@@ -273,7 +294,7 @@ public class Invoice : System.Web.Services.WebService {
         catch (Exception e) { }
     }
 
-    private List<Item> GetItems(Orders.NewUser order) {
+    private List<Item> GetItems(Orders.NewOrder order) {
         Item x = new Item();
         x.title = string.Format("{0} {1}", order.application, order.version);
         x.qty = Convert.ToInt32(order.licenceNumber);
@@ -311,7 +332,5 @@ public class Invoice : System.Web.Services.WebService {
         } catch (Exception e) { return 0; }
     }
     #endregion Methods
-
-
 
 }

@@ -146,7 +146,7 @@ public class Mail : System.Web.Services.WebService {
     #endregion WebMethods
 
     #region Methods
-    public Global.Response SendOrder(Orders.NewUser user, string lang, string file) {
+    public Global.Response SendOrder(Orders.NewOrder order, string lang, string file) {
         Global.Response resp = new Global.Response();
         try {
         //*****************Send mail to me****************
@@ -165,28 +165,28 @@ public class Mail : System.Web.Services.WebService {
 <p>Verzija: {9} {10}</p>
 <p>Licenca: {11} ({12})</p>
 <p>e-Račun: {13}</p>"
-        , user.firstName
-        , user.lastName
-        , user.companyName
-        , user.address
-        , user.postalCode
-        , user.city
-        , user.country
-        , user.pin
-        , user.email
-        , user.application
-        , user.version
-        , user.licenceNumber
-        , GetLicenceDuration(user.licence)
-        , user.eInvoice ? "DA": "NE");
+        , order.firstName
+        , order.lastName
+        , order.companyName
+        , order.address
+        , order.postalCode
+        , order.city
+        , order.country
+        , order.pin
+        , order.email
+        , order.application
+        , order.version
+        , order.licenceNumber
+        , GetLicenceDuration(order.licence)
+        , order.eInvoice ? "DA": "NE");
 
             resp = SendMail(myEmail, messageSubject, messageBody, lang, file, true);
             //*****************Send mail to me****************
 
             //************ Send mail to customer****************
-            messageSubject = (user.application == "Program Prehrane 5.0" ? user.application : t.Tran("nutrition program web", lang)) + " - " + t.Tran("payment details", lang);
-            messageBody = PaymentDetails(user, lang);
-            resp = SendMail(user.email, messageSubject, messageBody, lang, file, false);
+            messageSubject = (order.application == "Program Prehrane 5.0" ? order.application : t.Tran("nutrition program web", lang)) + " - " + t.Tran("payment details", lang);
+            messageBody = PaymentDetails(order, lang);
+            resp = SendMail(order.email, messageSubject, messageBody, lang, file, false);
             //************ Send mail to customer****************
             //if (sentToMe == false || sentToCustomer == false) {
             //    resp.isSuccess = false;
@@ -350,7 +350,7 @@ public class Mail : System.Web.Services.WebService {
         }
     }
 
-     private string PaymentDetails(Orders.NewUser user, string lang) {
+     private string PaymentDetails(Orders.NewOrder user, string lang) {
         switch (lang){
             case "en":
                 return

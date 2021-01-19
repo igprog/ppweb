@@ -310,6 +310,7 @@ angular.module('app', [])
 }])
 
 .controller('ordersCtrl', ['$scope', '$http', '$rootScope', 'functions', function ($scope, $http, $rootScope, functions) {
+
     var load = function () {
         functions.post('Orders', 'Load', {}).then(function(d) {
             $scope.orders = d;
@@ -324,10 +325,28 @@ angular.module('app', [])
         });
     }
 
+    $scope.remove = function (x) {
+        if (confirm("Briši narudžbu br. " + x.orderNumber + " (" + x.firstName + " " + x.lastName + " - " + x.companyName + ")?")) {
+            $http({
+                url: $rootScope.config.backend + 'Orders.asmx/Delete',
+                method: 'POST',
+                data: { id: x.id }
+            })
+            .then(function (response) {
+                alert(response.data.d);
+                load();
+            },
+            function (response) {
+                alert(response.data.d);
+            });
+        }
+    }
+
 }])
 
 .controller('invoiceCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
     $scope.searchInvoices = null;
+
     $scope.getTotal = function (x) {
         var total = 0;
         angular.forEach(x, function (value, key) {
@@ -356,10 +375,6 @@ angular.module('app', [])
         $scope.showInvoices = false;
         $scope.total = angular.isDefined($rootScope.i) ? $scope.getTotal($rootScope.i.items) : 0;
         $scope.year = new Date().getFullYear();
-        $scope.isForeign = false;
-        $scope.clientLeftSpacing = 300;
-        $scope.isOffer = false;
-        //$scope.totPrice_eur = 0;
     }
     initForm();
 
@@ -453,8 +468,7 @@ angular.module('app', [])
         $scope.getTotal($rootScope.i.items);
     }
 
-    $scope.totPrice_eur = 0;
-    $scope.createPdf = function (i, isForeign, totPrice_eur, clientLeftSpacing, isOffer) {
+    $scope.createPdf = function (i) {
         if ($rootScope.i.firstName == null && $rootScope.i.lastName == null && $rootScope.i.companyName == null) {
             alert('Upiši ime ili naziv');
             return false;
@@ -470,7 +484,7 @@ angular.module('app', [])
         $http({
             url: $rootScope.config.backend + 'PrintPdf.asmx/InvoicePdf',
             method: 'POST',
-            data: { invoice: i, isForeign: isForeign, totPrice_eur: totPrice_eur, clientLeftSpacing: clientLeftSpacing, isOffer: isOffer }
+            data: { invoice: i }
         })
      .then(function (response) {
          $scope.loading = false;

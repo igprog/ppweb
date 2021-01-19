@@ -395,10 +395,11 @@
                         <th>Cijena</th>
                         <th>Dodatna usluga</th>
                         <th>Napomena</th>
+                        <th></th>
                     </tr>
                     <tr ng-repeat="x in orders | filter:searchOrders">
                         <td><button class="btn btn-success" ng-click="createInvoice(x, 'invoices')"><i class="fa fa-file-text-o"></i> Račun</button></td>
-                        <td>{{x.id}}</td>
+                        <td>{{x.orderNumber}}</td>
                         <td style="white-space: nowrap">{{x.orderDate}}</td>
                         <td>{{x.firstName}}</td>
                         <td>{{x.lastName}}</td>
@@ -415,6 +416,7 @@
                         <td>{{x.price}}</td>
                         <td>{{x.additionalService}}</td>
                         <td>{{x.note}}</td>
+                        <td ng-if="config.debug"><button ng-click="remove(x)" class="btn btn-danger"><i class="fa fa-trash-o"></i> Briši</button></td>
                     </tr>
                 </table>
             </div>
@@ -606,23 +608,34 @@
                             <div class="row">
                                 <span class="col-sm-9 text-right">Poravnanje - klijent (300 desno, 0 lijevo):</span>
                                 <div class="col-sm-3">
-                                    <input ng-model="clientLeftSpacing" type="number" min="0" max="350" class="form-control text-right" />
+                                    <input ng-model="i.clientLeftSpacing" type="number" min="0" max="350" class="form-control text-right" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label>Vrsta dokumenta:</label>
+                                    <select ng-model="i.docType" class="form-control">
+                                        <option value="0" ng-selected="true">Račun</option>
+                                        <option value="1">Ponuda</option>
+                                        <option value="2">Predračun</option>
+                                    </select>
+                                </div>
+                                <div ng-if="i.docType>0" class="col-sm-3">
+                                    <label>Broj {{i.docType==1?'ponude':'predračuna'}}</label>
+                                    <input ng-model="i.orderNumber" type="number" class="form-control" />
                                 </div>
                             </div>
                             <div class="checkbox">
-                                <label><input ng-model="isForeign" type="checkbox" /> Inozemni račun</label>
+                                <label><input ng-model="i.isForeign" type="checkbox" /> Inozemni račun</label>
                             </div>
-                            <div ng-show="isForeign" class="row well">
+                            <div ng-show="i.isForeign" class="row well">
                                 <span class="col-sm-4" for="email">Ukupno (€):</span>
                                 <div class="col-sm-8">
-                                    <input ng-model="totPrice_eur" class="form-control" type="number" />
+                                    <input ng-model="i.totPrice_eur" class="form-control" type="number" />
                                 </div>
                             </div>
-                            <div class="checkbox">
-                                <label><input ng-model="isOffer" type="checkbox" /> Ponuda</label>
-                            </div>
-                            <div>
-                                <button class="btn btn-danger" ng-click="createPdf(i, isForeign, totPrice_eur, clientLeftSpacing, isOffer)"><i class="fa fa-{{loading==true?'spinner fa-spin':'file-pdf-o'}}"></i> Kreiraj PDF</button>
+                            <div class="mt10">
+                                <button class="btn btn-danger" ng-click="createPdf(i)"><i class="fa fa-{{loading==true?'spinner fa-spin':'file-pdf-o'}}"></i> Kreiraj PDF</button>
                             </div>
                             <div class="m10">
                                 <a ng-if="pdfTempLink" href="{{pdfTempLink}}" download><i class="fa fa-file-pdf-o"></i> {{pdfTempLink}}</a>

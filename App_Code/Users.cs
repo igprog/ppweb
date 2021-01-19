@@ -564,7 +564,7 @@ public class Users : System.Web.Services.WebService {
                 connection.Close();
             }
             return "ok";
-        } catch (Exception e) { return ("error: " + e); }
+        } catch (Exception e) { return (e.Message); }
     }
 
     [WebMethod]
@@ -698,7 +698,7 @@ public class Users : System.Web.Services.WebService {
     [WebMethod]
     public string UpdateUserInfoFromOrdersTbl(string email) {
         try {
-            Orders.NewUser x = new Orders.NewUser();
+            Orders.NewOrder x = new Orders.NewOrder();
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + webDataBase))) {
                 connection.Open();
                 string sql = string.Format(@"SELECT companyName, address, postalCode, city, country, pin, email

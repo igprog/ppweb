@@ -22,34 +22,36 @@ public class Orders : System.Web.Services.WebService {
     Invoice I = new Invoice();
     public Orders() { 
     }
-    public class NewUser {
-        public int id { get; set; }
-        public string firstName { get; set; }
-        public string lastName { get; set; }
-        public string companyName { get; set; }
-        public string address { get; set; }
-        public string postalCode { get; set; }
-        public string city { get; set; }
-        public string country { get; set; }
-        public string pin { get; set; }
-        public string email { get; set; }
-        public string ipAddress { get; set; }
-        public string application { get; set; }
-        public string version { get; set; }
-        public string licence { get; set; }
-        public string licenceNumber { get; set; }
-        public double price { get; set; }
-        public double priceEur { get; set; }
-        public string orderDate { get; set; }
-        public string additionalService { get; set; }
-        public string note { get; set; }
-        public bool eInvoice { get; set; }
+    public class NewOrder {
+        public string id;
+        public int orderNumber;
+        public string firstName;
+        public string lastName;
+        public string companyName;
+        public string address;
+        public string postalCode;
+        public string city;
+        public string country;
+        public string pin;
+        public string email;
+        public string ipAddress;
+        public string application;
+        public string version;
+        public string licence;
+        public string licenceNumber;
+        public double price;
+        public double priceEur;
+        public string orderDate;
+        public string additionalService;
+        public string note;
+        public bool eInvoice;
     }
 
     [WebMethod]
     public string Init() {
-        NewUser x = new NewUser();
-        x.id = 0;
+        NewOrder x = new NewOrder();
+        x.id = null;
+        x.orderNumber = 0;
         x.firstName = "";
         x.lastName = "";
         x.companyName = "";
@@ -76,36 +78,37 @@ public class Orders : System.Web.Services.WebService {
     [WebMethod]
     public string Load() {
         try {
-            List<NewUser> xx = new List<NewUser>();
+            List<NewOrder> xx = new List<NewOrder>();
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
                 connection.Open();
-                string sql = @"SELECT rowid, firstName, lastName, companyName, address, postalCode, city, country, pin, email, ipAddress, application, version, licence, licenceNumber, price, priceEur, orderDate, additionalService, note
+                string sql = @"SELECT id, orderNumber, firstName, lastName, companyName, address, postalCode, city, country, pin, email, ipAddress, application, version, licence, licenceNumber, price, priceEur, orderDate, additionalService, note
                             FROM orders
                             ORDER BY rowid DESC";
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
-                            NewUser x = new NewUser();
-                            x.id = reader.GetValue(0) == DBNull.Value ? 0 : reader.GetInt32(0);
-                            x.firstName = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                            x.lastName = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                            x.companyName = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
-                            x.address = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-                            x.postalCode = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5);
-                            x.city = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6);
-                            x.country = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
-                            x.pin = reader.GetValue(8) == DBNull.Value ? "" : reader.GetString(8);
-                            x.email = reader.GetValue(9) == DBNull.Value ? "" : reader.GetString(9);
-                            x.ipAddress = reader.GetValue(10) == DBNull.Value ? "" : reader.GetString(10);
-                            x.application = reader.GetValue(11) == DBNull.Value ? "" : reader.GetString(11);
-                            x.version = reader.GetValue(12) == DBNull.Value ? "" : reader.GetString(12);
-                            x.licence = reader.GetValue(13) == DBNull.Value ? "" : reader.GetString(13);
-                            x.licenceNumber = reader.GetValue(14) == DBNull.Value ? "" : reader.GetString(14);
-                            x.price = reader.GetValue(15) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(15));
-                            x.priceEur = reader.GetValue(16) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(16));
-                            x.orderDate = reader.GetValue(17) == DBNull.Value ? "" : reader.GetString(17);
-                            x.additionalService = reader.GetValue(18) == DBNull.Value ? "" : reader.GetString(18);
-                            x.note = reader.GetValue(19) == DBNull.Value ? "" : reader.GetString(19);
+                            NewOrder x = new NewOrder();
+                            x.id = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
+                            x.orderNumber = reader.GetValue(1) == DBNull.Value ? 0 : reader.GetInt32(1);
+                            x.firstName = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+                            x.lastName = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
+                            x.companyName = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
+                            x.address = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5);
+                            x.postalCode = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6);
+                            x.city = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
+                            x.country = reader.GetValue(8) == DBNull.Value ? "" : reader.GetString(8);
+                            x.pin = reader.GetValue(9) == DBNull.Value ? "" : reader.GetString(9);
+                            x.email = reader.GetValue(10) == DBNull.Value ? "" : reader.GetString(10);
+                            x.ipAddress = reader.GetValue(11) == DBNull.Value ? "" : reader.GetString(11);
+                            x.application = reader.GetValue(12) == DBNull.Value ? "" : reader.GetString(12);
+                            x.version = reader.GetValue(13) == DBNull.Value ? "" : reader.GetString(13);
+                            x.licence = reader.GetValue(14) == DBNull.Value ? "" : reader.GetString(14);
+                            x.licenceNumber = reader.GetValue(15) == DBNull.Value ? "" : reader.GetString(15);
+                            x.price = reader.GetValue(16) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(16));
+                            x.priceEur = reader.GetValue(17) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(17));
+                            x.orderDate = reader.GetValue(18) == DBNull.Value ? "" : reader.GetString(18);
+                            x.additionalService = reader.GetValue(19) == DBNull.Value ? "" : reader.GetString(19);
+                            x.note = reader.GetValue(20) == DBNull.Value ? "" : reader.GetString(20);
                             x.eInvoice = false;
                             xx.Add(x);
                         }
@@ -120,7 +123,7 @@ public class Orders : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public Global.Response SendOrder(NewUser x, string lang) {
+    public Global.Response SendOrder(NewOrder x, string lang) {
         Global.Response resp = new Global.Response();
         try {
             Invoice.NewInvoice i = new Invoice.NewInvoice();
@@ -144,6 +147,7 @@ public class Orders : System.Web.Services.WebService {
             i.total = x.price * item.qty;
             i.items.Add(item);
             i.showSignature = true;
+            i.docType = 1;
 
             string path = HttpContext.Current.Server.MapPath("~/App_Data/" + dataBase);
             db.CreateGlobalDataBase(path, db.orders);
@@ -188,7 +192,9 @@ public class Orders : System.Web.Services.WebService {
             }
 
             PrintPdf PDF = new PrintPdf();
-            string offerPdf = PDF.CreateInvoicePdf(i, false, x.priceEur, 0, true);
+            i.docType = 1; // TODO enum
+            i.totPrice_eur = x.priceEur;
+            string offerPdf = PDF.CreateInvoicePdf(i);
             string offerPdfPath = !string.IsNullOrEmpty(offerPdf) ? string.Format("~/upload/invoice/temp/{0}.pdf", offerPdf) : null;
             Mail m = new Mail();
             resp = m.SendOrder(x, lang, offerPdfPath);
@@ -199,6 +205,21 @@ public class Orders : System.Web.Services.WebService {
             resp.msg = e.Message;
             return (resp);
         }
+    }
+
+    [WebMethod]
+    public string Delete(string id) {
+        try {
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                connection.Open();
+                string sql = string.Format("DELETE FROM orders WHERE id = '{0}'", id);
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+            return "ok";
+        } catch (Exception e) { return (e.Message); }
     }
 
 }
