@@ -70,6 +70,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         .state('settings', {
             url: '/settings', templateUrl: './assets/partials/settings.html', controller: 'settingsCtrl'
         })
+        .state('adminlogin', {
+            url: '/adminlogin', templateUrl: './assets/partials/adminlogin.html', controller: 'loginCtrl'
+        })
 
     $urlRouterProvider.otherwise("/");
 
@@ -961,57 +964,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         })
         .then(function (response) {
             if (JSON.parse(response.data.d).userId != null) {
-                $rootScope.user = JSON.parse(response.data.d);
-                if ($rootScope.user.userId !== $rootScope.user.userGroupId && $rootScope.user.isActive === false) {
-                    $rootScope.loading = false;
-                    $scope.errorLogin = true;
-                    $scope.errorMesage = $translate.instant('your account is not active') + '. ' + $translate.instant('please contact your administrator');
-                    return false;
-                }
-                $rootScope.loginUser = JSON.parse(response.data.d);
-                $sessionStorage.loginuser = $rootScope.loginUser;
-                $sessionStorage.userid = $rootScope.user.userId;
-                $sessionStorage.usergroupid = $rootScope.user.userGroupId;
-                $sessionStorage.username = $rootScope.user.userName;
-                $sessionStorage.user = $rootScope.user;
-                $sessionStorage.islogin = true;
-                $rootScope.isLogin = true;
-                $rootScope.loadData();
-
-                if (typeof (Storage) !== "undefined") {
-                    localStorage.lastvisit = new Date();
-                }
-                if ($rootScope.user.licenceStatus === 'expired') {
-                    //$rootScope.isLogin = false;
-                    functions.alert($translate.instant('your subscription has expired'), $translate.instant('renew subscription'));
-                    $state.go('dashboard');
-                    $state.go('order');
-                } else {
-                    $state.go('dashboard');
-                    if ($rootScope.user.daysToExpite <= 10 && $rootScope.user.daysToExpite > 0) {
-                        $rootScope.mainMessage = $translate.instant('your subscription will expire in') + ' ' + $rootScope.user.daysToExpite + ' ' + ($rootScope.user.daysToExpite == 1 ? $translate.instant('day') : $translate.instant('days')) + '.';
-                        $rootScope.mainMessageBtn = $translate.instant('renew subscription');
-                    }
-                    if ($rootScope.user.daysToExpite == 0) {
-                        $rootScope.mainMessage = $translate.instant('your subscription will expire today') + '.';
-                        $rootScope.mainMessageBtn = $translate.instant('renew subscription');
-                    }
-                    if ($rootScope.user.licenceStatus == 'demo') {
-                        $rootScope.mainMessage = $translate.instant('you are currently working in a demo version') + '. ' + $translate.instant('some functions are disabled') + '.';
-                        $rootScope.mainMessageBtn = $translate.instant('activate full version');
-                    }
-                    if ($rootScope.config.language == 'en') {
-                        $rootScope.unitSystem = 0;
-                    } else {
-                        $rootScope.unitSystem = 1;
-                    }
-                }
-
-                /**** TODO (QUERY STRING) *****
-                var lang = $sessionStorage.config.language;
-                $window.location.href = lang == 'hr' ? '../app/' : '../app/?lang=' + lang;
-                ***************/
-
+                loginResponse(response);
             } else {
                 $rootScope.loading = false;
                 $scope.errorLogin = true;
@@ -1023,7 +976,103 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $scope.errorLogin = true;
             $scope.errorMesage = $translate.instant('user was not found');
         });
-     }
+    }
+
+    var loginResponse = function (response) {
+        $rootScope.user = JSON.parse(response.data.d);
+        if ($rootScope.user.userId !== $rootScope.user.userGroupId && $rootScope.user.isActive === false) {
+            $rootScope.loading = false;
+            $scope.errorLogin = true;
+            $scope.errorMesage = $translate.instant('your account is not active') + '. ' + $translate.instant('please contact your administrator');
+            return false;
+        }
+        $rootScope.loginUser = JSON.parse(response.data.d);
+        $sessionStorage.loginuser = $rootScope.loginUser;
+        $sessionStorage.userid = $rootScope.user.userId;
+        $sessionStorage.usergroupid = $rootScope.user.userGroupId;
+        $sessionStorage.username = $rootScope.user.userName;
+        $sessionStorage.user = $rootScope.user;
+        $sessionStorage.islogin = true;
+        $rootScope.isLogin = true;
+        $rootScope.loadData();
+
+        if (typeof (Storage) !== "undefined") {
+            localStorage.lastvisit = new Date();
+        }
+        if ($rootScope.user.licenceStatus === 'expired') {
+            //$rootScope.isLogin = false;
+            functions.alert($translate.instant('your subscription has expired'), $translate.instant('renew subscription'));
+            $state.go('dashboard');
+            $state.go('order');
+        } else {
+            $state.go('dashboard');
+            if ($rootScope.user.daysToExpite <= 10 && $rootScope.user.daysToExpite > 0) {
+                $rootScope.mainMessage = $translate.instant('your subscription will expire in') + ' ' + $rootScope.user.daysToExpite + ' ' + ($rootScope.user.daysToExpite == 1 ? $translate.instant('day') : $translate.instant('days')) + '.';
+                $rootScope.mainMessageBtn = $translate.instant('renew subscription');
+            }
+            if ($rootScope.user.daysToExpite == 0) {
+                $rootScope.mainMessage = $translate.instant('your subscription will expire today') + '.';
+                $rootScope.mainMessageBtn = $translate.instant('renew subscription');
+            }
+            if ($rootScope.user.licenceStatus == 'demo') {
+                $rootScope.mainMessage = $translate.instant('you are currently working in a demo version') + '. ' + $translate.instant('some functions are disabled') + '.';
+                $rootScope.mainMessageBtn = $translate.instant('activate full version');
+            }
+            if ($rootScope.config.language == 'en') {
+                $rootScope.unitSystem = 0;
+            } else {
+                $rootScope.unitSystem = 1;
+            }
+        }
+
+        /**** TODO (QUERY STRING) *****
+        var lang = $sessionStorage.config.language;
+        $window.location.href = lang == 'hr' ? '../app/' : '../app/?lang=' + lang;
+        ***************/
+    }
+
+    /***** Admin Login *****/
+    $scope.admin = {
+        username: null,
+        password: null,
+        isadmin: false
+    };
+    $scope.adminLogin = function (x) {
+        $http({
+            url: $rootScope.config.backend + 'Admin.asmx/Login',
+            method: "POST",
+            data: { username: x.username, password: x.password }
+        })
+        .then(function (response) {
+            $scope.admin.isadmin = JSON.parse(response.data.d);
+        },
+        function (response) {
+        });
+    }
+
+    $scope.loginUid = function (uid) {
+        if (!functions.isNullOrEmpty(uid)) {
+            $http({
+                url: $rootScope.config.backend + webService + '/Get',
+                method: "POST",
+                data: { userId: uid }
+            })
+            .then(function (response) {
+                if (JSON.parse(response.data.d).userId != null) {
+                    loginResponse(response);
+                } else {
+                    $rootScope.loading = false;
+                    $scope.errorLogin = true;
+                    $scope.errorMesage = $translate.instant('user was not found');
+                }
+            },
+            function (response) {
+                $scope.errorLogin = true;
+                $scope.errorMesage = $translate.instant('user was not found');
+            });
+        }
+    }
+    /***** Admin Login *****/
 
      $scope.signup = function () {
          $state.go('signup');

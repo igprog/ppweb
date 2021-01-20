@@ -2626,10 +2626,9 @@ IBAN HR8423400091160342496
             table.SetWidths(widths);
             doc.Add(table);
 
-
             p = new Paragraph();
-            p.Add(new Chunk("PDV nije obračunat jer obveznik IG PROG nije u sustavu PDV - a po čl. 90, st. 1.Zakona o porezu na dodanu vrijednost.", GetFont(9, Font.ITALIC)));
-            if (invoice.isForeign) { p.Add(new Chunk(" / VAT is not charged because taxpayer IG PROG is not registerd for VAT under Art 90, para 1 of the Law om VAT.", GetFontGray())); }
+            p.Add(new Paragraph("PDV nije obračunat jer obveznik IG PROG nije u sustavu PDV - a po čl. 90, st. 1.Zakona o porezu na dodanu vrijednost.", GetFont(9, Font.ITALIC)));
+            if (invoice.isForeign) { p.Add(new Paragraph("VAT is not charged because taxpayer IG PROG is not registerd for VAT under Art 90, para 1 of the Law om VAT.", GetFontGray())); }
             doc.Add(p);
 
             if (invoice.docType == (int)Invoice.DocType.invoice) {
