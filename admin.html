@@ -86,25 +86,27 @@
                 </ul>
             </div>
             <div ng-if="showUsers">
-                <h3>Korisnici</h3>
-                <div class="row">
-                    <div class="col-md-3">
+                <div class="row pt5">
+                    <div class="col-sm-3">
                         <form>
+                            <span class="p5">Pretraži:</span>
                             <div class="input-group">
-                                <input ng-model="searchQuery" type="text" class="form-control" placeholder="Pretraži...">
+                                <input ng-model="searchQuery" type="text" class="form-control" placeholder="Ime, E-mail, ID...">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-default" type="submit" ng-click="search(searchQuery, showActive, limit)">
+                                    <button class="btn btn-default" type="submit" ng-click="search(searchQuery, showActive, limit, isDesc)">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-9 checkbox">
-                        <label class="p5"><input type="checkbox" ng-model="showDetails" />Prikaži detalje / uredi</label>
-                        <label class="p5"><input type="checkbox" ng-model="showActive" ng-click="search(searchQuery, showActive, limit)" />Prikaži aktivne</label>
-                        <label class="p5">Limit: <input ng-model="limit" class="form-control" /></label>
+                    <div class="col-sm-1">
+                        <span class="p5">Limit: <input ng-model="limit" class="form-control" /></span>
                     </div>
+                </div>
+                <div class="checkbox">
+                    <label class="p5"><input type="checkbox" ng-model="showDetails" />Prikaži detalje / uredi</label>
+                    <label class="p5"><input type="checkbox" ng-model="showActive" ng-click="search(searchQuery, showActive, limit)" />Prikaži aktivne</label>
                 </div>
                 <div ng-if="loading" class="text-center text-primary">
                     <label class="lead text-primary">Učitavanje...</label>
@@ -119,7 +121,7 @@
                     <table class="table table-condensed text-small">
                         <tr>
                             <th></th>
-                            <th>Br.</th>
+                            <th>Br. <a href="" ng-click="search(searchQuery, showActive, limit, !isDesc)" title="{{isDesc?'Prikaži najstarije':'Prikaži najnovije'}}"><i class="fa fa-sort"></i></a></th>
                             <th ng-if="showDetails">UserId</th>
                             <th ng-if="showDetails">UserGroupId</th>
                             <th>Ime</th>
@@ -379,6 +381,7 @@
                     <tr>
                         <th></th>
                         <th>Br.</th>
+                        <th>Br. narudžbe</th>
                         <th>Datum</th>
                         <th>Ime</th>
                         <th>Prezime</th>
@@ -399,6 +402,7 @@
                     </tr>
                     <tr ng-repeat="x in orders | filter:searchOrders">
                         <td><button class="btn btn-success" ng-click="createInvoice(x, 'invoices')"><i class="fa fa-file-text-o"></i> Račun</button></td>
+                        <td>{{orders.length - $index}}</td>
                         <td>{{x.orderNumber}}</td>
                         <td style="white-space: nowrap">{{x.orderDate}}</td>
                         <td>{{x.firstName}}</td>
@@ -416,7 +420,7 @@
                         <td>{{x.price}}</td>
                         <td>{{x.additionalService}}</td>
                         <td>{{x.note}}</td>
-                        <td ng-if="config.debug"><button ng-click="remove(x)" class="btn btn-danger"><i class="fa fa-trash-o"></i> Briši</button></td>
+                        <td><button ng-click="remove(x)" class="btn btn-danger"><i class="fa fa-trash-o"></i> Briši</button></td>
                     </tr>
                 </table>
             </div>
@@ -613,9 +617,9 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <label>Vrsta dokumenta:</label>
+                                    <span>Vrsta dokumenta:</span>
                                     <select ng-model="i.docType" class="form-control">
-                                        <option value="0" ng-selected="true">Račun</option>
+                                        <option value="0" ng-selected="i.docType==0?true:false">Račun</option>
                                         <option value="1">Ponuda</option>
                                         <option value="2">Predračun</option>
                                     </select>

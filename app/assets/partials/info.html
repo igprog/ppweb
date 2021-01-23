@@ -12,6 +12,9 @@
                 <li><span class="text-capitalize">{{'web' | translate}}: </span><a href="{{config.webpageurl}}" target="_blank">{{config.webpage}}</a></li>
                 <li><span class="text-capitalize">{{'email' | translate}}: </span><a href="mailto:{{config.language=='en'?config.email_en:config.email}}" target="_blank">{{config.language=='en'?config.email_en:config.email}}</a></li>
             </ul>
+            <div class="text-right">
+                <a href="../app/licence.txt" title="{{'terms and conditions' | translate}}" target="_blank"><i class="fa fa-file-alt"></i> {{'terms and conditions' | translate}}</a>
+            </div>
             <hr />
             <div ng-if="config.language!=='en'">
                 <a href="" ng-click="toggleUpdates()">{{'update details' | translate}} <i class="fa fa-caret-{{showUpdates==false?'right':'down'}}" aria-hidden="true"></i></a>

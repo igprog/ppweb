@@ -502,4 +502,51 @@ angular.module('app', ['ngMaterial'])
 
 }])
 
+/***** Directive *****/
+.directive('passwordStrength', [
+    function () {
+        return {
+            require: 'ngModel',
+            restrict: 'E',
+            scope: {
+                password: '=ngModel'
+            },
+            link: function (scope, elem, attrs, ctrl) {
+                scope.$watch('password', function (newVal) {
+                    scope.strength = isSatisfied(newVal && newVal.length >= 8) +
+                      isSatisfied(newVal && /[A-z]/.test(newVal)) +
+                      isSatisfied(newVal && /(?=.*\W)/.test(newVal)) +
+                      isSatisfied(newVal && /\d/.test(newVal));
+                    function isSatisfied(criteria) {
+                        return criteria ? 1 : 0;
+                    }
+                }, true);
+            },
+            template: '<div class="progress">' +
+              '<div ng-if="strength >= 1 && strength < 2" class="progress-bar progress-bar-danger" style="width:25%">Niska</div>' +
+              '<div ng-if="strength >= 2 && strength < 3" class="progress-bar progress-bar-warning" style="width:50%">Srednja</div>' +
+              '<div ng-if="strength >= 3 && strength < 4" class="progress-bar progress-bar-warning" style="width:75%">Dobra</div>' +
+              '<div ng-if="strength >= 4" class="progress-bar progress-bar-success" style="width:100%">Visoka</div>' +
+              '</div>'
+        }
+    }
+])
+.directive('patternValidator', [
+    function () {
+        return {
+            require: 'ngModel',
+            restrict: 'A',
+            link: function (scope, elem, attrs, ctrl) {
+                ctrl.$parsers.unshift(function (viewValue) {
+                    var patt = new RegExp(attrs.patternValidator);
+                    var isValid = patt.test(viewValue);
+                    ctrl.$setValidity('passwordPattern', isValid);
+                    return viewValue;
+                });
+            }
+        };
+    }
+]);
+/***** Directive *****/
+
 ;

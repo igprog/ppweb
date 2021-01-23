@@ -147,7 +147,7 @@ public class Orders : System.Web.Services.WebService {
             i.total = x.price * item.qty;
             i.items.Add(item);
             i.showSignature = true;
-            i.docType = 1;
+            i.docType = (int)Invoice.DocType.offer;
 
             string path = HttpContext.Current.Server.MapPath("~/App_Data/" + dataBase);
             db.CreateGlobalDataBase(path, db.orders);
@@ -192,7 +192,7 @@ public class Orders : System.Web.Services.WebService {
             }
 
             PrintPdf PDF = new PrintPdf();
-            i.docType = 1; // TODO enum
+            i.docType = (int)Invoice.DocType.offer;
             i.totPrice_eur = x.priceEur;
             string offerPdf = PDF.CreateInvoicePdf(i);
             string offerPdfPath = !string.IsNullOrEmpty(offerPdf) ? string.Format("~/upload/invoice/temp/{0}.pdf", offerPdf) : null;

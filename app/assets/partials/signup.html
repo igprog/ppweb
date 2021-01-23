@@ -29,7 +29,11 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input ng-model="newUser.password" class="form-control form-control-user" type="password" required placeholder="{{'password' | translate}}" autocomplete="new-password" >
+                                        <input ng-model="newUser.password" class="form-control form-control-user" type="password" required placeholder="{{'password' | translate}}" autocomplete="new-password" pattern-validator="((?=.*\d)(?=.*[A-Z])(?=.*\W).{8,8})" >
+                                        <div ng-if="newUser.password" class="form-group p-2">
+                                            <em class="small text-muted">{{'password strength' | translate}}:</em>
+                                            <password-strength ng-model="newUser.password"></password-strength>
+                                        </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <input ng-model="passwordConfirm" class="form-control form-control-user" type="password" required placeholder="{{'confirm password' | translate}}" autocomplete="new-password" >
@@ -37,10 +41,10 @@
                                 </div>
                                 <div layout-gt-sm="row">
                                     <md-input-container class="md-block mt-0 mb-0" flex-gt-sm>
-                                        <md-checkbox md-no-ink aria-label={{'terms and conditions' | translate}} ng-model="accept" class="md-primary">
+                                        <md-checkbox md-no-ink aria-label={{'terms and conditions_' | translate}} ng-model="accept" class="md-primary">
                                             {{'i agree to the' | translate}}
                                         </md-checkbox>
-                                        <a href="{{config.appurl}}{{config.language=='en'?'eula.html':'licence.txt'}}" target="_blank">{{'terms and conditions' | translate}}</a>
+                                        <a href="{{config.appurl}}{{config.language=='en'?'eula.html':'licence.txt'}}" target="_blank">{{'terms and conditions_' | translate}}</a>
                                     </md-input-container>
                                 </div>
                             </form>

@@ -1463,6 +1463,7 @@
   "settings": "settings",
   "i agree to the": "I agree to the",
   "terms and conditions": "terms and conditions",
+  "terms and conditions_": "terms and conditions",
   "to top": "to top",
   "underweight": "underweight",
   "normal weight": "normal weight",
@@ -1931,7 +1932,7 @@
   "if you need any additional information, please do not hesitate to contact us": "If you need any additional information, please do not hesitate to contact us",
   "reset password link has been sent to your email": "Reset password link has been sent to Your email",
   "reset password": "Reset password",
-  "new password": "new password",
+  "new password": "New password",
   "reset password link": "Reset password link",
   "distribution of nutrients per meals": "Distribution of nutrients per meals",
   "update details": "Update details",
@@ -1982,8 +1983,8 @@
   "please wait": "Please wait",
   "please try again": "Please try again",
   "network information": "Network information",
-  "connection": "Veza",
-  "speed": "Brzina",
+  "connection": "Connection",
+  "speed": "Speed",
   "test speed": "Test speed",
   "bad_connection_alert": "Your internet connection is slow which may affect the performance of the application",
   "include charts": "Include charts",
@@ -1991,6 +1992,11 @@
   "recipe image": "recipe image",
   "you can upload a recipe picture after saving the recipe": "You can upload a recipe picture after saving the recipe",
   "image": "Image",
-  "max upload file size is 2.5 MB": "Max upload file size is 2.5 MB"
+  "max upload file size is 2.5 MB": "Max upload file size is 2.5 MB",
+  "upgrade": "Upgrade",
+  "password strength": "Password strength",
+  "medium": "Medium",
+  "good": "Good",
+  "high": "High"
 
 }

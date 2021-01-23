@@ -32,7 +32,11 @@
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>Lozinka</label>
-                        <input ng-model="user.password" type="password" required autocomplete="new-password">
+                        <input ng-model="user.password" type="password" required autocomplete="new-password" pattern-validator="((?=.*\d)(?=.*[A-Z])(?=.*\W).{8,8})">
+                        <div ng-if="user.password" class="form-group pt10">
+                            <em class="small text-muted">Jačina lozinke:</em>
+                            <password-strength ng-model="user.password"></password-strength>
+                        </div>
                     </md-input-container>
                 </div>
                 <div layout-gt-sm="row">

@@ -1465,7 +1465,8 @@
   "additional options": "додатне опције",
   "settings": "поставке",
   "i agree to the": "Cлажем се са",
-  "terms and conditions": "условима коришћења",
+  "terms and conditions": "услови коришћења",
+  "terms and conditions_": "условима коришћења",
   "to top": "на врх",
   "underweight": "снижена телесна маса",
   "normal weight": "нормална телесна маса",
@@ -1839,7 +1840,7 @@
   "license info": "Информације о лиценци",
   "number of clinets": "Број клијената",
   "total appointments": "Укупно термина",
-  "add appointment": "Додај термин",
+  "add appointment": "Закажи термин",
   "license": "Лиценца",
   "report a bug": "Пријави БУГ",
   "description is required": "Опис је обавезан",
@@ -1937,7 +1938,7 @@
   "if you need any additional information, please do not hesitate to contact us": "За сва додатна питања стојимо Вам на располагању",
   "reset password link has been sent to your email": "Линк за ресетовање лозинке је послан на Ваш емаил",
   "reset password": "Ресетуј лозинку",
-  "new password": "нова лозинка",
+  "new password": "Hова лозинка",
   "reset password link": "Линк за ресетовање лозинке",
   "distribution of nutrients per meals": "Распоред нутријената по оброцима",
   "update details": "Детаљи о надоградњама",
@@ -1997,6 +1998,11 @@
   "recipe image": "Слика рецепта",
   "you can upload a recipe picture after saving the recipe": "Слику рецепта можете да учитати након што спремите рецепт",
   "image": "Слика",
-  "max upload file size is 2.5 MB": "Максимална величина датотеке је 2.5 МБ"
+  "max upload file size is 2.5 MB": "Максимална величина датотеке је 2.5 МБ",
+  "upgrade": "Надогради",
+  "password strength": "Јачина лозинке",
+  "medium": "Средња",
+  "good": "Добра",
+  "high": "Висока"
 
 }

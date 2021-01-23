@@ -181,8 +181,8 @@
                             <a ui-sref="scheduler" ui-sref-active="" class="dropdown-item text-center small text-gray-500" href="">{{'show all appointments' | translate}}</a>
                         </div>
                         <div ng-if="activeEvents.length===0||activeEvents===null" class="text-center">
-                            <p>{{'you do not have any appointments' | translate}}</p>
-                            <button ui-sref="scheduler" ui-sref-active="" class="btn btn-outline-primary btn-lg"><i class="fa fa-user-clock"></i> {{'add appointment' | translate}}</button>
+                            <p>{{'you do not have any appointments' | translate}} !</p>
+                            <button ui-sref="scheduler" ui-sref-active="" class="btn btn-outline-primary"><i class="fa fa-user-clock"></i> {{'add appointment' | translate}}</button>
                         </div>
                         <!--<ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center text-capitalize" ng-repeat="x in activeEvents">
@@ -233,6 +233,13 @@
                         <div>{{'number of users' | translate}}: <span class="badge badge-secondary badge-pill">{{user.subusers+1}}</span> <em class="small text-muted">({{'max' | translate}} {{user.maxNumberOfUsers}})</em> <span class="float-right">{{(((user.subusers+1)/user.maxNumberOfUsers)*100).toFixed()}}%</span></div>
                         <div class="progress mb-4">
                             <div class="progress-bar bg-main" role="progressbar" aria-valuenow="{{(((user.subusers+1)/user.maxNumberOfUsers)*100).toFixed()}}" aria-valuemin="0" aria-valuemax="100" style="width:{{(((user.subusers+1)/user.maxNumberOfUsers)*100).toFixed()}}%"></div>
+                        </div>
+                        <div class="text-right pt-3">
+                            <a href="" class="btn btn-default" ui-sref="order" ui-sref-active="order">
+                                <i class="fa fa-shopping-cart pr-1"></i>
+                                <span ng-if="user.licenceStatus === 'demo'">{{'activate full version' | translate}}</span>
+                                <span ng-if="user.licenceStatus !== 'demo'"><span ng-if="user.package!=='premium'">{{'upgrade' | translate}} / </span>{{'renew subscription' | translate}}</span>
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -97,6 +97,7 @@ angular.module('app', [])
     $scope.page = 1;
     $scope.searchQuery = '';
     $scope.showUsers = true;
+    $scope.isDesc = true;
 
     function setYears() {
         $scope.years = [];
@@ -164,7 +165,7 @@ angular.module('app', [])
         $http({
             url: $rootScope.config.backend + 'Users.asmx/Load',
             method: 'POST',
-            data: { limit: limit, page: $scope.page }
+            data: { limit: limit, page: $scope.page, isDesc: $scope.isDesc }
         })
         .then(function (response) {
             $scope.loading = false;
@@ -176,14 +177,15 @@ angular.module('app', [])
         });
     }
 
-    $scope.search = function (searchQuery, showActive, limit) {
+    $scope.search = function (searchQuery, showActive, limit, isDesc) {
         $scope.loading = true;
         $scope.showUsers = true;
         $scope.page = 1;
+        $scope.isDesc = isDesc;
         $http({
             url: $rootScope.config.backend + 'Users.asmx/Search',
             method: 'POST',
-            data: { query: searchQuery, limit: limit, page: $scope.page, activeUsers: showActive }
+            data: { query: searchQuery, limit: limit, page: $scope.page, activeUsers: showActive, isDesc: isDesc }
         })
         .then(function (response) {
             $scope.d = JSON.parse(response.data.d);
@@ -194,7 +196,7 @@ angular.module('app', [])
             alert(response.data.d);
         });
     }
-    $scope.search(null, false, $scope.limit);
+    $scope.search(null, false, $scope.limit, $scope.isDesc);
 
     $scope.update = function (user) {
         $http({
@@ -228,7 +230,7 @@ angular.module('app', [])
         });
     }
 
-    $scope.remove = function(user) {
+    $scope.remove = function (user) {
         var r = confirm("Briši " + user.firstName + " "  + user.lastName + "?");
         if (r == true) {
             remove(user);

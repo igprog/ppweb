@@ -333,9 +333,9 @@ public class Users : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string Load(int? limit, int? page) {
+    public string Load(int? limit, int? page, bool isDesc) {
         try {
-            return JsonConvert.SerializeObject(GetUsers(limit, page, null), Formatting.None);
+            return JsonConvert.SerializeObject(GetUsers(limit, page, null, isDesc), Formatting.None);
         } catch (Exception e) {
             return (e.Message);
         }
@@ -346,7 +346,7 @@ public class Users : System.Web.Services.WebService {
         try {
             Totals x = new Totals();
             ClientApp ca = new ClientApp();
-            List<NewUser> users = GetUsers(null, null, year);
+            List<NewUser> users = GetUsers(null, null, year, true);
             x.active = users.Where(a => a.isActive == true).Count();
             x.demo = users.Where(a => a.isActive == false && a.activationDate == a.expirationDate).Count();
             x.expired = users.Where(a => a.licenceStatus == expired && G.DateDiff(a.activationDate, a.expirationDate) > 15).Count();
@@ -388,7 +388,7 @@ public class Users : System.Web.Services.WebService {
     //}
 
     [WebMethod]
-    public string Search(string query, int? limit, int? page, bool activeUsers) {
+    public string Search(string query, int? limit, int? page, bool activeUsers, bool isDesc) {
         try {
             List<NewUser> xx = new List<NewUser>();
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
@@ -405,7 +405,7 @@ public class Users : System.Web.Services.WebService {
                         SELECT userId, userType, firstName, lastName, companyName, address, postalCode, city, country, pin, phone, email, userName, password, adminType, userGroupId, activationDate, expirationDate, isActive, iPAddress, rowid
                         FROM users                       
                         WHERE (firstName LIKE '%{0}%' OR lastName LIKE '%{0}%' OR companyName LIKE '%{0}%' OR email LIKE '%{0}%' OR userId LIKE '%{0}%' OR userGroupId LIKE '%{0}%') {2}
-                        ORDER BY rowid DESC {1}", query, limitSql, aciveUsersSql);
+                        ORDER BY rowid {3} {1}", query, limitSql, aciveUsersSql, isDesc ? "DESC" : "ASC");
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
@@ -938,7 +938,7 @@ public class Users : System.Web.Services.WebService {
         }
     }
 
-    private List<NewUser> GetUsers(int? limit, int? page, int? year) {
+    private List<NewUser> GetUsers(int? limit, int? page, int? year, bool isDesc) {
         List<NewUser> xx = new List<NewUser>();
         string limitSql = "";
         string yearSql = "";
@@ -951,11 +951,7 @@ public class Users : System.Web.Services.WebService {
         string sql = string.Format(@"
                     SELECT userId, userType, firstName, lastName, companyName, address, postalCode, city, country, pin, phone, email, userName, password, adminType, userGroupId, activationDate, expirationDate, isActive, iPAddress, rowid
                     FROM users {0}
-                    ORDER BY rowid DESC {1}", yearSql, limitSql);
-        //string sql = string.Format(@"
-        //            SELECT userId, userType, firstName, lastName, companyName, address, postalCode, city, country, pin, phone, email, userName, password, adminType, userGroupId, activationDate, expirationDate, isActive, iPAddress, rowid
-        //            FROM users
-        //            ORDER BY rowid DESC {0}", limitSql);
+                    ORDER BY rowid {2} {1}", yearSql, limitSql, isDesc ? "DESC" : "ASC");
         using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
             connection.Open();
             using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {

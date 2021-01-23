@@ -9,10 +9,15 @@
             <a href="" class="btn btn-outline-light" ng-click="cancel()" title="{{'close' | translate}}">x</a>
         </div>
     </md-toolbar>
-    <md-dialog-content class="mt-3 mb-4">
+    <md-dialog-content class="mb-4">
         <div class="md-dialog-content">
-            <div class="row">
-                <div class="col-lg-7 text-capitalize">
+            <div class="pb-2">
+                <button class="btn btn-outline-primary" ng-click="save(d)" title="{{'save' | translate}}"><i class="fa fa-floppy-o"></i> {{'save' | translate}}</button>
+                <button ng-disabled="d.clientId===null" class="btn btn-outline-danger text-capitalize" title="{{'remove' | translate}}" ng-click="remove(d)"><i class="fa fa-trash-alt"></i> {{'delete' | translate}}</button>
+                <button ng-disabled="d.clientId===null" class="btn btn-outline-primary float-right" ng-click="forward(d)" title="{{'forward' | translate}}">{{'forward' | translate}} <i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+            </div>
+            <div class="row pt-3">
+                <div class="col-lg-7">
                     <div layout-gt-sm="row">
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>{{'first name' | translate}}</label>
@@ -68,13 +73,13 @@
                             <form id="formUpload" ng-submit="uploadImg()" enctype="multipart/form-data" method="post">
                                 <input id="imgFolder" name="imgFolder" value="temp" type="text" hidden="hidden">
                                 <p class="text-muted small">*<em>{{'max upload file size is 2.5 MB' | translate}}.</em></p>
-                                <div class="custom-file mb-2">
+                                <div class="custom-file">
                                     <input id="userid" name="userid" ng-model="d.userId" type="text" hidden="hidden">
                                     <input id="clientid" name="clientid" ng-model="d.clientId" type="text" hidden="hidden">
                                     <input ng-disabled="d.clientId===null" ng-model="d.profileImg" name="UploadedFile" id="UploadedFile" type="file" accept="image/*" class="custom-file-input" style="background-color:transparent">
                                     <label class="custom-file-label" for="UploadedFile">{{'attach the image' | translate}}</label>
                                 </div>
-                                <div class="text-right">
+                                <div class="text-right pt-2">
                                     <button ng-disabled="d.clientId===null" type="submit" class="btn btn-outline-secondary text-capitalize"><i class="fa fa-upload"></i> {{'upload' | translate}}</button>
                                 </div>
                                 <div ng-if="d.clientId===null">
@@ -90,14 +95,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="pull-right pt-2">
-                <button ng-disabled="d.clientId===null" class="btn btn-outline-danger text-capitalize" title="{{'remove' | translate}}" ng-click="remove(d)"><i class="fa fa-trash-alt"></i> {{'delete' | translate}}</button>
-                <!--<a ng-if="user.licenceStatus=='demo'" href="" class="btn btn-primary" ng-click="save(d)">{{'forward' | translate}} <i class="fa fa-arrow-right"></i></a>
-                <a ng-if="user.licenceStatus!='demo'" href="" class="btn btn-primary" ng-click="save(d)"><i class="fa fa-floppy-o"></i> {{'save' | translate}}</a>-->
-                <button class="btn btn-outline-primary" ng-click="save(d)" title="{{'save' | translate}}"><i class="fa fa-floppy-o"></i> {{'save' | translate}}</button>
-                <button ng-disabled="d.clientId===null" class="btn btn-outline-primary" ng-click="forward(d)" title="{{'forward' | translate}}">{{'forward' | translate}} <i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
             </div>
         </div>
         <!--<json-directive data="d"></json-directive>-->

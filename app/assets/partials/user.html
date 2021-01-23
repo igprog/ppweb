@@ -70,44 +70,47 @@
                     <fieldset class="fieldset-border">
                         <legend class="fieldset-border">{{'headers print' | translate}}</legend>
                         <div class="row">
-                            <div class="col-sm-6">
-                                <fieldset class="fieldset-border">
-                                    <legend class="fieldset-border text-capitalize">{{'logo' | translate}}</legend>
-                                    <form ng-disabled="user.adminType!=0" id="formUpload" ng-submit="upload()" enctype="multipart/form-data" method="post">
-                                        <input id="userid" name="userid" ng-model="user.userGroupId" type="text" hidden="hidden">
+                            <div class="col-lg-6 pt-3">
+                                <div class="card shadow">
+                                    <div class="card-body">
                                         <div>
-                                            <p class="text-muted small">*<em>{{'max upload file size is 2.5 MB' | translate}}.</em></p>
-                                            <em class="text-danger">* {{'use only png format' | translate}}</em>
+                                            <label class="text-capitalize">{{'logo' | translate}}</label>
+                                            <button ng-if="logo" ng-disabled="user.adminType!=0" class="btn btn-outline-danger btn-circle float-right" ng-click="removeLogo(user)" title="{{'delete' | translate}}"><i class="fa fa-times"></i></button>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-8">
-                                                <div class="custom-file mb-3">
-                                                    <input ng-disabled="user.adminType!=0" ng-model="file" name="UploadedFile" id="UploadedFile" type="file" accept=".png" class="custom-file-input" style="background-color:transparent">
-                                                    <label class="custom-file-label" for="UploadedFile">{{'attach the image' | translate}}</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4 pl-1">
-                                                <button ng-disabled="user.adminType!=0" type="submit" class="btn btn-outline-primary"><i class="fa fa-upload"></i> {{'upload' | translate}}</button>
-                                            </div>
+                                        <div ng-if="!logo" class="text-center text-primary">
+                                            <i class="fa fa-image fa-5x"></i>
                                         </div>
-                                        <script>
+                                        <img ng-if="logo" src="{{logo}}" class="mx-auto d-block img-thumbnail" width="200" />
+                                    </div>
+                                    <div class="card-footer">
+                                        <form ng-disabled="user.adminType!==0" id="formUpload" ng-submit="upload()" enctype="multipart/form-data" method="post">
+                                            <input id="userid" name="userid" ng-model="user.userGroupId" type="text" hidden="hidden">
+                                            <div>
+                                                <p class="text-muted small">*<em>{{'max upload file size is 2.5 MB' | translate}}.</em></p>
+                                                <em class="text-danger">* {{'use only png format' | translate}}</em>
+                                            </div>
+                                            <div class="custom-file">
+                                                <input ng-disabled="user.adminType!==0" ng-model="file" name="UploadedFile" id="UploadedFile" type="file" accept=".png" class="custom-file-input" style="background-color:transparent">
+                                                <label class="custom-file-label" for="UploadedFile">{{'attach the image' | translate}}</label>
+                                            </div>
+                                            <div class="text-right pt-2">
+                                                <button ng-disabled="user.adminType!==0" type="submit" class="btn btn-outline-secondary text-capitalize"><i class="fa fa-upload"></i> {{'upload' | translate}}</button>
+                                            </div>
+                                            <script>
                                             $(".custom-file-input").on("change", function () {
                                                 var fileName = $(this).val().split("\\").pop();
                                                 $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
                                             });
-                                        </script>
-                                    </form>
-                                    <div ng-if="showLogo" class="text-capitalize mt-2">
-                                        <img ng-if="showLogo" src="{{logo}}" class="img-thumbnail" width="200" />
-                                        <button ng-disabled="user.adminType!=0" class="btn btn-outline-danger" ng-click="removeLogo(user)"><i class="fa fa-trash-alt"></i> {{'delete' | translate}}</button>
+                                            </script>
+                                        </form>
                                     </div>
-                                </fieldset>
+                                </div>
                             </div>
-                            <div class="col-sm-6">
-                                <fieldset class="fieldset-border">
-                                    <legend class="fieldset-border text-capitalize">{{'info' | translate}}</legend>
-                                    <textarea ng-model="user.headerInfo" rows="4" class="form-control"></textarea>
-                                </fieldset>
+                            <div class="col-lg-6 pt-3">
+                                <md-input-container class="md-block m-0" flex-gt-sm>
+                                    <label class="text-capitalize">{{'info' | translate}}</label>
+                                    <textarea ng-model="user.headerInfo" rows="10" class="area"></textarea>
+                                </md-input-container>
                             </div>
                         </div>
                     </fieldset>

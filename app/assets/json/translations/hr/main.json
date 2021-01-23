@@ -1469,7 +1469,8 @@
   "additional options": "dodatne opcije",
   "settings": "postavke",
   "i agree to the": "Slažem se sa",
-  "terms and conditions": "uvjetima korištenja",
+  "terms and conditions": "uvjeti korištenja",
+  "terms and conditions_": "uvjetima korištenja",
   "to top": "na vrh",
   "underweight": "Snižena tjelesna masa",
   "normal weight": "Normalna tjelesna masa",
@@ -1842,7 +1843,7 @@
   "license info": "Informacije o licenci",
   "number of clinets": "Broj klijenata",
   "total appointments": "Ukupno termina",
-  "add appointment": "Dodaj termin",
+  "add appointment": "Zakaži termin",
   "license": "Licenca",
   "report a bug": "Prijavi BUG",
   "description is required": "Opis je obavezan",
@@ -1940,7 +1941,7 @@
   "if you need any additional information, please do not hesitate to contact us": "Za sva dodatna pitanja stojimo Vam na raspolaganju",
   "reset password link has been sent to your email": "Link za resetiranje lozinke je poslan na Vaš email",
   "reset password": "Resetiraj lozinku",
-  "new password": "nova lozinka",
+  "new password": "Nova lozinka",
   "reset password link": "Link za resetiranje lozinke",
   "distribution of nutrients per meals": "Raspored nutrijenata po obrocima",
   "update details": "Detalji o nadogradnjama",
@@ -2000,6 +2001,11 @@
   "recipe image": "Slika recepta",
   "you can upload a recipe picture after saving the recipe": "Sliku recepta možete učitati nakon što spremite recept",
   "image": "Slika",
-  "max upload file size is 2.5 MB": "Maksimalna veličina datoteke je 2.5 MB"
+  "max upload file size is 2.5 MB": "Maksimalna veličina datoteke je 2.5 MB",
+  "upgrade": "Nadogradi",
+  "password strength": "Jačina lozinke",
+  "medium": "Srednja",
+  "good": "Dobra",
+  "high": "Visoka"
 
 }

@@ -208,7 +208,7 @@
             </div>
             <div class="col-xl-5">
                 <fieldset class="fieldset-border">
-                    <legend class="fieldset-border">{{'physical activity level' | translate}}</legend>
+                    <legend class="fieldset-border">{{'physical activity level' | translate}}*</legend>
                     <div class="p-2 pt-4">
                         <md-radio-group ng-model="clientData.pal.value" ng-change="getPalDetails(clientData.pal.value)">
                             <md-radio-button ng-repeat="x in pals" value="{{x.value}}" class="md-primary">

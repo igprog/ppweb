@@ -57,7 +57,8 @@ Ukoliko postoji bilo kakva sumnja da postoji propust u sigurnosti ili su tajni k
 
 Vaši osobni podaci
 
-Vašu e-adresu i ostale podatke ne prodajemo, ne iznajmljujemo i ne stavljamo trećim pravnim i fizičkim osobama na raspolaganje bez vašeg pristanka jer je to protivno našoj politici o privatnosti.
+Vaše podatke i podatke Vaših klijenata ne prodajemo, ne iznajmljujemo i ne stavljamo trećim pravnim i fizičkim osobama na raspolaganje bez vašeg pristanka jer je to protivno našoj politici o privatnosti.
+Iako koristimo sve dostupne tehnologije za zaštitu osobnih podataka nikada ne spremajte u aplikaciju povjerljive podatke o Vama i Vašim klijentima kao što su lozinke, pinove, OIB-e i brojeve bankovnih računa. 
 VLASNIK se drži stroge politike »no spam«. VLASNIK ne odgovara za slučajnu pogrešku ili pogrešku zbog više sile ili drugih objektivnih okolnosti kojima se uzrokuje slučajno kršenje zajamčene zaštite vaših podataka, ali jamči da će pogreška biti otklonjena, ako je to moguće, čim prije.
 Prikupljamo samo one osobne podatke koji su nam dobrovoljno dostavljeni. Ne zahtijevamo od vas da nam pošaljete te podatke kako bismo vam omogućili pristup na svoje stranice i ne tražimo da otkrijete više podataka no što je doista potrebno za sudjelovanje u nekoj aktivnosti na našim stranicama.
 Ako imate bilo kakva pitanja ili dvojbe u vezi s našom Politikom zaštite osobnih podataka i Općim uvjetima, ili u vezi sa svojim iskustvima s ovom internetskom adresom, molimo vas da nam se javite.
