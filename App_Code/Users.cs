@@ -498,8 +498,7 @@ public class Users : System.Web.Services.WebService {
                 connection.Close();
             }
             x.datasum = GetDataSum(x.userGroupId, x.userId, x.userType, x.adminType);
-            string json = JsonConvert.SerializeObject(x, Formatting.None);
-            return json;
+            return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) { return (e.Message); }
     }
 

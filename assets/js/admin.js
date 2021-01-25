@@ -96,8 +96,9 @@ angular.module('app', [])
     $scope.limit = 10;
     $scope.page = 1;
     $scope.searchQuery = '';
-    $scope.showUsers = true;
+    //$scope.showUsers = true;
     $scope.isDesc = true;
+    $scope.activeTab = 'users';
 
     function setYears() {
         $scope.years = [];
@@ -126,7 +127,8 @@ angular.module('app', [])
     }
 
     $scope.total = function (year) {
-        $scope.showUsers = false;
+        //$scope.showUsers = false;
+        $scope.activeTab = 'total';
         google.charts.load('current', { packages: ['corechart'] });
         total(year);
     }
@@ -179,7 +181,8 @@ angular.module('app', [])
 
     $scope.search = function (searchQuery, showActive, limit, isDesc) {
         $scope.loading = true;
-        $scope.showUsers = true;
+        //$scope.showUsers = true;
+        $scope.activeTab = 'users';
         $scope.page = 1;
         $scope.isDesc = isDesc;
         $http({
@@ -308,6 +311,44 @@ angular.module('app', [])
             alert(d);
         });
     }
+
+    /***** Shared Recipes *****/
+    $scope.loadSharingRecipes = function () {
+        $scope.activeTab = 'sharingRecipes';
+        $scope.loading = true;
+        functions.post('SharingRecipes', 'Load', {}).then(function (d) {
+            $scope.sharingRecipes = d;
+            $scope.loading = false;
+        });
+    }
+
+    $scope.GetSharingRecipe = function (x, idx) {
+        $scope.loading = true;
+        functions.post('SharingRecipes', 'Get', { id: x.recipe.id }).then(function (d) {
+            $scope.sharingRecipes[idx] = d;
+            $scope.loading = false;
+        });
+    }
+
+    $scope.saveSharingrecipe = function (x) {
+        functions.post('SharingRecipes', 'Save', { x: x }).then(function (d) {
+            $scope.loadSharingRecipes();
+        });
+    }
+
+    $scope.statusIcon = function (x) {
+        switch (x) {
+            case 0:
+                return 'clock-o text-primary';
+            case 1:
+                return 'check text-success';
+            case 2:
+                return 'minus text-danger';
+            default:
+                return 'time text-success';
+        }
+    }
+    /***** Shared Recipes *****/
 
 }])
 

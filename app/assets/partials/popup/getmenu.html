@@ -38,7 +38,40 @@
                                 </md-radio-group>
                             </div>
                         </div>
-                        <div class="teble-responsive">
+
+                        <div class="card border-left-main shadow mt-3" ng-repeat="x in d">
+                            <div class="card-body">
+                                <a href="" ng-click="remove(x)" class="close" title="{{'delete' | translate}}">&times;</a>
+                                <div class="pointer" ng-click="confirm(x)">
+                                    <div class="row no-gutters align-items-center py-2">
+                                        <div class="col mr-2">
+                                            <div class="h5 mb-0 text-gray-800">
+                                                <div class="row">
+                                                    <div class="col-sm-8 h5 font-weight-bold text-main mb-1">{{x.title}}</div>
+                                                    <div class="col-sm-4 small">
+                                                        <em>{{x.client.firstName}} {{x.client.lastName}}</em>
+                                                    </div>
+                                                </div>
+                                                <div class="small">
+                                                    <p class="">{{x.note.length > 80 ? x.note.substring(0, 77) + '...' : x.note}}</p>
+                                                    <em class="text-muted">{{x.diet | translate}}</em>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <em class="small text-muted" title="{{'date' | translate}}">{{x.date | date:'dd.MM.yyyy'}}</em>
+                                        </div>
+                                        <div class="text-right mr-2">
+                                            <p title="{{'energy' | translate}}"><i class="fa fa-fire"></i> {{x.energy | number:0}} {{'kcal' | translate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--<div class="teble-responsive">
                             <table class="table table-hover table-borderless">
                                 <tr class="border-bottom">
                                     <th class="text-capitalize">{{'title' | translate}}</th>
@@ -46,7 +79,6 @@
                                     <th>{{'energy'| translate}}</th>
                                     <th class="text-capitalize">{{'date' | translate}}</th>
                                     <th>{{'note' | translate}}</th>
-                                    <!--<th ng-if="config.debug">{{'client Id' | translate}}</th>-->
                                     <th>{{'client' | translate}}</th>
                                     <th></th>
                                 </tr>
@@ -56,12 +88,11 @@
                                     <td class="nowrap" ng-click="confirm(x)"><span ng-if="x.energy>0">{{x.energy | number:0}} {{'kcal' | translate}}</span></td>
                                     <td ng-click="confirm(x)">{{x.date | date:'dd.MM.yyyy'}}</td>
                                     <td class="nowrap" ng-click="confirm(x)">{{x.note}}</td>
-                                    <!--<td ng-if="config.debug">{{x.client.clientId}}</td>-->
                                     <td ng-click="confirm(x)">{{x.client.firstName}} {{x.client.lastName}}</td>
                                     <td ng-click="remove(x)"><button class="btn btn-outline-danger btn-circle"><i class="fa fa-trash-alt"></i></button></td>
                                 </tr>
                             </table>
-                        </div>
+                        </div>-->
                         <div class="text-right mr-4 mt-2">
                             <a ng-if="d.length>=limit" href="" class="btn btn-outline-primary" ng-click="loadMore(searchValue, clientId)"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</a>
                         </div>

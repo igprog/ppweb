@@ -149,13 +149,19 @@ public class Orders : System.Web.Services.WebService {
             i.showSignature = true;
             i.docType = (int)Invoice.DocType.offer;
 
+            if (string.IsNullOrEmpty(x.id)) {
+                x.id = Guid.NewGuid().ToString();
+            }
+
             string path = HttpContext.Current.Server.MapPath("~/App_Data/" + dataBase);
             db.CreateGlobalDataBase(path, db.orders);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
                 connection.Open();
                 string sql = @"INSERT INTO orders VALUES  
-                       (@firstName, @lastName, @companyName, @address, @postalCode, @city, @country, @pin, @email, @ipAddress, @application, @version, @licence, @licenceNumber, @price, @priceEur, @orderDate, @additionalService, @note)";
+                       (@id, @orderNumber, @firstName, @lastName, @companyName, @address, @postalCode, @city, @country, @pin, @email, @ipAddress, @application, @version, @licence, @licenceNumber, @price, @priceEur, @orderDate, @additionalService, @note)";
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.Parameters.Add(new SQLiteParameter("id", x.id));
+                    command.Parameters.Add(new SQLiteParameter("orderNumber", i.orderNumber));
                     command.Parameters.Add(new SQLiteParameter("firstName", x.firstName));
                     command.Parameters.Add(new SQLiteParameter("lastName", x.lastName));
                     command.Parameters.Add(new SQLiteParameter("companyName", x.companyName));

@@ -38,8 +38,7 @@ public class Instal : System.Web.Services.WebService {
         x.version = "";
         x.action = "";
         x.ipAddress = HttpContext.Current.Request.UserHostAddress;
-        string json = JsonConvert.SerializeObject(x, Formatting.None);
-        return json;
+        return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
     [WebMethod]

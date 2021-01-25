@@ -30,6 +30,7 @@ namespace Igprog {
         public string weeklymenus = "weeklymenus";
         public string clientapp = "clientapp";
         public string bodyfat = "bodyfat";
+        public string sharingrecipes = "sharingrecipes";
 
 
         #region CreateTable (users.ddb)
@@ -319,6 +320,26 @@ namespace Igprog {
         }
         #endregion
 
+        #region CreateTable (sharing.ddb)
+        public void SharingRecipes(string path) {
+            string sql = @"CREATE TABLE IF NOT EXISTS recipes
+                (id NVARCHAR(50) PRIMARY KEY,
+                userId NVARCHAR(50),
+                userGroupId NVARCHAR(50),
+                recordDate NVARCHAR(50),
+                title NVARCHAR(200),
+                desc NVARCHAR(200),
+                energy VARCHAR(50),
+                mealGroup VARCHAR(50),
+                status INTEGER,
+                rank INTEGER,
+                like INTEGER,
+                lang NVARCHAR(50))";
+            CreateTable(path, sql);
+        }
+        #endregion
+
+
         public void CreateDataBase(string userId, string table) {
             try {
                 string path = GetDataBasePath(userId, dataBase);
@@ -394,6 +415,9 @@ namespace Igprog {
                 case "bodyfat":
                     BodyFat(path);
                     break;
+                case "sharingrecipes":
+                    SharingRecipes(path);
+                    break;
                 default:
                     break;
             }
@@ -402,11 +426,13 @@ namespace Igprog {
         private void CreateTable(string path, string sql) {
             try {
                 if (File.Exists(path)){
-                    SQLiteConnection connection = new SQLiteConnection("Data Source=" + path);
-                    connection.Open();
-                    SQLiteCommand command = new SQLiteCommand(sql, connection);
-                    command.ExecuteNonQuery();
-                    connection.Close();
+                    using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + path)) {
+                        connection.Open();
+                        using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                            command.ExecuteNonQuery();
+                        }
+                        connection.Close();
+                    } 
                 };
             } catch (Exception e) { }
         }
@@ -429,18 +455,21 @@ namespace Igprog {
                 DataBase db = new DataBase();
                 bool exists = false;
                 string name = null;
-                SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase));
-                connection.Open();
-                string sql = string.Format("pragma table_info('{0}')", table);
-                SQLiteCommand command = new SQLiteCommand(sql, connection);
-                SQLiteDataReader reader = command.ExecuteReader();
-                while (reader.Read()) {
-                    name = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                    if (name == column) {
-                        exists = true;
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                    connection.Open();
+                    string sql = string.Format("pragma table_info('{0}')", table);
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        using (SQLiteDataReader reader = command.ExecuteReader()) {
+                            while (reader.Read()) {
+                                name = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                                if (name == column) {
+                                    exists = true;
+                                }
+                            }
+                        }
                     }
+                    connection.Close();
                 }
-                connection.Close();
                 return exists;
             } catch (Exception e) { return false; }
         }

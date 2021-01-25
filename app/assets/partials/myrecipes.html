@@ -7,10 +7,22 @@
             <div>
                 <button class="btn btn-outline-primary" ng-click="new()"><i class="fa fa-file"></i> <span class="d-none d-sm-inline">{{'new recipe' | translate}}</span></button>
                 <button class="btn btn-outline-primary" ng-click="search()"><i class="fa fa-search"></i> <span class="d-none d-sm-inline">{{'search' | translate}}</span></button>
-                <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'save as recipe' | translate}}" ng-click="save(recipe)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save' | translate}}</span></button>
-                <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'save as food' | translate}}" ng-click="saveRecipeAsMyFood(recipe)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save as food' | translate}}</span></button>
+
+                <div class="dropdown" style="display: inline-block">
+                    <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save' | translate}}</span>
+                        <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a ng-disabled="recipe.data.selectedFoods.length==0" href="" class="dropdown-item" ng-click="save(recipe)" title="{{'save as recipe' | translate}}"><span>{{'save as recipe' | translate}}</span></a>
+                        <a ng-disabled="recipe.data.selectedFoods.length==0" href="" class="dropdown-item" ng-click="saveRecipeAsMyFood(recipe)" title="{{'save as food' | translate}}"><span>{{'save as food' | translate}}</span></a>
+                    </div>
+                </div>
+                <!--<button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'save as recipe' | translate}}" ng-click="save(recipe)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save' | translate}}</span></button>
+                <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'save as food' | translate}}" ng-click="saveRecipeAsMyFood(recipe)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save as food' | translate}}</span></button>-->
                 <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'show recipe preview' | translate}}" ng-click="printRecipePreview(recipe)"><i class="fa fa-print"></i> <span class="d-none d-sm-inline">{{'print' | translate}}</span></button>
-                <button ng-disabled="recipe.id==null" href="" class="btn btn-outline-danger text-capitalize" ng-click="remove(recipe)"><i class="fa fa-trash-alt"></i> <span class="d-none d-sm-inline">{{'delete' | translate}}</span></button>
+                <button ng-if="config.debug" ng-disabled="recipe.id==null" class="btn btn-outline-primary text-capitalize" ng-click="saveSharingRecipe(recipe)"><i class="fa fa-share-alt"></i> <span class="d-none d-sm-inline">{{'share' | translate}}</span></button>
+                <button ng-disabled="recipe.id==null" class="btn btn-outline-danger text-capitalize" ng-click="remove(recipe)"><i class="fa fa-trash-alt"></i> <span class="d-none d-sm-inline">{{'delete' | translate}}</span></button>
             </div>
             <div class="row pt-4">
                 <div class="col-lg-7">

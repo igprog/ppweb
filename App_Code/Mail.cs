@@ -180,7 +180,7 @@ public class Mail : System.Web.Services.WebService {
         , GetLicenceDuration(order.licence)
         , order.eInvoice ? "DA": "NE");
 
-            resp = SendMail(myEmail, messageSubject, messageBody, lang, file, true);
+            resp = SendMail(myEmail, messageSubject, messageBody, lang, null, true);
             //*****************Send mail to me****************
 
             //************ Send mail to customer****************
