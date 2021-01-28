@@ -45,6 +45,7 @@ public class Orders : System.Web.Services.WebService {
         public string additionalService;
         public string note;
         public bool eInvoice;
+        public int maxNumberOfUsers;
     }
 
     [WebMethod]
@@ -72,6 +73,7 @@ public class Orders : System.Web.Services.WebService {
         x.additionalService = "";
         x.note = "";
         x.eInvoice = false;
+        x.maxNumberOfUsers = 1;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -141,13 +143,22 @@ public class Orders : System.Web.Services.WebService {
             i.note = x.note;
             i.items = new List<Invoice.Item>();
             Invoice.Item item = new Invoice.Item();
-            item.title = string.Format("{0} - {1}", x.application, x.version);
+            item.title = string.Format(@"{0} - {1} {2} {3}"
+                        , x.application
+                        , x.version
+                        , x.maxNumberOfUsers > 5 ? string.Format("({0} korisnika)", x.maxNumberOfUsers) : ""
+                        , string.Format("- {0} god. licenca", x.licenceNumber));
             item.qty = Convert.ToInt32(x.licenceNumber);
             item.unitPrice = x.price;
             i.total = x.price * item.qty;
             i.items.Add(item);
             i.showSignature = true;
             i.docType = (int)Invoice.DocType.offer;
+            if (x.maxNumberOfUsers > 5) {
+                x.note = string.Format("{0}Pod-licence: {1}"
+                        , !string.IsNullOrWhiteSpace(x.note) ? string.Format("{0};", x.note) : ""
+                        , x.maxNumberOfUsers);
+            } 
 
             if (string.IsNullOrEmpty(x.id)) {
                 x.id = Guid.NewGuid().ToString();

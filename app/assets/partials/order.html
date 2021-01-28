@@ -125,8 +125,12 @@
                 </div>
             </div>
             <div ng-if="showAlert" class="alert alert-success m-2">
-                <strong><span class="fa fa-smile-o fa-lg"></span> {{alertMsg}}</strong>
+                <strong><span class="fa fa-smile-o fa-lg"></span> {{alertMsg}}.</strong>
                 <p>{{'your account will be active within 24 hours of your payment or after you send payment confirmation on email' | translate}}: <strong><a href="{{config.language==='en'?config.email_en:config.email}}"> {{config.language==='en'?config.email_en:config.email}}</a></strong></p>
+                <hr />
+                <div class="mt-2">
+                    <p>{{'the offer has been sent to your email' | translate}}.</p>
+                </div>
             </div>
         </div>
         <div ng-if="showPaymentDetails" class="container text-left h5 mt-5">

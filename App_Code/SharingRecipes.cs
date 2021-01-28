@@ -59,7 +59,7 @@ public class SharingRecipes : System.Web.Services.WebService {
             List<NewSharingRecipe> xx = new List<NewSharingRecipe>();
             string path = Server.MapPath(string.Format("~/App_Data/sharing/{0}", dataBase));
             db.CreateGlobalDataBase(path, db.sharingrecipes);
-            string sql = string.Format("SELECT {0} FROM recipes ORDER BY rowid DESC", mainSql);
+            string sql = string.Format("SELECT {0} FROM recipes ORDER BY status ASC, rowid DESC", mainSql);
             using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
                 connection.Open();
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {

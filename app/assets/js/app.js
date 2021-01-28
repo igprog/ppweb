@@ -6928,36 +6928,20 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     /********* Sharing Recipes *********/
     var sharingRecipe = null;
     var initSharingRecipe = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'SharingRecipes.asmx/Init',
-            method: 'POST',
-            data: {},
-        }).then(function (response) {
-            debugger;
-            sharingRecipe = JSON.parse(response.data.d);
+        functions.post('SharingRecipes', 'Init', {}).then(function (d) {
+            sharingRecipe = d;
             sharingRecipe.userId = $rootScope.user.userId;
             sharingRecipe.userGroupId = $rootScope.user.userGroupId;
             sharingRecipe.lang = $rootScope.config.language;
-        },
-       function (response) {
-           alert($translate.instant(response.data.d));
-       });
+        });
     };
     initSharingRecipe();
 
     $scope.saveSharingRecipe = function (x) {
-        debugger;
         sharingRecipe.recipe = x;
-        $http({
-            url: $sessionStorage.config.backend + 'SharingRecipes.asmx/Save',
-            method: 'POST',
-            data: { x: sharingRecipe },
-        }).then(function (response) {
+        functions.post('SharingRecipes', 'Save', { x: sharingRecipe }).then(function (d) {
             debugger;
-        },
-       function (response) {
-           alert($translate.instant(response.data.d));
-       });
+        });
     };
     /********* Sharing Recipes *********/
 
@@ -7227,6 +7211,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 return false;
             }
         }
+        user.maxNumberOfUsers = $scope.premiumUsers;
 
         $scope.sendicon = 'fa fa-spinner fa-spin';
         $scope.sendicontitle = $translate.instant('sending');

@@ -337,15 +337,16 @@ angular.module('app', [])
     }
 
     $scope.statusIcon = function (x) {
+        var prefix = 'fa fa-';
         switch (x) {
             case 0:
-                return 'clock-o text-primary';
+                return prefix + 'clock-o text-primary';
             case 1:
-                return 'check text-success';
+                return prefix + 'check text-success';
             case 2:
-                return 'minus text-danger';
+                return prefix + 'minus text-danger';
             default:
-                return 'time text-success';
+                return prefix + 'time text-success';
         }
     }
     /***** Shared Recipes *****/

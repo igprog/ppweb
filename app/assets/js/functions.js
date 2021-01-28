@@ -1,10 +1,10 @@
 ﻿/*!
 functions.js
-(c) 2017-2020 IG PROG, www.igprog.hr
+(c) 2017-2021 IG PROG, www.igprog.hr
 */
 angular.module('functions', [])
 
-.factory('functions', ['$mdDialog', '$rootScope', '$window', '$translate', '$sessionStorage', '$state', function ($mdDialog, $rootScope, $window, $translate, $sessionStorage, $state) {
+.factory('functions', ['$mdDialog', '$rootScope', '$window', '$translate', '$sessionStorage', '$state', '$http', function ($mdDialog, $rootScope, $window, $translate, $sessionStorage, $state, $http) {
     return {
         alert: function (title, content) {
             var confirm = $mdDialog.confirm()
@@ -69,6 +69,15 @@ angular.module('functions', [])
             sel.removeAllRanges();
             sel.addRange(range);
             document.execCommand('copy');
+        },
+        post: function (service, webmethod, data) {
+            return $http({
+                url: '../' + service + '.asmx/' + webmethod, method: 'POST', data: data
+            }).then(function (response) {
+                return JSON.parse(response.data.d);
+            }, function (response) {
+                return response.data.d;
+            });
         }
     }
 }]);

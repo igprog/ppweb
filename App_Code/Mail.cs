@@ -164,7 +164,8 @@ public class Mail : System.Web.Services.WebService {
 <p>Email: {8}</p>
 <p>Verzija: {9} {10}</p>
 <p>Licenca: {11} ({12})</p>
-<p>e-Račun: {13}</p>"
+<p>Korisnici: {13}</p>
+<p>e-Račun: {14}</p>"
         , order.firstName
         , order.lastName
         , order.companyName
@@ -178,6 +179,7 @@ public class Mail : System.Web.Services.WebService {
         , order.version
         , order.licenceNumber
         , GetLicenceDuration(order.licence)
+        , order.maxNumberOfUsers
         , order.eInvoice ? "DA": "NE");
 
             resp = SendMail(myEmail, messageSubject, messageBody, lang, null, true);

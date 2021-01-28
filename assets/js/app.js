@@ -331,6 +331,7 @@ angular.module('app', ['ngMaterial'])
                 return false;
             }
         }
+        user.maxNumberOfUsers = $scope.premiumUsers;
 
         $scope.sendicon = 'fa fa-spinner fa-spin';
         $scope.sendicontitle = 'Šaljem';

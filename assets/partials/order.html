@@ -180,6 +180,10 @@
             <strong>Narudžba je uspješno poslana!</strong>
             <p ng-if="user.application!='Program Prehrane Web'">Nakon primitka uplate ili nakon što nam pošaljete potvrdu o uplati <strong>aktivacijki kod</strong> šaljemo na Vašu email adresu.</p>
             <p ng-if="user.application=='Program Prehrane Web'">Vaš korisnički račun će biti aktivan unutar 24 sata od primitka uplate ili nakon što nam pošaljete potvrdu o uplati na email: <strong><a href="mailto:{{config.email}}" title="email"><span class="fa fa-envelope-o"></span> {{config.email}}</a></strong></p>
+            <hr />
+            <div class="mt2">
+                <p>Ponuda je poslana na Vaš email.</p>
+            </div>
         </div>
 
         <div ng-if="showPaymentDetails" class="well text-left">
