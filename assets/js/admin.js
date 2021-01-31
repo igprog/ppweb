@@ -96,7 +96,6 @@ angular.module('app', [])
     $scope.limit = 10;
     $scope.page = 1;
     $scope.searchQuery = '';
-    //$scope.showUsers = true;
     $scope.isDesc = true;
     $scope.activeTab = 'users';
 
@@ -111,125 +110,50 @@ angular.module('app', [])
 
     var total = function (year) {
         $scope.loading = true;
-        $http({
-            url: $rootScope.config.backend + 'Users.asmx/Total',
-            method: 'POST',
-            data: { year: year }
-        })
-        .then(function (response) {
-            $scope.t = JSON.parse(response.data.d);
+        functions.post('Users', 'Total', { year: year }).then(function (d) {
+            $scope.t = d;
             $scope.loading = false;
-        },
-        function (response) {
-            $scope.loading = false;
-            alert(response.data.d);
         });
     }
 
     $scope.total = function (year) {
-        //$scope.showUsers = false;
         $scope.activeTab = 'total';
         google.charts.load('current', { packages: ['corechart'] });
         total(year);
     }
 
-    //function drawChart() {
-    //    $scope.loadingChart = true;
-    //    var data = new google.visualization.DataTable();
-    //    data.addColumn('string', 'Mjesec');
-    //    data.addColumn('number', 'Registracije');
-    //    data.addColumn('number', 'Aktivacije');
-    //    data.addColumn('number', 'Postotak');
-
-    //        var tl = $scope.t.monthly;
-    //        angular.forEach(tl, function (value, key) {
-    //            data.addRows([
-    //                   [value.month, value.registration, value.activation, value.percentage]
-    //            ]);
-    //        })
-    //        var options = {
-    //            chart: {
-    //                title: 'Pregled registracija i aktivacija'
-    //            },
-    //            height: (tl.length * 55) + 2,
-    //            chartArea: {
-    //                height: tl.length * 55,
-    //                width: 350
-    //            }
-    //        };
-    //        var chart = new google.visualization.BarChart(document.getElementById('chart_ppweb'));
-    //        chart.draw(data, options);
-    //        $scope.loadingChart = false;
-    //}
-
     var load = function (limit) {
         $scope.loading = true;
-        $http({
-            url: $rootScope.config.backend + 'Users.asmx/Load',
-            method: 'POST',
-            data: { limit: limit, page: $scope.page, isDesc: $scope.isDesc }
-        })
-        .then(function (response) {
+        functions.post('Users', 'Load', { limit: limit, page: $scope.page, isDesc: $scope.isDesc }).then(function (d) {
+            $scope.d = d;
             $scope.loading = false;
-            $scope.d = JSON.parse(response.data.d);
-        },
-        function (response) {
-            $scope.loading = false;
-            alert(response.data.d);
         });
     }
 
     $scope.search = function (searchQuery, showActive, limit, isDesc) {
         $scope.loading = true;
-        //$scope.showUsers = true;
         $scope.activeTab = 'users';
         $scope.page = 1;
         $scope.isDesc = isDesc;
-        $http({
-            url: $rootScope.config.backend + 'Users.asmx/Search',
-            method: 'POST',
-            data: { query: searchQuery, limit: limit, page: $scope.page, activeUsers: showActive, isDesc: isDesc }
-        })
-        .then(function (response) {
-            $scope.d = JSON.parse(response.data.d);
+        functions.post('Users', 'Search', { query: searchQuery, limit: limit, page: $scope.page, activeUsers: showActive, isDesc: isDesc }).then(function (d) {
+            $scope.d = d;
             $scope.loading = false;
-        },
-        function (response) {
-            $scope.loading = false;
-            alert(response.data.d);
         });
     }
     $scope.search(null, false, $scope.limit, $scope.isDesc);
 
     $scope.update = function (user) {
-        $http({
-            url: $rootScope.config.backend + 'Users.asmx/Update',
-            method: 'POST',
-            data: { x: user }
-        })
-        .then(function (response) {
+        functions.post('Users', 'Update', { x: user }).then(function (d) {
             load($scope.limit);
-            //total($scope.year);
-            alert(response.data.d);
-        },
-        function (response) {
-            alert(response.data.d);
+            alert(d);
         });
     }
 
     $scope.currUser = null;
     $scope.info = function (x) {
         $scope.currUser = x;
-        $http({
-            url: $rootScope.config.backend + 'Users.asmx/GetUserSum',
-            method: 'POST',
-            data: { userGroupId: x.userGroupId, userId: x.userId, userType: x.userType, adminType: x.adminType }
-        })
-        .then(function (response) {
-            $scope.userTotal = JSON.parse(response.data.d);
-        },
-        function (response) {
-            alert(response.data.d);
+        functions.post('Users', 'GetUserSum', { userGroupId: x.userGroupId, userId: x.userId, userType: x.userType, adminType: x.adminType }).then(function (d) {
+            $scope.userTotal = d;
         });
     }
 
@@ -241,19 +165,14 @@ angular.module('app', [])
     }
 
     var remove = function (user) {
-        $http({
-            url: $rootScope.config.backend + 'Users.asmx/DeleteAllUserGroup',
-            method: 'POST',
-            data: { x: user }
-        })
-        .then(function (response) {
-            load($scope.limit);
-            //total($scope.year);
-            alert(response.data.d);
-        },
-        function (response) {
-            alert(response.data.d);
-        });
+        if (user.userId !== user.userGroupId) {
+            alert('Samo glavni nositelj računa može biti obrisan.');
+        } else {
+            functions.post('Users', 'DeleteAllUserGroup', { x: user }).then(function (d) {
+                load($scope.limit);
+                alert(d);
+            });
+        }
     }
 
     $scope.idxStart = 0;
@@ -281,16 +200,8 @@ angular.module('app', [])
     }
 
     $scope.updateInfo = function (x) {
-        $http({
-            url: $rootScope.config.backend + 'Users.asmx/UpdateUserInfoFromOrdersTbl',
-            method: 'POST',
-            data: { email: x }
-        })
-        .then(function (response) {
-            alert(response.data.d);
-        },
-        function (response) {
-            alert(response.data.d);
+        functions.post('Users', 'UpdateUserInfoFromOrdersTbl', { email: x }).then(function (d) {
+            alert(d);
         });
     }
 
@@ -316,7 +227,7 @@ angular.module('app', [])
     $scope.loadSharingRecipes = function () {
         $scope.activeTab = 'sharingRecipes';
         $scope.loading = true;
-        functions.post('SharingRecipes', 'Load', {}).then(function (d) {
+        functions.post('SharingRecipes', 'Load', { userId: null, status: null, showUserRecipes: true }).then(function (d) {
             $scope.sharingRecipes = d;
             $scope.loading = false;
         });
@@ -334,20 +245,6 @@ angular.module('app', [])
         functions.post('SharingRecipes', 'Save', { x: x }).then(function (d) {
             $scope.loadSharingRecipes();
         });
-    }
-
-    $scope.statusIcon = function (x) {
-        var prefix = 'fa fa-';
-        switch (x) {
-            case 0:
-                return prefix + 'clock-o text-primary';
-            case 1:
-                return prefix + 'check text-success';
-            case 2:
-                return prefix + 'minus text-danger';
-            default:
-                return prefix + 'time text-success';
-        }
     }
     /***** Shared Recipes *****/
 

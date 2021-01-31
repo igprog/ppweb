@@ -29,7 +29,8 @@ public class Recipes : System.Web.Services.WebService {
         public string title { get; set; }
         public string description { get; set; }
         public double energy { get; set; }
-        public string mealGroup { get; set; }
+
+        public CodeMeal mealGroup = new CodeMeal();
 
         public JsonFile data = new JsonFile();
 
@@ -72,13 +73,7 @@ public class Recipes : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
-                            NewRecipe x = new NewRecipe();
-                            x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                            x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                            x.description = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                            x.energy = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
-                            x.mealGroup = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-                            x.recipeImg = GetRecipeImg(userId, x.id);
+                            NewRecipe x = GetData(reader, userId);
                             xx.Add(x);
                         }
                     } 
@@ -103,14 +98,7 @@ public class Recipes : System.Web.Services.WebService {
                     Clients.Client client = new Clients.Client();
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
-                            x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                            x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                            x.description = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                            x.energy = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
-                            x.mealGroup = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-                            x.data = JsonConvert.DeserializeObject<JsonFile>(GetJsonFile(userId, x.id));
-                            x.recipeImg = GetRecipeImg(userId, x.id);
-                            x.mealGroups = InitMealGroups();
+                            x = GetData(reader, userId);
                         }
                     }
                 }
@@ -133,7 +121,7 @@ public class Recipes : System.Web.Services.WebService {
             sql = string.Format(@"BEGIN;
                         INSERT OR REPLACE INTO recipes (id, title, description, energy, mealGroup)
                         VALUES ('{0}', '{1}', '{2}', '{3}', '{4}');
-                        COMMIT;", x.id, x.title, x.description, x.energy, x.mealGroup);
+                        COMMIT;", x.id, x.title, x.description, x.energy, x.mealGroup.code);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
@@ -246,13 +234,28 @@ public class Recipes : System.Web.Services.WebService {
         x.title = null;
         x.description = null;
         x.energy = 0;
-        x.mealGroup = null;
+        x.mealGroup = new CodeMeal();
         JsonFile data = new JsonFile();
         data.selectedFoods = new List<Foods.NewFood>();
         data.selectedInitFoods = new List<Foods.NewFood>();
         x.data = data;
         x.mealGroups = InitMealGroups();
         x.recipeImg = null;
+        return x;
+    }
+
+    private NewRecipe GetData(SQLiteDataReader reader, string userId) {
+        NewRecipe x = new NewRecipe();
+        x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+        x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+        x.description = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+        x.energy = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
+        x.mealGroup = new CodeMeal();
+        x.mealGroup.code = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
+        x.mealGroup.title = GetMealGroupTitle(x.mealGroup.code);
+        x.data = JsonConvert.DeserializeObject<JsonFile>(GetJsonFile(userId, x.id));
+        x.recipeImg = GetRecipeImg(userId, x.id);
+        x.mealGroups = InitMealGroups();
         return x;
     }
 
@@ -425,6 +428,10 @@ public class Recipes : System.Web.Services.WebService {
             x = ss.Select(a => string.Format("{0}?v={1}", Path.GetFileName(a), DateTime.Now.Ticks)).FirstOrDefault();
         }
         return x;
+    }
+
+    public string GetMealGroupTitle(string code) {
+        return !string.IsNullOrWhiteSpace(code) ? InitMealGroups().Find(a => a.code == code).title : null;
     }
     #endregion Methods
 

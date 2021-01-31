@@ -2007,6 +2007,11 @@
   "medium": "Srednja",
   "good": "Dobra",
   "high": "Visoka",
-  "the offer has been sent to your email": "Ponuda je poslata na Vaš email"
+  "the offer has been sent to your email": "Ponuda je poslata na Vaš email",
+  "you do not have permission to delete this user account": "Nemate dopuštenje za brisanje ovog korisničkog računa",
+  "welcome to web application": "Dobrodošli u veb aplikaciju",
+  "pending": "na pregledu",
+  "approved": "odobren",
+  "rejected": "odbijen"
 
 }

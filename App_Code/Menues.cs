@@ -116,7 +116,6 @@ public class Menues : System.Web.Services.WebService {
                         }
                     }
                 }
-                connection.Close();
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) { return (e.Message); }
@@ -152,7 +151,6 @@ public class Menues : System.Web.Services.WebService {
                         }
                     }
                 }
-                connection.Close();
             } 
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) { return (e.Message); }
@@ -187,7 +185,6 @@ public class Menues : System.Web.Services.WebService {
                         }
                     } 
                 }
-                connection.Close();
             }  
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) { return (e.Message); }
@@ -219,7 +216,6 @@ public class Menues : System.Web.Services.WebService {
                     using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                         command.ExecuteNonQuery();
                     }
-                    connection.Close();
                 }
                     
                 SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
@@ -230,8 +226,7 @@ public class Menues : System.Web.Services.WebService {
                         }
                     }
                 }
-                string json = JsonConvert.SerializeObject(x, Formatting.None);
-                return json;
+                return JsonConvert.SerializeObject(x, Formatting.None);
             } catch (Exception e) { return (e.Message); }
         }
     }
@@ -246,7 +241,6 @@ public class Menues : System.Web.Services.WebService {
                     command.Parameters.Add(new SQLiteParameter("id", id));
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
             }
             DeleteJson(userId, id);
         } catch (Exception e) { return (e.Message); }

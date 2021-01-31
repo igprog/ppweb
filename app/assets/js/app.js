@@ -70,8 +70,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         .state('settings', {
             url: '/settings', templateUrl: './assets/partials/settings.html', controller: 'settingsCtrl'
         })
-        .state('admin', {
-            url: '/admin', templateUrl: './assets/partials/admin.html', controller: 'loginCtrl'
+        .state('loginas', {
+            url: '/loginas', templateUrl: './assets/partials/loginas.html', controller: 'loginCtrl'
         })
 
     $urlRouterProvider.otherwise("/");
@@ -1031,7 +1031,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         ***************/
     }
 
-    /***** Admin Login *****/
+    /***** Login As *****/
     $scope.admin = {
         username: null,
         password: null,
@@ -1050,7 +1050,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         });
     }
 
-    $scope.loginUid = function (uid) {
+    $scope.loginAs = function (uid) {
         if (!functions.isNullOrEmpty(uid)) {
             $http({
                 url: $rootScope.config.backend + webService + '/Get',
@@ -6507,13 +6507,16 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     var getMyRecipesPopupCtrl = function ($scope, $mdDialog, $http) {
         $scope.limit = 20;
-        $scope.userId = $rootScope.user.userGroupId;
+        $scope.userId = $rootScope.user.userId;
+        $scope.userGroupId = $rootScope.user.userGroupId;
+        $scope.sharingRecipes = false;
 
         $scope.loadMore = function () {
             $scope.limit += 20;
         }
 
         var load = function () {
+            $scope.sharingRecipes = false;
             if ($rootScope.user.licenceStatus == 'demo') {
                 return false;
             }
@@ -6533,6 +6536,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
            });
         }
         load();
+
+        $scope.load = function () {
+            return load();
+        }
 
         var init = function () {
             if ($rootScope.user.licenceStatus == 'demo') {
@@ -6603,6 +6610,18 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 alert(response.data.d);
             });
         }
+
+        /***** Shared Recipes *****/
+        $scope.showUserRecipes = false;
+        $scope.loadSharingRecipes = function (userId, status, showUserRecipes) {
+            $scope.showUserRecipes = showUserRecipes;
+            debugger;
+            functions.post('SharingRecipes', 'Load', { userId: userId, status: status, showUserRecipes: showUserRecipes }).then(function (d) {
+                $scope.d = d;
+                $scope.sharingRecipes = true;
+            });
+        };
+        /***** Shared Recipes *****/
 
     };
 
@@ -8267,16 +8286,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.login = function (d) {
-        $http({
-            url: config.backend + 'Users.asmx/Login',
-            method: "POST",
-            data: { userName: d.userName, password: d.password }
-        }).then(function (response) {
-            var user = JSON.parse(response.data.d);
+        functions.post('Users', 'Login', { userName: d.userName, password: d.password }).then(function (d) {
+            var user = d;
             if (user.userId !== null) {
                 if (user.userId !== $scope.uid) {
                     $scope.showErrorAlert = true;
                     $scope.errorMesage = $translate.instant('wrong user');
+                } else if (user.userId !== user.userGroupId) {
+                    functions.alert($translate.instant('you do not have permission to delete this user account'), '');
                 } else {
                     $scope.showErrorAlert = false;
                     $scope.user = user;
@@ -8285,27 +8302,17 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 $scope.showErrorAlert = true;
                 $scope.errorMesage = $translate.instant('wrong user name or password');
             }
-        },
-        function (response) {
-            $scope.errorLogin = true;
-            $scope.showErrorAlert = true;
-            $scope.errorMesage = $translate.instant('user was not found');
-            $scope.showUserDetails = false;
         });
     }
 
     var remove = function (user) {
-        $http({
-            url: config.backend + 'Users.asmx/DeleteAllUserGroup',
-            method: 'POST',
-            data: { x: user }
-        })
-        .then(function (response) {
-            functions.alert($translate.instant(JSON.parse(response.data.d)), '');
-        },
-        function (response) {
-            functions.alert($translate.instant(JSON.parse(response.data.d)), '');
-        });
+        if (user.userId !== user.userGroupId) {
+            functions.alert($translate.instant('you do not have permission to delete this account'), '');
+        } else {
+            functions.post('Users', 'DeleteAllUserGroup', { x: user }).then(function (d) {
+                functions.alert($translate.instant(d), '');
+            });
+        }
     }
 
     $scope.confirm = function (user) {

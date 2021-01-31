@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-5">
             <fieldset class="fieldset-border">
-                <legend class="fieldset-border">Admin Login</legend>
+                <legend class="fieldset-border">Login As</legend>
                 <div ng-if="!admin.isadmin">
                     <form id="loginform">
                         <input ng-model="admin.username" type="text" class="form-control mt-2" placeholder="Email">
@@ -14,7 +14,7 @@
                 </div>
                 <div ng-if="admin.isadmin" class="text-right">
                     <input ng-model="admin.uid" class="form-control mt-2" placeholder="uid" />
-                    <button class="btn btn-default mt-2" ng-click="loginUid(admin.uid)"><i class="fa fa-key"></i> Login</button>
+                    <button class="btn btn-default mt-2" ng-click="loginAs(admin.uid)"><i class="fa fa-key"></i> Login</button>
                 </div>
                 <div ng-if="errorLogin" class="alert alert-danger mt-3">
                     <strong class="text-uppercase">{{'error' | translate}} !</strong> {{errorMesage}}.

@@ -8,8 +8,11 @@
     </md-toolbar>
     <md-dialog-content>
         <div class="md-dialog-content">
+            <button class="btn btn-default" ng-click="load()">Load My Recipes</button>
+            <button class="btn btn-default" ng-click="loadSharingRecipes(userId, 1, false)">Get Sharing Recipes</button>
+            <button class="btn btn-default" ng-click="loadSharingRecipes(userId, null, true)">Get Only My Sharing Recipes</button>
             <loading-directive value="loading"></loading-directive>
-            <div ng-if="d.length==0" class="mt-5">
+            <div ng-if="d.length===0&&!sharingRecipes" class="mt-5">
                 <div class="alert alert-danger">
                     {{'you do not have any recipes' | translate}}!
                 </div>
@@ -38,7 +41,7 @@
                         </md-input-container>
                     </div>
                 </div>
-                <div class="card border-left-main shadow mt-3" ng-repeat="x in d | filter:searchValue | filter:{'mealGroup':mealGroup} | limitTo:limit">
+                <div ng-if="!sharingRecipes" class="card border-left-main shadow mt-3" ng-repeat="x in d | filter:searchValue | filter:{'mealGroup':mealGroup} | limitTo:limit">
                     <div class="card-body">
                         <a href="" ng-click="remove(x)" class="close" title="{{'delete' | translate}}">&times;</a>
                         <div class="row no-gutters align-items-center py-2 pointer" ng-click="confirm(x, showDescription)">
@@ -49,7 +52,7 @@
                                             <div ng-if="!x.recipeImg" class="text-center text-primary">
                                                 <i class="fa fa-image fa-3x"></i>
                                             </div>
-                                            <img ng-if="x.recipeImg" src="../upload/users/{{userId}}/recipes/{{x.id}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                                            <img ng-if="x.recipeImg" src="../upload/users/{{userGroupId}}/recipes/{{x.id}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
                                         </div>
                                         <div class="col-lg-10">
                                             <div class="h5 font-weight-bold text-main mb-1">{{x.title}}</div>
@@ -59,8 +62,52 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="text-right pointer" ng-click="confirm(x, showDescription)">
-                            <p title="{{'energy' | translate}}"><i class="fa fa-fire"></i> {{x.energy | number:0}} {{'kcal' | translate}}</p>
+                        <div class="row">
+                            <div class="col-sm-6 small text-muted">
+                                <p ng-if="x.mealGroup.title">{{'meal group' | translate}}: {{x.mealGroup.title | translate}}</p>
+                            </div>
+                            <div class="col-sm-6 text-right pointer" ng-click="confirm(x, showDescription)">
+                                <p title="{{'energy' | translate}}"><i class="fa fa-fire"></i> {{x.energy | number:0}} {{'kcal' | translate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="sharingRecipes" class="card border-left-main shadow mt-3" ng-repeat="x in d | filter:searchValue | filter:{'mealGroup':mealGroup} | limitTo:limit">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center py-2 pointer" ng-click="confirm(x.recipe, showDescription)">
+                            <div class="col mr-2">
+                                <div class="h5 mb-0 text-gray-800">
+                                    <div class="row">
+                                        <div class="col-sm-6 small text-muted">
+                                            <p><i class="fa fa-user"></i> {{x.ownerName}}</p>
+                                        </div>
+                                        <div ng-if="userId===x.userId && showUserRecipes" class="col-lg-6 text-right text-{{x.status.style}}">
+                                            <i ng-class="x.status.ico"></i> <span ng-if="x.status.title" class="pr-2">{{x.status.title | translate}}</span>
+                                            <p ng-if="x.status.note" class="pr-2 small"><em>{{x.status.note | translate}}.</em></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-2 pb-2">
+                                            <div ng-if="!x.recipe.recipeImg" class="text-center text-primary">
+                                                <i class="fa fa-image fa-3x"></i>
+                                            </div>
+                                            <img ng-if="x.recipe.recipeImg" src="../upload/users/{{x.userGroupId}}/recipes/{{x.recipe.id}}/recipeimg/{{x.recipe.recipeImg}}" alt="{{x.recipe.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                                        </div>
+                                        <div class="col-lg-10">
+                                            <div class="h5 font-weight-bold text-main mb-1">{{x.recipe.title}}</div>
+                                            <p>{{x.recipe.description.length > 150 ? x.recipe.description.substring(0, 147) + '...' : x.recipe.description}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 small text-muted">
+                                <p ng-if="x.recipe.mealGroup.title">{{'meal group' | translate}}: {{x.recipe.mealGroup.title | translate}}</p>
+                            </div>
+                            <div class="col-sm-6 text-right pointer" ng-click="confirm(x.recipe, showDescription)">
+                                <p title="{{'energy' | translate}}"><i class="fa fa-fire"></i> {{x.recipe.energy | number:0}} {{'kcal' | translate}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

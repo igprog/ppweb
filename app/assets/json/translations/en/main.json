@@ -1998,6 +1998,11 @@
   "medium": "Medium",
   "good": "Good",
   "high": "High",
-  "the offer has been sent to your email": "The offer has been sent to your email"
+  "the offer has been sent to your email": "The offer has been sent to your email",
+  "you do not have permission to delete this user account": "You do not have permission to delete this user account",
+  "welcome to web application": "Welcome to web application",
+  "pending": "pending",
+  "approved": "approved",
+  "rejected": "rejected"
 
 }

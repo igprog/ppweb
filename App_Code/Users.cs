@@ -33,6 +33,8 @@ public class Users : System.Web.Services.WebService {
     string url_en = ConfigurationManager.AppSettings["url_en"];
     public Users() {
     }
+
+    #region Class
     public class NewUser {
         public string userId { get; set; }
         public int userType { get; set; }
@@ -134,8 +136,10 @@ public class Users : System.Web.Services.WebService {
                 return result;
             } catch (Exception e) { return false; }
         }
+
         public string message = "you do not have permission to open this file";
     }
+    #endregion Class
 
     #region WebMethods
     [WebMethod]
@@ -326,9 +330,9 @@ public class Users : System.Web.Services.WebService {
                 f.SaveFile(x.userGroupId, headerinfo, x.headerInfo);
             }
 
-            return ("saved");
+            return JsonConvert.SerializeObject("saved", Formatting.None);
         } catch (Exception e) {
-            return ("error: " + e);
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
@@ -560,7 +564,6 @@ public class Users : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
             }
             return "ok";
         } catch (Exception e) { return (e.Message); }
@@ -569,17 +572,20 @@ public class Users : System.Web.Services.WebService {
     [WebMethod]
     public string DeleteAllUserGroup(NewUser x) {
         try {
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
-                connection.Open();
-                string sql = string.Format("DELETE FROM users WHERE userGroupId = '{0}'", x.userGroupId);
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                    command.ExecuteNonQuery();
+            if (x.userId == x.userGroupId) {
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                    connection.Open();
+                    string sql = string.Format("DELETE FROM users WHERE userGroupId = '{0}'", x.userGroupId);
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        command.ExecuteNonQuery();
+                    }
+                    Files f = new Files();
+                    f.DeleteUserFolder(x.userGroupId);
                 }
-                connection.Close();
-                Files f = new Files();
-                f.DeleteUserFolder(x.userGroupId);
+                return JsonConvert.SerializeObject("account has been deleted", Formatting.None);
+            } else {
+                return JsonConvert.SerializeObject("you do not have permission to delete this account", Formatting.None);
             }
-            return JsonConvert.SerializeObject("account has been deleted", Formatting.None);
         } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
     }
 
@@ -595,8 +601,7 @@ public class Users : System.Web.Services.WebService {
                         while (reader.Read()) {
                             x.userId = reader.GetString(0);
                         }
-                    }  
-                    connection.Close();
+                    }
                 } 
             }
                 
@@ -627,7 +632,6 @@ public class Users : System.Web.Services.WebService {
                     response = t.Tran("error", lang);
                 }
             }
-
             return JsonConvert.SerializeObject(response, Formatting.None);
         } catch (Exception e) { return (e.Message); }
     }
@@ -645,7 +649,6 @@ public class Users : System.Web.Services.WebService {
                         transaction.Commit();
                     }
                 }
-                connection.Close();
             }
             return ("saved");
         } catch (Exception e) {
@@ -908,7 +911,7 @@ public class Users : System.Web.Services.WebService {
 {11}"
 , t.Tran("hi", lang)
 , x.firstName
-, t.Tran("welcome to", lang)
+, t.Tran("welcome to web application", lang)
 , t.Tran("nutrition program web", lang)
 , t.Tran("your username is", lang)
 , x.email
@@ -1243,6 +1246,26 @@ public class Users : System.Web.Services.WebService {
             case 2: return "premium";
             default: return "";
         }
+    }
+
+    public string GetUserFirstName(string userId) {
+        try {
+            string x = null;
+            string dataBase = ConfigurationManager.AppSettings["UsersDataBase"];
+            string path = Server.MapPath("~/App_Data/" + dataBase);
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + path)) {
+                string sql = string.Format("SELECT firstName FROM users WHERE userId = '{0}'", userId);
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            x = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
+                        }
+                    }
+                }
+            }
+            return x;
+        } catch (Exception e) { return e.Message; }
     }
     #endregion
 

@@ -2004,6 +2004,11 @@
   "medium": "Средња",
   "good": "Добра",
   "high": "Висока",
-  "the offer has been sent to your email": "Понуда је послата на Ваш емаил"
+  "the offer has been sent to your email": "Понуда је послата на Ваш емаил",
+  "you do not have permission to delete this user account": "Немате допуштење за брисање овог корисничког рачуна",
+  "welcome to web application": "Добродошли у веб апликацију",
+  "pending": "на прегледу",
+  "approved": "одобрен",
+  "rejected": "одбијен"
 
 }

@@ -332,6 +332,7 @@ namespace Igprog {
                 energy VARCHAR(50),
                 mealGroup VARCHAR(50),
                 status INTEGER,
+                statusNote NVARCHAR(200),
                 rank INTEGER,
                 like INTEGER,
                 lang NVARCHAR(50))";
