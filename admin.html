@@ -189,7 +189,7 @@
                             <td>{{x.subusers + 1}}</td>
                             <td><button ng-disabled="!showDetails" ng-click="update(x)" class="btn btn-success"><i class="fa fa-floppy-o"></i> Spremi</button></td>
                             <td>
-                                <div ng-if="config.debug&&x.maxNumberOfUsers>5&&showDetails&&x.userType==2&&x.userId==x.userGroupId" class="input-group">
+                                <div ng-if="x.maxNumberOfUsers>5&&showDetails&&x.userType==2&&x.userId==x.userGroupId" class="input-group">
                                     <input ng-model="prefix" type="text" class="form-control" placeholder="Prefiks..." style="min-width:100px">
                                     <div class="input-group-btn">
                                         <button class="btn btn-warning" ng-click="createSubusers(x, prefix)">
