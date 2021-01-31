@@ -7192,7 +7192,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
         $scope.user.licenceNumber = 1;
         totalprice = $scope.user.licenceNumber > 1 ? unitprice * $scope.user.licenceNumber - (unitprice * $scope.user.licenceNumber * 0.1) : unitprice;
-        var additionalUsers = $scope.premiumUsers > 5 && $scope.user.userType == 2 ? ($scope.premiumUsers - 5) * 50 : 0;  // 50kn/additional user;
+        var additionalUsers = $scope.premiumUsers > 5 && $scope.user.userType == 2 ? ($scope.premiumUsers - 5) * 500 : 0;  // 500kn/additional user;
         $scope.user.price = totalprice + additionalUsers;
         $scope.user.priceEur = (totalprice + additionalUsers) / $rootScope.config.eur;
     }
