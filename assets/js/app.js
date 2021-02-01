@@ -331,6 +331,9 @@ angular.module('app', ['ngMaterial'])
                 return false;
             }
         }
+        if (!(user.country.toLowerCase().startsWith('hr') || user.country.toLowerCase().startsWith('cro'))) {
+            user.isForeign = true;
+        }
         user.maxNumberOfUsers = $scope.premiumUsers;
 
         $scope.sendicon = 'fa fa-spinner fa-spin';

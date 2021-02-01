@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Web;
+using System.IO;
+using System.Text;
 
 /// <summary>
 /// Global
@@ -15,6 +17,15 @@ namespace Igprog {
         public class Response {
             public bool isSuccess;
             public string msg;
+        }
+
+        public class NewErrorLog {
+            public string userId;
+            public string service;
+            public string method;
+            public DateTime time;
+            public string msg;
+            public string stackTrace;
         }
 
         #region Date
@@ -164,5 +175,38 @@ namespace Igprog {
             return x * 1024;
         }
         #endregion ImageCompress
+
+        public void ErrorLog(Exception e, string userId, string service, string method) {
+            NewErrorLog x = new NewErrorLog();
+            x.userId = userId;
+            x.service = service;
+            x.method = method;
+            x.time = DateTime.UtcNow;
+            x.msg = e.Message;
+            x.stackTrace = e.StackTrace;
+
+
+            //TOOD: create error.log file ~/error.log
+            string err = string.Format(@"#####################
+TIME: {0}
+SERVICE: {1}
+METHOD: {2}
+MESAGE: {3}
+STACK TRACE: {4}
+USER ID: {5}
+#####################
+"
+                , x.time.ToString()
+                , x.service
+                , x.method
+                , x.msg
+                , x.stackTrace
+                , x.userId);
+
+            // TOTO: read file and add new line
+            using (TextWriter tw = new StreamWriter(HttpContext.Current.Server.MapPath("~/error.log"))) {
+                tw.WriteLine(err);
+            }
+        }
     }
 }

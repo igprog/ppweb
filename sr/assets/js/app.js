@@ -82,7 +82,7 @@ angular.module('app', ['ngMaterial'])
     $scope.premiumPriceOneYear = 1850;
     $scope.premiumPriceTwoYear = 2960;
     $scope.getPremiumPrice = function (x) {
-        $scope.premiumPriceOneYear = x > 5 ? 1850 + ((x- 5) * 500) : 1850;
+        $scope.premiumPriceOneYear = x > 5 ? 1850 + ((x - 5) * 500) : 1850;
         $scope.premiumPriceTwoYear = x > 5 ? 2960 + ((x - 5) * 500) : 2960;
         $scope.premiumUsers = x;
         $scope.premiumUsers_ = x;
@@ -325,6 +325,9 @@ angular.module('app', ['ngMaterial'])
                 $scope.errorMessage = 'Sva polja su obavezna.';
                 return false;
             }
+        }
+        if (!(user.country.toLowerCase().startsWith('hr') || user.country.toLowerCase().startsWith('cro'))) {
+            user.isForeign = true;
         }
         user.maxNumberOfUsers = $scope.premiumUsers;
 

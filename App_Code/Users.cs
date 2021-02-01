@@ -341,6 +341,7 @@ public class Users : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(GetUsers(limit, page, null, isDesc), Formatting.None);
         } catch (Exception e) {
+            G.ErrorLog(e, null, "Users", "Load");
             return (e.Message);
         }
     }
@@ -452,7 +453,10 @@ public class Users : System.Web.Services.WebService {
                 connection.Close();
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            G.ErrorLog(e, null, "Users", "Search");
+            return (e.Message);
+        }
     }
 
     [WebMethod]

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 using System.Configuration;
+using Newtonsoft.Json;
 
 /// <summary>
 /// Admin
@@ -24,6 +25,11 @@ public class Admin : System.Web.Services.WebService {
         } else {
             return false;
         }
+    }
+
+    [WebMethod]
+    public string AddYear() {
+        return JsonConvert.SerializeObject(DateTime.UtcNow.AddDays(366).ToString(), Formatting.None);
     }
 
 }

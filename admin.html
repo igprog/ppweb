@@ -140,6 +140,7 @@
                             <th ng-if="showDetails" class="nowrap">Tip admina</th>
                             <th class="nowrap">Datum aktivacije</th>
                             <th class="nowrap">Istek aktivacije</th>
+                            <th ng-if="showDetails"></th>
                             <th>Aktivan</th>
                             <th class="nowrap">Status</th>
                             <th class="nowrap" style="min-width:150px">Licenca</th>
@@ -176,6 +177,9 @@
                             </td>
                             <td><input ng-disabled="!showDetails" ng-model="x.activationDate" type="text" /></td>
                             <td><input ng-disabled="!showDetails" ng-model="x.expirationDate" type="text" /></td>
+                            <td ng-if="showDetails">
+                                <button class="btn btn-default" ng-click="addYear($index)" title="Produži na godinu dana"><i class="fa fa-caret-right"></i></button>
+                            </td>
                             <td><input ng-disabled="!showDetails" ng-model="x.isActive" type="checkbox" class="form-control" /></td>
                             <td>{{x.licenceStatus}}</td>
                             <td>

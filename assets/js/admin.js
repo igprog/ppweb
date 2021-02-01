@@ -223,6 +223,12 @@ angular.module('app', [])
         });
     }
 
+    $scope.addYear = function (idx) {
+        functions.post('Admin', 'AddYear', {}).then(function (d) {
+            $scope.d[idx].expirationDate = d;
+        });
+    }
+
     /***** Shared Recipes *****/
     $scope.loadSharingRecipes = function () {
         $scope.activeTab = 'sharingRecipes';

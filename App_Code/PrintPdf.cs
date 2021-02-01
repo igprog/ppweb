@@ -1508,14 +1508,14 @@ public class PrintPdf : System.Web.Services.WebService {
             table.AddCell(new PdfPCell(new Phrase("18.5 - 25 kg/m2", GetFont())) { Border = 0 });
             table.AddCell(new PdfPCell(new Phrase(t.Tran(calculation.bmi.title, lang), GetFont())) { Border = 0 });
 
-            if(calculation.whr.value > 0 && !double.IsInfinity(calculation.whr.value)) {
+            if (calculation.whr.value > 0 && !double.IsInfinity(calculation.whr.value)) {
                 table.AddCell(new PdfPCell(new Phrase(t.Tran("whr", lang).ToUpper() + " (" + t.Tran("waist–hip ratio", lang) + "):", GetFont())) { Border = 0 });
                 table.AddCell(new PdfPCell(new Phrase(Math.Round(calculation.whr.value, 1).ToString(), GetFont())) { Border = 0 });
                 table.AddCell(new PdfPCell(new Phrase("< " + calculation.whr.increasedRisk.ToString(), GetFont())) { Border = 0 });
                 table.AddCell(new PdfPCell(new Phrase(t.Tran(calculation.whr.title, lang) + " (" + t.Tran(calculation.whr.description, lang) + ")", GetFont())) { Border = 0 });
             }
             
-            if(calculation.waist.value > 0) {
+            if (calculation.waist.value > 0) {
                 table.AddCell(new PdfPCell(new Phrase(t.Tran("waist", lang).ToUpper() + ":", GetFont())) { Border = 0 });
                 table.AddCell(new PdfPCell(new Phrase(calculation.waist.value.ToString() + " cm", GetFont())) { Border = 0 });
                 table.AddCell(new PdfPCell(new Phrase("< " + calculation.waist.increasedRisk.ToString() + " cm", GetFont())) { Border = 0 });
@@ -2672,7 +2672,6 @@ IBAN HR8423400091160342496
                 doc.Add(invoiceInfo_table);
             }
 
-            //TODO
             if (invoice.docType != (int)Invoice.DocType.invoice) {
                 p = new Paragraph();
                 p.Add(new Paragraph(@"
@@ -2685,7 +2684,7 @@ IBAN HR8423400091160342496
                 p = new Paragraph();
                 p.Add(new Paragraph("IBAN: HR8423400091160342496", GetFont()));
                 if (invoice.isForeign) {
-                    p.Add(new Paragraph("SWIFT CODE: PBZGHR2X", GetFont()));
+                    p.Add(new Paragraph("SWIFT: PBZGHR2X", GetFont()));
                 }
                 doc.Add(p);
                 p = new Paragraph();

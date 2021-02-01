@@ -46,6 +46,7 @@ public class Orders : System.Web.Services.WebService {
         public string note;
         public bool eInvoice;
         public int maxNumberOfUsers;
+        public bool isForeign;
     }
 
     [WebMethod]
@@ -74,6 +75,7 @@ public class Orders : System.Web.Services.WebService {
         x.note = "";
         x.eInvoice = false;
         x.maxNumberOfUsers = 1;
+        x.isForeign = false;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -153,6 +155,7 @@ public class Orders : System.Web.Services.WebService {
             i.total = x.price * item.qty;
             i.items.Add(item);
             i.showSignature = true;
+            i.isForeign = x.isForeign;
             i.docType = (int)Invoice.DocType.offer;
             if (x.maxNumberOfUsers > 5) {
                 x.note = string.Format("{0}Pod-licence: {1}"
