@@ -247,12 +247,28 @@ angular.module('app', [])
         });
     }
 
-    $scope.saveSharingrecipe = function (x) {
+    $scope.saveSharingRecipe = function (x) {
         functions.post('SharingRecipes', 'Save', { x: x }).then(function (d) {
             $scope.loadSharingRecipes();
         });
     }
     /***** Shared Recipes *****/
+
+    /***** Error Log *****/
+    $scope.loadErrorLog = function () {
+        $scope.activeTab = 'errorLog';
+        $scope.loading = true;
+        functions.post('Admin', 'LoadErrorLogin', {}).then(function (d) {
+            $scope.errorLog = d;
+            $scope.loading = false;
+        });
+    }
+
+    $scope.saveErrorLog = function (x) {
+        functions.post('Admin', 'SaveErrorLog', { x: x }).then(function (d) {
+        });
+    }
+    /***** Error Log *****/
 
 }])
 

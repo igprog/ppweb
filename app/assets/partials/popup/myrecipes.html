@@ -8,9 +8,22 @@
     </md-toolbar>
     <md-dialog-content>
         <div class="md-dialog-content">
-            <button class="btn btn-default" ng-click="load()">Load My Recipes</button>
-            <button class="btn btn-default" ng-click="loadSharingRecipes(userId, 1, false)">Get Sharing Recipes</button>
-            <button class="btn btn-default" ng-click="loadSharingRecipes(userId, null, true)">Get Only My Sharing Recipes</button>
+            <ul class="nav nav-tabs text-capitalize">
+                <li class="nav-item" ng-click="load()">
+                    <a href="" ng-class="!sharingRecipes?'nav-link active':'nav-link'">{{'my recipes' | translate}}</a>
+                </li>
+                <li class="nav-item" ng-click="loadSharingRecipes(userId, 1, false)">
+                    <a href="" ng-class="sharingRecipes?'nav-link active':'nav-link'">{{'shared recipes' | translate}}</a>
+                </li>
+            </ul>
+            <div ng-if="sharingRecipes" class="mt-3">
+                <p><em class="small text-muted">* Recepti drugih korisnika aplikacije koji su sa Vama podijelili recepte.</em></p>
+                <md-input-container class="md-block mt-0 mb-0" flex-gt-sm ng-click="loadSharingRecipes(userId, null, showOnlyMyRecipes)">
+                    <md-checkbox md-no-ink aria-label={{'show only my' | translate}} ng-model="showOnlyMyRecipes" class="md-primary">
+                        {{'show only my' | translate}}
+                    </md-checkbox>
+                </md-input-container>
+            </div>
             <loading-directive value="loading"></loading-directive>
             <div ng-if="d.length===0&&!sharingRecipes" class="mt-5">
                 <div class="alert alert-danger">

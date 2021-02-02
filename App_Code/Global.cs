@@ -2,14 +2,16 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Web;
-using System.IO;
 using System.Text;
+using System.Configuration;
 
 /// <summary>
 /// Global
 /// </summary>
 namespace Igprog {
     public class Global {
+
+        public static string errorLog = ConfigurationManager.AppSettings["ErrorLog"];
 
         public Global() {
         }
@@ -25,7 +27,6 @@ namespace Igprog {
             public string method;
             public DateTime time;
             public string msg;
-            public string stackTrace;
         }
 
         #region Date
@@ -176,6 +177,7 @@ namespace Igprog {
         }
         #endregion ImageCompress
 
+        #region ErrorLogin
         public void ErrorLog(Exception e, string userId, string service, string method) {
             NewErrorLog x = new NewErrorLog();
             x.userId = userId;
@@ -183,30 +185,27 @@ namespace Igprog {
             x.method = method;
             x.time = DateTime.UtcNow;
             x.msg = e.Message;
-            x.stackTrace = e.StackTrace;
 
-
-            //TOOD: create error.log file ~/error.log
-            string err = string.Format(@"#####################
-TIME: {0}
-SERVICE: {1}
-METHOD: {2}
+            string err = string.Format(@"## TIME: {0}
+SERVICE: {1}\{2}.asmx
 MESAGE: {3}
-STACK TRACE: {4}
-USER ID: {5}
-#####################
+USER ID: {4}
 "
                 , x.time.ToString()
                 , x.service
                 , x.method
                 , x.msg
-                , x.stackTrace
                 , x.userId);
 
-            // TOTO: read file and add new line
-            using (TextWriter tw = new StreamWriter(HttpContext.Current.Server.MapPath("~/error.log"))) {
-                tw.WriteLine(err);
+            StringBuilder sb = new StringBuilder();
+            Files F = new Files();
+            string oldErrorLog = F.ReadTempFile(errorLog);
+            if (oldErrorLog != null) {
+                sb.AppendLine(oldErrorLog);
             }
+            sb.AppendLine(err);
+            F.SaveTempFile(errorLog, sb.ToString());
         }
+        #endregion ErrorLogin
     }
 }

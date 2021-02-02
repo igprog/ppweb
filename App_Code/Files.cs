@@ -156,6 +156,24 @@ public class Files : System.Web.Services.WebService {
             }
         } catch (Exception e) { return ("Error: " + e); }
     }
+
+    public void SaveTempFile (string fileName, string content) {
+        string path = "~/temp";
+        string filePath = string.Format("{0}/{1}", path, fileName);
+        CreateFolder(path);
+        WriteFile(filePath, content);
+    }
+
+    public string ReadTempFile(string fileName) {
+        try {
+            string filePath = string.Format("~/temp/{0}", fileName);
+            if (File.Exists(Server.MapPath(filePath))) {
+                return File.ReadAllText(Server.MapPath(filePath));
+            } else {
+                return null;
+            }
+        } catch (Exception e) { return (e.Message); }
+    }
     #endregion Methods
 
 }

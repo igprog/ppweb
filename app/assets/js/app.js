@@ -6615,7 +6615,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.showUserRecipes = false;
         $scope.loadSharingRecipes = function (userId, status, showUserRecipes) {
             $scope.showUserRecipes = showUserRecipes;
-            debugger;
+            if (status === null && !showUserRecipes) {
+                status = 1;
+            }
             functions.post('SharingRecipes', 'Load', { userId: userId, status: status, showUserRecipes: showUserRecipes }).then(function (d) {
                 $scope.d = d;
                 $scope.sharingRecipes = true;
