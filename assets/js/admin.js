@@ -248,6 +248,7 @@ angular.module('app', [])
     }
 
     $scope.saveSharingRecipe = function (x) {
+        x.adminSave = true;
         functions.post('SharingRecipes', 'Save', { x: x }).then(function (d) {
             $scope.loadSharingRecipes();
         });
@@ -258,14 +259,14 @@ angular.module('app', [])
     $scope.loadErrorLog = function () {
         $scope.activeTab = 'errorLog';
         $scope.loading = true;
-        functions.post('Admin', 'LoadErrorLogin', {}).then(function (d) {
+        functions.post('Log', 'Load', { fileName: 'error.log' }).then(function (d) {
             $scope.errorLog = d;
             $scope.loading = false;
         });
     }
 
     $scope.saveErrorLog = function (x) {
-        functions.post('Admin', 'SaveErrorLog', { x: x }).then(function (d) {
+        functions.post('Log', 'Save', { fileName: 'error.log', content: x }).then(function (d) {
         });
     }
     /***** Error Log *****/

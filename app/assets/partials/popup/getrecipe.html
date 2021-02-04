@@ -1,99 +1,102 @@
 ﻿<md-dialog flex class="fixed-height">
-    <form ng-cloak>
-        <md-toolbar class="bg-main">
-            <div class="md-toolbar-tools">
-                <h2 class="text-capitalize">{{'recipes' | translate}}</h2>
-                <span flex></span>
-                <a href="" class="btn btn-outline-light" ng-click="cancel()" title="{{'close' | translate}}">x</a>
+    <md-toolbar class="bg-main">
+        <div class="md-toolbar-tools">
+            <h2 class="text-capitalize">{{'recipes' | translate}}</h2>
+            <span flex></span>
+            <a href="" class="btn btn-outline-light" ng-click="cancel()" title="{{'close' | translate}}">x</a>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <loading-directive value="loading"></loading-directive>
+            <div class="text-right text-capitalize">
+                <a href="" class="btn btn-outline-primary" ng-click="toggleMyRecipeTpl()"><i class="fa fa-file-text"></i> {{'create recipe' | translate}}</a>
             </div>
-        </md-toolbar>
-        <md-dialog-content>
-            <div class="md-dialog-content">
-                <loading-directive value="loading"></loading-directive>
-                <div class="text-right text-capitalize">
-                    <a href="" class="btn btn-outline-primary" ng-click="toggleMyRecipeTpl()"><i class="fa fa-file-text"></i> {{'create recipe' | translate}}</a>
+            <div ng-if="config.debug&&user.userType>0">
+                <ul class="nav nav-tabs text-capitalize">
+                    <li class="nav-item" ng-click="load()"><a href="" ng-class="appRecipes==false?'nav-link active':'nav-link'">{{'my recipes' | translate}}</a></li>
+                    <li class="nav-item" ng-click="loadAppRecipes()"><a href="" ng-class="appRecipes==true?'nav-link active':'nav-link'">{{'recipes examples' | translate}}</a></li>
+                </ul>
+            </div>
+            <!--<div ng-if="d.length==0" class="pt-4">
+                <div class="alert alert-danger">
+                    {{'you do not have any recipes' | translate}}
                 </div>
-                <div ng-if="config.debug&&user.userType>0">
-                    <ul class="nav nav-tabs text-capitalize">
-                        <li class="nav-item"  ng-click="load()"><a href="" ng-class="appRecipes==false?'nav-link active':'nav-link'">{{'my recipes' | translate}}</a></li>
-                        <li class="nav-item" ng-click="loadAppRecipes()"><a href="" ng-class="appRecipes==true?'nav-link active':'nav-link'">{{'recipes examples' | translate}}</a></li>
-                    </ul>
-                </div>
-                <div ng-if="d.length==0" class="pt-4">
-                    <div class="alert alert-danger">
-                        {{'you do not have any recipes' | translate}}
+            </div>-->
+            <div ng-show="!loading" class="md-dialog-content">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <form id="searchFrm" class="input-group">
+                            <input ng-model="searchValue" class="form-control search" type="text" placeholder="{{'search' | translate}}..." />
+                            <span class="input-group-append">
+                                <button class="btn btn-outline-primary" form="searchFrm" type="submit" ng-click="search(searchValue, mealGroup.code)"><i class="fa fa-search" aria-hidden="true"></i>&#8203;</button>
+                            </span>
+                        </form>
+                    </div>
+                    <div class="col-sm-4">
+                        <md-input-container class="md-block m-0" flex-gt-xs>
+                            <label>{{'meal group' | translate}}</label>
+                            <md-select ng-model="mealGroup">
+                                <md-option value="">
+                                    <md-checkbox ng-checked="mealGroup==''" class="md-primary text-capitalize" aria-label="mealgroup" ng-click="search(searchValue, null)">{{'all' | translate}}</md-checkbox>
+                                </md-option>
+                                <md-option ng-value="x.code" ng-repeat="x in recipe.mealGroups track by $index">
+                                    <md-checkbox ng-checked="x.code==mealGroup" class="md-primary text-capitalize" aria-label="mealgroup" ng-click="search(searchValue, x.code)">{{x.title | translate}}</md-checkbox>
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div class="col-sm-12 pt-2">
+                        <md-checkbox ng-model="showDescription" class="md-primary">
+                            {{'show description' | translate}}
+                        </md-checkbox>
                     </div>
                 </div>
-                <div ng-if="d.length>0" ng-show="!loading" class="md-dialog-content">
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <input ng-model="searchValue" class="form-control search" type="text" placeholder="{{'search' | translate}}..." />
-                                <span class="input-group-append">
-                                    <button class="btn btn-outline-primary" type="button"><i class="fa fa-search" aria-hidden="true"></i>&#8203;</button>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <md-input-container class="md-block m-0" flex-gt-xs>
-                                <label>{{'meal group' | translate}}</label>
-                                <md-select ng-model="mealGroup">
-                                    <md-option value="">
-                                        <md-checkbox ng-checked="mealGroup==''" class="md-primary text-capitalize" aria-label="mealgroup">{{'all' | translate}}</md-checkbox>
-                                    </md-option>
-                                    <md-option ng-value="x.code" ng-repeat="x in recipe.mealGroups track by $index">
-                                        <md-checkbox ng-checked="x.code==mealGroup" class="md-primary text-capitalize" aria-label="mealgroup">{{x.title | translate}}</md-checkbox>
-                                    </md-option>
-                                </md-select>
-                            </md-input-container>
-                        </div>
-                        <div class="col-sm-12 pt-2">
-                            <md-checkbox ng-model="showDescription" class="md-primary">
-                                {{'show description' | translate}}
-                            </md-checkbox>
-                        </div>
-                    </div>
-                    <div class="card border-left-main shadow mt-3" ng-repeat="x in d | filter:searchValue | filter:{'mealGroup':mealGroup} | limitTo:limit" ng-click="confirm(x, showDescription)">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center py-2 pointer">
-                                <div class="col mr-2">
-                                    <div class="h5 mb-0 text-gray-800">
-                                        <div class="row">
-                                            <div class="col-lg-2 pb-2">
-                                                <div ng-if="!x.recipeImg" class="text-center text-primary">
-                                                    <i class="fa fa-image fa-3x"></i>
-                                                </div>
-                                                <img ng-if="x.recipeImg" src="../upload/users/{{user.userId}}/recipes/{{x.id}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                <div class="card border-left-main shadow mt-3" ng-repeat="x in d | limitTo:limit" ng-click="confirm(x, showDescription)">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center py-2 pointer">
+                            <div class="col mr-2">
+                                <div class="h5 mb-0 text-gray-800">
+                                    <div class="row">
+                                        <div class="col-lg-2 pb-2">
+                                            <div ng-if="!x.recipeImg" class="text-center text-primary">
+                                                <i class="fa fa-image fa-3x"></i>
                                             </div>
-                                            <div class="col-lg-10">
-                                                <div class="h5 font-weight-bold text-main mb-1">{{x.title}}</div>
-                                                <p ng-if="showDescription">{{x.description.length > 150 ? x.description.substring(0, 147) + '...' : x.description}}</p>
-                                            </div>
+                                            <img ng-if="x.recipeImg" src="../upload/users/{{user.userId}}/recipes/{{x.id}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                                        </div>
+                                        <div class="col-lg-10">
+                                            <div class="h5 font-weight-bold text-main mb-1">{{x.title}}</div>
+                                            <p ng-if="showDescription">{{x.description.length > 150 ? x.description.substring(0, 147) + '...' : x.description}}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-right pointer">
+                        </div>
+                        <div class="row pointer">
+                            <div class="col-sm-6 small text-muted">
+                                <p ng-if="x.mealGroup.title">{{'meal group' | translate}}: {{x.mealGroup.title | translate}}</p>
+                            </div>
+                            <div class="col-sm-6 text-right">
                                 <p title="{{'energy' | translate}}"><i class="fa fa-fire"></i> {{x.energy | number:0}} {{'kcal' | translate}}</p>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <!--<div class="table-responsive mt-2">
-                        <table class="table table-hover table-borderless">
-                            <tr class="text-capitalize border-bottom">
-                                <th>{{'title' | translate}}</th>
-                                <th class="text-right">{{'energy'| translate}}</th>
-                            </tr>
-                            <tr ng-repeat="x in d | filter:searchValue | filter:{'mealGroup':mealGroup} | limitTo:limit" ng-click="confirm(x, showDescription)">
-                                <td class="nowrap">{{x.title}}</td>
-                                <td class="nowrap text-right"><span ng-if="x.energy>0">{{x.energy | number:0}} {{'kcal' | translate}}</span></td>
-                            </tr>
-                        </table>
-                    </div>-->
-
-                    <!--TODO: Translate recipes-->
-                    <!--<table ng-if="appRecipes==true" class="table table-hover table-condensed">
+                <!--<div class="table-responsive mt-2">
+                    <table class="table table-hover table-borderless">
+                        <tr class="text-capitalize border-bottom">
+                            <th>{{'title' | translate}}</th>
+                            <th class="text-right">{{'energy'| translate}}</th>
+                        </tr>
+                        <tr ng-repeat="x in d | filter:searchValue | filter:{'mealGroup':mealGroup} | limitTo:limit" ng-click="confirm(x, showDescription)">
+                            <td class="nowrap">{{x.title}}</td>
+                            <td class="nowrap text-right"><span ng-if="x.energy>0">{{x.energy | number:0}} {{'kcal' | translate}}</span></td>
+                        </tr>
+                    </table>
+                </div>-->
+                <!--TODO: Translate recipes-->
+                <!--<table ng-if="appRecipes==true" class="table table-hover table-condensed">
                     <tr ng-if="config.debug">
                         <td><label><input ng-model="toTranslate" type="checkbox" ng-checked="setToTranslate(toTranslate)" /> {{'translate to' | translate}}: </label></td>
                         <td ng-if="toTranslate==true">
@@ -118,11 +121,10 @@
                 </table>-->
 
 
-                    <div class="text-right">
-                        <a href="" ng-if="limit<d.length+1" class="btn btn-outline-primary" ng-click="loadMore()"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</a>
-                    </div>
+                <div class="text-right">
+                    <a href="" ng-if="limit<d.length+1" class="btn btn-outline-primary" ng-click="loadMore()"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</a>
                 </div>
             </div>
-        </md-dialog-content>
-    </form>
+        </div>
+    </md-dialog-content>
 </md-dialog>

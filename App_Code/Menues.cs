@@ -19,6 +19,7 @@ public class Menues : System.Web.Services.WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     string appDataBase = ConfigurationManager.AppSettings["AppDataBase"];
     DataBase db = new DataBase();
+    Log L = new Log();
 
     public Menues() {
     }
@@ -82,9 +83,9 @@ public class Menues : System.Web.Services.WebService {
                 connection.Open();
                 string whereSql = null;
                 if (!string.IsNullOrWhiteSpace(search) && string.IsNullOrEmpty(clientId)) {
-                    whereSql = string.Format("WHERE title LIKE '%{0}%' OR note LIKE '%{0}%' OR energy LIKE '{0}%'", search);
+                    whereSql = string.Format("WHERE UPPER(title) LIKE '%{0}%' OR UPPER(note) LIKE '%{0}%' OR energy LIKE '{0}%'", search.ToUpper());
                 } else if (!string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
-                    whereSql = string.Format("WHERE clientId = '{1}' AND (title LIKE '%{0}%' OR note LIKE '%{0}%' OR energy LIKE '{0}%')", search, clientId);
+                    whereSql = string.Format("WHERE clientId = '{1}' AND (UPPER(title) LIKE '%{0}%' OR UPPER(note) LIKE '%{0}%' OR energy LIKE '{0}%')", search.ToUpper(), clientId);
                 } else if (string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
                     whereSql = string.Format("WHERE clientId = '{0}'", clientId);
                 } else {
@@ -118,7 +119,10 @@ public class Menues : System.Web.Services.WebService {
                 }
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "Menus", "Load");
+            return (e.Message);
+        }
     }
 
 

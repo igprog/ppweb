@@ -32,6 +32,7 @@ public class Mail : System.Web.Services.WebService {
     string myMenuPassword = ConfigurationManager.AppSettings["myMenuPassword"];
     double usd = Convert.ToDouble(ConfigurationManager.AppSettings["USD"]);
     Translate t = new Translate();
+    Log L = new Log();
 
     public Mail() {
     }
@@ -203,6 +204,7 @@ public class Mail : System.Web.Services.WebService {
         } catch (Exception e) {
             resp.isSuccess = false;
             resp.msg = e.Message;
+            L.SendErrorLog(e, order.id, "Mail", "SendOrder");
             return resp;
         }
     }
@@ -274,6 +276,7 @@ public class Mail : System.Web.Services.WebService {
         } catch (Exception e) {
             resp.isSuccess = false;
             resp.msg = e.Message;
+            L.SendErrorLog(e, sendTo, "Mail", "SendMail");
             return resp;
         }
     }

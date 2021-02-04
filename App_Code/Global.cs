@@ -2,8 +2,6 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Web;
-using System.Text;
-using System.Configuration;
 
 /// <summary>
 /// Global
@@ -11,21 +9,11 @@ using System.Configuration;
 namespace Igprog {
     public class Global {
 
-        public static string errorLog = ConfigurationManager.AppSettings["ErrorLog"];
-
         public Global() {
         }
 
         public class Response {
             public bool isSuccess;
-            public string msg;
-        }
-
-        public class NewErrorLog {
-            public string userId;
-            public string service;
-            public string method;
-            public DateTime time;
             public string msg;
         }
 
@@ -176,36 +164,5 @@ namespace Igprog {
             return x * 1024;
         }
         #endregion ImageCompress
-
-        #region ErrorLogin
-        public void ErrorLog(Exception e, string userId, string service, string method) {
-            NewErrorLog x = new NewErrorLog();
-            x.userId = userId;
-            x.service = service;
-            x.method = method;
-            x.time = DateTime.UtcNow;
-            x.msg = e.Message;
-
-            string err = string.Format(@"## TIME: {0}
-SERVICE: {1}\{2}.asmx
-MESAGE: {3}
-USER ID: {4}
-"
-                , x.time.ToString()
-                , x.service
-                , x.method
-                , x.msg
-                , x.userId);
-
-            StringBuilder sb = new StringBuilder();
-            Files F = new Files();
-            string oldErrorLog = F.ReadTempFile(errorLog);
-            if (oldErrorLog != null) {
-                sb.AppendLine(oldErrorLog);
-            }
-            sb.AppendLine(err);
-            F.SaveTempFile(errorLog, sb.ToString());
-        }
-        #endregion ErrorLogin
     }
 }

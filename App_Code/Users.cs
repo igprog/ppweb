@@ -23,6 +23,7 @@ public class Users : System.Web.Services.WebService {
     DataBase db = new DataBase();
     Translate t = new Translate();
     Global G = new Global();
+    Log L = new Log();
     Files f = new Files();
     string EncryptionKey = ConfigurationManager.AppSettings["EncryptionKey"];
     string supervisorUserName = ConfigurationManager.AppSettings["SupervisorUserName"];
@@ -341,7 +342,7 @@ public class Users : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(GetUsers(limit, page, null, isDesc), Formatting.None);
         } catch (Exception e) {
-            G.ErrorLog(e, null, "Users", "Load");
+            L.SendErrorLog(e, null, "Users", "Load");
             return (e.Message);
         }
     }
@@ -409,8 +410,8 @@ public class Users : System.Web.Services.WebService {
                 string sql = string.Format(@"
                         SELECT userId, userType, firstName, lastName, companyName, address, postalCode, city, country, pin, phone, email, userName, password, adminType, userGroupId, activationDate, expirationDate, isActive, iPAddress, rowid
                         FROM users                       
-                        WHERE (firstName LIKE '%{0}%' OR lastName LIKE '%{0}%' OR companyName LIKE '%{0}%' OR email LIKE '%{0}%' OR userId LIKE '%{0}%' OR userGroupId LIKE '%{0}%') {2}
-                        ORDER BY rowid {3} {1}", query, limitSql, aciveUsersSql, isDesc ? "DESC" : "ASC");
+                        WHERE (UPPER(firstName) LIKE '%{0}%' OR UPPER(lastName) LIKE '%{0}%' OR UPPER(companyName) LIKE '%{0}%' OR UPPER(email) LIKE '%{0}%' OR userId LIKE '%{0}%' OR userGroupId LIKE '%{0}%') {2}
+                        ORDER BY rowid {3} {1}", query.ToUpper(), limitSql, aciveUsersSql, isDesc ? "DESC" : "ASC");
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
@@ -454,7 +455,7 @@ public class Users : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            G.ErrorLog(e, null, "Users", "Search");
+            L.SendErrorLog(e, null, "Users", "Search");
             return (e.Message);
         }
     }

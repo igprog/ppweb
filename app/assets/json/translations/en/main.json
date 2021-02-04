@@ -2003,6 +2003,7 @@
   "welcome to web application": "Welcome to web application",
   "pending": "pending",
   "approved": "approved",
-  "rejected": "rejected"
+  "rejected": "rejected",
+  "show only my": "Show only my"
 
 }

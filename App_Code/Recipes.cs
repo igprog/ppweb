@@ -19,6 +19,7 @@ public class Recipes : System.Web.Services.WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     string appDataBase = ConfigurationManager.AppSettings["AppDataBase"];
     DataBase db = new DataBase();
+    Log L = new Log();
 
     public Recipes() {
     }
@@ -85,6 +86,33 @@ public class Recipes : System.Web.Services.WebService {
     }
 
     [WebMethod]
+    public string Search(string userId, string query, string mealGroup) {
+        try {
+            List<NewRecipe> xx = new List<NewRecipe>();
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                string sql = string.Format(@"SELECT id, title, description, energy, mealGroup FROM recipes
+                                {0} {1} {2} ORDER BY rowid DESC"
+                                , (string.IsNullOrWhiteSpace(query) && string.IsNullOrEmpty(mealGroup)) ? "" : "WHERE"
+                                , !string.IsNullOrWhiteSpace(query) ? string.Format("(UPPER(title) LIKE '%{0}%' OR UPPER(description) LIKE '%{0}%')", query.ToUpper()) : ""
+                                , !string.IsNullOrEmpty(mealGroup) ? string.Format(" {0} mealGroup = '{1}'", !string.IsNullOrEmpty(query) ? "AND" : "", mealGroup) : "");     
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            NewRecipe x = GetData(reader, userId);
+                            xx.Add(x);
+                        }
+                    } 
+                }
+            }
+            return JsonConvert.SerializeObject(xx, Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, "Recipes", "Search");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
+    }
+
+    [WebMethod]
     public string Get(string userId, string id) {
         try {
             NewRecipe x = new NewRecipe();
@@ -139,9 +167,10 @@ public class Recipes : System.Web.Services.WebService {
         try {
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
-                string sql = "delete from recipes where id = @id";
+                string sql = string.Format(@"BEGIN;
+                                DELETE FROM recipes WHERE id = '{0}';
+                                COMMIT;", id);
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)){
-                    command.Parameters.Add(new SQLiteParameter("id", id));
                     command.ExecuteNonQuery();
                 }
                 connection.Close();
@@ -151,8 +180,12 @@ public class Recipes : System.Web.Services.WebService {
             MyFoods mf = new MyFoods();
             mf.Delete(userId, id);
             /*******************************************************************/
-            Files f = new Files();
-            f.DeleteRecipeFolder(userId, id);
+            Files F = new Files();
+            F.DeleteRecipeFolder(userId, id);
+            /******* Delete from My Sharing Recipes if exists *******/
+            SharingRecipes SR = new SharingRecipes();
+            SR.Delete(id);
+            /*******************************************************************/
             return "OK";
         } catch (Exception e) { return (e.Message); }
     }

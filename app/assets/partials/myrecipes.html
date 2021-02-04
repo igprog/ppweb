@@ -18,8 +18,6 @@
                         <a ng-disabled="recipe.data.selectedFoods.length==0" href="" class="dropdown-item" ng-click="saveRecipeAsMyFood(recipe)" title="{{'save as food' | translate}}"><span>{{'save as food' | translate}}</span></a>
                     </div>
                 </div>
-                <!--<button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'save as recipe' | translate}}" ng-click="save(recipe)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save' | translate}}</span></button>
-                <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'save as food' | translate}}" ng-click="saveRecipeAsMyFood(recipe)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save as food' | translate}}</span></button>-->
                 <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'show recipe preview' | translate}}" ng-click="printRecipePreview(recipe)"><i class="fa fa-print"></i> <span class="d-none d-sm-inline">{{'print' | translate}}</span></button>
                 <button ng-if="config.debug" ng-disabled="recipe.id==null" class="btn btn-outline-primary text-capitalize" ng-click="saveSharingRecipe(recipe)"><i class="fa fa-share-alt"></i> <span class="d-none d-sm-inline">{{'share' | translate}}</span></button>
                 <button ng-disabled="recipe.id==null" class="btn btn-outline-danger text-capitalize" ng-click="remove(recipe)"><i class="fa fa-trash-alt"></i> <span class="d-none d-sm-inline">{{'delete' | translate}}</span></button>
@@ -39,8 +37,8 @@
                             <md-input-container class="md-block mt-0" flex-gt-xs>
                                 <label>{{'meal group' | translate}}</label>
                                 <md-select ng-model="recipe.mealGroup">
-                                    <md-option ng-value="x.code" ng-repeat="x in recipe.mealGroups track by $index">
-                                        <md-checkbox ng-checked="x.code==recipe.mealGroup" class="md-primary text-capitalize" aria-label="mealgroup">{{x.title | translate}}</md-checkbox>
+                                    <md-option ng-selected="x.code==recipe.mealGroup.code" ng-value="x" ng-repeat="x in recipe.mealGroups track by $index">
+                                        <md-checkbox ng-checked="x.code==recipe.mealGroup.code" class="md-primary text-capitalize" aria-label="mealgroup">{{x.title | translate}}</md-checkbox>
                                     </md-option>
                                 </md-select>
                             </md-input-container>

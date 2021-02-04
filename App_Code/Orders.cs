@@ -161,7 +161,12 @@ public class Orders : System.Web.Services.WebService {
                 x.note = string.Format("{0}Pod-licence: {1}"
                         , !string.IsNullOrWhiteSpace(x.note) ? string.Format("{0};", x.note) : ""
                         , x.maxNumberOfUsers);
-            } 
+            }
+            if (x.eInvoice) {
+                x.note = string.Format("{0}e-Račun"
+                        , !string.IsNullOrWhiteSpace(x.note) ? string.Format("{0};", x.note) : "");
+            }
+
 
             if (string.IsNullOrEmpty(x.id)) {
                 x.id = Guid.NewGuid().ToString();

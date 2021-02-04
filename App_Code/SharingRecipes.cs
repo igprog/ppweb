@@ -17,11 +17,12 @@ using Igprog;
 [System.Web.Script.Services.ScriptService]
 public class SharingRecipes : System.Web.Services.WebService {
     string dataBase = ConfigurationManager.AppSettings["SharingDataBase"];
-    string dataSource = string.Format("~/App_Data/sharing/{0}", ConfigurationManager.AppSettings["SharingDataBase"]);
-    string mainSql = "id, userId, userGroupId, recordDate, title, desc, energy, mealGroup, status, statusNote, rank, like, lang";
+    string dataSource = string.Format("~/App_Data/{0}", ConfigurationManager.AppSettings["SharingDataBase"]);
+    string mainSql = "id, userId, userGroupId, recordDate, title, desc, energy, mealGroup, status, statusNote, rank, like, views, lang";
     DataBase db = new DataBase();
     Recipes R = new Recipes();
     Users U = new Users();
+    Log L = new Log();
 
     public SharingRecipes() {
     }
@@ -36,7 +37,9 @@ public class SharingRecipes : System.Web.Services.WebService {
         public Status status;
         public int rank;
         public int like;
+        public int views;
         public string lang;
+        public bool adminSave;
     }
 
     public class Status {
@@ -56,12 +59,14 @@ public class SharingRecipes : System.Web.Services.WebService {
         x.userId = null;
         x.ownerName = null;
         x.userGroupId = null;
-        x.recordDate = null;
+        x.recordDate = DateTime.UtcNow.ToString();
         x.status = new Status();
         x.status.code = 0;
         x.rank = 0;
         x.like = 0;
+        x.views = 0;
         x.lang = null;
+        x.adminSave = false;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -69,7 +74,7 @@ public class SharingRecipes : System.Web.Services.WebService {
     public string Load(string userId, int? status, bool showUserRecipes) {
         try {
             List<NewSharingRecipe> xx = new List<NewSharingRecipe>();
-            string path = Server.MapPath(string.Format("~/App_Data/sharing/{0}", dataBase));
+            string path = Server.MapPath(string.Format("~/App_Data/{0}", dataBase));
             db.CreateGlobalDataBase(path, db.sharingrecipes);
             string sql_condition = null;
             if (!string.IsNullOrEmpty(userId) || status != null) {
@@ -101,6 +106,34 @@ public class SharingRecipes : System.Web.Services.WebService {
     }
 
     [WebMethod]
+    public string Search(string userId, string query, string mealGroup) {
+        try {
+            List<NewSharingRecipe> xx = new List<NewSharingRecipe>();
+            using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
+                connection.Open();
+                string sql = string.Format(@"SELECT {0} FROM recipes
+                                {1} {2} {3} ORDER BY rowid DESC"
+                                , mainSql
+                                , (string.IsNullOrWhiteSpace(query) && string.IsNullOrEmpty(mealGroup)) ? "" : "WHERE"
+                                , !string.IsNullOrWhiteSpace(query) ? string.Format("(UPPER(title) LIKE '%{0}%' OR UPPER(desc) LIKE '%{0}%')", query.ToUpper()) : ""
+                                , !string.IsNullOrEmpty(mealGroup) ? string.Format(" {0} mealGroup = '{1}'", !string.IsNullOrEmpty(query) ? "AND" : "", mealGroup) : "");
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            NewSharingRecipe x = GetData(reader);
+                            xx.Add(x);
+                        }
+                    }
+                }
+            }
+            return JsonConvert.SerializeObject(xx, Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, "Recipes", "Search");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
+    }
+
+    [WebMethod]
     public string Get(string id) {
         try {
             NewSharingRecipe x = new NewSharingRecipe();
@@ -128,17 +161,21 @@ public class SharingRecipes : System.Web.Services.WebService {
     [WebMethod]
     public string Save(NewSharingRecipe x) {
         try {
-            string path = Server.MapPath(string.Format("~/App_Data/sharing/{0}", dataBase));
+            string path = Server.MapPath(string.Format("~/App_Data/{0}", dataBase));
             db.CreateGlobalDataBase(path, db.sharingrecipes);
             string sql = null;
-            if (x.recipe.id == null) {
-                x.recipe.id = Convert.ToString(Guid.NewGuid());
+            if (!Check(x.recipe.id) || x.adminSave) {
+                sql = string.Format(@"BEGIN;
+                        INSERT OR REPLACE INTO recipes ({0})
+                        VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', {9}, '{10}', {11}, {12}, {13}, '{13}');
+                        COMMIT;", mainSql, x.recipe.id, x.userId, x.userGroupId, x.recordDate, x.recipe.title, x.recipe.description, x.recipe.energy, x.recipe.mealGroup.code, x.status.code, x.status.note, x.rank, x.like, x.views, x.lang);
+            } else {
+                sql = string.Format(@"BEGIN;
+                        UPDATE recipes SET recordDate = '{1}', title = '{2}', desc = '{3}', energy = '{4}', mealGroup = '{5}', lang = '{6}' WHERE id = '{0}';
+                        COMMIT;", x.recipe.id, x.recordDate, x.recipe.title, x.recipe.description, x.recipe.energy, x.recipe.mealGroup.code, x.lang);
             }
             x.recipe.energy = x.recipe.data.selectedFoods.Sum(a => a.energy);
-            sql = string.Format(@"BEGIN;
-                    INSERT OR REPLACE INTO recipes ({0})
-                    VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', {9}, '{10}', {11}, {12}, '{13}');
-                    COMMIT;", mainSql, x.recipe.id, x.userId, x.userGroupId, x.recordDate, x.recipe.title, x.recipe.description, x.recipe.energy, x.recipe.mealGroup.code, x.status.code, x.status.note, x.rank, x.like, x.lang);
+            
             using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
                 connection.Open();
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
@@ -146,9 +183,28 @@ public class SharingRecipes : System.Web.Services.WebService {
                 }
                 connection.Close();
             }
-            SaveJsonToFile(x.recipe.id, JsonConvert.SerializeObject(x.recipe.data, Formatting.None));
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return (JsonConvert.SerializeObject(e.Message, Formatting.None)); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.userId, "SharingRecipes", "Save");
+            return (JsonConvert.SerializeObject(e.Message, Formatting.None));
+        }
+    }
+
+    [WebMethod]
+    public string UpdateViews(string id) {
+        try {
+            string path = Server.MapPath(string.Format("~/App_Data/{0}", dataBase));
+            db.CreateGlobalDataBase(path, db.sharingrecipes);
+            string sql = string.Format(@"UPDATE recipes SET views = views + 1 WHERE id = '{0}'", id);
+            using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+            return JsonConvert.SerializeObject("OK", Formatting.None);
+        } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
     }
     #endregion WebMethods
 
@@ -175,28 +231,42 @@ public class SharingRecipes : System.Web.Services.WebService {
         x.status.note = reader.GetValue(9) == DBNull.Value ? null : reader.GetString(9);
         x.rank = reader.GetValue(10) == DBNull.Value ? 0 : reader.GetInt32(10);
         x.like = reader.GetValue(11) == DBNull.Value ? 0 : reader.GetInt32(11);
-        x.lang = reader.GetValue(12) == DBNull.Value ? null : reader.GetString(12);
+        x.views = reader.GetValue(12) == DBNull.Value ? 0 : reader.GetInt32(12);
+        x.lang = reader.GetValue(13) == DBNull.Value ? null : reader.GetString(13);
         return x;
     }
-    #endregion Methods
 
-    //TODO: Move to files (refactor)
-    public void SaveJsonToFile(string filename, string json) {
-        string path = "~/App_Data/sharing/recipes";
-        string filepath = string.Format("{0}/{1}.json", path, filename);
-        CreateFolder(path);
-        WriteFile(filepath, json);
-    }
-
-    protected void CreateFolder(string path) {
-        if (!Directory.Exists(Server.MapPath(path))) {
-            Directory.CreateDirectory(Server.MapPath(path));
+    public void Delete(string id) {
+        using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
+            connection.Open();
+            string sql = string.Format(@"BEGIN;
+                                DELETE FROM recipes WHERE id = '{0}';
+                                COMMIT;", id);
+            using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                command.ExecuteNonQuery();
+            }
         }
     }
 
-    protected void WriteFile(string path, string value) {
-        File.WriteAllText(Server.MapPath(path), value);
+    private bool Check(string id) {
+        try {
+            bool result = false;
+            using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
+                string sql = string.Format("SELECT EXISTS(SELECT id FROM recipes WHERE id = '{0}')", id); 
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            result = reader.GetBoolean(0);
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return result;
+        } catch (Exception e) { return false; }
     }
+    #endregion Methods
 
     private string GetStatusTitle(int code) {
         switch (code) {

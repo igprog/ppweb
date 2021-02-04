@@ -5349,6 +5349,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.toLanguage = '';
         $scope.showDescription = true;
         $scope.limit = 20;
+        $scope.searchValue = null;
 
         $scope.loadMore = function () {
             $scope.limit += 20;
@@ -5381,22 +5382,27 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             if ($rootScope.user.licenceStatus == 'demo') {
                 return false;
             }
-            $http({
-                url: $sessionStorage.config.backend + 'Recipes.asmx/Init',
-                method: "POST",
-                data: ''
-            })
-           .then(function (response) {
-               $scope.recipe = JSON.parse(response.data.d);
-           },
-           function (response) {
-               alert(response.data.d);
-           });
+            functions.post('Recipes', 'Init', {}).then(function (d) {
+                $scope.recipe = d;
+                $scope.mealGroup = d.mealGroup;
+            });
         }
         init();
 
         $scope.load = function () {
             load();
+        }
+
+        $scope.search = function (query, mealGroup) {
+            if (mealGroup === null) {
+                $scope.mealGroup = {
+                    code: null,
+                    title: $translate.instant('all')
+                }
+            }
+            functions.post('Recipes', 'Search', { userId: $rootScope.user.userGroupId, query: query, mealGroup: mealGroup }).then(function (d) {
+                $scope.d = d;
+            });
         }
 
         $scope.cancel = function () {
@@ -5893,7 +5899,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         });
     };
     init();
-
 
     $scope.new = function () {
         init();
@@ -6510,6 +6515,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.userId = $rootScope.user.userId;
         $scope.userGroupId = $rootScope.user.userGroupId;
         $scope.sharingRecipes = false;
+        $scope.searchValue = null;
 
         $scope.loadMore = function () {
             $scope.limit += 20;
@@ -6545,41 +6551,40 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             if ($rootScope.user.licenceStatus == 'demo') {
                 return false;
             }
-            $http({
-                url: $sessionStorage.config.backend + 'Recipes.asmx/Init',
-                method: "POST",
-                data: ''
-            })
-           .then(function (response) {
-               $scope.recipe = JSON.parse(response.data.d);
-           },
-           function (response) {
-               alert(response.data.d);
-           });
+            functions.post('Recipes', 'Init', {}).then(function (d) {
+                $scope.recipe = d;
+                $scope.mealGroup = d.mealGroup;
+            });
         }
         init();
+
+        $scope.search = function (query, mealGroup, sharingRecipes) {
+            if (mealGroup === null) {
+                $scope.mealGroup = {
+                    code: null,
+                    title: $translate.instant('all')
+                }
+            }
+            $scope.sharingRecipes = sharingRecipes;
+            var service = sharingRecipes ? 'SharingRecipes' : 'Recipes';
+            functions.post(service, 'Search', { userId: $rootScope.user.userGroupId, query: query, mealGroup: mealGroup }).then(function (d) {
+                $scope.d = d;
+            });
+        }
 
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
 
-        var get = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + 'Recipes.asmx/Get',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, id: x.id }
-            })
-            .then(function (response) {
-                $scope.recipe = JSON.parse(response.data.d);
+        var get = function (userGroupId, x) {
+            functions.post('Recipes', 'Get', { userId: userGroupId, id: x.id }).then(function (d) {
+                $scope.recipe = d;
                 $mdDialog.hide($scope.recipe);
-            },
-            function (response) {
-                alert(response.data.d)
             });
         }
 
         $scope.confirm = function (x) {
-            get(x);
+            get($rootScope.user.userGroupId, x);
         }
 
         $scope.remove = function (x) {
@@ -6598,16 +6603,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         var remove = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + webService + '/Delete',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, id: x.id }
-            })
-            .then(function (response) {
+            debugger;
+            functions.post('Recipes', 'Delete', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
                 init();
-            },
-            function (response) {
-                alert(response.data.d);
             });
         }
 
@@ -6623,6 +6621,19 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 $scope.sharingRecipes = true;
             });
         };
+
+        $scope.confirmShared = function (userId, x) {
+            functions.post('SharingRecipes', 'Get', { id: x.recipe.id }).then(function (d) {
+                $scope.recipe = d.recipe;
+                debugger;
+                if (d.userId !== userId) {
+                    $scope.recipe.id = null;
+                }
+                functions.post('SharingRecipes', 'UpdateViews', { id: x.recipe.id }).then(function (d) {
+                    $mdDialog.hide($scope.recipe);
+                });
+            });
+        }
         /***** Shared Recipes *****/
 
     };

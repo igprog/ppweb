@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Services;
 using System.Configuration;
 using Newtonsoft.Json;
-using Igprog;
 
 /// <summary>
 /// Admin
@@ -36,28 +35,6 @@ public class Admin : System.Web.Services.WebService {
     [WebMethod]
     public string AddYear() {
         return JsonConvert.SerializeObject(DateTime.UtcNow.AddDays(366).ToString(), Formatting.None);
-    }
-
-    [WebMethod]
-    public string LoadErrorLogin() {
-        try {
-            Files F = new Files();
-            string x = F.ReadTempFile(Global.errorLog);
-            return JsonConvert.SerializeObject(x, Formatting.Indented);
-        } catch (Exception e) {
-            return JsonConvert.SerializeObject(e.Message, Formatting.Indented);
-        }
-    }
-
-    [WebMethod]
-    public string SaveErrorLog(string x) {
-        try {
-            Files F = new Files();
-            F.SaveTempFile(Global.errorLog, x);
-            return JsonConvert.SerializeObject(x, Formatting.Indented);
-        } catch (Exception e) {
-            return JsonConvert.SerializeObject(e.Message, Formatting.Indented);
-        }
     }
 
 }

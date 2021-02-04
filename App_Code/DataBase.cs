@@ -335,6 +335,7 @@ namespace Igprog {
                 statusNote NVARCHAR(200),
                 rank INTEGER,
                 like INTEGER,
+                views INTEGER,
                 lang NVARCHAR(50))";
             CreateTable(path, sql);
         }
