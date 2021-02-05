@@ -19,11 +19,17 @@
                     </div>
                 </div>
                 <button ng-disabled="recipe.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'show recipe preview' | translate}}" ng-click="printRecipePreview(recipe)"><i class="fa fa-print"></i> <span class="d-none d-sm-inline">{{'print' | translate}}</span></button>
-                <button ng-if="config.debug" ng-disabled="recipe.id==null" class="btn btn-outline-primary text-capitalize" ng-click="saveSharingRecipe(recipe)"><i class="fa fa-share-alt"></i> <span class="d-none d-sm-inline">{{'share' | translate}}</span></button>
                 <button ng-disabled="recipe.id==null" class="btn btn-outline-danger text-capitalize" ng-click="remove(recipe)"><i class="fa fa-trash-alt"></i> <span class="d-none d-sm-inline">{{'delete' | translate}}</span></button>
             </div>
             <div class="row pt-4">
                 <div class="col-lg-7">
+                    <div class="text-right pt-2">
+                        <md-input-container ng-if="recipe.id!==null" class="md-block mt-0 mb-0" flex-gt-sm ng-click="saveSharingRecipe(recipe)" title="{{'share recipe with other users' | translate}}">
+                            <md-checkbox md-no-ink aria-label={{'share' | translate}} ng-model="recipe.isShared" class="md-primary">
+                                <i class="fa fa-share-alt"></i> {{recipe.isShared ? ('shared' | translate) : ('share' | translate)}}
+                            </md-checkbox>
+                        </md-input-container>
+                    </div>
                     <md-input-container class="md-block" flex-gt-sm>
                         <label>{{'recipe title' | translate}}</label>
                         <input ng-model="recipe.title" type="text">

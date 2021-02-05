@@ -17,7 +17,7 @@
                 </li>
             </ul>
             <div ng-if="sharingRecipes" class="mt-3">
-                <p><em class="small text-muted">* Recepti drugih korisnika aplikacije koji su sa Vama podijelili recepte.</em></p>
+                <p><em class="small text-muted">* {{'share_note' | translate}}.</em></p>
                 <md-input-container class="md-block mt-0 mb-0" flex-gt-sm ng-click="loadSharingRecipes(userId, null, showOnlyMyRecipes)">
                     <md-checkbox md-no-ink aria-label={{'show only my' | translate}} ng-model="showOnlyMyRecipes" class="md-primary">
                         {{'show only my' | translate}}
@@ -68,7 +68,7 @@
                                             <img ng-if="x.recipeImg" src="../upload/users/{{userGroupId}}/recipes/{{x.id}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
                                         </div>
                                         <div class="col-lg-10">
-                                            <div class="h5 font-weight-bold text-main mb-1">{{x.title}}</div>
+                                            <div class="h5 font-weight-bold text-main mb-1"><i ng-if="x.isShared" class="fa fa-share-alt pr-2" title="{{'shared' | translate}}"></i>{{x.title}}</div>
                                             <p>{{x.description.length > 150 ? x.description.substring(0, 147) + '...' : x.description}}</p>
                                         </div>
                                     </div>

@@ -6603,7 +6603,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         var remove = function (x) {
-            debugger;
             functions.post('Recipes', 'Delete', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
                 init();
             });
@@ -6625,7 +6624,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.confirmShared = function (userId, x) {
             functions.post('SharingRecipes', 'Get', { id: x.recipe.id }).then(function (d) {
                 $scope.recipe = d.recipe;
-                debugger;
                 if (d.userId !== userId) {
                     $scope.recipe.id = null;
                 }
@@ -6970,10 +6968,16 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     initSharingRecipe();
 
     $scope.saveSharingRecipe = function (x) {
-        sharingRecipe.recipe = x;
-        functions.post('SharingRecipes', 'Save', { x: sharingRecipe }).then(function (d) {
-            debugger;
-        });
+        if (x.isShared) {
+            sharingRecipe.recipe = x;
+            functions.post('SharingRecipes', 'Save', { x: sharingRecipe }).then(function (d) {
+                functions.alert($translate.instant(d), '');
+            });
+        } else {
+            functions.post('SharingRecipes', 'Delete', { id: x.id }).then(function (d) {
+            });
+        }
+
     };
     /********* Sharing Recipes *********/
 

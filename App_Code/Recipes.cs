@@ -37,6 +37,7 @@ public class Recipes : System.Web.Services.WebService {
 
         public List<CodeMeal> mealGroups = new List<CodeMeal>();
         public string recipeImg { get; set; }
+        public bool isShared { get; set; }
     }
 
     public class JsonFile {
@@ -74,7 +75,7 @@ public class Recipes : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
-                            NewRecipe x = GetData(reader, userId);
+                            NewRecipe x = GetData(reader, userId, false);
                             xx.Add(x);
                         }
                     } 
@@ -99,7 +100,7 @@ public class Recipes : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
-                            NewRecipe x = GetData(reader, userId);
+                            NewRecipe x = GetData(reader, userId, false);
                             xx.Add(x);
                         }
                     } 
@@ -126,11 +127,10 @@ public class Recipes : System.Web.Services.WebService {
                     Clients.Client client = new Clients.Client();
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
-                            x = GetData(reader, userId);
+                            x = GetData(reader, userId, true);
                         }
                     }
                 }
-                connection.Close();
             }
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) { return (e.Message); }
@@ -184,7 +184,7 @@ public class Recipes : System.Web.Services.WebService {
             F.DeleteRecipeFolder(userId, id);
             /******* Delete from My Sharing Recipes if exists *******/
             SharingRecipes SR = new SharingRecipes();
-            SR.Delete(id);
+            SR.DeleteSharedRecipe(id);
             /*******************************************************************/
             return "OK";
         } catch (Exception e) { return (e.Message); }
@@ -274,10 +274,11 @@ public class Recipes : System.Web.Services.WebService {
         x.data = data;
         x.mealGroups = InitMealGroups();
         x.recipeImg = null;
+        x.isShared = false;
         return x;
     }
 
-    private NewRecipe GetData(SQLiteDataReader reader, string userId) {
+    private NewRecipe GetData(SQLiteDataReader reader, string userId, bool getJson) {
         NewRecipe x = new NewRecipe();
         x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
         x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
@@ -286,9 +287,11 @@ public class Recipes : System.Web.Services.WebService {
         x.mealGroup = new CodeMeal();
         x.mealGroup.code = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
         x.mealGroup.title = GetMealGroupTitle(x.mealGroup.code);
-        x.data = JsonConvert.DeserializeObject<JsonFile>(GetJsonFile(userId, x.id));
+        x.data = getJson ? JsonConvert.DeserializeObject<JsonFile>(GetJsonFile(userId, x.id)) : new JsonFile();
         x.recipeImg = GetRecipeImg(userId, x.id);
         x.mealGroups = InitMealGroups();
+        SharingRecipes SR = new SharingRecipes();
+        x.isShared = SR.Check(x.id);
         return x;
     }
 

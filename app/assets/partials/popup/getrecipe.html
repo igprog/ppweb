@@ -37,11 +37,11 @@
                         <md-input-container class="md-block m-0" flex-gt-xs>
                             <label>{{'meal group' | translate}}</label>
                             <md-select ng-model="mealGroup">
-                                <md-option value="">
-                                    <md-checkbox ng-checked="mealGroup==''" class="md-primary text-capitalize" aria-label="mealgroup" ng-click="search(searchValue, null)">{{'all' | translate}}</md-checkbox>
+                                <md-option ng-value=mealGroup>
+                                    <md-checkbox ng-checked="mealGroup.code==''" class="md-primary text-capitalize" aria-label="mealgroup" ng-click="search(searchValue, null)">{{'all' | translate}}</md-checkbox>
                                 </md-option>
-                                <md-option ng-value="x.code" ng-repeat="x in recipe.mealGroups track by $index">
-                                    <md-checkbox ng-checked="x.code==mealGroup" class="md-primary text-capitalize" aria-label="mealgroup" ng-click="search(searchValue, x.code)">{{x.title | translate}}</md-checkbox>
+                                <md-option ng-selected="x.code==recipe.mealGroup.code" ng-value="x" ng-repeat="x in recipe.mealGroups track by $index" ng-click="search(searchValue, x.code)">
+                                    <md-checkbox ng-checked="x.code==recipe.mealGroup.code" class="md-primary text-capitalize" aria-label="mealgroup">{{x.title | translate}}</md-checkbox>
                                 </md-option>
                             </md-select>
                         </md-input-container>

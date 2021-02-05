@@ -40,6 +40,7 @@ public class SharingRecipes : System.Web.Services.WebService {
         public int views;
         public string lang;
         public bool adminSave;
+        public string resp;
     }
 
     public class Status {
@@ -67,6 +68,7 @@ public class SharingRecipes : System.Web.Services.WebService {
         x.views = 0;
         x.lang = null;
         x.adminSave = false;
+        x.resp = null;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -183,7 +185,8 @@ public class SharingRecipes : System.Web.Services.WebService {
                 }
                 connection.Close();
             }
-            return JsonConvert.SerializeObject(x, Formatting.None);
+            x.resp = "saved";
+            return JsonConvert.SerializeObject(x.resp, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, x.userId, "SharingRecipes", "Save");
             return (JsonConvert.SerializeObject(e.Message, Formatting.None));
@@ -203,6 +206,14 @@ public class SharingRecipes : System.Web.Services.WebService {
                 }
                 connection.Close();
             }
+            return JsonConvert.SerializeObject("OK", Formatting.None);
+        } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
+    }
+
+    [WebMethod]
+    public string Delete(string id) {
+        try {
+            DeleteSharedRecipe(id);
             return JsonConvert.SerializeObject("OK", Formatting.None);
         } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
     }
@@ -236,19 +247,21 @@ public class SharingRecipes : System.Web.Services.WebService {
         return x;
     }
 
-    public void Delete(string id) {
-        using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
-            connection.Open();
-            string sql = string.Format(@"BEGIN;
+    public void DeleteSharedRecipe(string id) {
+        if (!string.IsNullOrWhiteSpace(id)){
+            using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
+                connection.Open();
+                string sql = string.Format(@"BEGIN;
                                 DELETE FROM recipes WHERE id = '{0}';
                                 COMMIT;", id);
-            using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                command.ExecuteNonQuery();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.ExecuteNonQuery();
+                }
             }
         }
     }
 
-    private bool Check(string id) {
+    public bool Check(string id) {
         try {
             bool result = false;
             using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
@@ -261,7 +274,6 @@ public class SharingRecipes : System.Web.Services.WebService {
                         }
                     }
                 }
-                connection.Close();
             }
             return result;
         } catch (Exception e) { return false; }

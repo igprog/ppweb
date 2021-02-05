@@ -2013,7 +2013,13 @@
   "pending": "na pregledu",
   "approved": "odobren",
   "rejected": "odbijen",
-  "show only my": "Prikaži samo moje"
+  "show only my": "Prikaži samo moje",
+  "share recipe with other users": "Podijeli recept sa drugim korisnicima",
+  "share": "Podijeli",
+  "shared": "Podijeljen",
+  "shared recipes": "Podijeljeni recepti",
+  "share_note": "Recepti drugih korisnika koji su podijelili svoje recepte sa vama",
+  "share_alert": "Ako želite vidjeti recepte drugih korisnika, prvo morate podijeliti barem jedan svoj recept"
 
 
 }
