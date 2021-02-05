@@ -6609,15 +6609,27 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         /***** Shared Recipes *****/
+        var loadSharingRecipes = function (userId, status, showUserRecipes) {
+            functions.post('SharingRecipes', 'Load', { userId: userId, status: status, showUserRecipes: showUserRecipes }).then(function (d) {
+                $scope.d = d;
+                $scope.sharingRecipes = true;
+            });
+        }
+
         $scope.showUserRecipes = false;
+        $rootScope.showPointer = false;
         $scope.loadSharingRecipes = function (userId, status, showUserRecipes) {
             $scope.showUserRecipes = showUserRecipes;
             if (status === null && !showUserRecipes) {
                 status = 1;
             }
-            functions.post('SharingRecipes', 'Load', { userId: userId, status: status, showUserRecipes: showUserRecipes }).then(function (d) {
-                $scope.d = d;
-                $scope.sharingRecipes = true;
+            functions.post('SharingRecipes', 'CheckIfSharingUser', { userId: userId }).then(function (d) {
+                if (d) {
+                    loadSharingRecipes(userId, status, showUserRecipes);
+                } else {
+                    $rootScope.showPointer = true;
+                    functions.alert($translate.instant('share_alert'), '');
+                }
             });
         };
 
@@ -6968,16 +6980,20 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     initSharingRecipe();
 
     $scope.saveSharingRecipe = function (x) {
-        if (x.isShared) {
-            sharingRecipe.recipe = x;
-            functions.post('SharingRecipes', 'Save', { x: sharingRecipe }).then(function (d) {
-                functions.alert($translate.instant(d), '');
-            });
+        if (x.id === null) {
+            functions.alert($translate.instant('choose recipe'), '');
+            $scope.recipe.isShared = false;
         } else {
-            functions.post('SharingRecipes', 'Delete', { id: x.id }).then(function (d) {
-            });
+            if (x.isShared) {
+                sharingRecipe.recipe = x;
+                functions.post('SharingRecipes', 'Save', { x: sharingRecipe }).then(function (d) {
+                    functions.alert($translate.instant(d), '');
+                });
+            } else {
+                functions.post('SharingRecipes', 'Delete', { id: x.id }).then(function (d) {
+                });
+            }
         }
-
     };
     /********* Sharing Recipes *********/
 

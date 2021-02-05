@@ -10,10 +10,10 @@
         <div class="md-dialog-content">
             <ul class="nav nav-tabs text-capitalize">
                 <li class="nav-item" ng-click="load()">
-                    <a href="" ng-class="!sharingRecipes?'nav-link active':'nav-link'">{{'my recipes' | translate}}</a>
+                    <a href="" ng-class="!sharingRecipes?'nav-link active':'nav-link'"><i class="fa fa-user"></i> {{'my recipes' | translate}}</a>
                 </li>
                 <li class="nav-item" ng-click="loadSharingRecipes(userId, 1, false)">
-                    <a href="" ng-class="sharingRecipes?'nav-link active':'nav-link'">{{'shared recipes' | translate}}</a>
+                    <a href="" ng-class="sharingRecipes?'nav-link active':'nav-link'"><i class="fa fa-share-alt"></i> {{'shared recipes' | translate}}</a>
                 </li>
             </ul>
             <div ng-if="sharingRecipes" class="mt-3">

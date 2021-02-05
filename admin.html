@@ -85,7 +85,7 @@
                     <li ng-class="activeTab==='total'?'active':''" ng-click="total(year)"><a href=""><i class="fa fa-bar-chart"></i> Analitika</a></li>
                     <!--<li ng-class="showUsers==true?'active':''" ng-click="search(searchQuery, showActive, limit, isDesc)"><a href=""><i class="fa fa-users"></i> Korisnici</a></li>
                     <li ng-class="showUsers==false?'active':''" ng-click="total(year)"><a href=""><i class="fa fa-bar-chart"></i> Analitika</a></li>-->
-                    <li ng-class="activeTab==='sharingRecipes'?'active':''" ng-click="loadSharingRecipes()"><a href=""><i class="fa fa-share"></i> Podijeljeni Recepti</a></li>
+                    <li ng-class="activeTab==='sharingRecipes'?'active':''" ng-click="loadSharingRecipes()"><a href=""><i class="fa fa-share-alt"></i> Podijeljeni Recepti</a></li>
                     <li ng-class="activeTab==='errorLog'?'active':''" ng-click="loadErrorLog()"><a href=""><i class="fa fa-exclamation-triangle"></i> Error Log</a></li>
                 </ul>
             </div>
@@ -326,6 +326,7 @@
                         <div class="col-lg-6">
                             <div class="panel panel-default" ng-repeat="x in sharingRecipes track by $index">
                                 <div class="panel-heading">
+                                    <a href="" ng-click="removeRecipe(x.recipe)" class="close" style="color:red!important" title="briši">&times;</a>
                                     <div>
                                         <label><i class="{{x.status.ico}} text-{{x.status.style}}"></i> {{x.recipe.title}}</label>
                                     </div>

@@ -407,6 +407,9 @@ public class Users : System.Web.Services.WebService {
                 if (activeUsers == true) {
                     aciveUsersSql = "AND isActive = 1";
                 }
+                if (string.IsNullOrWhiteSpace(query)) {
+                    query = "";
+                }
                 string sql = string.Format(@"
                         SELECT userId, userType, firstName, lastName, companyName, address, postalCode, city, country, pin, phone, email, userName, password, adminType, userGroupId, activationDate, expirationDate, isActive, iPAddress, rowid
                         FROM users                       
@@ -587,6 +590,8 @@ public class Users : System.Web.Services.WebService {
                     Files f = new Files();
                     f.DeleteUserFolder(x.userGroupId);
                 }
+                SharingRecipes SR = new SharingRecipes();
+                SR.DeleteSharedRecipeByUserId(x.userGroupId);
                 return JsonConvert.SerializeObject("account has been deleted", Formatting.None);
             } else {
                 return JsonConvert.SerializeObject("you do not have permission to delete this account", Formatting.None);

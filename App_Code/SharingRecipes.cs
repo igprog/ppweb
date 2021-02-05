@@ -217,6 +217,22 @@ public class SharingRecipes : System.Web.Services.WebService {
             return JsonConvert.SerializeObject("OK", Formatting.None);
         } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
     }
+
+    [WebMethod]
+    public bool CheckIfSharingUser(string userId) {
+        try {
+            string path = Server.MapPath(string.Format("~/App_Data/{0}", dataBase));
+            db.CreateGlobalDataBase(path, db.sharingrecipes);
+            string sql = string.Format("SELECT EXISTS(SELECT id FROM recipes WHERE userId = '{0}')", userId);
+            using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.ExecuteNonQuery();
+                }
+            }
+            return true;
+        } catch (Exception e) { return false; }
+    }
     #endregion WebMethods
 
     #region Methods
@@ -254,6 +270,20 @@ public class SharingRecipes : System.Web.Services.WebService {
                 string sql = string.Format(@"BEGIN;
                                 DELETE FROM recipes WHERE id = '{0}';
                                 COMMIT;", id);
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+    }
+
+    public void DeleteSharedRecipeByUserId(string userId) {
+        if (!string.IsNullOrWhiteSpace(userId)) {
+            using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
+                connection.Open();
+                string sql = string.Format(@"BEGIN;
+                                DELETE FROM recipes WHERE userId = '{0}' OR userGroupId = '{0}';
+                                COMMIT;", userId);
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();
                 }
