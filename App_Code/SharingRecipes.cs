@@ -153,7 +153,7 @@ public class SharingRecipes : System.Web.Services.WebService {
                 }
                 connection.Close();
             }
-            x.recipe.data = JsonConvert.DeserializeObject<Recipes.JsonFile>(R.GetJsonFile(x.userId, x.recipe.id));
+            x.recipe.data = JsonConvert.DeserializeObject<Recipes.JsonFile>(R.GetJsonFile(x.userGroupId, x.recipe.id));
             x.recipe.recipeImg = Recipes.GetRecipeImg(x.userGroupId, x.recipe.id);
             x.recipe.mealGroups = R.InitMealGroups();
             return JsonConvert.SerializeObject(x, Formatting.None);
@@ -173,8 +173,8 @@ public class SharingRecipes : System.Web.Services.WebService {
                         COMMIT;", mainSql, x.recipe.id, x.userId, x.userGroupId, x.recordDate, x.recipe.title, x.recipe.description, x.recipe.energy, x.recipe.mealGroup.code, x.status.code, x.status.note, x.rank, x.like, x.views, x.lang);
             } else {
                 sql = string.Format(@"BEGIN;
-                        UPDATE recipes SET recordDate = '{1}', title = '{2}', desc = '{3}', energy = '{4}', mealGroup = '{5}', lang = '{6}' WHERE id = '{0}';
-                        COMMIT;", x.recipe.id, x.recordDate, x.recipe.title, x.recipe.description, x.recipe.energy, x.recipe.mealGroup.code, x.lang);
+                        UPDATE recipes SET recordDate = '{1}', title = '{2}', desc = '{3}', energy = '{4}', mealGroup = '{5}', status = {6} lang = '{7}' WHERE id = '{0}';
+                        COMMIT;", x.recipe.id, x.recordDate, x.recipe.title, x.recipe.description, x.recipe.energy, x.recipe.mealGroup.code, x.status.code, x.lang);
             }
             x.recipe.energy = x.recipe.data.selectedFoods.Sum(a => a.energy);
             
@@ -221,16 +221,22 @@ public class SharingRecipes : System.Web.Services.WebService {
     [WebMethod]
     public bool CheckIfSharingUser(string userId) {
         try {
+            bool result = false;
             string path = Server.MapPath(string.Format("~/App_Data/{0}", dataBase));
             db.CreateGlobalDataBase(path, db.sharingrecipes);
-            string sql = string.Format("SELECT EXISTS(SELECT id FROM recipes WHERE userId = '{0}')", userId);
             using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
+                string sql = string.Format("SELECT EXISTS(SELECT id FROM recipes WHERE userId = '{0}')", userId);
                 connection.Open();
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                    command.ExecuteNonQuery();
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            result = reader.GetBoolean(0);
+                        }
+                    }
                 }
             }
-            return true;
+            return result;
+
         } catch (Exception e) { return false; }
     }
     #endregion WebMethods

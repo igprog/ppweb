@@ -255,7 +255,6 @@ angular.module('app', [])
     }
 
     $scope.removeRecipe = function (x) {
-        debugger;
         var r = confirm("Briši " + x.title + "?");
         if (r) {
             functions.post('SharingRecipes', 'Delete', { id: x.id }).then(function (d) {

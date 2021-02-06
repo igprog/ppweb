@@ -18,8 +18,8 @@
             </ul>
             <div ng-if="sharingRecipes" class="mt-3">
                 <p><em class="small text-muted">* {{'share_note' | translate}}.</em></p>
-                <md-input-container class="md-block mt-0 mb-0" flex-gt-sm ng-click="loadSharingRecipes(userId, null, showOnlyMyRecipes)">
-                    <md-checkbox md-no-ink aria-label={{'show only my' | translate}} ng-model="showOnlyMyRecipes" class="md-primary">
+                <md-input-container class="md-block mt-0 mb-0" flex-gt-sm ng-click="loadSharingRecipes(userId, null, showUserRecipes)">
+                    <md-checkbox md-no-ink aria-label={{'show only my' | translate}} ng-model="showUserRecipes" class="md-primary">
                         {{'show only my' | translate}}
                     </md-checkbox>
                 </md-input-container>

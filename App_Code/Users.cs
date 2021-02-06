@@ -573,8 +573,13 @@ public class Users : System.Web.Services.WebService {
                     command.ExecuteNonQuery();
                 }
             }
+            SharingRecipes SR = new SharingRecipes();
+            SR.DeleteSharedRecipeByUserId(x.userId);
             return "ok";
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, "Users", "Delete");
+            return (e.Message);
+        }
     }
 
     [WebMethod]
@@ -587,16 +592,19 @@ public class Users : System.Web.Services.WebService {
                     using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                         command.ExecuteNonQuery();
                     }
-                    Files f = new Files();
-                    f.DeleteUserFolder(x.userGroupId);
                 }
                 SharingRecipes SR = new SharingRecipes();
                 SR.DeleteSharedRecipeByUserId(x.userGroupId);
+                Files f = new Files();
+                f.DeleteUserFolder(x.userGroupId);
                 return JsonConvert.SerializeObject("account has been deleted", Formatting.None);
             } else {
                 return JsonConvert.SerializeObject("you do not have permission to delete this account", Formatting.None);
             }
-        } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, "Users", "DeleteAllUserGroup");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]

@@ -6618,6 +6618,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
         $scope.showUserRecipes = false;
         $rootScope.showPointer = false;
+        $scope.showUserRecipes = false;
         $scope.loadSharingRecipes = function (userId, status, showUserRecipes) {
             $scope.showUserRecipes = showUserRecipes;
             if (status === null && !showUserRecipes) {
@@ -6981,7 +6982,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     $scope.saveSharingRecipe = function (x) {
         if (x.id === null) {
-            functions.alert($translate.instant('choose recipe'), '');
+            if (x.title !== null) {
+                functions.alert($translate.instant('save recipe'), '');
+            } else {
+                functions.alert($translate.instant('choose recipe'), '');
+            }
             $scope.recipe.isShared = false;
         } else {
             if (x.isShared) {
