@@ -6503,8 +6503,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             parent: angular.element(document.body),
             clickOutsideToClose: true,
         })
-        .then(function (recipe) {
-            $scope.recipe = recipe;
+        .then(function (resp) {
+            $scope.recipe = resp.data;
+            $scope.userId = resp.userId;
+            $scope.recipeId = resp.recipeId;
             getTotals($scope.recipe);
         }, function () {
         });
@@ -6554,6 +6556,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             functions.post('Recipes', 'Init', {}).then(function (d) {
                 $scope.recipe = d;
                 $scope.mealGroup = d.mealGroup;
+                $scope.userId = $rootScope.user.userGroupId;
             });
         }
         init();
@@ -6579,7 +6582,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         var get = function (userGroupId, x) {
             functions.post('Recipes', 'Get', { userId: userGroupId, id: x.id }).then(function (d) {
                 $scope.recipe = d;
-                $mdDialog.hide($scope.recipe);
+                var userId = $rootScope.user.userGroupId;
+                var recipeId = $scope.recipe.id;
+                var resp = {
+                    userId: userId,
+                    recipeId: recipeId,
+                    data: $scope.recipe
+                }
+                $mdDialog.hide(resp);
             });
         }
 
@@ -6637,11 +6647,18 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.confirmShared = function (userId, x) {
             functions.post('SharingRecipes', 'Get', { id: x.recipe.id }).then(function (d) {
                 $scope.recipe = d.recipe;
+                var userId = d.userId;
+                var recipeId = $scope.recipe.id;
                 if (d.userId !== userId) {
                     $scope.recipe.id = null;
                 }
                 functions.post('SharingRecipes', 'UpdateViews', { id: x.recipe.id }).then(function (d) {
-                    $mdDialog.hide($scope.recipe);
+                    var resp = {
+                        userId: userId,
+                        recipeId: recipeId,
+                        data: $scope.recipe
+                    }
+                    $mdDialog.hide(resp);
                 });
             });
         }

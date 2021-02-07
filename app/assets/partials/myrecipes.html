@@ -62,7 +62,7 @@
                             <div ng-if="!recipe.recipeImg" class="text-center text-primary">
                                 <i class="fa fa-image fa-5x"></i>
                             </div>
-                            <img ng-if="recipe.recipeImg" class="mx-auto d-block img-circle rounded-circle" src="../upload/users/{{user.userGroupId}}/recipes/{{recipe.id}}/recipeimg/{{recipe.recipeImg}}" alt="{{recipe.recipeImg}}" style="height:15rem;width:15rem">
+                            <img ng-if="recipe.recipeImg" class="mx-auto d-block img-circle rounded-circle" src="../upload/users/{{userId}}/recipes/{{recipeId}}/recipeimg/{{recipe.recipeImg}}" alt="{{recipe.recipeImg}}" style="height:15rem;width:15rem">
                         </div>
                         <div class="card-footer">
                             <form id="formUpload" ng-submit="uploadImg()" enctype="multipart/form-data" method="post">
