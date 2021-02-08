@@ -106,7 +106,10 @@ public class SharingRecipes : System.Web.Services.WebService {
                 connection.Close();
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return (JsonConvert.SerializeObject(e.Message, Formatting.None)); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "Recipes", "Load");
+            return (JsonConvert.SerializeObject(e.Message, Formatting.None));
+        }
     }
 
     [WebMethod]
@@ -125,6 +128,9 @@ public class SharingRecipes : System.Web.Services.WebService {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
                             NewSharingRecipe x = GetData(reader);
+                            x.recipeId = x.recipe.id;
+                            x.recipe.mealGroup.title = R.GetMealGroupTitle(x.recipe.mealGroup.code);
+                            x.recipe.recipeImg = Recipes.GetRecipeImg(x.userGroupId, x.recipe.id);
                             xx.Add(x);
                         }
                     }
@@ -132,7 +138,7 @@ public class SharingRecipes : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, "Recipes", "Search");
+            L.SendErrorLog(e, userId, "Recipes", "Search");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -161,7 +167,10 @@ public class SharingRecipes : System.Web.Services.WebService {
             x.recipe.recipeImg = Recipes.GetRecipeImg(x.userGroupId, x.recipe.id);
             x.recipe.mealGroups = R.InitMealGroups();
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, id, "Recipes", "Get");
+            return (e.Message);
+        }
     }
 
     [WebMethod]
@@ -211,7 +220,10 @@ public class SharingRecipes : System.Web.Services.WebService {
                 connection.Close();
             }
             return JsonConvert.SerializeObject("OK", Formatting.None);
-        } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, id, "SharingRecipes", "UpdateViews");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -219,7 +231,10 @@ public class SharingRecipes : System.Web.Services.WebService {
         try {
             DeleteSharedRecipe(id);
             return JsonConvert.SerializeObject("OK", Formatting.None);
-        } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, id, "SharingRecipes", "Delete");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]

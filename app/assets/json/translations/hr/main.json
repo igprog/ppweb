@@ -2020,7 +2020,9 @@
   "shared recipes": "Podijeljeni recepti",
   "share_note": "Recepti drugih korisnika koji su podijelili svoje recepte sa vama",
   "share_alert": "Ako želite vidjeti recepte drugih korisnika, prvo morate podijeliti barem jedan svoj recept",
-  "choose recipe": "Odaberite recept"
+  "choose recipe": "Odaberite recept",
+  "view": "pregled",
+  "views": "pregleda"
 
 
 }

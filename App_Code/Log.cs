@@ -65,7 +65,7 @@ public class Log : System.Web.Services.WebService {
         string err = string.Format(@"## TIME: {0}
 SERVICE: {1}\{2}.asmx
 MESAGE: {3}
-USER ID: {4}
+ID: {4}
 "
             , x.time.ToString()
             , x.service
