@@ -21,7 +21,6 @@ public class SharingRecipes : System.Web.Services.WebService {
     string mainSql = "id, userId, userGroupId, recordDate, title, desc, energy, mealGroup, status, statusNote, rank, like, views, lang";
     DataBase db = new DataBase();
     Recipes R = new Recipes();
-    Users U = new Users();
     Log L = new Log();
 
     public SharingRecipes() {
@@ -31,7 +30,8 @@ public class SharingRecipes : System.Web.Services.WebService {
     public class NewSharingRecipe {
         public Recipes.NewRecipe recipe;
         public string userId;
-        public string ownerName;
+        public string recipeId;
+        public Users.NewUser recipeOwner;
         public string userGroupId;
         public string recordDate;
         public Status status;
@@ -58,7 +58,8 @@ public class SharingRecipes : System.Web.Services.WebService {
         NewSharingRecipe x = new NewSharingRecipe();
         x.recipe = R.InitData();
         x.userId = null;
-        x.ownerName = null;
+        x.recipeId = null;
+        x.recipeOwner = new Users.NewUser();
         x.userGroupId = null;
         x.recordDate = DateTime.UtcNow.ToString();
         x.status = new Status();
@@ -95,6 +96,7 @@ public class SharingRecipes : System.Web.Services.WebService {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
                             NewSharingRecipe x = GetData(reader);
+                            x.recipeId = x.recipe.id;
                             x.recipe.mealGroup.title = R.GetMealGroupTitle(x.recipe.mealGroup.code);
                             x.recipe.recipeImg = Recipes.GetRecipeImg(x.userGroupId, x.recipe.id);
                             xx.Add(x);
@@ -147,13 +149,15 @@ public class SharingRecipes : System.Web.Services.WebService {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
                             x = GetData(reader);
-                            x.recipe.mealGroup.title = R.GetMealGroupTitle(x.recipe.mealGroup.code);
+                            x.recipe.recipeImg = Recipes.GetRecipeImg(x.userGroupId, x.recipe.id);
                         }
                     }
                 }
                 connection.Close();
             }
             x.recipe.data = JsonConvert.DeserializeObject<Recipes.JsonFile>(R.GetJsonFile(x.userGroupId, x.recipe.id));
+            x.recipeId = x.recipe.id;
+            x.recipe.mealGroup.title = R.GetMealGroupTitle(x.recipe.mealGroup.code);
             x.recipe.recipeImg = Recipes.GetRecipeImg(x.userGroupId, x.recipe.id);
             x.recipe.mealGroups = R.InitMealGroups();
             return JsonConvert.SerializeObject(x, Formatting.None);
@@ -247,7 +251,10 @@ public class SharingRecipes : System.Web.Services.WebService {
         x.recipe = new Recipes.NewRecipe();
         x.recipe.id = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
         x.userId = reader.GetValue(1) == DBNull.Value ? null : reader.GetString(1);
-        x.ownerName = U.GetUserFirstName(x.userId);
+        x.recipeOwner = new Users.NewUser();
+        x.recipeOwner.userId = x.userId;
+        Users U = new Users();
+        x.recipeOwner.firstName = U.GetUserFirstName(x.userId);
         x.userGroupId = reader.GetValue(2) == DBNull.Value ? null : reader.GetString(2);
         x.recordDate = reader.GetValue(3) == DBNull.Value ? null : reader.GetString(3);
         x.recipe.title = reader.GetValue(4) == DBNull.Value ? null : reader.GetString(4);

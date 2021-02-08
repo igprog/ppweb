@@ -92,7 +92,7 @@
                                 <div class="h5 mb-0 text-gray-800">
                                     <div class="row">
                                         <div class="col-sm-6 small text-muted">
-                                            <p ng-if="config.debug"><i class="fa fa-user"></i> {{x.ownerName}}</p>
+                                            <p title="{{'author' | translate}}"><i class="fa fa-user"></i> {{x.recipeOwner.firstName}}</p>
                                         </div>
                                         <div ng-if="userId===x.userId && showUserRecipes" class="col-lg-6 text-right small text-{{x.status.style}}">
                                             <i ng-class="x.status.ico"></i> <span ng-if="x.status.title" class="pr-2">{{x.status.title | translate}}</span>

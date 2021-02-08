@@ -6647,8 +6647,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.confirmShared = function (userId, x) {
             functions.post('SharingRecipes', 'Get', { id: x.recipe.id }).then(function (d) {
                 $scope.recipe = d.recipe;
-                var userId = d.userId;
-                var recipeId = $scope.recipe.id;
+                var userId = d.recipeOwner.userId;
+                var recipeId = d.recipeId;
                 if (d.userId !== userId) {
                     $scope.recipe.id = null;
                 }

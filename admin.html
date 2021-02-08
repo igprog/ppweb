@@ -344,7 +344,7 @@
                                                 <li ng-repeat="y in x.recipe.data.selectedFoods"><strong>{{y.food}}</strong> <span class="text-muted small">{{y.quantity}} {{y.unit}} ({{y.mass}} g)</span></li>
                                             </ul>
                                             <hr />
-                                            <p class="small text-muted">Ime : {{x.ownerName}}</p>
+                                            <p class="small text-muted">Autor : {{x.recipeOwner.firstName}}</p>
                                             <p class="small text-muted">User ID: {{x.userId}}</p>
                                             <p class="small text-muted">Grupa obroka: {{x.recipe.mealGroup.code}} - {{x.recipe.mealGroup.title}}</p>
                                             <p class="small text-muted">Pregledi: <span class="badge">{{x.views}}</span></p>
