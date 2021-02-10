@@ -1,5 +1,5 @@
 ﻿<div ng-controller="signupCtrl" class="text-left" >
-    <div ng-show="!signupok">
+    <div ng-if="!signupok">
         <p>Za pristup demo verziji potrebno je ispuniti <em>registracijsku formu</em>. Upišite Vaše ime i prezime, email adresu te lozinku koju želite koristiti za pristup aplikciji.</p>
         <div class="well">
             <h4>Registracijska forma</h4>
@@ -56,7 +56,7 @@
                 <div ng-if="msg.title" class="alert alert-{{msg.css}}">
                     <i class="fa fa-{{msg.icon}}"></i> {{msg.title}}
                 </div>
-                <button ng-if="!hidebutton" class="btn btn-default btn-lg main" ng-click="signup(user)"><i class="fa fa-sign-in"></i> REGISTRACIJA</button>
+                <button class="btn btn-default btn-lg main" ng-disabled="isSendButtonDisabled" ng-click="signup(user, emailConfirm, passwordConfirm, accept)"><span ng-class="sendicon"></span> {{sendicontitle}}</button>
             </div>
         </div>
     </div>

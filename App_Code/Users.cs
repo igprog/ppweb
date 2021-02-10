@@ -176,7 +176,10 @@ public class Users : System.Web.Services.WebService {
             x.datasum = new DataSum();
             x.headerInfo = "";
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, "Users", "Init");
+            return e.Message;
+        }
     }
 
     [WebMethod]
@@ -227,7 +230,10 @@ public class Users : System.Web.Services.WebService {
             }
             x.datasum = GetDataSum(x.userGroupId, x.userId, x.userType, x.adminType);
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userName, "Users", "Login");
+            return e.Message;
+        }
     }
 
     [WebMethod]
@@ -278,7 +284,10 @@ public class Users : System.Web.Services.WebService {
                     SendMail(x, lang);
                 }
                 return ("registration completed successfully");
-            } catch (Exception e) { return ("error: " + e); }
+            } catch (Exception e) {
+                L.SendErrorLog(e, x.email, "Users", "Signup");
+                return e.Message;
+            }
         }
     }
 
@@ -333,6 +342,7 @@ public class Users : System.Web.Services.WebService {
 
             return JsonConvert.SerializeObject("saved", Formatting.None);
         } catch (Exception e) {
+            L.SendErrorLog(e, x.userId, "Users", "Update");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
