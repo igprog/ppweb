@@ -241,17 +241,17 @@ public class Users : System.Web.Services.WebService {
         string path = HttpContext.Current.Server.MapPath("~/App_Data/" + dataBase);
         db.CreateGlobalDataBase(path, db.users);
         if (Check(x) != false) {
-            return ("the email address you have entered is already registered");
+            return "the email address you have entered is already registered";
         }
         else {
             try {
-                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
-                    x.userId = Convert.ToString(Guid.NewGuid());
-                    x.userGroupId = x.userGroupId == null ? x.userId : x.userGroupId;
-                    x.password = Encrypt(x.password);
-                    connection.Open();
-                    string sql = @"INSERT INTO users VALUES  
+                x.userId = Convert.ToString(Guid.NewGuid());
+                x.userGroupId = x.userGroupId == null ? x.userId : x.userGroupId;
+                x.password = Encrypt(x.password);
+                string sql = @"INSERT INTO users VALUES  
                        (@UserId, @UserType, @FirstName, @LastName, @CompanyName, @Address, @PostalCode, @City, @Country, @Pin, @Phone, @Email, @UserName, @Password, @AdminType, @UserGroupId, @ActivationDate, @ExpirationDate, @IsActive, @IPAddress)";
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                    connection.Open();
                     using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                         command.Parameters.Add(new SQLiteParameter("userId", x.userId));
                         command.Parameters.Add(new SQLiteParameter("UserType", x.userType));
@@ -278,12 +278,11 @@ public class Users : System.Web.Services.WebService {
                             transaction.Commit();
                         }
                     }
-                    connection.Close();
                 }
                 if (x.email.Contains("@")) {
                     SendMail(x, lang);
                 }
-                return ("registration completed successfully");
+                return "registration completed successfully";
             } catch (Exception e) {
                 L.SendErrorLog(e, x.email, "Users", "Signup");
                 return e.Message;

@@ -36,19 +36,19 @@
                         <form id="searchFrm" class="input-group">
                             <input ng-model="searchValue" class="form-control search" type="text" placeholder="{{'search' | translate}}..." autofocus />
                             <span class="input-group-append">
-                                <button class="btn btn-outline-primary" form="searchFrm" type="submit" ng-click="search(searchValue, mealGroup.code, sharingRecipes)"><i class="fa fa-search" aria-hidden="true"></i>&#8203;</button>
+                                <button class="btn btn-outline-primary" form="searchFrm" type="submit" ng-click="search(searchValue, init.mealGroup.code, sharingRecipes)"><i class="fa fa-search" aria-hidden="true"></i>&#8203;</button>
                             </span>
                         </form>
                     </div>
                     <div class="col-sm-4 pt-3">
                         <md-input-container class="md-block mt-0" flex-gt-xs>
                             <label>{{'meal group' | translate}}</label>
-                            <md-select ng-model="mealGroup" >
-                                <md-option ng-value=mealGroup>
-                                    <md-checkbox ng-checked="mealGroup.code==''" class="md-primary text-capitalize" aria-label="mealgroup" ng-click="search(searchValue, null, sharingRecipes)">{{'all' | translate}}</md-checkbox>
+                            <md-select ng-model="init.mealGroup" >
+                                <md-option ng-value=init.mealGroup>
+                                    <md-checkbox ng-checked="init.mealGroup.code==''" class="md-primary text-capitalize" aria-label="mealgroup" ng-click="search(searchValue, null, sharingRecipes)">{{'all' | translate}}</md-checkbox>
                                 </md-option>
-                                <md-option ng-selected="x.code==recipe.mealGroup.code" ng-value="x" ng-repeat="x in recipe.mealGroups track by $index" ng-click="search(searchValue, x.code, sharingRecipes)">
-                                    <md-checkbox ng-checked="x.code==recipe.mealGroup.code" class="md-primary text-capitalize" aria-label="mealgroup">{{x.title | translate}}</md-checkbox>
+                                <md-option ng-selected="x.code==init.mealGroup.code" ng-value="x" ng-repeat="x in init.mealGroups track by $index" ng-click="search(searchValue, x.code, sharingRecipes)">
+                                    <md-checkbox ng-checked="x.code==init.mealGroup.code" class="md-primary text-capitalize" aria-label="mealgroup">{{x.title | translate}}</md-checkbox>
                                 </md-option>
                             </md-select>
                         </md-input-container>
@@ -65,7 +65,7 @@
                                             <div ng-if="!x.recipeImg" class="text-center text-primary">
                                                 <i class="fa fa-image fa-3x"></i>
                                             </div>
-                                            <img ng-if="x.recipeImg" src="../upload/users/{{userGroupId}}/recipes/{{x.id}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                                            <img ng-if="x.recipeImg" src="../upload/users/{{x.userId}}/recipes/{{x.id}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
                                         </div>
                                         <div class="col-lg-10">
                                             <div class="h5 font-weight-bold text-main mb-1"><i ng-if="x.isShared" class="fa fa-share-alt pr-2" title="{{'shared' | translate}}"></i>{{x.title}}</div>
@@ -93,23 +93,23 @@
                                     <div class="row">
                                         <div class="col-sm-9 small text-muted">
                                             <span title="{{'author' | translate}}"><i class="fa fa-user"></i> {{x.recipeOwner.firstName}}</span>
-                                            <span class="float-right pr-5 pl-5 font-weight-bold"><span class="">{{x.views}}</span> {{x.views > 1 ? ('views' | translate) : ('view' | translate)}}</span>
+                                            <span class="float-right pr-5 pl-5"><span class="">{{x.sharingData.views}}</span> {{x.sharingData.views > 1 ? ('views' | translate) : ('view' | translate)}}</span>
                                         </div>
-                                        <div ng-if="userId===x.userId && showUserRecipes" class="col-lg-3 text-right small text-{{x.status.style}}">
-                                            <i ng-class="x.status.ico"></i> <span ng-if="x.status.title" class="pr-2">{{x.status.title | translate}}</span>
-                                            <p ng-if="x.status.note" class="pr-2 small"><em>{{x.status.note | translate}}.</em></p>
+                                        <div ng-if="userId===x.sharingData.recipeOwner.userId && showUserRecipes" class="col-lg-3 text-right small text-{{x.sharingData.status.style}}">
+                                            <i ng-class="x.sharingData.status.ico"></i> <span ng-if="x.sharingData.status.title" class="pr-2">{{x.sharingData.status.title | translate}}</span>
+                                            <p ng-if="x.sharingData.status.note" class="pr-2 small"><em>{{x.sharingData.status.note | translate}}.</em></p>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-2 pt-2 pb-2">
-                                            <div ng-if="!x.recipe.recipeImg" class="text-center text-primary">
+                                            <div ng-if="!x.recipeImg" class="text-center text-primary">
                                                 <i class="fa fa-image fa-3x"></i>
                                             </div>
-                                            <img ng-if="x.recipe.recipeImg" src="../upload/users/{{x.userGroupId}}/recipes/{{x.recipe.id}}/recipeimg/{{x.recipe.recipeImg}}" alt="{{x.recipe.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                                            <img ng-if="x.recipeImg" src="../upload/users/{{x.sharingData.recipeOwner.userGroupId}}/recipes/{{x.sharingData.recipeId}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
                                         </div>
                                         <div class="col-lg-10 pt-2">
-                                            <div class="h5 font-weight-bold text-main mb-1">{{x.recipe.title}}</div>
-                                            <p>{{x.recipe.description.length > 150 ? x.recipe.description.substring(0, 147) + '...' : x.recipe.description}}</p>
+                                            <div class="h5 font-weight-bold text-main mb-1">{{x.title}}</div>
+                                            <p>{{x.description.length > 150 ? x.description.substring(0, 147) + '...' : x.description}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -117,10 +117,10 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-6 small text-muted">
-                                <p ng-if="x.recipe.mealGroup.title">{{'meal group' | translate}}: {{x.recipe.mealGroup.title | translate}}</p>
+                                <p ng-if="x.mealGroup.title">{{'meal group' | translate}}: {{x.mealGroup.title | translate}}</p>
                             </div>
                             <div class="col-sm-6 text-right pointer" >
-                                <p title="{{'energy' | translate}}"><i class="fa fa-fire"></i> {{x.recipe.energy | number:0}} {{'kcal' | translate}}</p>
+                                <p title="{{'energy' | translate}}"><i class="fa fa-fire"></i> {{x.energy | number:0}} {{'kcal' | translate}}</p>
                             </div>
                         </div>
                     </div>

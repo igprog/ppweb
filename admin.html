@@ -326,43 +326,45 @@
                         <div class="col-lg-6">
                             <div class="panel panel-default" ng-repeat="x in sharingRecipes track by $index">
                                 <div class="panel-heading">
-                                    <a href="" ng-click="removeRecipe(x.recipe)" class="close" style="color:red!important" title="briši">&times;</a>
+                                    <a href="" ng-click="removeRecipe(x)" class="close" style="color:red!important" title="briši">&times;</a>
                                     <div class="pt-2">
-                                        <label><i class="{{x.status.ico}} text-{{x.status.style}}"></i> {{x.recipe.title}}</label>
-                                        <p class="text-muted"><em>{{x.recipe.description.length > 80 ? x.recipe.description.substring(0, 77) + '...' : x.recipe.description}}</em></p>
+                                        <label><i class="{{x.sharingData.status.ico}} text-{{x.sharingData.status.style}}"></i> {{x.title}}</label>
+                                        <p class="text-muted"><em>{{x.description.length > 80 ? x.description.substring(0, 77) + '...' : x.description}}</em></p>
                                     </div>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="col-sm-3">
-                                        <img ng-if="x.recipe.recipeImg" src="../upload/users/{{x.userId}}/recipes/{{x.recipe.id}}/recipeimg/{{x.recipe.recipeImg}}" alt="{{x.recipe.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <a href="" ng-click="GetSharingRecipe(x, $index)" >Detalji <i class="fa fa-caret-right"></i></a>
-                                        <div ng-if="x.recipe.data.selectedFoods">
-                                            <em>{{x.recipe.description}}</em>
-                                            <p class="pt-2">Namirnice:</p>
-                                            <ul>
-                                                <li ng-repeat="y in x.recipe.data.selectedFoods"><strong>{{y.food}}</strong> <span class="text-muted small">{{y.quantity}} {{y.unit}} ({{y.mass}} g)</span></li>
-                                            </ul>
-                                            <hr />
-                                            <p class="small text-muted">Autor : {{x.recipeOwner.firstName}}</p>
-                                            <p class="small text-muted">User ID: {{x.userId}}</p>
-                                            <p class="small text-muted">Grupa obroka: {{x.recipe.mealGroup.code}} - {{x.recipe.mealGroup.title}}</p>
-                                            <p class="small text-muted">Pregledi: <span class="badge">{{x.views}}</span></p>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <img ng-if="x.recipeImg" src="../upload/users/{{x.sharingData.recipeOwner.userGroupId}}/recipes/{{x.sharingData.recipeId}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <a href="" ng-click="GetSharingRecipe(x, $index)">Detalji <i class="fa fa-caret-right"></i></a>
+                                            <div ng-if="x.data.selectedFoods">
+                                                <em>{{x.description}}</em>
+                                                <p class="pt-2">Namirnice:</p>
+                                                <ul>
+                                                    <li ng-repeat="y in x.data.selectedFoods"><strong>{{y.food}}</strong> <span class="text-muted small">{{y.quantity}} {{y.unit}} ({{y.mass}} g)</span></li>
+                                                </ul>
+                                                <hr />
+                                                <p class="small text-muted">Autor : {{x.sharingData.recipeOwner.firstName}}</p>
+                                                <p class="small text-muted">User ID: {{x.sharingData.userId}}</p>
+                                                <p class="small text-muted">Grupa obroka: {{x.mealGroup.code}} - {{x.mealGroup.title}}</p>
+                                                <p class="small text-muted">Pregledi: <span class="badge">{{x.sharingData.views}}</span></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div ng-if="x.recipe.data.selectedFoods" class="panel-footer">
+                                <div ng-if="x.data.selectedFoods" class="panel-footer">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <select ng-model="x.status.code" class="form-control" title="status">
-                                                <option value="0" ng-selected="x.status.code==0?true:false">U obradi</option>
-                                                <option value="1" ng-selected="x.status.code==1?true:false">Odobren</option>
-                                                <option value="2" ng-selected="x.status.code==2?true:false">Odbijen</option>
+                                            <select ng-model="x.sharingData.status.code" class="form-control" title="status">
+                                                <option value="0" ng-selected="x.sharingData.status.code==0?true:false">U obradi</option>
+                                                <option value="1" ng-selected="x.sharingData.status.code==1?true:false">Odobren</option>
+                                                <option value="2" ng-selected="x.sharingData.status.code==2?true:false">Odbijen</option>
                                             </select>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input ng-model="x.status.note" class="form-control" placeholder="Napomena..." />
+                                            <input ng-model="x.sharingData.status.note" class="form-control" placeholder="Napomena..." />
                                         </div>
                                         <div class="col-sm-3 text-right">
                                             <button class="btn btn-danger" ng-click="saveSharingRecipe(x)"><i class="fa fa-floppy-o"></i> Spremi</button>

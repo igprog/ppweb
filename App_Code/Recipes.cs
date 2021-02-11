@@ -38,6 +38,10 @@ public class Recipes : System.Web.Services.WebService {
         public List<CodeMeal> mealGroups = new List<CodeMeal>();
         public string recipeImg { get; set; }
         public bool isShared { get; set; }
+        //TODO: sharingData
+        public SharingRecipes.SharingData sharingData = new SharingRecipes.SharingData();
+        public string userId;
+
     }
 
     public class JsonFile {
@@ -275,6 +279,9 @@ public class Recipes : System.Web.Services.WebService {
         x.mealGroups = InitMealGroups();
         x.recipeImg = null;
         x.isShared = false;
+        SharingRecipes sr = new SharingRecipes();
+        x.sharingData = sr.InitSharingData();
+        x.userId = null;
         return x;
     }
 
@@ -292,6 +299,8 @@ public class Recipes : System.Web.Services.WebService {
         x.mealGroups = InitMealGroups();
         SharingRecipes SR = new SharingRecipes();
         x.isShared = SR.Check(x.id);
+        x.sharingData = SR.InitSharingData();
+        x.userId = userId;
         return x;
     }
 

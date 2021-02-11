@@ -108,11 +108,8 @@ angular.module('app', ['ngMaterial'])
 }])
 
 .controller('signupCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
-    $scope.accept = false;
     $scope.msg = { title: null, css: null, icon: null }
-    $scope.hidebutton = false;
     $scope.signupok = false;
-    $scope.loading = false;
 
     var init = function () {
         $http({
@@ -122,9 +119,9 @@ angular.module('app', ['ngMaterial'])
         })
      .then(function (response) {
          $scope.user = JSON.parse(response.data.d);
-         $scope.passwordConfirm = '';
-         $scope.emailConfirm = '';
-
+         $scope.passwordConfirm = null;
+         $scope.emailConfirm = null;
+         $scope.accept = false;
      },
      function (response) {
          alert(response.data.d);
@@ -144,50 +141,50 @@ angular.module('app', ['ngMaterial'])
         init();
     }
 
+    var validationFormDanger = function () {
+        $scope.msg.css = 'danger';
+        $scope.msg.icon = 'exclamation';
+        $scope.sendicon = 'fa fa-sign-in';
+        $scope.sendicontitle = 'REGISTRACIJA';
+        $scope.signupok = false;
+        $scope.isSendButtonDisabled = false;
+    }
+
+    var validationFormSuccess = function () {
+        $scope.msg.css = 'success';
+        $scope.msg.icon = 'check';
+        $scope.signupok = true;
+        $scope.sendicon = 'fa fa-sign-in';
+        $scope.sendicontitle = 'REGISTRACIJA';
+        $scope.isSendButtonDisabled = true;
+    }
+
     $scope.sendicon = 'fa fa-sign-in';
     $scope.sendicontitle = 'REGISTRACIJA';
     $scope.isSendButtonDisabled = false;
     $scope.signup = function (user, emailConfirm, passwordConfirm, accept) {
-        $scope.loading = true;
         $scope.msg = { title: null, css: null, icon: null }
         user.userName = user.email;
         if (user.firstName == "" || user.lastName == "" || user.email == "" || user.password == "" || passwordConfirm == "" || emailConfirm == "") {
             $scope.msg.title = 'Sva polja su obavezna.';
-            $scope.msg.css = 'danger';
-            $scope.msg.icon = 'exclamation';
-            $scope.loading = false;
-            $scope.sendicon = 'fa fa-sign-in';
-            $scope.sendicontitle = 'REGISTRACIJA';
+            validationFormDanger();
             return false;
         }
         if (user.email != emailConfirm) {
             $scope.msg.title = 'Email adrese moraju biti jednake.';
-            $scope.msg.css = 'danger';
-            $scope.msg.icon = 'exclamation';
-            $scope.loading = false;
-            $scope.sendicon = 'fa fa-sign-in';
-            $scope.sendicontitle = 'REGISTRACIJA';
+            validationFormDanger();
             return false;
         }
         if (user.password != passwordConfirm) {
             $scope.msg.title = 'Lozinke moraju biti jednake.';
-            $scope.msg.css = 'danger';
-            $scope.msg.icon = 'exclamation';
-            $scope.loading = false;
-            $scope.sendicon = 'fa fa-sign-in';
-            $scope.sendicontitle = 'REGISTRACIJA';
+            validationFormDanger();
             return false;
         }
         if (accept == false) {
             $scope.msg.title = 'Morate prihvatiti uvjete korištenja.';
-            $scope.msg.css = 'danger';
-            $scope.msg.icon = 'exclamation';
-            $scope.loading = false;
-            $scope.sendicon = 'fa fa-sign-in';
-            $scope.sendicontitle = 'REGISTRACIJA';
+            validationFormDanger();
             return false;
         }
-        $scope.hidebutton = true;
         $scope.signupok = false;
         $scope.sendicon = 'fa fa-spinner fa-spin';
         $scope.sendicontitle = 'Šaljem';
@@ -200,36 +197,21 @@ angular.module('app', ['ngMaterial'])
        .then(function (response) {
            if (response.data.d == 'the email address you have entered is already registered') {
                $scope.msg.title = 'E-mail adresa koju ste upisali je već registrirana';
-               $scope.msg.css = 'danger';
-               $scope.msg.icon = 'exclamation';
-               $scope.hidebutton = false;
-               $scope.signupok = false;
-               $scope.loading = false;
-               $scope.sendicon = 'fa fa-sign-in';
-               $scope.sendicontitle = 'REGISTRACIJA';
-               $scope.isSendButtonDisabled = false;
+               validationFormDanger();
+               init();
            }
            if (response.data.d == 'registration completed successfully') {
                $scope.msg.title = 'Registracija upješno završena';
-               $scope.msg.css = 'success';
-               $scope.msg.icon = 'check';
-               $scope.hidebutton = true;
-               $scope.signupok = true;
-               $scope.loading = false;
-               $scope.sendicon = 'fa fa-sign-in';
-               $scope.sendicontitle = 'REGISTRACIJA';
-               $scope.isSendButtonDisabled = true;
+               validationFormSuccess();
                window.location.hash = 'registration';
            }
        },
        function (response) {
            alert(response.data.d);
-           $scope.hidebutton = false;
            $scope.signupok = false;
            $scope.sendicon = 'fa fa-sign-in';
            $scope.sendicontitle = 'REGISTRACIJA';
            $scope.isSendButtonDisabled = true;
-           $scope.loading = false;
        });
     }
 
@@ -587,16 +569,7 @@ angular.module('app', ['ngMaterial'])
             }
         };
     }
-])
-.directive('loadingDirective', function () {
-    return {
-        restrict: 'E',
-        scope: {
-            value: '='
-        },
-        templateUrl: './assets/partials/directive/loading.html'
-    };
-});
+]);
 /***** Directive *****/
 
 ;

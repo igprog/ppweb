@@ -241,14 +241,14 @@ angular.module('app', [])
 
     $scope.GetSharingRecipe = function (x, idx) {
         $scope.loading = true;
-        functions.post('SharingRecipes', 'Get', { id: x.recipe.id }).then(function (d) {
+        functions.post('SharingRecipes', 'Get', { id: x.id }).then(function (d) {
             $scope.sharingRecipes[idx] = d;
             $scope.loading = false;
         });
     }
 
     $scope.saveSharingRecipe = function (x) {
-        x.adminSave = true;
+        x.sharingData.adminSave = true;
         functions.post('SharingRecipes', 'Save', { x: x }).then(function (d) {
             $scope.loadSharingRecipes();
         });

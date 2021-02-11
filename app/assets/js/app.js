@@ -6504,10 +6504,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             clickOutsideToClose: true,
         })
         .then(function (resp) {
-            $scope.recipe = resp.data;
-            $scope.userId = resp.userId;
-            $scope.recipeId = resp.recipeId;
-            getTotals($scope.recipe);
+            $scope.d = resp;
+            getTotals($scope.d.data);
         }, function () {
         });
     };
@@ -6554,9 +6552,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 return false;
             }
             functions.post('Recipes', 'Init', {}).then(function (d) {
-                $scope.recipe = d;
-                $scope.mealGroup = d.mealGroup;
-                $scope.userId = $rootScope.user.userGroupId;
+                $scope.init = d;
             });
         }
         init();
@@ -6581,15 +6577,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
         var get = function (userGroupId, x) {
             functions.post('Recipes', 'Get', { userId: userGroupId, id: x.id }).then(function (d) {
-                $scope.recipe = d;
-                var userId = $rootScope.user.userGroupId;
-                var recipeId = $scope.recipe.id;
-                var resp = {
-                    userId: userId,
-                    recipeId: recipeId,
-                    data: $scope.recipe
-                }
-                $mdDialog.hide(resp);
+                $mdDialog.hide(d);
             });
         }
 
@@ -6630,6 +6618,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $rootScope.showPointer = false;
         $scope.showUserRecipes = false;
         $scope.loadSharingRecipes = function (userId, status, showUserRecipes) {
+            debugger;
             $scope.showUserRecipes = showUserRecipes;
             if (status === null && !showUserRecipes) {
                 status = 1;
@@ -6645,19 +6634,25 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         $scope.confirmShared = function (userId, x) {
-            functions.post('SharingRecipes', 'Get', { id: x.recipe.id }).then(function (d) {
-                $scope.recipe = d.recipe;
-                var userId = d.recipeOwner.userId;
-                var recipeId = d.recipeId;
-                if (d.userId !== userId) {
-                    $scope.recipe.id = null;
+            functions.post('SharingRecipes', 'Get', { id: x.sharingData.recipeId }).then(function (d) {
+                var resp = d;
+                debugger;
+                //$scope.recipe = d.recipe;
+                //var userId = d.recipeOwner.userId;
+                //var userGroupId = d.recipeOwner.userGroupId;
+                //var recipeId = d.recipeId;
+                if (d.sharingData.recipeOwner.userId !== userId) {
+                    resp.id = null;
                 }
-                functions.post('SharingRecipes', 'UpdateViews', { id: x.recipe.id }).then(function (d) {
-                    var resp = {
-                        userId: userId,
-                        recipeId: recipeId,
-                        data: $scope.recipe
-                    }
+
+                functions.post('SharingRecipes', 'UpdateViews', { id: x.sharingData.recipeId }).then(function (d) {
+                    //var resp = {
+                    //    userId: userId,
+                    //    userGroupId: userGroupId,
+                    //    recipeId: recipeId,
+                    //    data: $scope.recipe
+                    //}
+                    debugger;
                     $mdDialog.hide(resp);
                 });
             });
@@ -6984,8 +6979,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
     /********* Recipe Image *********/
 
-    // TODO: SharingRecipes
     /********* Sharing Recipes *********/
+    /*
     var sharingRecipe = null;
     var initSharingRecipe = function () {
         functions.post('SharingRecipes', 'Init', {}).then(function (d) {
@@ -6996,19 +6991,23 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         });
     };
     initSharingRecipe();
+    */
 
     $scope.saveSharingRecipe = function (x) {
+        debugger;
         if (x.id === null) {
             if (x.title !== null) {
                 functions.alert($translate.instant('save recipe'), '');
             } else {
                 functions.alert($translate.instant('choose recipe'), '');
             }
-            $scope.recipe.isShared = false;
+            $scope.d.isShared = false;
         } else {
             if (x.isShared) {
-                sharingRecipe.recipe = x;
-                functions.post('SharingRecipes', 'Save', { x: sharingRecipe }).then(function (d) {
+                x.sharingData.recipeOwner.userId = $rootScope.user.userId;
+                x.sharingData.recipeOwner.userGroupId = $rootScope.user.userGroupId;
+                //sharingRecipe.recipe = x;
+                functions.post('SharingRecipes', 'Save', { x: x }).then(function (d) {
                     functions.alert($translate.instant(d), '');
                 });
             } else {
