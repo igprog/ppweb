@@ -177,7 +177,7 @@ public class SharingRecipes : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string Get(string id) {
+    public string Get(string userId, string id) {
         try {
             Recipes.NewRecipe x = new Recipes.NewRecipe();
             using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
@@ -196,8 +196,9 @@ public class SharingRecipes : System.Web.Services.WebService {
             x.data = JsonConvert.DeserializeObject<Recipes.JsonFile>(R.GetJsonFile(x.sharingData.recipeOwner.userGroupId, x.id));
             x.sharingData.recipeId = x.id;
             x.mealGroup.title = R.GetMealGroupTitle(x.mealGroup.code);
-            x.recipeImg = Recipes.GetRecipeImg(x.sharingData.recipeOwner.userGroupId, x.id);
+            //x.recipeImg = Recipes.GetRecipeImg(x.sharingData.recipeOwner.userGroupId, x.id);
             x.mealGroups = R.InitMealGroups();
+            x.userId = userId;
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, id, "Recipes", "Get");
@@ -342,6 +343,7 @@ public class SharingRecipes : System.Web.Services.WebService {
         x.sharingData.lang = reader.GetValue(13) == DBNull.Value ? null : reader.GetString(13);
         Users U = new Users();
         x.sharingData.recipeOwner.firstName = U.GetUserFirstName(x.sharingData.recipeOwner.userId);
+        x.isShared = false;
         return x;
     }
 

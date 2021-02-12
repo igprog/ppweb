@@ -6312,7 +6312,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             data: ''
         })
         .then(function (response) {
-            $scope.recipe = JSON.parse(response.data.d);
+            $scope.d = JSON.parse(response.data.d);
             $scope.currentRecipe = null;
             $rootScope.totals = null;
             recipeFromMenu();
@@ -6347,13 +6347,13 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 if (angular.isDefined($rootScope.recipeData.selectedFoods)) {
                     angular.forEach($rootScope.recipeData.selectedFoods, function (value, key) {
                         if (value.meal.code == $rootScope.currentMealForRecipe) {
-                            $scope.recipe.data.selectedFoods.push(value);
-                            $scope.recipe.data.selectedInitFoods.push($rootScope.recipeData.selectedFoods[key]);
+                            $scope.d.data.selectedFoods.push(value);
+                            $scope.d.data.selectedInitFoods.push($rootScope.recipeData.selectedFoods[key]);
                         }
                     })
                     angular.forEach($rootScope.recipeData.meals, function (value, key) {
                         if (value.code == $rootScope.currentMealForRecipe) {
-                            $scope.recipe.description = value.description;
+                            $scope.d.description = value.description;
                         }
                     })
                 }
@@ -6364,7 +6364,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     init();
 
     $scope.add = function (x) {
-        $scope.recipe.push(x);
+        $scope.d.push(x);
     }
 
     $scope.openFoodPopup = function (food, idx) {
@@ -6377,18 +6377,18 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             clickOutsideToClose: true,
             d: { foods: $rootScope.foods, myFoods: $rootScope.myFoods, foodGroups: $rootScope.foodGroups, food: food, idx: idx, config: $rootScope.config }
         })
-    .then(function (x) {
-        $scope.food = x;
-        if (idx == null) {
-            $scope.recipe.data.selectedFoods.push(x.food);
-            $scope.recipe.data.selectedInitFoods.push(x.initFood);
-        } else {
-            $scope.recipe.data.selectedFoods[idx] = x.food;
-            $scope.recipe.data.selectedInitFoods[idx] = x.initFood;
-        }
-        getTotals($scope.recipe);
-        $scope.addFoodBtnIcon = 'fa fa-plus';
-        $scope.addFoodBtn = false;
+        .then(function (x) {
+            $scope.food = x;
+            if (idx == null) {
+                $scope.d.data.selectedFoods.push(x.food);
+                $scope.d.data.selectedInitFoods.push(x.initFood);
+            } else {
+                $scope.d.data.selectedFoods[idx] = x.food;
+                $scope.d.data.selectedInitFoods[idx] = x.initFood;
+            }
+            getTotals($scope.d);
+            $scope.addFoodBtnIcon = 'fa fa-plus';
+            $scope.addFoodBtn = false;
         }, function () {
             $scope.addFoodBtnIcon = 'fa fa-plus';
             $scope.addFoodBtn = false;
@@ -6410,8 +6410,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             data: { userId: $sessionStorage.usergroupid, id: id }
         })
         .then(function (response) {
-            $scope.recipe = JSON.parse(response.data.d);
-            getTotals($scope.recipe);
+            $scope.d = JSON.parse(response.data.d);
+            getTotals($scope.d);
         },
         function (response) {
             alert(response.data.d);
@@ -6438,7 +6438,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         })
         .then(function (response) {
             if (response.data.d != 'there is already a recipe with the same name') {
-                $scope.recipe = JSON.parse(response.data.d);
+                $scope.d = JSON.parse(response.data.d);
                 load();
             } else {
                 functions.alert($translate.instant('there is already a recipe with the same name'), '');
@@ -6457,9 +6457,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             .ok($translate.instant('yes'))
             .cancel($translate.instant('no'));
         $mdDialog.show(confirm).then(function () {
-            $scope.recipe.data.selectedFoods.splice(idx, 1);
-            $scope.recipe.data.selectedInitFoods.splice(idx, 1);
-            getTotals($scope.recipe);
+            $scope.d.data.selectedFoods.splice(idx, 1);
+            $scope.d.data.selectedInitFoods.splice(idx, 1);
+            getTotals($scope.d);
         }, function () {
         });
     }
@@ -6505,7 +6505,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         })
         .then(function (resp) {
             $scope.d = resp;
-            getTotals($scope.d.data);
+            getTotals($scope.d);
         }, function () {
         });
     };
@@ -6634,25 +6634,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         $scope.confirmShared = function (userId, x) {
-            functions.post('SharingRecipes', 'Get', { id: x.sharingData.recipeId }).then(function (d) {
+            functions.post('SharingRecipes', 'Get', { userId: userId, id: x.sharingData.recipeId }).then(function (d) {
                 var resp = d;
                 debugger;
-                //$scope.recipe = d.recipe;
-                //var userId = d.recipeOwner.userId;
-                //var userGroupId = d.recipeOwner.userGroupId;
-                //var recipeId = d.recipeId;
+
                 if (d.sharingData.recipeOwner.userId !== userId) {
                     resp.id = null;
                 }
 
                 functions.post('SharingRecipes', 'UpdateViews', { id: x.sharingData.recipeId }).then(function (d) {
-                    //var resp = {
-                    //    userId: userId,
-                    //    userGroupId: userGroupId,
-                    //    recipeId: recipeId,
-                    //    data: $scope.recipe
-                    //}
-                    debugger;
                     $mdDialog.hide(resp);
                 });
             });
@@ -6678,7 +6668,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             data: recipe
         })
         .then(function (recipe) {
-            $scope.recipe = recipe;
+            $scope.d = recipe;
         }, function () {
         });
     }
@@ -6929,6 +6919,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     var getTotals = function (x) {
+        debugger;
         $http({
             url: $sessionStorage.config.backend + 'Foods.asmx/GetTotals',
             method: "POST",
@@ -6952,7 +6943,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             headers: { 'Content-Type': undefined },
             data: content,
         }).then(function (response) {
-            $scope.recipe.recipeImg = response.data;
+            $scope.d.recipeImg = response.data;
         },
        function (response) {
            alert($translate.instant(response.data));
@@ -6971,7 +6962,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             method: 'POST',
             data: { x: x, userId: $rootScope.user.userGroupId },
         }).then(function (response) {
-            $scope.recipe.recipeImg = response.data.d;
+            $scope.d.recipeImg = response.data.d;
         },
        function (response) {
            alert($translate.instant(response.data.d));
@@ -6993,13 +6984,17 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     initSharingRecipe();
     */
 
-    $scope.saveSharingRecipe = function (x) {
+    $scope.saveSharedRecipe = function (x) {
         debugger;
         if (x.id === null) {
             if (x.title !== null) {
                 functions.alert($translate.instant('save recipe'), '');
+                $scope.d.isShared = false;
+                return;
             } else {
                 functions.alert($translate.instant('choose recipe'), '');
+                $scope.d.isShared = false;
+                return;
             }
             $scope.d.isShared = false;
         } else {

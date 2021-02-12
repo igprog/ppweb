@@ -24,7 +24,7 @@
                 <div class="col-lg-7">
                     <div class="pt-2 form-group text-right">
                         <i ng-if="showPointer" class="fa fa-hand-o-right fa-2x arrow1 pr-2" aria-hidden="true"></i>
-                        <md-input-container class="mt-0 mb-0" flex-gt-sm ng-click="saveSharingRecipe(d)" title="{{'share recipe with other users' | translate}}">
+                        <md-input-container class="mt-0 mb-0" flex-gt-sm ng-click="saveSharedRecipe(d)" title="{{'share recipe with other users' | translate}}">
                             <md-checkbox md-no-ink aria-label={{'share' | translate}} ng-model="d.isShared" class="md-primary">
                                 <i class="fa fa-share-alt"></i> {{d.isShared ? ('shared' | translate) : ('share' | translate)}}
                             </md-checkbox>
