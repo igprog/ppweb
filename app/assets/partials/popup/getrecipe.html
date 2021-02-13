@@ -36,10 +36,7 @@
                     <div class="col-sm-4">
                         <md-input-container class="md-block m-0" flex-gt-xs>
                             <label>{{'meal group' | translate}}</label>
-                            <md-select ng-model="mealGroup">
-                                <md-option ng-value=mealGroup>
-                                    <md-checkbox ng-checked="mealGroup.code==''" class="md-primary text-capitalize" aria-label="mealgroup" ng-click="search(searchValue, null)">{{'all' | translate}}</md-checkbox>
-                                </md-option>
+                            <md-select ng-model="recipe.mealGroup">
                                 <md-option ng-selected="x.code==recipe.mealGroup.code" ng-value="x" ng-repeat="x in recipe.mealGroups track by $index" ng-click="search(searchValue, x.code)">
                                     <md-checkbox ng-checked="x.code==recipe.mealGroup.code" class="md-primary text-capitalize" aria-label="mealgroup">{{x.title | translate}}</md-checkbox>
                                 </md-option>
@@ -59,10 +56,10 @@
                                 <div class="h5 mb-0 text-gray-800">
                                     <div class="row">
                                         <div class="col-lg-2 pb-2">
-                                            <div ng-if="!x.recipeImg" class="text-center text-primary">
+                                            <div ng-if="!x.recipeImg" class="text-primary">
                                                 <i class="fa fa-image fa-3x"></i>
                                             </div>
-                                            <img ng-if="x.recipeImg" src="../upload/users/{{user.userId}}/recipes/{{x.id}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                                            <img ng-if="x.recipeImg" src="{{x.recipeImgPath}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
                                         </div>
                                         <div class="col-lg-10">
                                             <div class="h5 font-weight-bold text-main mb-1">{{x.title}}</div>

@@ -180,9 +180,8 @@ public class Mail : System.Web.Services.WebService {
         , order.version
         , order.licenceNumber
         , GetLicenceDuration(order.licence)
-        , order.maxNumberOfUsers
+        , order.version.ToLower() == "premium" ? order.maxNumberOfUsers.ToString() : null
         , order.eInvoice ? "DA": "NE");
-
             resp = SendMail(myEmail, messageSubject, messageBody, lang, null, true);
             //*****************Send mail to me****************
 

@@ -37,6 +37,7 @@ public class Recipes : System.Web.Services.WebService {
 
         public List<CodeMeal> mealGroups = new List<CodeMeal>();
         public string recipeImg { get; set; }
+        public string recipeImgPath { get; set; }
         public bool isShared { get; set; }
         //TODO: sharingData
         public SharingRecipes.SharingData sharingData = new SharingRecipes.SharingData();
@@ -278,6 +279,7 @@ public class Recipes : System.Web.Services.WebService {
         x.data = data;
         x.mealGroups = InitMealGroups();
         x.recipeImg = null;
+        x.recipeImgPath = null;
         x.isShared = false;
         SharingRecipes sr = new SharingRecipes();
         x.sharingData = sr.InitSharingData();
@@ -296,6 +298,7 @@ public class Recipes : System.Web.Services.WebService {
         x.mealGroup.title = GetMealGroupTitle(x.mealGroup.code);
         x.data = getJson ? JsonConvert.DeserializeObject<JsonFile>(GetJsonFile(userId, x.id)) : new JsonFile();
         x.recipeImg = GetRecipeImg(userId, x.id);
+        x.recipeImgPath = GetRecipeImgPath(userId, x.id, x.recipeImg);
         x.mealGroups = InitMealGroups();
         SharingRecipes SR = new SharingRecipes();
         x.isShared = SR.Check(x.id);
@@ -477,6 +480,12 @@ public class Recipes : System.Web.Services.WebService {
 
     public string GetMealGroupTitle(string code) {
         return !string.IsNullOrWhiteSpace(code) ? InitMealGroups().Find(a => a.code == code).title : null;
+    }
+
+    public static string GetRecipeImgPath(string userId, string recipeId, string recipeImg) {
+        SharingRecipes SR = new SharingRecipes();
+        NewRecipe x = SR.GetRecipeById(recipeId);
+        return string.Format("../upload/users/{0}/recipes/{1}/recipeimg/{2}", recipeId == x.id ? x.sharingData.recipeOwner.userGroupId : userId, recipeId, recipeImg);
     }
     #endregion Methods
 

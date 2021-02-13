@@ -44,9 +44,6 @@
                         <md-input-container class="md-block mt-0" flex-gt-xs>
                             <label>{{'meal group' | translate}}</label>
                             <md-select ng-model="init.mealGroup" >
-                                <md-option ng-value=init.mealGroup>
-                                    <md-checkbox ng-checked="init.mealGroup.code==''" class="md-primary text-capitalize" aria-label="mealgroup" ng-click="search(searchValue, null, sharingRecipes)">{{'all' | translate}}</md-checkbox>
-                                </md-option>
                                 <md-option ng-selected="x.code==init.mealGroup.code" ng-value="x" ng-repeat="x in init.mealGroups track by $index" ng-click="search(searchValue, x.code, sharingRecipes)">
                                     <md-checkbox ng-checked="x.code==init.mealGroup.code" class="md-primary text-capitalize" aria-label="mealgroup">{{x.title | translate}}</md-checkbox>
                                 </md-option>
@@ -62,10 +59,10 @@
                                 <div class="h5 mb-0 text-gray-800">
                                     <div class="row">
                                         <div class="col-lg-2 pb-2">
-                                            <div ng-if="!x.recipeImg" class="text-center text-primary">
+                                            <div ng-if="!x.recipeImg" class="text-primary">
                                                 <i class="fa fa-image fa-3x"></i>
                                             </div>
-                                            <img ng-if="x.recipeImg" src="../upload/users/{{x.userId}}/recipes/{{x.id}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                                            <img ng-if="x.recipeImg" src="{{x.recipeImgPath}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
                                         </div>
                                         <div class="col-lg-10">
                                             <div class="h5 font-weight-bold text-main mb-1"><i ng-if="x.isShared" class="fa fa-share-alt pr-2" title="{{'shared' | translate}}"></i>{{x.title}}</div>
@@ -102,10 +99,10 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-2 pt-2 pb-2">
-                                            <div ng-if="!x.recipeImg" class="text-center text-primary">
+                                            <div ng-if="!x.recipeImg" class="text-primary">
                                                 <i class="fa fa-image fa-3x"></i>
                                             </div>
-                                            <img ng-if="x.recipeImg" src="../upload/users/{{x.sharingData.recipeOwner.userGroupId}}/recipes/{{x.sharingData.recipeId}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                                            <img ng-if="x.recipeImg" src="{{x.recipeImgPath}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
                                         </div>
                                         <div class="col-lg-10 pt-2">
                                             <div class="h5 font-weight-bold text-main mb-1">{{x.title}}</div>

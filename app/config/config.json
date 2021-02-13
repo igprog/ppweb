@@ -1,6 +1,6 @@
 ﻿{
-  "version": "2.2.2",
-  "date": "10.2.2021",
+  "version": "2.2.3",
+  "date": "13.2.2021",
   "backend": "../",
   "title": "nutrition program web",
   "shortDescription": "meal planning web app",
@@ -71,6 +71,7 @@
     }
   ],
   "showupdatedes": true,
+  "showupdatedesinitvisible": false,
   "showlanguages": true,
   "showsendmenu": false,
   "packages": [

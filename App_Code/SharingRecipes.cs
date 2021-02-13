@@ -27,27 +27,10 @@ public class SharingRecipes : System.Web.Services.WebService {
     }
 
     #region Class
-    //public class NewSharingRecipe {
-    //    public Recipes.NewRecipe recipe;
-    //    public string userId;
-    //    public string recipeId;
-    //    public Users.NewUser recipeOwner;
-    //    public string userGroupId;
-    //    public string recordDate;
-    //    public Status status;
-    //    public int rank;
-    //    public int like;
-    //    public int views;
-    //    public string lang;
-    //    public bool adminSave;
-    //    public string resp;
-    //}
 
     public class SharingData {
-        //public string userId;
         public string recipeId;
         public Users.NewUser recipeOwner;
-        //public string userGroupId;
         public string recordDate;
         public Status status;
         public int rank;
@@ -68,44 +51,6 @@ public class SharingRecipes : System.Web.Services.WebService {
     #endregion Class
 
     #region WebMethods
-    /*
-    [WebMethod]
-    public string Init() {
-        Recipes.NewRecipe x = new Recipes.NewRecipe();
-        x = R.InitData();
-        x.sharingData.userId = null;
-        x.sharingData.recipeId = null;
-        x.sharingData.recipeOwner = new Users.NewUser();
-        x.sharingData.userGroupId = null;
-        x.sharingData.recordDate = DateTime.UtcNow.ToString();
-        x.sharingData.status = new Status();
-        x.sharingData.status.code = 0;
-        x.sharingData.rank = 0;
-        x.sharingData.like = 0;
-        x.sharingData.views = 0;
-        x.sharingData.lang = null;
-        x.sharingData.adminSave = false;
-        x.sharingData.resp = null;
-
-        //NewSharingRecipe x = new NewSharingRecipe();
-        //x.recipe = R.InitData();
-        //x.userId = null;
-        //x.recipeId = null;
-        //x.recipeOwner = new Users.NewUser();
-        //x.userGroupId = null;
-        //x.recordDate = DateTime.UtcNow.ToString();
-        //x.status = new Status();
-        //x.status.code = 0;
-        //x.rank = 0;
-        //x.like = 0;
-        //x.views = 0;
-        //x.lang = null;
-        //x.adminSave = false;
-        //x.resp = null;
-        return JsonConvert.SerializeObject(x, Formatting.None);
-    }
-    */
-
     [WebMethod]
     public string Load(string userId, int? status, bool showUserRecipes) {
         try {
@@ -132,6 +77,7 @@ public class SharingRecipes : System.Web.Services.WebService {
                             x.sharingData.recipeId = x.id;
                             x.mealGroup.title = R.GetMealGroupTitle(x.mealGroup.code);
                             x.recipeImg = Recipes.GetRecipeImg(x.sharingData.recipeOwner.userGroupId, x.id);
+                            x.recipeImgPath = Recipes.GetRecipeImgPath(userId, x.id, x.recipeImg);
                             xx.Add(x);
                         }
                     } 
@@ -164,6 +110,7 @@ public class SharingRecipes : System.Web.Services.WebService {
                             x.sharingData.recipeId = x.id;
                             x.mealGroup.title = R.GetMealGroupTitle(x.mealGroup.code);
                             x.recipeImg = Recipes.GetRecipeImg(x.sharingData.recipeOwner.userGroupId, x.id);
+                            x.recipeImgPath = Recipes.GetRecipeImgPath(userId, x.id, x.recipeImg);
                             xx.Add(x);
                         }
                     }
@@ -180,25 +127,32 @@ public class SharingRecipes : System.Web.Services.WebService {
     public string Get(string userId, string id) {
         try {
             Recipes.NewRecipe x = new Recipes.NewRecipe();
-            using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
-                connection.Open();
-                string sql = string.Format("SELECT {0} FROM recipes WHERE id = '{1}'", mainSql, id);
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                    Clients.Client client = new Clients.Client();
-                    using (SQLiteDataReader reader = command.ExecuteReader()) {
-                        while (reader.Read()) {
-                            x = GetData(reader);
+            if (!string.IsNullOrEmpty(id)) {
+                using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
+                    connection.Open();
+                    string sql = string.Format("SELECT {0} FROM recipes WHERE id = '{1}'", mainSql, id);
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        Clients.Client client = new Clients.Client();
+                        using (SQLiteDataReader reader = command.ExecuteReader()) {
+                            while (reader.Read()) {
+                                x = GetData(reader);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
+                x.data = JsonConvert.DeserializeObject<Recipes.JsonFile>(R.GetJsonFile(x.sharingData.recipeOwner.userGroupId, x.id));
+                x.sharingData.recipeId = x.id;
+                x.mealGroup.title = R.GetMealGroupTitle(x.mealGroup.code);
+                x.recipeImg = Recipes.GetRecipeImg(x.sharingData.recipeOwner.userGroupId, x.id);
+                x.recipeImgPath = Recipes.GetRecipeImgPath(userId, id, x.recipeImg);
+                x.mealGroups = R.InitMealGroups();
+                x.userId = userId;
+                if (x.userId != null && x.userId != x.sharingData.recipeOwner.userId) {
+                    x.id = null;
+                }
+                x.isShared = true;
             }
-            x.data = JsonConvert.DeserializeObject<Recipes.JsonFile>(R.GetJsonFile(x.sharingData.recipeOwner.userGroupId, x.id));
-            x.sharingData.recipeId = x.id;
-            x.mealGroup.title = R.GetMealGroupTitle(x.mealGroup.code);
-            //x.recipeImg = Recipes.GetRecipeImg(x.sharingData.recipeOwner.userGroupId, x.id);
-            x.mealGroups = R.InitMealGroups();
-            x.userId = userId;
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, id, "Recipes", "Get");
@@ -296,9 +250,6 @@ public class SharingRecipes : System.Web.Services.WebService {
     #region Methods
     public SharingData InitSharingData() {
         SharingData x = new SharingData();
-        //Recipes.NewRecipe x = new Recipes.NewRecipe();
-        //x = R.InitData();
-        //x.userId = null;
         x.recipeId = null;
         x.recipeOwner = new Users.NewUser();
         x.recipeOwner.userId = null;
@@ -319,8 +270,6 @@ public class SharingRecipes : System.Web.Services.WebService {
         Recipes.NewRecipe x = new Recipes.NewRecipe();
         x.sharingData = new SharingData();
         x.id = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
-        //x.sharingData.recipeOwner.userId = reader.GetValue(1) == DBNull.Value ? null : reader.GetString(1);
-        //x.sharingData.userGroupId = reader.GetValue(2) == DBNull.Value ? null : reader.GetString(2);
         x.sharingData.recipeOwner = new Users.NewUser();
         x.sharingData.recipeOwner.userId = reader.GetValue(1) == DBNull.Value ? null : reader.GetString(1);
         x.sharingData.recipeOwner.userGroupId = reader.GetValue(2) == DBNull.Value ? null : reader.GetString(2);
@@ -391,6 +340,25 @@ public class SharingRecipes : System.Web.Services.WebService {
             }
             return result;
         } catch (Exception e) { return false; }
+    }
+
+    public Recipes.NewRecipe GetRecipeById(string id) {
+        Recipes.NewRecipe x = new Recipes.NewRecipe();
+        x.sharingData = InitSharingData();
+        using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
+            connection.Open();
+            string sql = string.Format("SELECT {0} FROM recipes WHERE id = '{1}'", mainSql, id);
+            using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                Clients.Client client = new Clients.Client();
+                using (SQLiteDataReader reader = command.ExecuteReader()) {
+                    while (reader.Read()) {
+                        x = GetData(reader);
+                    }
+                }
+            }
+            connection.Close();
+        }
+        return x;
     }
     #endregion Methods
 

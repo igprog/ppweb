@@ -241,7 +241,7 @@ angular.module('app', [])
 
     $scope.GetSharingRecipe = function (x, idx) {
         $scope.loading = true;
-        functions.post('SharingRecipes', 'Get', { id: x.id }).then(function (d) {
+        functions.post('SharingRecipes', 'Get', {userId: null, id: x.id }).then(function (d) {
             $scope.sharingRecipes[idx] = d;
             $scope.loading = false;
         });

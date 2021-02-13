@@ -335,7 +335,7 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <img ng-if="x.recipeImg" src="../upload/users/{{x.sharingData.recipeOwner.userGroupId}}/recipes/{{x.sharingData.recipeId}}/recipeimg/{{x.recipeImg}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
+                                            <img ng-if="x.recipeImg" src="{{x.recipeImgPath}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
                                         </div>
                                         <div class="col-sm-9">
                                             <a href="" ng-click="GetSharingRecipe(x, $index)">Detalji <i class="fa fa-caret-right"></i></a>
@@ -347,7 +347,7 @@
                                                 </ul>
                                                 <hr />
                                                 <p class="small text-muted">Autor : {{x.sharingData.recipeOwner.firstName}}</p>
-                                                <p class="small text-muted">User ID: {{x.sharingData.userId}}</p>
+                                                <p class="small text-muted">User ID: {{x.sharingData.recipeOwner.userId}}</p>
                                                 <p class="small text-muted">Grupa obroka: {{x.mealGroup.code}} - {{x.mealGroup.title}}</p>
                                                 <p class="small text-muted">Pregledi: <span class="badge">{{x.sharingData.views}}</span></p>
                                             </div>
