@@ -17,7 +17,7 @@ public class UploadHandler : IHttpHandler {
                 string fname = context.Server.MapPath(string.Format("~/upload/users/{0}/{1}", userId, "logo.png"));
                 if (!string.IsNullOrEmpty(file.FileName)) {
                     int fileLength = file.ContentLength;
-                    if (fileLength <= G.KBToByte(2500)) {
+                    if (fileLength <= G.KBToByte(4000)) {
                         string folderPath = context.Server.MapPath(string.Format("~/upload/users/{0}", userId));
                         if (!Directory.Exists(folderPath)) {
                             Directory.CreateDirectory(folderPath);
@@ -25,7 +25,7 @@ public class UploadHandler : IHttpHandler {
                         file.SaveAs(fname);
                         context.Response.Write("OK");
                     } else {
-                        context.Response.Write("max upload file size is 2.5 MB");
+                        context.Response.Write("max upload file size is 4 MB");
                     }
                 } else {
                     context.Response.Write("please choose a file to upload");

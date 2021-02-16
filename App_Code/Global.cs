@@ -137,7 +137,6 @@ namespace Igprog {
         }
 
         public int CompressionParam(int fileLength) {
-            //TODO
             /***** higher fileLength higher quality and less compression *****/
             int x = 0;
             if (fileLength < 200000) {
@@ -149,13 +148,22 @@ namespace Igprog {
             } else if (fileLength > 500000 && fileLength <= 800000) {
                 x = 50;
             } else if (fileLength > 800000 && fileLength <= 1000000) {
-                x = 45;
-            } else if (fileLength > 1000000 && fileLength <= 1500000) {
                 x = 40;
-            }else if (fileLength > 1500000 && fileLength <= 2000000) {
-                x = 35;
-            } else {
-                x = 30;
+            } else if (fileLength > 1000000 && fileLength <= 1500000) {
+                x = 25;
+            } else if (fileLength > 1500000 && fileLength <= 2000000) {
+                x = 15;
+            } else if (fileLength > 2000000 && fileLength <= 2500000) {
+                x = 10;
+            } else if (fileLength > 2500000 && fileLength <= 3000000) {
+                x = 8;
+            } else if (fileLength > 2500000 && fileLength <= 3000000) {
+                x = 4;
+            } else if (fileLength > 3500000 && fileLength <= 4000000) {
+                x = 2;
+            }
+            else {
+                x = 2;
             }
             return x;
         }

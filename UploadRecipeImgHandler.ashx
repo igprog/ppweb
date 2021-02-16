@@ -19,7 +19,7 @@ public class UploadRecipeImgHandler : IHttpHandler {
                 string fname_temp = context.Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg/temp/{2}", userId, recipeId, file.FileName));
                 if (!string.IsNullOrEmpty(file.FileName)) {
                     int fileLength = file.ContentLength;
-                    if (fileLength <= G.KBToByte(2500)) {
+                    if (fileLength <= G.KBToByte(4000)) {
                         string folderPath = context.Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg", userId, recipeId));
                         string folderPath_temp = context.Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg/temp", userId, recipeId));
 
@@ -43,7 +43,7 @@ public class UploadRecipeImgHandler : IHttpHandler {
                         }
                         context.Response.Write(string.Format("{0}?v={1}", file.FileName, DateTime.Now.Ticks));
                     } else {
-                        context.Response.Write("max upload file size is 2.5 MB");
+                        context.Response.Write("max upload file size is 4 MB");
                     }
 
                 } else {
