@@ -6179,6 +6179,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     var usdaPopupCtrl = function ($scope, $mdDialog, $http) {
         var webService = 'Usda.asmx';
         $scope.loading = false;
+        $scope.loading1 = false;
         $scope.page = 1;
         $scope.foods = null;
         $scope.d = null;
@@ -6225,6 +6226,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 data: { param }
             })
           .then(function (response) {
+              if (response.data.d == 'The operation has timed out') {
+                  functions.alert(response.data.d);
+                  $scope.loading = false;
+                  return;
+              }
               $scope.foods = JSON.parse(response.data.d);
               $scope.page = page;
               if (page === 1) {
@@ -6241,18 +6247,26 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
         $scope.get = function (x) {
             if (x === null) { return false; }
+            $scope.loading1 = true;
             $http({
                 url: $sessionStorage.config.backend + webService + '/Get',
                 method: "POST",
                 data: { id: x }
             })
           .then(function (response) {
+              if (response.data.d == 'The operation has timed out') {
+                  functions.alert(response.data.d);
+                  $scope.loading1 = false;
+                  return;
+              }
               $scope.d = JSON.parse(response.data.d);
               $scope.d_ = JSON.parse(response.data.d);
               $scope.gramWeight = 100;
+              $scope.loading1 = false;
           },
           function (response) {
-              alert(response.data.d)
+              $scope.loading1 = false;
+              alert(response.data.d);
           });
         }
 

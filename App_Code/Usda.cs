@@ -17,22 +17,16 @@ using Igprog;
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
 public class Usda : System.Web.Services.WebService {
-
+    Log L = new Log();
     public Usda() {
     }
 
     string apiUrl = "https://api.nal.usda.gov/fdc/v1/";
     string apiKey = "RqTcaxwMWOal7N4XZySPEtx8hZBXFkZ1v320FQwQ";
 
-    //https://api.nal.usda.gov/fdc/v1/search?api_key=RqTcaxwMWOal7N4XZySPEtx8hZBXFkZ1v320FQwQ&generalSearchInput=Cheddar%20Cheese
+    /***** https://api.nal.usda.gov/fdc/v1/search?api_key=RqTcaxwMWOal7N4XZySPEtx8hZBXFkZ1v320FQwQ&generalSearchInput=Cheddar%20Cheese *****/
 
-    //Documentation: https://fdc.nal.usda.gov/api-guide.html#bkmk-6
-
-
-    //[WebMethod]
-    //public string Load(string page) {
-    //    return RequestData(RequestStr(string.Format("pageNumber={0}", page)));
-    //}
+    //***** Documentation: https://fdc.nal.usda.gov/api-guide.html#bkmk-6 /*****
 
     [WebMethod]
     public string Search(string param) {
@@ -82,6 +76,7 @@ public class Usda : System.Web.Services.WebService {
             response.Close();
             return responseFromServer;
         } catch (Exception e) {
+            L.SendErrorLog(e, url, "Usda", "RequestData");
             return e.Message;
         } 
     }

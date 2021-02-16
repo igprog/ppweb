@@ -40,7 +40,8 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div ng-if="d">
+                    <loading-directive value="loading1" showdesc="true"></loading-directive>
+                    <div ng-if="d && !loading1">
                         <input ng-model="d.description" type="text" class="form-control" />
                         <div class="mt-2" style="height:100px">
                             <div style="min-height:25px">
