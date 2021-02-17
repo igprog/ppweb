@@ -172,9 +172,7 @@ public class SharingRecipes : System.Web.Services.WebService {
                         VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', {9}, '{10}', {11}, {12}, {13}, '{13}');
                         COMMIT;", mainSql, x.id, x.sharingData.recipeOwner.userId, x.sharingData.recipeOwner.userGroupId, x.sharingData.recordDate, x.title, x.description, x.energy, x.mealGroup.code, x.sharingData.status.code, x.sharingData.status.note, x.sharingData.rank, x.sharingData.like, x.sharingData.views, x.sharingData.lang);
             } else {
-                sql = string.Format(@"BEGIN;
-                        UPDATE recipes SET recordDate = '{1}', title = '{2}', desc = '{3}', energy = '{4}', mealGroup = '{5}', status = {6}, lang = '{7}' WHERE id = '{0}';
-                        COMMIT;", x.id, x.sharingData.recordDate, x.title, x.description, x.energy, x.mealGroup.code, x.sharingData.status.code, x.sharingData.lang);
+                sql = string.Format(@"UPDATE recipes SET recordDate = '{1}', title = '{2}', desc = '{3}', energy = '{4}', mealGroup = '{5}', status = {6}, lang = '{7}' WHERE id = '{0}'", x.id, x.sharingData.recordDate, x.title, x.description, x.energy, x.mealGroup.code, x.sharingData.status.code, x.sharingData.lang);
             }
             x.energy = x.data.selectedFoods.Sum(a => a.energy);
             
@@ -189,7 +187,7 @@ public class SharingRecipes : System.Web.Services.WebService {
             return JsonConvert.SerializeObject(x.sharingData.resp, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, x.sharingData.recipeOwner.userId, "SharingRecipes", "Save");
-            return (JsonConvert.SerializeObject(e.Message, Formatting.None));
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 

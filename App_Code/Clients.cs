@@ -24,6 +24,7 @@ public class Clients : System.Web.Services.WebService {
     Users.CheckUser c = new Users.CheckUser();
     Translate t = new Translate();
     Calculations C = new Calculations();
+    Log L = new Log();
 
     public Clients() {
     }
@@ -37,6 +38,7 @@ public class Clients : System.Web.Services.WebService {
         public string phone { get; set; }
         public string email { get; set; }
         public string userId { get; set; }
+        public string userGroupId { get; set; }
         public string date { get; set; }
         public int isActive { get; set; }
         public string note { get; set; }
@@ -113,6 +115,7 @@ public class Clients : System.Web.Services.WebService {
         x.phone = "";
         x.email = "";
         x.userId = null;
+        x.userGroupId = null;
         x.date = DateTime.UtcNow.ToString();
         x.isActive = 1;
         x.note = null;
@@ -125,15 +128,20 @@ public class Clients : System.Web.Services.WebService {
     public string Load(string userId, Users.NewUser user) {
         try {
             return JsonConvert.SerializeObject(GetClients(userId, user, null, null), Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "Clients", "Load");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
+    
     [WebMethod]
     public string Save(Users.NewUser user, NewClient x, string lang) {
         try {
             db.CreateDataBase(user.userGroupId, db.clients);
             db.AddColumn(user.userGroupId, db.GetDataBasePath(user.userGroupId, dataBase), db.clients, "note");  //new column in clients tbl.
             SaveResponse r = new SaveResponse();
+            string sql = null;
             if (x.clientId == null && Check(user.userGroupId, x) == false) {
                 r.data = null;
                 r.message = t.Tran("client is already registered", lang);
@@ -149,36 +157,32 @@ public class Clients : System.Web.Services.WebService {
                     } else {
                         x.clientId = Convert.ToString(Guid.NewGuid());
                     }
+                    sql = string.Format(@"INSERT INTO clients VALUES
+                                        ('{0}', '{1}', '{2}', '{3}', {4}, '{5}', '{6}', '{7}', '{8}', {9}, '{10}')"
+                                        , x.clientId, x.firstName, x.lastName, x.birthDate, x.gender.value, x.phone, x.email, x.userId, x.date, x.isActive, x.note);
+                } else {
+                    sql = string.Format(@"UPDATE clients SET firstName = '{1}', lastName = '{2}', birthDate = '{3}', gender = {4}, phone = '{5}', email = '{6}', isActive = {7}, note = '{8}' WHERE clientId = '{0}';"
+                                        , x.clientId, x.firstName, x.lastName, x.birthDate, x.gender.value, x.phone, x.email, x.isActive, x.note);
                 }
                 using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(user.userGroupId, dataBase))) {
                     connection.Open();
-                    string sql = @"INSERT OR REPLACE INTO clients VALUES
-                            (@clientId, @firstName, @lastName, @birthDate, @gender, @phone, @email, @userId, @date, @isActive, @note)";
                     using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                         using (SQLiteTransaction transaction = connection.BeginTransaction()) {
-                            command.Parameters.Add(new SQLiteParameter("clientId", x.clientId));
-                            command.Parameters.Add(new SQLiteParameter("firstName", x.firstName));
-                            command.Parameters.Add(new SQLiteParameter("lastName", x.lastName));
-                            command.Parameters.Add(new SQLiteParameter("birthDate", x.birthDate));
-                            command.Parameters.Add(new SQLiteParameter("gender", x.gender.value));
-                            command.Parameters.Add(new SQLiteParameter("phone", x.phone));
-                            command.Parameters.Add(new SQLiteParameter("email", x.email));
-                            command.Parameters.Add(new SQLiteParameter("userId", x.userId));
-                            command.Parameters.Add(new SQLiteParameter("date", x.date));
-                            command.Parameters.Add(new SQLiteParameter("isActive", x.isActive));
-                            command.Parameters.Add(new SQLiteParameter("note", x.note));
                             command.ExecuteNonQuery();
                             transaction.Commit();
                         }
                     } 
-                    connection.Close();
                 }  
                 r.data = x;
                 r.data.gender.title = GetGenderTitle(r.data.gender.value);
+                r.data.userGroupId = user.userGroupId;
                 r.message = null;
                 return JsonConvert.SerializeObject(r, Formatting.None);
             }
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.userId, "Clients", "Save");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -209,10 +213,14 @@ public class Clients : System.Web.Services.WebService {
                         }
                     }    
                 }
-                connection.Close();
-            }  
+            }
+            Users U = new Users();
+            x.userGroupId = U.GetUserGroupId(x.userId);
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "Clients", "Get");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -228,9 +236,12 @@ public class Clients : System.Web.Services.WebService {
                 connection.Close();
                 Files f = new Files();
                 f.DeleteClientFolder(userId, clientId);
-            } 
-        } catch (Exception e) { return (e.Message); }
-        return JsonConvert.SerializeObject(GetClients(userId, user, null, null), Formatting.None);
+            }
+            return JsonConvert.SerializeObject(GetClients(userId, user, null, null), Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "Clients", "Delete");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     #region ClientApp
@@ -305,6 +316,7 @@ public class Clients : System.Web.Services.WebService {
 
     public List<NewClient> GetClients(string userId, Users.NewUser user, string order, string dir) {
         List<NewClient> xx = new List<NewClient>();
+        Users U = new Users();
         try {
             db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
@@ -335,11 +347,11 @@ public class Clients : System.Web.Services.WebService {
                             x.profileImg = GetProfileImg(userId, x.clientId);
                             x.clientData = new ClientsData.NewClientData();
                             x.clientData.age = C.Age(x.birthDate);
+                            x.userGroupId = U.GetUserGroupId(x.userId);
                             xx.Add(x);
                         }
                     }   
                 } 
-                connection.Close();
             }
             return xx;
         } catch (Exception e) { return (new List<NewClient>()); }

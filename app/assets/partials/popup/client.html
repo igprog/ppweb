@@ -67,14 +67,14 @@
                             <div ng-if="!d.profileImg" class="text-center text-primary">
                                 <i class="fa fa-user-slash fa-5x"></i>
                             </div>
-                            <img ng-if="d.profileImg" class="mx-auto d-block img-circle rounded-circle" src="../upload/users/{{d.userId}}/clients/{{d.clientId}}/profileimg/{{d.profileImg}}" alt="{{d.profileImg}}" style="height:15rem;width:15rem">
+                            <img ng-if="d.profileImg" class="mx-auto d-block img-circle rounded-circle" src="../upload/users/{{d.userGroupId}}/clients/{{d.clientId}}/profileimg/{{d.profileImg}}" alt="{{d.profileImg}}" style="height:15rem;width:15rem">
                         </div>
                         <div class="card-footer">
                             <form id="formUpload" ng-submit="uploadImg()" enctype="multipart/form-data" method="post">
                                 <input id="imgFolder" name="imgFolder" value="temp" type="text" hidden="hidden">
                                 <p class="text-muted small">*<em>{{'max upload file size is 4 MB' | translate}}.</em></p>
                                 <div class="custom-file">
-                                    <input id="userid" name="userid" ng-model="d.userId" type="text" hidden="hidden">
+                                    <input id="userid" name="userid" ng-model="d.userGroupId" type="text" hidden="hidden">
                                     <input id="clientid" name="clientid" ng-model="d.clientId" type="text" hidden="hidden">
                                     <input ng-disabled="d.clientId===null" ng-model="d.profileImg" name="UploadedFile" id="UploadedFile" type="file" accept="image/*" class="custom-file-input" style="background-color:transparent">
                                     <label class="custom-file-label" for="UploadedFile">{{'attach the image' | translate}}</label>

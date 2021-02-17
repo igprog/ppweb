@@ -34,7 +34,7 @@
                         <tr ng-repeat="x in d | filter:searchValue | limitTo:limit">
                             <td ng-click="get(x)">
                                 <i ng-if="!x.profileImg" class="fa fa-user-circle fa-2x"></i>
-                                <img ng-if="x.profileImg" src="../upload/users/{{x.userId}}/clients/{{x.clientId}}/profileimg/{{x.profileImg}}" alt="{{x.profileImg}}" style="height:2rem;width:2rem" class="img-circle rounded-circle" />
+                                <img ng-if="x.profileImg" src="../upload/users/{{x.userGroupId}}/clients/{{x.clientId}}/profileimg/{{x.profileImg}}" alt="{{x.profileImg}}" style="height:2rem;width:2rem" class="img-circle rounded-circle" />
                             </td>
                             <td style="width:20%" ng-click="get(x)">{{x.firstName}}</td>
                             <td style="width:20%" ng-click="get(x)">{{x.lastName}}</td>

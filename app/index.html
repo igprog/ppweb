@@ -91,7 +91,7 @@
                         <a href="" ng-click="edit(client)" title="{{'client' | translate}}" class="decoration-none">
                             <div>
                                 <i ng-if="!client.profileImg" class="fa fa-user-circle fa-3x"></i>
-                                <img ng-if="client.profileImg" src="../upload/users/{{client.userId}}/clients/{{client.clientId}}/profileimg/{{client.profileImg}}" alt="{{client.profileImg}}" style="height:3rem;width:3rem" class="img-circle rounded-circle" />
+                                <img ng-if="client.profileImg" src="../upload/users/{{client.userGroupId}}/clients/{{client.clientId}}/profileimg/{{client.profileImg}}" alt="{{client.profileImg}}" style="height:3rem;width:3rem" class="img-circle rounded-circle" />
                             </div>
                             <div class="text-light pt-2">
                                 {{client.firstName}} {{client.lastName}}, {{'age' | translate}}: {{clientData.age}}
@@ -121,7 +121,7 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a href="" ng-click="toggleNewTpl('clientsdata')" ng-class="selectedNavItem=='clientsdata'?'collapse-item active':'collapse-item'"><i class="fas fa-weight"></i><span class="pl-2">{{'input data' | translate}}</span></a>
                             <a href="" ng-click="toggleNewTpl('calculation')" ng-class="selectedNavItem=='calculation'?'collapse-item active':'collapse-item'"><i class="fas fa-calculator"></i><span class="pl-2">{{'calculation' | translate}}</span></a>
-                            <a href="" ng-click="toggleNewTpl('activities')" ng-class="selectedNavItem=='activities'?'collapse-item active':'collapse-item'"><i class="fas fa-bicycle"></i><span class="pl-2">{{'additional activities' | translate}}</span></a>
+                            <a href="" ng-click="toggleNewTpl('activities')" ng-class="selectedNavItem=='activities'?'collapse-item active':'collapse-item'"><i class="fas fa-running"></i><span class="pl-2">{{'additional activities' | translate}}</span></a>
                             <a href="" ng-click="toggleNewTpl('diets')" ng-class="selectedNavItem=='diets'?'collapse-item active':'collapse-item'"><i class="fas fa-heartbeat"></i><span class="pl-2">{{'diets' | translate}}</span></a>
                             <a href="" ng-click="toggleNewTpl('meals')" ng-class="selectedNavItem=='meals'?'collapse-item active':'collapse-item'"><i class="fas fa-list-ol"></i><span class="pl-2">{{'meals' | translate}}</span></a>
                             <a href="" ng-click="toggleNewTpl('menu')" ng-class="selectedNavItem=='menu'?'collapse-item active':'collapse-item'"><i class="fas fa-utensils"></i><span class="pl-2">{{'menu' | translate}}</span></a>

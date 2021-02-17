@@ -1294,6 +1294,26 @@ public class Users : System.Web.Services.WebService {
             return x;
         } catch (Exception e) { return e.Message; }
     }
+
+    public string GetUserGroupId(string userId) {
+        try {
+            string x = null;
+            string dataBase = ConfigurationManager.AppSettings["UsersDataBase"];
+            string path = Server.MapPath("~/App_Data/" + dataBase);
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + path)) {
+                string sql = string.Format("SELECT userGroupId FROM users WHERE userId = '{0}'", userId);
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            x = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
+                        }
+                    }
+                }
+            }
+            return x;
+        } catch (Exception e) { return e.Message; }
+    }
     #endregion
 
 }
