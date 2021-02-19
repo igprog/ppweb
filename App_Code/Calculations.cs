@@ -17,9 +17,6 @@ using Igprog;
 [System.Web.Script.Services.ScriptService]
 public class Calculations : System.Web.Services.WebService {
     string dataBase = ConfigurationManager.AppSettings["AppDataBase"];
-    //Equations E = new Equations();
-    //Calculations C = new Calculations();
-    BodyFat BF = new BodyFat();
 
     public Calculations() {
     }
@@ -54,6 +51,7 @@ public class Calculations : System.Web.Services.WebService {
         public double value { get; set; }
         public double min { get; set; }
         public double max { get; set; }
+        public string icon { get; set; }
     }
 
     public class RecommenderWeight {
@@ -103,6 +101,7 @@ public class Calculations : System.Web.Services.WebService {
         x.recommendedWeight = RecommendedWeight(client);
         x.goal = RecommendedGoal(client);
         x.bmrEquations = GetBmrEquations(userType);
+        BodyFat BF = new BodyFat();
         x.bodyFat = BF.GetBodyFat(client);
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
@@ -124,6 +123,7 @@ public class Calculations : System.Web.Services.WebService {
                             x.min = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
                             x.max = reader.GetValue(4) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(4));
                             x.value = Math.Round((x.min + x.max) / 2, 2);
+                            x.icon = GetPalIcon(x.code);
                             xx.Add(x);
                         }
                     }  
@@ -139,8 +139,7 @@ public class Calculations : System.Web.Services.WebService {
         try {
             Pal x = new Pal();
             x = GetPal(palValue);
-            string json = JsonConvert.SerializeObject(x, Formatting.None);
-            return json;
+            return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) { return ("Error: " + e); }
     }
     #endregion
@@ -157,25 +156,40 @@ public class Calculations : System.Web.Services.WebService {
 
     public Pal GetPal(double palValue) {
           try {
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase));
-            connection.Open();
-            string sql = @"SELECT code, title, palDescription, palMin, palMax FROM pal WHERE @palValue >= palMin AND @palValue < palMax";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            command.Parameters.Add(new SQLiteParameter("palValue", palValue));
             Pal x = new Pal();
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
-                x.code = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                x.description = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                x.min = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
-                x.max = reader.GetValue(4) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(4));
-                x.value = Math.Round((x.min + x.max) / 2, 2);
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                connection.Open();
+                string sql = @"SELECT code, title, palDescription, palMin, palMax FROM pal WHERE @palValue >= palMin AND @palValue < palMax";
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.Parameters.Add(new SQLiteParameter("palValue", palValue));
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            x.code = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                            x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                            x.description = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+                            x.min = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
+                            x.max = reader.GetValue(4) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(4));
+                            x.value = Math.Round((x.min + x.max) / 2, 2);
+                        }
+                    }
+                }
             }
-            connection.Close();
             return x;
-        } catch (Exception e) { return new Pal(); }
+        } catch (Exception e) {
+            return new Pal();
+        }
+    }
 
+    private string GetPalIcon(string code) {
+        switch (code) {
+            case "P1": return "fa fa-bed";
+            case "P2": return "fa fa-male";
+            case "P3": return "fa fa-walking";
+            case "P4": return "fa fa-running";
+            case "P5": return "fa fa-swimmer";
+            case "P6": return "fa fa-dumbbell";
+            default: return null;
+        }
     }
 
     private ValueTitle Bmi(ClientsData.NewClientData client) {

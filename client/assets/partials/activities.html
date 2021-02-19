@@ -1,7 +1,6 @@
 ﻿<div class="container">
     <h2 class="h3 mb-0 text-gray-800">{{'physical activity level' | translate}}</h2>
     <hr />
-    <!--<span class="col-sm-6 text-capitalize">{{'physical activity level' | translate}}:</span>-->
     <div>
         <select ng-model="clientData.pal" ng-options="(x.title | translate) for x in pals" class="form-control">
             <option value="" disabled="disabled"> {{clientData.pal.title | translate}} </option>
