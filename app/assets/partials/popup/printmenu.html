@@ -71,6 +71,17 @@
                                         {{'description' | translate}}
                                     </md-checkbox>
                                 </md-input-container>
+                                <md-input-container class="md-block" flex-gt-xs style="margin-top:20px">
+                                    <label>{{'description position' | translate}}</label>
+                                    <md-select ng-model="settings.descPosition">
+                                        <md-option value="0">
+                                            <md-checkbox ng-checked="settings.descPosition==0?true:false" class="md-primary" aria-label="mealgroup">{{'top' | translate}}</md-checkbox>
+                                        </md-option>
+                                        <md-option value="1">
+                                            <md-checkbox ng-checked="settings.descPosition==1?true:false" class="md-primary" aria-label="mealgroup">{{'bottom' | translate}}</md-checkbox>
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
                                 <md-input-container class="md-block">
                                     <md-checkbox ng-model="settings.showFoods" class="md-primary">
                                         {{'foods' | translate}}
@@ -129,7 +140,6 @@
                                 </div>
                             </fieldset>
                             <fieldset class="fieldset-border">
-                                <!--<legend class="fieldset-border">{{'settings' | translate}}</legend>-->
                                 <md-input-container class="md-block" flex-gt-xs style="margin-top:20px">
                                     <label>{{'print style' | translate}}</label>
                                     <md-select ng-model="settings.printStyle">
@@ -212,7 +222,19 @@
         <div ng-if="x.isSelected==1" ng-repeat="x in currentMenu.data.meals track by $index" class="m-2">
             <label class="text-uppercase mt-2">{{getMealTitle(x)}}</label>
             <hr class="d-block d-sm-none m-0" />
+
             <div ng-if="x.description" class="mt-2 mb-2">
+                <em ng-if="!isSeparatedDes(x.description)&&settings.showDescription&&settings.descPosition==0">{{x.description}}</em>
+                <div ng-if="isSeparatedDes(x.description)">
+                    <div ng-repeat="y in getTitleDes(x.description)">
+                        <div ng-if="settings.showTitle">{{y.title}}</div>
+                        <em ng-if="settings.showDescription&&settings.descPosition==0">{{y.description}}</em>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--<div ng-if="x.description" class="mt-2 mb-2">
                 <em ng-if="!isSeparatedDes(x.description)&&settings.showDescription">{{x.description}}</em>
                 <div ng-if="isSeparatedDes(x.description)">
                     <div ng-repeat="y in getTitleDes(x.description)">
@@ -220,7 +242,10 @@
                         <em ng-if="settings.showDescription">{{y.description}}</em>
                     </div>
                 </div>
-            </div>
+            </div>-->
+
+
+
             <!--Desktop-->
             <div ng-if="settings.showFoods" class="table-responsive mt-2 d-none d-sm-block">
                 <table class="table table-borderless table-sm">
@@ -264,6 +289,14 @@
                 </div>
             </div>
             <!--Mobile-->
+
+            <em ng-if="!isSeparatedDes(x.description)&&settings.showDescription&&settings.descPosition==1">{{x.description}}</em>
+            <div ng-show="isSeparatedDes(x.description)&&settings.descPosition==1">
+                <div ng-repeat="y in getTitleDes(getOnlyDesc(x.description))">
+                    <div ng-if="settings.showTitle">{{y.title}}</div>
+                    <em ng-if="settings.showDescription">{{y.description}}</em>
+                </div>
+            </div>
 
         </div>
 
@@ -354,6 +387,8 @@
         </div>
     </div>
 </script>
+
+
 
 <style>
     .col-width {

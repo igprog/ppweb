@@ -48,6 +48,10 @@ public class PrintPdf : System.Web.Services.WebService {
     string landscape = "L";
     string portrait = "P";
 
+    enum DescPosition {
+        top,
+        bottom
+    }
 
     public PrintPdf() {
     }
@@ -70,6 +74,7 @@ public class PrintPdf : System.Web.Services.WebService {
         public bool showAuthor;
         public int printStyle;  // 0 = New Style (table style); 1 = Old style
         public bool showImg;
+        public int descPosition;
     }
 
     #region WebMethods
@@ -93,6 +98,7 @@ public class PrintPdf : System.Web.Services.WebService {
         x.showAuthor = true;
         x.printStyle = 0;
         x.showImg = false;
+        x.descPosition = (int) DescPosition.bottom;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -1862,7 +1868,11 @@ public class PrintPdf : System.Web.Services.WebService {
                     string description = meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
                     if (!string.IsNullOrWhiteSpace(description)) {
                         StringBuilder sb = new StringBuilder();
-                        sb = AppendMealDescription(sb, description, settings);
+                        if (settings.descPosition == (int) DescPosition.bottom) {
+                            sb = AppendMealDescription(sb, description, settings, true, false);
+                        } else {
+                            sb = AppendMealDescription(sb, description, settings, false, false);
+                        }
                         doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
                     }
                     if (settings.showFoods) {
@@ -1873,6 +1883,13 @@ public class PrintPdf : System.Web.Services.WebService {
                     if (settings.showMealsTotal) {
                         if (totals != null) {
                             AppendMealTotalTbl(doc, totals.mealsTotal, meal[0].meal.code, settings, lang);
+                        }
+                    }
+                    if (settings.descPosition == (int)DescPosition.bottom) {
+                        if (!string.IsNullOrWhiteSpace(description)) {
+                            StringBuilder sb = new StringBuilder();
+                            sb = AppendMealDescription(sb, description, settings, false, true);
+                            doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
                         }
                     }
                 }
@@ -1889,7 +1906,7 @@ public class PrintPdf : System.Web.Services.WebService {
                 rowCount = rowCount + 1;
                 string description = meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
                 if (!string.IsNullOrWhiteSpace(description)) {
-                    sb = AppendMealDescription(sb, description, settings);
+                    sb = AppendMealDescription(sb, description, settings, false, false);
                 }
                 if (settings.showFoods) {
                     foreach (Foods.NewFood food in meal) {
@@ -2230,7 +2247,7 @@ public class PrintPdf : System.Web.Services.WebService {
                     List<Foods.NewFood> meal_ = food.MultipleConsumers(meal, consumers);
                     if (!string.IsNullOrWhiteSpace(description)) {
                         StringBuilder sb = new StringBuilder();
-                        p.Add(new Chunk(AppendMealDescription(sb, description, settings).ToString(), GetFont(10)));
+                        p.Add(new Chunk(AppendMealDescription(sb, description, settings, false, false).ToString(), GetFont(10)));
                         p.Add(new Chunk("\n\n", GetFont()));
                     }
                     if (settings.showFoods) {
@@ -2264,7 +2281,7 @@ public class PrintPdf : System.Web.Services.WebService {
         } catch (Exception e) {}
     }
 
-    private StringBuilder AppendMealDescription(StringBuilder sb, string description, PrintMenuSettings settings) {
+    private StringBuilder AppendMealDescription(StringBuilder sb, string description, PrintMenuSettings settings, bool showOnlyTitle, bool showOnlyDesc) {
          if (description.Contains('~')) {
             string[] desList = description.Split('|');
             if (desList.Length > 0) {
@@ -2274,11 +2291,17 @@ public class PrintPdf : System.Web.Services.WebService {
                                 description = p_.Split('~').Length > 1 ? p_.Split('~')[1] : ""
                             }).ToList();
                 foreach (var l in list) {
-                    if (settings.showTitle) {
-                        sb.AppendLine(l.title);
-                        rowCount = rowCount + 1;
+                    if (settings.showTitle && !showOnlyDesc) {
+                        if (showOnlyTitle) {
+                            sb.AppendLine(string.Format(@"{0}
+                                            ",l.title));
+                            rowCount = rowCount + 2;
+                        } else {
+                            sb.AppendLine(l.title);
+                            rowCount = rowCount + 1;
+                        }
                     }
-                    if (settings.showDescription) {
+                    if (settings.showDescription && !showOnlyTitle) {
                         sb.AppendLine(string.Format(@"{0}
                                         ", l.description));
                         rowCount = rowCount + 1;
@@ -2286,13 +2309,43 @@ public class PrintPdf : System.Web.Services.WebService {
                 }
             }
         } else {
-            if (settings.showDescription) {
+            if (settings.showDescription && !showOnlyTitle) {
                 sb.AppendLine(description);
                 rowCount = rowCount + 1;
             }
         }
         return sb;
     }
+
+    //private StringBuilder AppendMealDescription(StringBuilder sb, string description, PrintMenuSettings settings) {
+    //     if (description.Contains('~')) {
+    //        string[] desList = description.Split('|');
+    //        if (desList.Length > 0) {
+    //            var list = (from p_ in desList
+    //                        select new {
+    //                            title = p_.Split('~')[0],
+    //                            description = p_.Split('~').Length > 1 ? p_.Split('~')[1] : ""
+    //                        }).ToList();
+    //            foreach (var l in list) {
+    //                if (settings.showTitle) {
+    //                    sb.AppendLine(l.title);
+    //                    rowCount = rowCount + 1;
+    //                }
+    //                if (settings.showDescription) {
+    //                    sb.AppendLine(string.Format(@"{0}
+    //                                    ", l.description));
+    //                    rowCount = rowCount + 1;
+    //                }
+    //            }
+    //        }
+    //    } else {
+    //        if (settings.showDescription) {
+    //            sb.AppendLine(description);
+    //            rowCount = rowCount + 1;
+    //        }
+    //    }
+    //    return sb;
+    //}
 
     private void AppendTotal(PdfPTable table, string[] menuList, string userId) {
         StringBuilder sb = new StringBuilder();

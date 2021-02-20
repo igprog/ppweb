@@ -4201,6 +4201,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
         }
 
+        $scope.getOnlyDesc = function (x) {
+            debugger;
+            var test = x.split('~')[1];
+            return test;
+        }
+
         //$scope.settings = d.settings;
         //$scope.pdfLink == null;
         //$scope.creatingPdf = false;
