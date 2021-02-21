@@ -24,50 +24,56 @@ public class Meals : System.Web.Services.WebService {
         public string code;
         public string title;
         public string description;
-
-        //TODO desctiption
-        // public List<DishDesctiption> description;
-
         public bool isSelected;
         public bool isDisabled;
-       
     }
 
-    //public class DishDesctiption {
-    //    public string title;
-    //    public string description;
-    //}
+    /***** split description to title and description (separator: ~ and |) *****/
+    public class MealSplitDesc {
+        public string code;
+        public string title;
+        public List<DishDesc> dishDesc;
+        public bool isSelected;
+        public bool isDisabled;
+    }
+
+    public class DishDesc {
+        public string title;
+        public string desc;
+    }
 
     [WebMethod]
     public string Load() {
         try {
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase));
-            connection.Open();
-            string sql = @"SELECT code, title FROM codeBook WHERE codeGroup = 'MEALS' ORDER BY codeOrder ASC";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
             List<NewMeal> xx = new List<NewMeal>();
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
-                NewMeal x = new NewMeal();
-                x.code = reader.GetValue(0) == DBNull.Value ? "B" : reader.GetString(0);
-                x.title = reader.GetValue(1) == DBNull.Value ? GetMealTitle("B", connection) : reader.GetString(1);
-                x.description = "";
-                x.isSelected = true;
-                x.isDisabled = x.code == "B" || x.code == "L" || x.code == "D" ? true : false;
-                xx.Add(x);
-            }
-            connection.Close();
-            string json = JsonConvert.SerializeObject(xx, Formatting.None);
-            return json;
-        } catch (Exception e) { return ("Error: " + e); }
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))){
+                connection.Open();
+                string sql = @"SELECT code, title FROM codeBook WHERE codeGroup = 'MEALS' ORDER BY codeOrder ASC";
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            NewMeal x = new NewMeal();
+                            x.code = reader.GetValue(0) == DBNull.Value ? "B" : reader.GetString(0);
+                            x.title = reader.GetValue(1) == DBNull.Value ? GetMealTitle("B", connection) : reader.GetString(1);
+                            x.description = "";
+                            x.isSelected = true;
+                            x.isDisabled = x.code == "B" || x.code == "L" || x.code == "D" ? true : false;
+                            xx.Add(x);
+                        }
+                    }
+                        
+                }
+            } 
+            return JsonConvert.SerializeObject(xx, Formatting.None);
+        } catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     public static string GetMealTitle(string code, SQLiteConnection connection) {
-        string title = "";
+        string title = null;
         try {
-            string sql = @"SELECT title
-                        FROM codeBook 
-                        WHERE code = @code AND codeGroup = 'MEALS'";
+            string sql = "SELECT title FROM codeBook WHERE code = @code AND codeGroup = 'MEALS'";
             using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                 command.Parameters.Add(new SQLiteParameter("code", code));
                 using (SQLiteDataReader reader = command.ExecuteReader()) {
@@ -76,8 +82,10 @@ public class Meals : System.Web.Services.WebService {
                     }
                 } 
             }
-        } catch (Exception e) { return null; }
-        return title;
+            return title;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

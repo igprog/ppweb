@@ -7,6 +7,7 @@ using System.Configuration;
 using Newtonsoft.Json;
 using System.Data.SQLite;
 using System.IO;
+using System.Text;
 using Igprog;
 
 /// <summary>
@@ -37,6 +38,7 @@ public class Menues : System.Web.Services.WebService {
         public double energy;
 
         public Data data = new Data();
+        public List<Meals.MealSplitDesc> splitMealDesc = new List<Meals.MealSplitDesc>();
     }
 
     public class Data {
@@ -71,6 +73,7 @@ public class Menues : System.Web.Services.WebService {
         data.selectedInitFoods = new List<Foods.NewFood>();
         data.meals = new List<Meals.NewMeal>();
         x.data = data;
+        x.splitMealDesc = new List<Meals.MealSplitDesc>();
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -124,7 +127,6 @@ public class Menues : System.Web.Services.WebService {
             return (e.Message);
         }
     }
-
 
     [WebMethod]
     public string LoadClientMenues(string userId, string clientId) {
@@ -184,6 +186,7 @@ public class Menues : System.Web.Services.WebService {
                             x.userGroupId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
                             x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
                             x.data = JsonConvert.DeserializeObject<Data>(GetJsonFile(userId, x.id));
+                            x.splitMealDesc = MealTitleDesc(x.data.meals);
                             x.client.clientData = new ClientsData.NewClientData();
                             x.client.clientData.myMeals = JsonConvert.DeserializeObject<MyMeals.NewMyMeals>(GetMyMealsJsonFile(userId, x.id));
                         }
@@ -202,8 +205,8 @@ public class Menues : System.Web.Services.WebService {
         } else {
             try {
                 string sql = null;
-                if (x.id == null) {
-                    x.id = Convert.ToString(Guid.NewGuid());
+                if (string.IsNullOrEmpty(x.id)) {
+                    x.id = Guid.NewGuid().ToString();
                     sql = string.Format(@"BEGIN;
                     INSERT INTO menues (id, title, diet, date, note, userId, clientId, userGroupId, energy)
                     VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}');
@@ -221,7 +224,7 @@ public class Menues : System.Web.Services.WebService {
                         command.ExecuteNonQuery();
                     }
                 }
-                    
+                x.data.meals = CombineTitleDesc(x);    
                 SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
                 if(myMeals != null) {
                     if(myMeals.data != null) {
@@ -231,7 +234,10 @@ public class Menues : System.Web.Services.WebService {
                     }
                 }
                 return JsonConvert.SerializeObject(x, Formatting.None);
-            } catch (Exception e) { return (e.Message); }
+            } catch (Exception e) {
+                L.SendErrorLog(e, userId, "Menues", "Save");
+                return JsonConvert.SerializeObject(e.Message, Formatting.None);
+            }
         }
     }
 
@@ -247,8 +253,10 @@ public class Menues : System.Web.Services.WebService {
                 }
             }
             DeleteJson(userId, id);
-        } catch (Exception e) { return (e.Message); }
-        return "OK";
+            return "OK";
+        } catch (Exception e) {
+            return e.Message;
+        }
     }
     #endregion ClientMenues
 
@@ -276,10 +284,11 @@ public class Menues : System.Web.Services.WebService {
                         }
                     }
                 }
-                connection.Close();
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -302,6 +311,7 @@ public class Menues : System.Web.Services.WebService {
                             x.note = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
                             x.energy = reader.GetValue(4) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(4));
                             x.data = JsonConvert.DeserializeObject<Data>(GetJsonFile(string.Format("~/App_Data/menues/{0}/{1}.json", lang, x.id)));
+                            x.splitMealDesc = MealTitleDesc(x.data.meals);
                         }
                     }
                     if (toTranslate == true) {
@@ -327,12 +337,12 @@ public class Menues : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
             }
             SaveAppMenuJsonToFile(id, lang, JsonConvert.SerializeObject(x.data, Formatting.None));
-            string json = JsonConvert.SerializeObject(x, Formatting.None);
-            return json;
-        } catch (Exception e) { return (e.Message); }
+            return JsonConvert.SerializeObject(x, Formatting.None);
+        } catch (Exception e) {
+            return (e.Message);
+        }
     }
     #endregion AppMenues
 
@@ -486,6 +496,64 @@ public class Menues : System.Web.Services.WebService {
             }
             return x;
         } catch (Exception e) { return new NewMenu(); }
+    }
+
+    private List<Meals.MealSplitDesc> MealTitleDesc(List<Meals.NewMeal> meals) {
+        List<Meals.MealSplitDesc> xx = new List<Meals.MealSplitDesc>();
+        foreach (var m in meals) {
+            Meals.MealSplitDesc x = new Meals.MealSplitDesc();
+            x.code = m.code;
+            x.title = m.title;
+            x.dishDesc = SplitMealTitleDesc(m.description);
+            x.isSelected = m.isSelected;
+            x.isDisabled = m.isDisabled;
+            xx.Add(x);
+        }
+        return xx;
+    }
+
+    private List<Meals.DishDesc> SplitMealTitleDesc(string description) {
+        List<Meals.DishDesc> xx = new List<Meals.DishDesc>();
+        if (description.Contains('~')) {
+            string[] desList = description.Split('|');
+            if (desList.Length > 0) {
+                var list = (from p_ in desList
+                            select new {
+                                title = p_.Split('~')[0],
+                                description = p_.Split('~').Length > 1 ? p_.Split('~')[1] : ""
+                            }).ToList();
+                foreach (var l in list) {
+                    Meals.DishDesc x = new Meals.DishDesc();
+                    x.title = l.title;
+                    x.desc = l.description;
+                    xx.Add(x);
+                }
+            }
+        }
+        else {
+            Meals.DishDesc x = new Meals.DishDesc();
+            x.desc = description;
+            xx.Add(x);
+        }
+        return xx;
+    }
+
+    private List<Meals.NewMeal> CombineTitleDesc(NewMenu menu) {
+        foreach (var meal in menu.data.meals) {
+            var dishDesc = menu.splitMealDesc.Find(a => a.code == meal.code).dishDesc;
+            StringBuilder sb = new StringBuilder();
+            foreach (var dd in dishDesc) {
+                if (!string.IsNullOrWhiteSpace(dd.title) && !string.IsNullOrWhiteSpace(dd.desc)) {
+                    sb.Append(string.Format("{0}~{1}", dd.title, dd.desc));
+                } else if (string.IsNullOrWhiteSpace(dd.title) && !string.IsNullOrWhiteSpace(dd.desc)) {
+                    sb.Append(string.Format("{0}", dd.title));
+                } else if (!string.IsNullOrWhiteSpace(dd.title) && string.IsNullOrWhiteSpace(dd.desc)) {
+                    sb.Append(string.Format("{0}", dd.desc));
+                }
+            }
+            meal.description = sb.ToString();
+        }
+        return menu.data.meals;
     }
     #endregion
 

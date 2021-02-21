@@ -3894,7 +3894,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $rootScope.currentMenu.client = $rootScope.client;
             $rootScope.currentMenu.client.clientData = $rootScope.clientData;  //TODO sredit
             $rootScope.currentMenu.data.meals = $rootScope.clientData.meals;
-
+            debugger;
             if ($rootScope.mealsTpl === 'myMeals') {
                 $rootScope.currentMenu.data.meals = $rootScope.myMeals.data.meals;
                 angular.forEach($rootScope.currentMenu.data.meals, function (value, key) {
@@ -3903,6 +3903,18 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     }
                 })
             }
+
+            //TODO: splitMealDesc
+            debugger;
+            angular.forEach($rootScope.currentMenu.data.meals, function (value, key) {
+                $rootScope.currentMenu.splitMealDesc.push({
+                    code: value.code,
+                    title: value.description,
+                    dishDesc: [{title: null, desc:null}],
+                    isSelected: value.isSelected,
+                    isDisabled: value.isDisabled
+                });
+            })
 
             $rootScope.currentMeal = 'B';
             if ($rootScope.currentMenu !== undefined) {
@@ -4173,38 +4185,41 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return (functions.isNullOrEmpty(des) ? '' : (des + ', ')) + serv + ' serv. ' + $translate.instant(title);
         }
 
-        $scope.isSeparatedDes = function (x) {
-            return x.includes('~');
-        }
+        //$scope.isSeparatedDes = function (x) {
+        //    return x.includes('~');
+        //}
 
-        var currDes = null;
-        $scope.list = [];
-        var currList = [];
-        $scope.getTitleDes = function (x) {
-            if (currList === x) { return currList; }
-            if (!functions.isNullOrEmpty(x) && !$scope.list.includes(x)) {
-                $scope.list.push(x);
-                var desList = x.split('|');
-                var list = [];
-                angular.forEach(desList, function (value, key) {
-                    list.push({
-                        title: value.split('~')[0],
-                        description: value.split('~')[1],
-                    })
-                });
-                currDes = x;
-                currList = list;
-                return list.length > 0 ? list : x;
-            } else {
-                currList = x;
-                return x;
-            }
-        }
+        //var currDes = null;
+        //$scope.list = [];
+        //var currList = [];
+        //$scope.getTitleDes = function (x) {
+        //    if (currList === x) { return currList; }
+        //    if (!functions.isNullOrEmpty(x) && !$scope.list.includes(x)) {
+        //        $scope.list.push(x);
+        //        var desList = x.split('|');
+        //        var list = [];
+        //        angular.forEach(desList, function (value, key) {
+        //            list.push({
+        //                title: value.split('~')[0],
+        //                description: value.split('~')[1],
+        //            })
+        //        });
+        //        currDes = x;
+        //        currList = list;
+        //        return list.length > 0 ? list : x;
+        //    } else {
+        //        currList = x;
+        //        return x;
+        //    }
+        //}
 
-        $scope.getOnlyDesc = function (x) {
-            debugger;
-            var test = x.split('~')[1];
-            return test;
+        //$scope.getOnlyDesc = function (x) {
+        //    var test = x.split('~')[1];
+        //    return test;
+        //}
+
+        $scope.getCurrMealDesc = function (x, splitMealDesc) {
+            return splitMealDesc.find(a => a.code === x.code).dishDesc;
         }
 
         //$scope.settings = d.settings;
@@ -4361,6 +4376,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $rootScope.currentMenu.client.clientData = $rootScope.clientData;
             $rootScope.currentMenu.client.clientData.meals = x.data.meals;
             $rootScope.currentMenu.client.clientData.myMeals = x.client.clientData.myMeals;
+            debugger;
+            $rootScope.currentMenu.splitMealDesc = x.splitMealDesc;
             $rootScope.isMyMeals = false;
             if ($rootScope.currentMenu.client.clientData.myMeals != null) {
                 if ($rootScope.currentMenu.client.clientData.myMeals.data != null) {

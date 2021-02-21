@@ -234,7 +234,7 @@ public class PrintPdf : System.Web.Services.WebService {
                     rowCount = 0;
                 }
 
-                AppendMeal(doc, meal, currentMenu.data.meals, lang, totals, settings);
+                AppendMeal(doc, meal, currentMenu, lang, totals, settings);
 
                 firstPage = false;
                 i++;
@@ -299,7 +299,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
             foreach (string m in orderedMeals) {
                 List<Foods.NewFood> meal = currentMenu.data.selectedFoods.Where(a => a.meal.code == m).ToList();
-                sb.AppendLine(AppendMeal_old(meal, currentMenu.data.meals, lang, totals, settings));
+                sb.AppendLine(AppendMeal_old(meal, currentMenu, lang, totals, settings));
             }
 
             doc.Add(new Paragraph(sb.ToString(), GetFont()));
@@ -1858,21 +1858,38 @@ public class PrintPdf : System.Web.Services.WebService {
         }
     }
 
-    private void AppendMeal(Document doc, List<Foods.NewFood> meal, List<Meals.NewMeal> meals, string lang, Foods.Totals totals, PrintMenuSettings settings) {
+    private void AppendMeal(Document doc, List<Foods.NewFood> meal, Menues.NewMenu currentMenu, string lang, Foods.Totals totals, PrintMenuSettings settings) {
         if (meal.Count > 0) {
-            if (meals.Find(a => a.code == meal[0].meal.code)!= null) {
-                if (meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
-                    string mealtitle = string.Format(@"{0}:", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, meals), lang)).ToUpper();
+            if (currentMenu.data.meals.Find(a => a.code == meal[0].meal.code)!= null) {
+                if (currentMenu.data.meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
+                    string mealtitle = string.Format(@"{0}:", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, currentMenu.data.meals), lang)).ToUpper();
                     doc.Add(new Paragraph(mealtitle, GetFont(true)));
                     rowCount = rowCount + 1;
-                    string description = meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
+                    string description = currentMenu.data.meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
                     if (!string.IsNullOrWhiteSpace(description)) {
                         StringBuilder sb = new StringBuilder();
-                        if (settings.descPosition == (int) DescPosition.bottom) {
-                            sb = AppendMealDescription(sb, description, settings, true, false);
-                        } else {
-                            sb = AppendMealDescription(sb, description, settings, false, false);
+                        foreach (var dd in currentMenu.splitMealDesc) {
+                            foreach (var d in dd.dishDesc) {
+                                if (!string.IsNullOrWhiteSpace(d.title)) {
+                                    sb.AppendLine(d.title);
+                                }
+                                if (settings.descPosition == (int)DescPosition.top) {
+                                    if (!string.IsNullOrWhiteSpace(d.desc)) {
+                                        sb.AppendLine(d.desc);
+                                    }
+                                }
+                            }
+                            //if (settings.descPosition == (int)DescPosition.top) {
+                            //    foreach (var d in dd.dishDesc) {
+                            //        sb.Append(d.title);
+                            //    }
+                            //    //sb = AppendMealDescription(sb, description, settings, true, false);
+                            //} else
+                            //{
+                            //    sb = AppendMealDescription(sb, description, settings, false, false);
+                            //}
                         }
+                        sb.AppendLine();
                         doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
                     }
                     if (settings.showFoods) {
@@ -1888,7 +1905,18 @@ public class PrintPdf : System.Web.Services.WebService {
                     if (settings.descPosition == (int)DescPosition.bottom) {
                         if (!string.IsNullOrWhiteSpace(description)) {
                             StringBuilder sb = new StringBuilder();
-                            sb = AppendMealDescription(sb, description, settings, false, true);
+                            foreach (var dd in currentMenu.splitMealDesc) {
+                                foreach (var d in dd.dishDesc) {
+                                    if (settings.descPosition == (int)DescPosition.bottom) {
+                                        if (!string.IsNullOrWhiteSpace(d.desc)) {
+                                            sb.AppendLine(d.desc);
+                                        }
+                                    }
+                                }
+                            }
+
+                            //sb = AppendMealDescription(sb, description, settings, false, true);
+                            sb.AppendLine();
                             doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
                         }
                     }
@@ -1897,20 +1925,45 @@ public class PrintPdf : System.Web.Services.WebService {
         }
     }
 
-    private string AppendMeal_old(List<Foods.NewFood> meal, List<Meals.NewMeal> meals, string lang, Foods.Totals totals, PrintMenuSettings settings) {
+    private string AppendMeal_old(List<Foods.NewFood> meal, Menues.NewMenu currentMenu, string lang, Foods.Totals totals, PrintMenuSettings settings) {
         StringBuilder sb = new StringBuilder();
         if (meal.Count > 0) {
-            if (meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
-                sb.AppendLine(string.Format(@"{0}", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, meals), lang)).ToUpper());
-                //sb.AppendLine(string.Format(@"{0}", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title), lang)).ToUpper());
+            if (currentMenu.data.meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
+                sb.AppendLine(string.Format(@"{0}", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, currentMenu.data.meals), lang)).ToUpper());
                 rowCount = rowCount + 1;
-                string description = meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
+                string description = currentMenu.data.meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
                 if (!string.IsNullOrWhiteSpace(description)) {
-                    sb = AppendMealDescription(sb, description, settings, false, false);
+                    foreach (var dd in currentMenu.splitMealDesc) {
+                        foreach (var d in dd.dishDesc) {
+                            if (!string.IsNullOrWhiteSpace(d.title)) {
+                                sb.AppendLine(d.title);
+                            }
+                            if (settings.descPosition == (int)DescPosition.top) {
+                                if (!string.IsNullOrWhiteSpace(d.desc)) {
+                                    sb.AppendLine(d.desc);
+                                }
+                            }
+                        }
+                    }
+                    sb.AppendLine();
                 }
                 if (settings.showFoods) {
                     foreach (Foods.NewFood food in meal) {
                         sb.AppendLine(AppendFoods(food, settings, lang));
+                    }
+                }
+                if (settings.descPosition == (int)DescPosition.bottom) {
+                    if (!string.IsNullOrWhiteSpace(description)) {
+                        sb.AppendLine();
+                        foreach (var dd in currentMenu.splitMealDesc) {
+                            foreach (var d in dd.dishDesc) {
+                                if (settings.descPosition == (int)DescPosition.bottom) {
+                                    if (!string.IsNullOrWhiteSpace(d.desc)) {
+                                        sb.AppendLine(d.desc);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 if (settings.showMealsTotal) {
@@ -1924,13 +1977,46 @@ public class PrintPdf : System.Web.Services.WebService {
                                 , t.Tran("fats", lang), Math.Round(ft.fats.val, 1), Math.Round(ft.fats.perc, 1))).ToString();
                         rowCount = rowCount + 2;
                     }
-                    
                 }
-                //sb.AppendLine("__________________________________________________________________________________________________");
             }
         }
         return sb.ToString();
     }
+
+    //private string AppendMeal_old(List<Foods.NewFood> meal, List<Meals.NewMeal> meals, string lang, Foods.Totals totals, PrintMenuSettings settings) {
+    //    StringBuilder sb = new StringBuilder();
+    //    if (meal.Count > 0) {
+    //        if (meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
+    //            sb.AppendLine(string.Format(@"{0}", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, meals), lang)).ToUpper());
+    //            //sb.AppendLine(string.Format(@"{0}", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title), lang)).ToUpper());
+    //            rowCount = rowCount + 1;
+    //            string description = meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
+    //            if (!string.IsNullOrWhiteSpace(description)) {
+    //                sb = AppendMealDescription(sb, description, settings, false, false);
+    //            }
+    //            if (settings.showFoods) {
+    //                foreach (Foods.NewFood food in meal) {
+    //                    sb.AppendLine(AppendFoods(food, settings, lang));
+    //                }
+    //            }
+    //            if (settings.showMealsTotal) {
+    //                if (totals != null) {
+    //                    sb.AppendLine(string.Format(@""));
+    //                    Foods.MealsTotal ft = totals.mealsTotal.Where(a => a.code == meal[0].meal.code).FirstOrDefault();
+    //                    sb.AppendLine(string.Format(@"{0}: {1} kcal ({2}%), {3}: {4} g ({5}%), {6}: {7} g ({8}%), {9}: {10} g ({11}%)"
+    //                            , t.Tran("energy", lang), Math.Round(ft.energy.val, 1), Math.Round(ft.energy.perc, 1)
+    //                            , t.Tran("carbohydrates", lang), Math.Round(ft.carbohydrates.val, 1), Math.Round(ft.carbohydrates.perc, 1)
+    //                            , t.Tran("proteins", lang), Math.Round(ft.proteins.val, 1), Math.Round(ft.proteins.perc, 1)
+    //                            , t.Tran("fats", lang), Math.Round(ft.fats.val, 1), Math.Round(ft.fats.perc, 1))).ToString();
+    //                    rowCount = rowCount + 2;
+    //                }
+                    
+    //            }
+    //            //sb.AppendLine("__________________________________________________________________________________________________");
+    //        }
+    //    }
+    //    return sb.ToString();
+    //}
 
     private string AppendFoods(Foods.NewFood food, PrintMenuSettings settings, string lang) {
         string x = string.Format(@"- {0}{1}{2}{3}"
