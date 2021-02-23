@@ -60,11 +60,13 @@
                                 <tbody class="small">
                                     <tr>
                                         <th colspan="8">
-                                            <div ng-repeat="x in currentMenu.splitMealDesc">
+                                            <div ng-init="sectionIndex = $index" ng-repeat="x in currentMenu.splitMealDesc track by $index">
                                                 <div ng-if="x.code===currentMeal">
-                                                    <md-input-container class="md-block mb-0" flex-gt-sm ng-repeat="dd in x.dishDesc">
+                                                    <md-input-container class="md-block mb-0" flex-gt-sm ng-repeat="dd in x.dishDesc track by $index">
                                                         <label class="text-capitalize">{{'meal title' | translate}}</label>
                                                         <input ng-model="dd.title" type="text">
+                                                        <a ng-if="dd.title.length>0" href="" ng-click="addNewDishTitle(sectionIndex)" title="{{'add new dish title' | translate}}">+</a>
+                                                        <a ng-if="x.dishDesc.length>1" href="" ng-click="removeNewDishTitle(sectionIndex, $index)" title="{{'remove new dish title' | translate}}">-</a>
                                                     </md-input-container>
                                                 </div>
                                             </div>
@@ -72,7 +74,7 @@
                                         <th class="text-right border-bottom">{{'energy' | translate}}<br /> <span class="small text-nowrap">(<em>{{'kcal' | translate}}</em>)</span></th>
                                         <th class="text-right border-bottom">{{'carbs' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
                                         <th class="text-right border-bottom">{{'prot' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
-                                        <th class="text-right border-bottom">{{'fats' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
+                                        <th class="text-right border-bottom">{{'fats' | translate}}<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
                                     </tr>
                                     <tr ng-if="currentMenu.data.selectedFoods.length>0" ng-repeat="x in currentMenu.data.selectedFoods | filter:filterMeal track by $index" ng-class="getFoodGroupClass(x.foodGroup.code)" title="{{x.foodGroup.title}}">
                                         <td>
@@ -150,7 +152,7 @@
                             <div ng-repeat="x in currentMenu.splitMealDesc">
                                 <div ng-if="x.code===currentMeal">
                                     <md-input-container class="md-block mb-0" flex-gt-sm ng-repeat="dd in x.dishDesc">
-                                        <label class="text-capitalize">{{'meal preparation' | translate}}</label>
+                                        <label>{{'meal preparation' | translate}} <em ng-if="dd.title">({{dd.title.length > 25 ? dd.title.substring(0, 23) + '...' : dd.title}})</em></label>
                                         <textarea ng-model="dd.desc" rows="3" class="area" type="text"></textarea>
                                     </md-input-container>
                                 </div>

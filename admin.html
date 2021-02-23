@@ -472,9 +472,23 @@
     <script type="text/ng-template" id="orders">
         <div ng-controller="ordersCtrl" class="container-fluid">
             <h2>Narudžbe</h2>
-            <div class="row" style="padding-bottom:10px">
-                <div class="col-sm-4">
-                    <input ng-model="searchOrders" class="form-control" placeholder="Pretraži..." />
+            <div class="row m10">
+                <div class="col-sm-2">
+                    <select ng-model="year" class="form-control" ng-change="load(year, searchOrders)">
+                        <option ng-selected="x==year?true:false" ng-repeat="x in years">{{x}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <form>
+                        <div class="input-group">
+                            <input ng-model="searchOrders" type="text" class="form-control" placeholder="Pretraži...">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit" ng-click="load(year, searchOrders)">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="table-responsive table-scroll" style="max-height:600px">
@@ -501,7 +515,7 @@
                         <th>Napomena</th>
                         <th></th>
                     </tr>
-                    <tr ng-repeat="x in orders | filter:searchOrders">
+                    <tr ng-repeat="x in orders">
                         <td><button class="btn btn-success" ng-click="createInvoice(x, 'invoices')"><i class="fa fa-file-text-o"></i> Račun</button></td>
                         <td>{{orders.length - $index}}</td>
                         <td>{{x.orderNumber}}</td>

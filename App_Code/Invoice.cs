@@ -154,7 +154,7 @@ public class Invoice : System.Web.Services.WebService {
                 connection.Open();
                 string sql = string.Format(@"SELECT id, number, fileName, orderNumber, dateAndTime, year, firstName, lastName, companyName, address, postalCode, city, country, pin, note, items, isPaid, paidAmount, paidDate
                         FROM invoices {0}
-                        ORDER BY rowid DESC", !string.IsNullOrEmpty(search) ? string.Format("WHERE UPPER(firstName) LIKE '{0}%' OR UPPER(lastName) LIKE '{0}%' OR UPPER(companyName) LIKE '{0}%' OR UPPER(items) LIKE '%{0}%'", search.ToUpper()) : "" );
+                        ORDER BY rowid DESC", !string.IsNullOrWhiteSpace(search) ? string.Format("WHERE UPPER(firstName) LIKE '{0}%' OR UPPER(lastName) LIKE '{0}%' OR UPPER(companyName) LIKE '{0}%' OR UPPER(items) LIKE '%{0}%'", search.ToUpper()) : "" );
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {

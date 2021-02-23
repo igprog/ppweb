@@ -3933,6 +3933,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         });
     };
 
+    $scope.addNewDishTitle = function (idx) {
+        $rootScope.currentMenu.splitMealDesc[idx].dishDesc.push({title: null, desc: null});
+    }
+
+    $scope.removeNewDishTitle = function (idx, idx1) {
+        $rootScope.currentMenu.splitMealDesc[idx].dishDesc.splice(idx1, 1);
+    }
+
     $scope.toggleMeals = function (x) {
         $rootScope.currentMeal = x;
     };
@@ -4376,7 +4384,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $rootScope.currentMenu.client.clientData = $rootScope.clientData;
             $rootScope.currentMenu.client.clientData.meals = x.data.meals;
             $rootScope.currentMenu.client.clientData.myMeals = x.client.clientData.myMeals;
-            debugger;
             $rootScope.currentMenu.splitMealDesc = x.splitMealDesc;
             $rootScope.isMyMeals = false;
             if ($rootScope.currentMenu.client.clientData.myMeals != null) {
@@ -5356,6 +5363,18 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 var idx = $rootScope.currentMenu.data.selectedFoods.length;
                 $scope.addFoodToMeal(value, recipe.data.selectedInitFoods[key], idx);
             });
+
+            var dishDescList = angular.copy($rootScope.currentMenu.splitMealDesc.find(a => a.code === $rootScope.currentMeal).dishDesc);
+            angular.forEach(dishDescList, function (value, key) {
+                if (value.title === null && value.desc === null) {
+                    $rootScope.currentMenu.splitMealDesc.find(a => a.code === $rootScope.currentMeal).dishDesc[key] = recipe.dishDesc;
+                    return;
+                } else {
+                    $rootScope.currentMenu.splitMealDesc.find(a => a.code === $rootScope.currentMeal).dishDesc.push(recipe.dishDesc);
+                    return;
+                }
+            });
+
             getTotals($rootScope.currentMenu);
         }, function () {
         });

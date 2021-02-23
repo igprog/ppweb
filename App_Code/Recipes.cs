@@ -39,10 +39,9 @@ public class Recipes : System.Web.Services.WebService {
         public string recipeImg { get; set; }
         public string recipeImgPath { get; set; }
         public bool isShared { get; set; }
-        //TODO: sharingData
         public SharingRecipes.SharingData sharingData = new SharingRecipes.SharingData();
         public string userId;
-
+        public Meals.DishDesc dishDesc = new Meals.DishDesc();
     }
 
     public class JsonFile {
@@ -284,6 +283,7 @@ public class Recipes : System.Web.Services.WebService {
         SharingRecipes sr = new SharingRecipes();
         x.sharingData = sr.InitSharingData();
         x.userId = null;
+        x.dishDesc = new Meals.DishDesc();
         return x;
     }
 
@@ -304,6 +304,11 @@ public class Recipes : System.Web.Services.WebService {
         x.isShared = SR.Check(x.id);
         x.sharingData = SR.InitSharingData();
         x.userId = userId;
+        if (getJson) {
+            x.dishDesc = new Meals.DishDesc();
+            x.dishDesc.title = x.title;
+            x.dishDesc.desc = x.description;
+        }
         return x;
     }
 

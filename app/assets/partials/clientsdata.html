@@ -3,9 +3,9 @@
      <div class="bg-white p-3">
         <div class="row">
                  <div class="col-sm-8">
-                     <a href="" class="btn btn-outline-primary text-capitalize" ng-click="newClient()"><i class="fa fa-user-plus"></i> <span class="d-none d-sm-inline">{{'new client' | translate}}</span></a>
-                     <a href="" ng-if="clients.length>0" class="btn btn-outline-primary text-capitalize" ng-click="search()"><i class="fa fa-search"></i> <span class="d-none d-sm-inline">{{'search clients' | translate}}</span></a>
-                     <a ng-if="client.clientId" href="" class="btn btn-outline-primary text-capitalize" ng-click="saveClientData(clientData)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save' | translate}}</span></a>
+                     <button class="btn btn-outline-primary text-capitalize" ng-click="newClient()"><i class="fa fa-user-plus"></i> <span class="d-none d-sm-inline">{{'new client' | translate}}</span></button>
+                     <button ng-if="clients.length>0" class="btn btn-outline-primary text-capitalize" ng-click="search()"><i class="fa fa-search"></i> <span class="d-none d-sm-inline">{{'search clients' | translate}}</span></button>
+                     <button ng-disabled="clientDataTpl==='clientStatictic'" ng-if="client.clientId" class="btn btn-outline-primary text-capitalize" ng-click="saveClientData(clientData)"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save' | translate}}</span></button>
                  </div>
              </div>
          <div class="mt-3">

@@ -529,8 +529,7 @@ public class Menues : System.Web.Services.WebService {
                     xx.Add(x);
                 }
             }
-        }
-        else {
+        } else {
             Meals.DishDesc x = new Meals.DishDesc();
             x.desc = description;
             xx.Add(x);

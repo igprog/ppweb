@@ -80,14 +80,14 @@ public class Orders : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string Load() {
+    public string Load(int year, string search) {
         try {
             List<NewOrder> xx = new List<NewOrder>();
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
                 connection.Open();
-                string sql = @"SELECT id, orderNumber, firstName, lastName, companyName, address, postalCode, city, country, pin, email, ipAddress, application, version, licence, licenceNumber, price, priceEur, orderDate, additionalService, note
-                            FROM orders
-                            ORDER BY rowid DESC";
+                string sql = string.Format(@"SELECT id, orderNumber, firstName, lastName, companyName, address, postalCode, city, country, pin, email, ipAddress, application, version, licence, licenceNumber, price, priceEur, orderDate, additionalService, note
+                            FROM orders {0}
+                            ORDER BY rowid DESC", !string.IsNullOrWhiteSpace(search) ? string.Format("WHERE UPPER(firstName) LIKE '{0}%' OR UPPER(lastName) LIKE '{0}%' OR UPPER(companyName) LIKE '{0}%' OR UPPER(email) LIKE '%{0}%'", search.ToUpper()) : "");
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
@@ -117,12 +117,12 @@ public class Orders : System.Web.Services.WebService {
                             xx.Add(x);
                         }
                     }
-                } 
-                connection.Close();
-            }  
+                }
+            }
+            xx = xx.Where(a => Convert.ToDateTime(a.orderDate).Year == year).ToList();  
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            return (e.Message);
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
@@ -240,10 +240,11 @@ public class Orders : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
             }
-            return "ok";
-        } catch (Exception e) { return (e.Message); }
+            return JsonConvert.SerializeObject("ok", Formatting.None);
+        } catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
 }

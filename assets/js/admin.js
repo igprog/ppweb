@@ -284,13 +284,26 @@ angular.module('app', [])
 }])
 
 .controller('ordersCtrl', ['$scope', '$http', '$rootScope', 'functions', function ($scope, $http, $rootScope, functions) {
+    $scope.searchOrders = null;
+    function setYears() {
+        $scope.years = [];
+        for (var i = 2017; i <= $scope.year; i++) {
+            $scope.years.push(i);
+        }
+        $scope.year = new Date().getFullYear();
+    }
+    setYears();
 
-    var load = function () {
-        functions.post('Orders', 'Load', {}).then(function(d) {
+    var load = function (year, search) {
+        functions.post('Orders', 'Load', {year: year, search: search}).then(function(d) {
             $scope.orders = d;
         });
     }
-    load();
+    load($scope.year, null);
+
+    $scope.load = function (year, search) {
+        return load(year, search);
+    }
 
     $scope.createInvoice = function (order, tpl) {
         functions.post('Invoice', 'InitPP', {order: order}).then(function(d) {
@@ -301,17 +314,9 @@ angular.module('app', [])
 
     $scope.remove = function (x) {
         if (confirm("Briši narudžbu br. " + x.orderNumber + " (" + x.firstName + " " + x.lastName + " - " + x.companyName + ")?")) {
-            $http({
-                url: $rootScope.config.backend + 'Orders.asmx/Delete',
-                method: 'POST',
-                data: { id: x.id }
-            })
-            .then(function (response) {
-                alert(response.data.d);
-                load();
-            },
-            function (response) {
-                alert(response.data.d);
+            functions.post('Orders', 'Delete', { id: x.id }).then(function (d) {
+                load($scope.year, null);
+                alert(d);
             });
         }
     }

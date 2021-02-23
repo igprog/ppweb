@@ -59,6 +59,7 @@ public class MyFoods : System.Web.Services.WebService {
             Foods.FoodData foodData = new Foods.FoodData();
             List<Foods.FoodGroup> foodGroups = new List<Foods.FoodGroup>();
             DataBase db = new DataBase();
+            db.CreateDataBase(userId, db.myFoods);
             string sql = @"SELECT f.id, f.food, f.foodGroup, '', f.foodGroupVitaminLost, f.quantity, f.unit, f.mass, f.energy, f.carbohydrates, f.proteins, f.fats,
                         f.cerealsServ, f.vegetablesServ, f.fruitServ, f.meatServ, f.milkServ, f.fatsServ, f.otherFoodsServ,
                         f.starch, f.totalSugar, f.glucose, f.fructose, f.saccharose, f.maltose, f.lactose, f.fibers, f.saturatedFats,
@@ -88,7 +89,7 @@ public class MyFoods : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(foodData, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, "MyFoods", "Load");
+            L.SendErrorLog(e, userId, "MyFoods", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -98,6 +99,7 @@ public class MyFoods : System.Web.Services.WebService {
         try {
             Foods.NewFood x = new Foods.NewFood();
             DataBase db = new DataBase();
+            db.CreateDataBase(userId, db.myFoods);
             string sql = @"SELECT f.id, f.food, f.foodGroup, '', f.foodGroupVitaminLost, f.quantity, f.unit, f.mass, f.energy, f.carbohydrates, f.proteins, f.fats,
                         f.cerealsServ, f.vegetablesServ, f.fruitServ, f.meatServ, f.milkServ, f.fatsServ, f.otherFoodsServ,
                         f.starch, f.totalSugar, f.glucose, f.fructose, f.saccharose, f.maltose, f.lactose, f.fibers, f.saturatedFats,
