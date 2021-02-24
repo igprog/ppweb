@@ -2022,6 +2022,10 @@
   "share_alert": "Ako želite vidjeti recepte drugih korisnika, prvo morate podijeliti barem jedan svoj recept",
   "choose recipe": "Odaberite recept",
   "view": "pregled",
-  "views": "pregleda"
+  "views": "pregleda",
+  "meal title": "Naziv jela",
+  "add new dish title": "dodaj novi naziv jela",
+  "remove dish title": "briši naziv jela",
+  "meal preparation": "Priprema jela"
 
 }

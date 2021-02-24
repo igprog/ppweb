@@ -30,11 +30,6 @@
                 </div>
                 <div class="col-lg-7 text-right">
                     <div ng-if="settings.showClientData">
-                        <!--<p>
-                        <p>{{'client' | translate}}: {{menu.client.firstName}} {{menu.client.lastName}}</p>
-                            {{'height' | translate}}: {{menu.client.clientData.height}} cm, {{'weight' | translate}}: {{menu.client.clientData.weight}} kg
-                            <span ng-if="menu.client.clientData.waist>0">, {{'waist' | translate}}: {{menu.client.clientData.waist}} cm</span><span ng-if="menu.client.clientData.hip>0">, {{'hip' | translate}}: {{menu.client.clientData.hip}} cm</span>
-                        </p>-->
                         <p>{{'diet' | translate}}: {{client.clientData.diet.diet | translate}}</p>
                     </div>
                 </div>
@@ -44,15 +39,12 @@
             <div ng-if="x.isSelected==1" ng-repeat="x in menu.data.meals track by $index" class="m-2">
                 <label class="text-uppercase mt-2 mb-0">{{getMealTitle(x)}}</label>
                 <hr class="d-block d-sm-none m-0" />
-                <div ng-if="x.description" class="mt-2 mb-2">
-                    <em ng-if="!isSeparatedDes(x.description)&&settings.showDescription">{{x.description}}</em>
-                    <div ng-if="isSeparatedDes(x.description)">
-                        <div ng-repeat="y in getTitleDes(x.description) track by $index">
-                            <div ng-if="settings.showTitle">{{y.title}}</div>
-                            <em ng-if="settings.showDescription">{{y.description}}</em>
-                        </div>
+                <div class="mt-2 mb-2">
+                    <div ng-repeat="y in getCurrMealDesc(x, menu.splitMealDesc) track by $index">
+                        <p>{{y.title}}</p>
                     </div>
                 </div>
+
                 <!--Desktop-->
                 <div ng-if="settings.showFoods" class="table-responsive mt-2 d-none d-sm-block">
                     <table class="table table-borderless table-sm">
@@ -96,6 +88,12 @@
                     </div>
                 </div>
                 <!--Mobile-->
+
+                <div class="mt-2 mb-2">
+                    <div ng-repeat="y in getCurrMealDesc(x, menu.splitMealDesc) track by $index">
+                        <em>{{y.desc}}</em>
+                    </div>
+                </div>
 
             </div>
 
@@ -150,30 +148,6 @@
 
         </div>
     </div>
-
-
-    <!--<div>
-        <strong>{{menu.title}}</strong>
-        <p>{{menu.note}}</p>
-        <hr />
-        <div ng-if="x.isSelected" ng-repeat="x in menu.data.meals track by $index">
-            <div class="text-uppercase"><strong>{{getMealTitle(x)}}</strong></div>
-            <div ng-if="x.description">
-                <em class="text-justify">{{x.description}}</em>
-            </div>
-            <div class="p10">
-                <p ng-if="y.meal.code==x.code" ng-repeat="y in menu.data.selectedFoods track by $index">- {{y.food | translate}}, {{y.quantity}} {{y.unit | translate}}, ({{y.mass}} {{'g' | translate}})</p>
-            </div>
-            <hr />
-        </div>
-        <div>
-            <div><strong class="text-uppercase">{{'total' | translate}}</strong></div>
-            <p><span class="text-capitalize">{{'energy value' | translate}}:</span> <span>{{totals.energy}} {{'kcal' | translate}}</span></p>
-            <p><span class="text-capitalize">{{'carbohydrates' | translate}}:</span> <span>{{totals.carbohydrates | number:1}} {{'g' | translate}}, ({{totals.carbohydratesPercentage | number:1}} %)</span></p>
-            <p><span class="text-capitalize">{{'proteins' | translate}}:</span> <span>{{totals.proteins | number:1}} {{'g' | translate}}, ({{totals.proteinsPercentage | number:1}} %)</span></p>
-            <p><span class="text-capitalize">{{'fats' | translate}}:</span> <span>{{totals.fats | number:1}} {{'g' | translate}}, ({{totals.fatsPercentage | number:1}} %)</span></p>
-        </div>
-    </div>-->
 </div>
 
 <style>

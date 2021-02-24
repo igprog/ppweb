@@ -2013,6 +2013,10 @@
   "share_alert": "If you want to see the other users recipes, first you need to share at least one of yours recipe",
   "choose recipe": "Choose recipe",
   "view": "view",
-  "views": "views"
+  "views": "views",
+  "meal title": "Meal title",
+  "add new dish title": "add new dish title",
+  "remove dish title": "remove dish title",
+  "meal preparation": "Meal preparation"
 
 }

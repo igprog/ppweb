@@ -1,6 +1,6 @@
 ﻿/*!
 app.js
-(c) 2019-2020 IG PROG, www.igprog.hr
+(c) 2019-2021 IG PROG, www.igprog.hr
 */
 angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngStorage', 'functions', 'charts'])
 
@@ -437,32 +437,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
         $scope.pdfLink = null;
     }
 
-    $scope.isSeparatedDes = function (x) {
-        return x.includes('~');
-    }
-
-    var currDes = null;
-    $scope.list = [];
-    var currList = [];
-    $scope.getTitleDes = function (x) {
-        if (currList === x) { return currList; }
-        if (!functions.isNullOrEmpty(x) && !$scope.list.includes(x)) {
-            $scope.list.push(x);
-            var desList = x.split('|');
-            var list = [];
-            angular.forEach(desList, function (value, key) {
-                list.push({
-                    title: value.split('~')[0],
-                    description: value.split('~')[1],
-                })
-            });
-            currDes = x;
-            currList = list;
-            return list.length > 0 ? list : x;
-        } else {
-            currList = x;
-            return x;
-        }
+    $scope.getCurrMealDesc = function (x, splitMealDesc) {
+        return splitMealDesc.find(a => a.code === x.code).dishDesc;
     }
 
     $scope.change = function (step, scope) {

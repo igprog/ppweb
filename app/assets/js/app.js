@@ -4193,46 +4193,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return (functions.isNullOrEmpty(des) ? '' : (des + ', ')) + serv + ' serv. ' + $translate.instant(title);
         }
 
-        //$scope.isSeparatedDes = function (x) {
-        //    return x.includes('~');
-        //}
-
-        //var currDes = null;
-        //$scope.list = [];
-        //var currList = [];
-        //$scope.getTitleDes = function (x) {
-        //    if (currList === x) { return currList; }
-        //    if (!functions.isNullOrEmpty(x) && !$scope.list.includes(x)) {
-        //        $scope.list.push(x);
-        //        var desList = x.split('|');
-        //        var list = [];
-        //        angular.forEach(desList, function (value, key) {
-        //            list.push({
-        //                title: value.split('~')[0],
-        //                description: value.split('~')[1],
-        //            })
-        //        });
-        //        currDes = x;
-        //        currList = list;
-        //        return list.length > 0 ? list : x;
-        //    } else {
-        //        currList = x;
-        //        return x;
-        //    }
-        //}
-
-        //$scope.getOnlyDesc = function (x) {
-        //    var test = x.split('~')[1];
-        //    return test;
-        //}
-
         $scope.getCurrMealDesc = function (x, splitMealDesc) {
             return splitMealDesc.find(a => a.code === x.code).dishDesc;
         }
 
-        //$scope.settings = d.settings;
-        //$scope.pdfLink == null;
-        //$scope.creatingPdf = false;
         $scope.printMenuPdf = function (consumers, date, author, rowsPerPage) {
             if (angular.isDefined($rootScope.currentMenu)) {
                 $scope.creatingPdf = true;
@@ -6892,35 +6856,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return (functions.isNullOrEmpty(des) ? '' : (des + ', ')) + serv + ' serv. ' + $translate.instant(title);
         }
 
-        //$scope.isSeparatedDes = function (x) {
-        //    return x.includes('~');
-        //}
-
-        //var currDes = null;
-        //$scope.list = [];
-        //var currList = [];
-        //$scope.getTitleDes = function (x) {
-        //    if (currList === x) { return currList; }
-        //    if (!functions.isNullOrEmpty(x) && !$scope.list.includes(x)) {
-        //        $scope.list.push(x);
-        //        var desList = x.split('|');
-        //        var list = [];
-        //        angular.forEach(desList, function (value, key) {
-        //            list.push({
-        //                title: value.split('~')[0],
-        //                description: value.split('~')[1],
-        //            })
-        //        });
-        //        currDes = x;
-        //        currList = list;
-        //        return list.length > 0 ? list : x;
-        //    } else {
-        //        currList = x;
-        //        return x;
-        //    }
-        //}
-
-      //  $scope.settings = d.settings;
+        
         $scope.pdfLink == null;
         $scope.creatingPdf = false;
         $scope.printRecipePdf = function (consumers, date, author) {
@@ -6932,9 +6868,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     data: { foods: $scope.recipe.data.selectedInitFoods, number: consumers }
                 })
                 .then(function (response) {
-                    //var foods = JSON.parse(response.data.d);
-                    //var currentMenu = angular.copy($rootScope.currentMenu);
-                    //currentMenu.data.selectedFoods = foods;
                     $http({
                         url: $sessionStorage.config.backend + 'PrintPdf.asmx/RecipePdf',
                         method: "POST",

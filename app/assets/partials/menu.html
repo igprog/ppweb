@@ -63,10 +63,10 @@
                                             <div ng-init="sectionIndex = $index" ng-repeat="x in currentMenu.splitMealDesc track by $index">
                                                 <div ng-if="x.code===currentMeal">
                                                     <md-input-container class="md-block mb-0" flex-gt-sm ng-repeat="dd in x.dishDesc track by $index">
-                                                        <label class="text-capitalize">{{'meal title' | translate}}</label>
+                                                        <label>{{'meal title' | translate}}</label>
                                                         <input ng-model="dd.title" type="text">
                                                         <a ng-if="dd.title.length>0" href="" ng-click="addNewDishTitle(sectionIndex)" title="{{'add new dish title' | translate}}">+</a>
-                                                        <a ng-if="x.dishDesc.length>1" href="" ng-click="removeNewDishTitle(sectionIndex, $index)" title="{{'remove new dish title' | translate}}">-</a>
+                                                        <a ng-if="x.dishDesc.length>1" href="" ng-click="removeNewDishTitle(sectionIndex, $index)" title="{{'remove dish title' | translate}}">-</a>
                                                     </md-input-container>
                                                 </div>
                                             </div>
@@ -95,32 +95,10 @@
                                         <td class="text-right" style="min-width:100px">
                                             <input type="text" ng-model="x.quantity" class="form-control" ng-change="changeQuantity(x, 'quantity', currentMenu.data.selectedFoods.indexOf(x))" allow-only-numbers>
                                         </td>
-                                        <!--<td class="borderNone text-right" style="min-width:140px">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text pointer" ng-click="change(-1, 'quantity', currentMenu.data.selectedFoods.indexOf(x))">-</span>
-                                                </div>
-                                                <input type="text" ng-model="x.quantity" class="form-control" ng-change="changeQuantity(x, 'quantity', currentMenu.data.selectedFoods.indexOf(x))" allow-only-numbers>
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text pointer" ng-click="change(1, 'quantity', currentMenu.data.selectedFoods.indexOf(x))">+</span>
-                                                </div>
-                                            </div>
-                                        </td>-->
                                         <td style="min-width:100px">{{x.unit}}</td>
                                         <td class="text-right" style="min-width:100px">
                                             <input type="text" ng-model="x.mass" class="form-control" ng-change="changeQuantity(x, 'mass', currentMenu.data.selectedFoods.indexOf(x))" allow-only-numbers>
                                         </td>
-                                        <!--<td class="borderNone text-right" style="min-width:160px">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text pointer" ng-click="change(-1, 'mass', currentMenu.data.selectedFoods.indexOf(x))">-</span>
-                                                </div>
-                                                <input type="text" ng-model="x.mass" class="form-control" ng-change="changeQuantity(x, 'mass', currentMenu.data.selectedFoods.indexOf(x))" allow-only-numbers>
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text pointer" ng-click="change(1, 'mass', currentMenu.data.selectedFoods.indexOf(x))">+</span>
-                                                </div>
-                                            </div>
-                                        </td>-->
                                         <td style="width:10px">{{'g' | translate}}</td>
                                         <td class="text-right nowrap" style="width:150px">{{x.energy}}</td>
                                         <td class="text-right nowrap" style="width:150px">{{x.carbohydrates}}</td>
@@ -152,26 +130,11 @@
                             <div ng-repeat="x in currentMenu.splitMealDesc">
                                 <div ng-if="x.code===currentMeal">
                                     <md-input-container class="md-block mb-0" flex-gt-sm ng-repeat="dd in x.dishDesc">
-                                        <label>{{'meal preparation' | translate}} <em ng-if="dd.title">({{dd.title.length > 25 ? dd.title.substring(0, 23) + '...' : dd.title}})</em></label>
+                                        <label>{{'meal preparation' | translate}} <em ng-if="dd.title">({{dd.title.length > 35 ? dd.title.substring(0, 33) + '...' : dd.title}})</em></label>
                                         <textarea ng-model="dd.desc" rows="3" class="area" type="text"></textarea>
                                     </md-input-container>
                                 </div>
                             </div>
-                            <!--<div ng-repeat="x in currentMenu.data.meals" >
-                                <md-input-container ng-if="x.code==currentMeal" class="md-block m-0" flex-gt-sm>
-                                    <label>{{'description, meal preparation' | translate}}</label>
-                                    <textarea ng-model="x.description" rows="3" class="area" ng-click="mealDescHelp(true)"></textarea>
-                                </md-input-container>
-                            </div>
-                            <div ng-if="showMenuDescHelp&&config.language!=='en'" class="alert alert-warning alert-dismissible">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <p class="text-small ml10"> 
-                                    <i class="fa fa-exclamation-triangle"></i>
-                                    Za odvajanje naziva jela od njegovog opisa koristite separator <strong class="p5">~</strong> <kbd>Alt+1(!)</kbd>.
-                                    Ako imate više jela unutar jednog obroka, jela odvajajte separatorom <strong class="p5">|</strong> <kbd>Alt+w</kbd>.<br />
-                                    Npr: Naziv jela 1~Opis jela 1|Naziv jela 2~Opis jela 2.
-                                </p>
-                            </div>-->
                         </div>
                         <div ng-if="totals.price.value>0" class="text-right m-2">
                             <em class="text-primary"><span class="text-capitalize">{{'price' | translate}}</span>: <span>{{totals.price.value | number:2}}</span> <span class="text-uppercase">{{config.currency}}</span></em>

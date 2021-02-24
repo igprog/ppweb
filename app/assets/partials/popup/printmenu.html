@@ -24,9 +24,6 @@
                                     <input ng-model="rowsPerPage" type="range" min="30" max="70" class="slider">
                                 </div>
                                 <div class="col-xl-4">
-                                    <!--<button ng-if="!pdfLink" class="btn btn-outline-danger text-capitalize" ng-click="createMenuPdf(rowsPerPage)" ng-disabled="creatingPdf==true"><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf'}}"></i> {{'create pdf' | translate}}</button>
-                                    <a ng-if="pdfLink" href="{{pdfLink}}" class="btn btn-danger text-capitalize" download ng-click="hidePdfLink()"><i class="fa fa-download"></i> {{'take pdf' | translate}}</a>-->
-
                                     <button ng-if="pdfLink==null" ng-click="printMenuPdf(consumers, date, author, rowsPerPage)" class="btn btn-outline-primary text-capitalize" ng-disabled="creatingPdf==true"><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf-o'}}"></i> {{'create pdf' | translate}}</button>
                                     <a ng-if="pdfLink!=null" href="{{pdfLink}}" class="btn btn-danger text-capitalize" download ng-click="hidePdfLink()">
                                         <i class="fa fa-file-pdf-o"></i> {{'take pdf' | translate}}
@@ -37,16 +34,6 @@
                         </fieldset>
                     </div>
                 </div>
-
-
-                <!--<div class="text-right">
-                    <button ng-click="copyToClipboard('menu_container')" class="btn btn-outline-primary" title="{{'copy to clipboard' | translate}}"><span class="text-capitalize"><i class="fa fa-files-o"></i> {{'copy' | translate}}</span></button>
-                    <a ng-if="pdfLink==null" href="" ng-click="printMenuPdf(consumers, date, author)" class="btn btn-outline-primary text-capitalize" ng-disabled="creatingPdf==true"><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf-o'}}"></i> {{'create pdf' | translate}}</a>
-                    <a ng-if="pdfLink!=null" href="{{pdfLink}}" class="btn btn-danger text-capitalize" download ng-click="hidePdfLink()">
-                        <i class="fa fa-file-pdf-o"></i> {{'take pdf' | translate}}
-                    </a>
-                    <a ng-if="loginUser.adminType<2&&config.showsendmenu" ng-disabled="currentMenu.data.selectedFoods.length==0" href="" class="btn btn-outline-primary" title="{{'send menu to the clients email' | translate}}" ng-click="send()"><i class="fa fa-paper-plane"></i> <span class="text-capitalize">{{'send' | translate}}</span></a>
-                </div>-->
                 <div class="row small">
                     <div class="col-lg-3">
                         <div>
@@ -68,7 +55,7 @@
                                 </md-input-container>
                                 <md-input-container class="md-block">
                                     <md-checkbox ng-model="settings.showDescription" class="md-primary">
-                                        {{'description' | translate}}
+                                        {{'meal preparation' | translate}}
                                     </md-checkbox>
                                 </md-input-container>
                                 <md-input-container class="md-block" flex-gt-xs style="margin-top:20px">
@@ -230,29 +217,6 @@
                 </div>
             </div>
 
-            <!--<div ng-if="x.description" class="mt-2 mb-2">
-                <em ng-if="!isSeparatedDes(x.description)&&settings.showDescription&&settings.descPosition==0">{{x.description}}</em>
-                <div ng-if="isSeparatedDes(x.description)">
-                    <div ng-repeat="y in getTitleDes(x.description)">
-                        <div ng-if="settings.showTitle">{{y.title}}</div>
-                        <em ng-if="settings.showDescription&&settings.descPosition==0">{{y.description}}</em>
-                    </div>
-                </div>
-            </div>-->
-
-
-            <!--<div ng-if="x.description" class="mt-2 mb-2">
-                <em ng-if="!isSeparatedDes(x.description)&&settings.showDescription">{{x.description}}</em>
-                <div ng-if="isSeparatedDes(x.description)">
-                    <div ng-repeat="y in getTitleDes(x.description)">
-                        <div ng-if="settings.showTitle">{{y.title}}</div>
-                        <em ng-if="settings.showDescription">{{y.description}}</em>
-                    </div>
-                </div>
-            </div>-->
-
-
-
             <!--Desktop-->
             <div ng-if="settings.showFoods" class="table-responsive mt-2 d-none d-sm-block">
                 <table class="table table-borderless table-sm">
@@ -302,14 +266,6 @@
                     <em>{{y.desc}}</em>
                 </div>
             </div>
-
-            <!--<em ng-if="!isSeparatedDes(x.description)&&settings.showDescription&&settings.descPosition==1">{{x.description}}</em>
-            <div ng-show="isSeparatedDes(x.description)&&settings.descPosition==1">
-                <div ng-repeat="y in getTitleDes(getOnlyDesc(x.description))">
-                    <div ng-if="settings.showTitle">{{y.title}}</div>
-                    <em ng-if="settings.showDescription">{{y.description}}</em>
-                </div>
-            </div>-->
 
         </div>
 
@@ -376,13 +332,6 @@
                         <em ng-if="settings.showDescription&&settings.descPosition==0">{{y.desc}}</em>
                     </div>
                 </div>
-                <!--<em ng-if="!isSeparatedDes(x.description)&&settings.showDescription">{{x.description}}</em>
-                <div ng-if="isSeparatedDes(x.description)">
-                    <div ng-repeat="y in getTitleDes(x.description)">
-                        <div ng-if="settings.showTitle">{{y.title}}</div>
-                        <em ng-if="settings.showDescription">{{y.description}}</em>
-                    </div>
-                </div>-->
             </div>
             <div ng-if="settings.showFoods" class="mt-2">
                 <div ng-if="y.meal.code==x.code" ng-repeat="y in foods track by $index">

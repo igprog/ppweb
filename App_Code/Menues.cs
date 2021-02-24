@@ -541,7 +541,11 @@ public class Menues : System.Web.Services.WebService {
         foreach (var meal in menu.data.meals) {
             var dishDesc = menu.splitMealDesc.Find(a => a.code == meal.code).dishDesc;
             StringBuilder sb = new StringBuilder();
+            int idx = 0;
             foreach (var dd in dishDesc) {
+                if (idx > 0) {
+                    sb.Append("|");  /***** new dish *****/
+                }
                 if (!string.IsNullOrWhiteSpace(dd.title) && !string.IsNullOrWhiteSpace(dd.desc)) {
                     sb.Append(string.Format("{0}~{1}", dd.title, dd.desc));
                 } else if (string.IsNullOrWhiteSpace(dd.title) && !string.IsNullOrWhiteSpace(dd.desc)) {
@@ -549,6 +553,7 @@ public class Menues : System.Web.Services.WebService {
                 } else if (!string.IsNullOrWhiteSpace(dd.title) && string.IsNullOrWhiteSpace(dd.desc)) {
                     sb.Append(string.Format("{0}", dd.desc));
                 }
+                idx ++;
             }
             meal.description = sb.ToString();
         }
