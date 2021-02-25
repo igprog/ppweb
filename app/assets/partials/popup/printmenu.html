@@ -62,19 +62,19 @@
                                     <label>{{'description position' | translate}}</label>
                                     <md-select ng-model="settings.descPosition">
                                         <md-option value="0">
-                                            <md-checkbox ng-checked="settings.descPosition==0?true:false" class="md-primary" aria-label="mealgroup">{{'top' | translate}}</md-checkbox>
+                                            <md-checkbox ng-checked="settings.descPosition==0?true:false" class="md-primary" aria-label="mealgroup">{{'above foods' | translate}}</md-checkbox>
                                         </md-option>
                                         <md-option value="1">
-                                            <md-checkbox ng-checked="settings.descPosition==1?true:false" class="md-primary" aria-label="mealgroup">{{'bottom' | translate}}</md-checkbox>
+                                            <md-checkbox ng-checked="settings.descPosition==1?true:false" class="md-primary" aria-label="mealgroup">{{'under foods' | translate}}</md-checkbox>
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-input-container class="md-block">
+                                <md-input-container class="md-block text-capitalize">
                                     <md-checkbox ng-model="settings.showFoods" class="md-primary">
                                         {{'foods' | translate}}
                                     </md-checkbox>
                                 </md-input-container>
-                                <md-input-container class="md-block">
+                                <md-input-container class="md-block text-capitalize">
                                     <md-checkbox ng-disabled="!settings.showFoods" ng-model="settings.showQty" class="md-primary">
                                         {{'quantity' | translate}}
                                     </md-checkbox>
@@ -104,12 +104,12 @@
                                         {{'additional activity' | translate}}
                                     </md-checkbox>
                                 </md-input-container>
-                                <md-input-container class="md-block">
+                                <md-input-container class="md-block text-capitalize">
                                     <md-checkbox ng-model="settings.showPrice" class="md-primary">
                                         {{'price' | translate}}
                                     </md-checkbox>
                                 </md-input-container>
-                                <md-input-container class="md-block" style="margin-bottom:2px">
+                                <md-input-container class="md-block text-capitalize" style="margin-bottom:2px">
                                     <md-checkbox ng-model="settings.showDate" class="md-primary" style="margin-bottom:2px">
                                         {{'date' | translate}}
                                     </md-checkbox>
@@ -117,7 +117,7 @@
                                 <div ng-if="settings.showDate">
                                     <input ng-model="date" class="form-control" ng-change="setDate(date)" />
                                 </div>
-                                <md-input-container class="md-block" style="margin-bottom:2px">
+                                <md-input-container class="md-block text-capitalize" style="margin-bottom:2px">
                                     <md-checkbox ng-model="settings.showAuthor" class="md-primary" style="margin-bottom:2px">
                                         {{'author' | translate}}
                                     </md-checkbox>
@@ -127,7 +127,7 @@
                                 </div>
                             </fieldset>
                             <fieldset class="fieldset-border">
-                                <md-input-container class="md-block" flex-gt-xs style="margin-top:20px">
+                                <md-input-container class="md-block" flex-gt-xs style="margin-top:30px">
                                     <label>{{'print style' | translate}}</label>
                                     <md-select ng-model="settings.printStyle">
                                         <md-option value="0">

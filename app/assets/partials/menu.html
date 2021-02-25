@@ -33,7 +33,7 @@
                 <div class="card-body">
                     <div layout-gt-sm="row" style="margin:0px">
                         <md-input-container class="md-block mb-0" flex-gt-sm>
-                            <label class="text-capitalize">{{'menu title' | translate}}</label>
+                            <label>{{'menu title' | translate}}</label>
                             <input ng-model="currentMenu.title" type="text">
                         </md-input-container>
                         <md-input-container class="md-block mb-0" flex-gt-sm>
@@ -59,7 +59,7 @@
                             <table class="table table-sm table-borderless">
                                 <tbody class="small">
                                     <tr>
-                                        <th colspan="8">
+                                        <th colspan="8" class="align-bottom">
                                             <div ng-init="sectionIndex = $index" ng-repeat="x in currentMenu.splitMealDesc track by $index">
                                                 <div ng-if="x.code===currentMeal">
                                                     <md-input-container class="md-block mb-0" flex-gt-sm ng-repeat="dd in x.dishDesc track by $index">
@@ -71,10 +71,10 @@
                                                 </div>
                                             </div>
                                         </th>
-                                        <th class="text-right border-bottom">{{'energy' | translate}}<br /> <span class="small text-nowrap">(<em>{{'kcal' | translate}}</em>)</span></th>
-                                        <th class="text-right border-bottom">{{'carbs' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
-                                        <th class="text-right border-bottom">{{'prot' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
-                                        <th class="text-right border-bottom">{{'fats' | translate}}<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
+                                        <th class="text-right border-bottom align-bottom">{{'energy' | translate}}<br /> <span class="small text-nowrap">(<em>{{'kcal' | translate}}</em>)</span></th>
+                                        <th class="text-right border-bottom align-bottom">{{'carbs' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
+                                        <th class="text-right border-bottom align-bottom">{{'prot' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
+                                        <th class="text-right border-bottom align-bottom">{{'fats' | translate}}<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
                                     </tr>
                                     <tr ng-if="currentMenu.data.selectedFoods.length>0" ng-repeat="x in currentMenu.data.selectedFoods | filter:filterMeal track by $index" ng-class="getFoodGroupClass(x.foodGroup.code)" title="{{x.foodGroup.title}}">
                                         <td>
