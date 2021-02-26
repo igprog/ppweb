@@ -1860,7 +1860,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
     private void AppendMeal(Document doc, List<Foods.NewFood> meal, Menues.NewMenu currentMenu, string lang, Foods.Totals totals, PrintMenuSettings settings) {
         if (meal.Count > 0) {
-            if (currentMenu.data.meals.Find(a => a.code == meal[0].meal.code)!= null) {
+            if (currentMenu.data.meals.Find(a => a.code == meal[0].meal.code) != null) {
                 if (currentMenu.data.meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
                     string mealtitle = string.Format(@"{0}:", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, currentMenu.data.meals), lang)).ToUpper();
                     doc.Add(new Paragraph(mealtitle, GetFont(true)));
@@ -1868,7 +1868,7 @@ public class PrintPdf : System.Web.Services.WebService {
                     string description = currentMenu.data.meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
                     if (!string.IsNullOrWhiteSpace(description)) {
                         StringBuilder sb = new StringBuilder();
-                        foreach (var dd in currentMenu.splitMealDesc) {
+                        foreach (var dd in currentMenu.splitMealDesc.Where(a => a.code == meal[0].meal.code)) {
                             foreach (var d in dd.dishDesc) {
                                 if (!string.IsNullOrWhiteSpace(d.title)) {
                                     sb.AppendLine(d.title);
@@ -1905,7 +1905,7 @@ public class PrintPdf : System.Web.Services.WebService {
                     if (settings.descPosition == (int)DescPosition.bottom) {
                         if (!string.IsNullOrWhiteSpace(description)) {
                             StringBuilder sb = new StringBuilder();
-                            foreach (var dd in currentMenu.splitMealDesc) {
+                            foreach (var dd in currentMenu.splitMealDesc.Where(a => a.code == meal[0].meal.code)) {
                                 foreach (var d in dd.dishDesc) {
                                     if (settings.descPosition == (int)DescPosition.bottom) {
                                         if (!string.IsNullOrWhiteSpace(d.desc)) {

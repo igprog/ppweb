@@ -338,6 +338,7 @@ public class Menues : System.Web.Services.WebService {
                     command.ExecuteNonQuery();
                 }
             }
+            x.data.meals = CombineTitleDesc(x);
             SaveAppMenuJsonToFile(id, lang, JsonConvert.SerializeObject(x.data, Formatting.None));
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
@@ -531,7 +532,7 @@ public class Menues : System.Web.Services.WebService {
             }
         } else {
             Meals.DishDesc x = new Meals.DishDesc();
-            x.desc = description;
+            x.title = description;
             xx.Add(x);
         }
         return xx;
@@ -546,12 +547,10 @@ public class Menues : System.Web.Services.WebService {
                 if (idx > 0) {
                     sb.Append("|");  /***** new dish *****/
                 }
-                if (!string.IsNullOrWhiteSpace(dd.title) && !string.IsNullOrWhiteSpace(dd.desc)) {
+                if (!string.IsNullOrWhiteSpace(dd.desc)) {
                     sb.Append(string.Format("{0}~{1}", dd.title, dd.desc));
-                } else if (string.IsNullOrWhiteSpace(dd.title) && !string.IsNullOrWhiteSpace(dd.desc)) {
-                    sb.Append(string.Format("{0}", dd.title));
                 } else if (!string.IsNullOrWhiteSpace(dd.title) && string.IsNullOrWhiteSpace(dd.desc)) {
-                    sb.Append(string.Format("{0}", dd.desc));
+                    sb.Append(string.Format("{0}", dd.title));
                 }
                 idx ++;
             }
