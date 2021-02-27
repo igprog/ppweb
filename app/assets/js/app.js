@@ -3893,8 +3893,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $rootScope.currentMenu = JSON.parse(response.data.d);
             $rootScope.currentMenu.client = $rootScope.client;
             $rootScope.currentMenu.client.clientData = $rootScope.clientData;  //TODO sredit
+
             $rootScope.currentMenu.data.meals = $rootScope.clientData.meals;
-            debugger;
             if ($rootScope.mealsTpl === 'myMeals') {
                 $rootScope.currentMenu.data.meals = $rootScope.myMeals.data.meals;
                 angular.forEach($rootScope.currentMenu.data.meals, function (value, key) {
@@ -3904,8 +3904,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 })
             }
 
-            //TODO: splitMealDesc
-            debugger;
             angular.forEach($rootScope.currentMenu.data.meals, function (value, key) {
                 $rootScope.currentMenu.splitMealDesc.push({
                     code: value.code,
