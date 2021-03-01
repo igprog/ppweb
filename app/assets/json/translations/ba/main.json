@@ -2030,6 +2030,8 @@
   "description position": "Pozicija opisa",
   "above foods": "Iznad namirnica",
   "under foods": "Ispod namirnica",
-  "g": "g"
+  "g": "g",
+  "remove recipe": "Briši recept",
+  "clear all foods from the meal": "Clear all foods from the meal"
 
 }

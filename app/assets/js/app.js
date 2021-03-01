@@ -3907,7 +3907,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             angular.forEach($rootScope.currentMenu.data.meals, function (value, key) {
                 $rootScope.currentMenu.splitMealDesc.push({
                     code: value.code,
-                    title: value.description,
+                    title: value.title,
                     dishDesc: [{title: null, desc: null, id: null}],
                     isSelected: value.isSelected,
                     isDisabled: value.isDisabled
@@ -3939,17 +3939,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $rootScope.currentMenu.splitMealDesc[idx].dishDesc.splice(idx1, 1);
     }
 
-    //TODO:
     $scope.removeDish = function (currentMenu, idx, idx1, id, mealCode) {
-
         if (currentMenu.splitMealDesc[idx].dishDesc.length > 1) {
             $scope.removeNewDishTitle(idx, idx1);
         } else if (currentMenu.splitMealDesc[idx].dishDesc.length === 1 && idx1 === 0) {
             currentMenu.splitMealDesc[idx].dishDesc[0] = {title: null, desc: null, id: null};
         }
-        debugger;
         $rootScope.currentMenu.data.selectedFoods = currentMenu.data.selectedFoods.filter(a => a.id.split(';')[1] !== id);
         $rootScope.currentMenu.data.selectedInitFoods = currentMenu.data.selectedInitFoods.filter(a => a.id.split(';')[1] !== id);
+        getTotals($rootScope.currentMenu);
     }
 
     $scope.toggleMeals = function (x) {
@@ -4030,7 +4028,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.openFoodPopup = function (x, idx) {
-        debugger;
         $scope.addFoodBtn = true;
         $scope.addFoodBtnIcon = 'fa fa-spinner fa-spin';
         if ($rootScope.user.licenceStatus == 'demo' && $rootScope.currentMenu.data.selectedFoods.length > 9) {
@@ -4120,19 +4117,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $rootScope.currentMenu.data.selectedFoods.splice(idx, 1);
         $rootScope.currentMenu.data.selectedInitFoods.splice(idx, 1);
         getTotals($rootScope.currentMenu);
-
-        //var confirm = $mdDialog.confirm()
-        //     .title($translate.instant('delete food') + '?')
-        //     .textContent(x.food)
-        //     .targetEvent(x)
-        //     .ok($translate.instant('yes'))
-        //     .cancel($translate.instant('no'));
-        //$mdDialog.show(confirm).then(function () {
-        //    $rootScope.currentMenu.data.selectedFoods.splice(idx, 1);
-        //    $rootScope.currentMenu.data.selectedInitFoods.splice(idx, 1);
-        //    getTotals($rootScope.currentMenu);
-        //}, function () {
-        //});
     }
 
     $scope.printPreview = function () {
@@ -5339,20 +5323,22 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             config: $rootScope.config
         })
         .then(function (recipe) {
-            debugger;
             angular.forEach(recipe.data.selectedFoods, function (value, key) {
                 var idx = $rootScope.currentMenu.data.selectedFoods.length;
                 value.id = value.id + ';' + recipe.id;
                 $scope.addFoodToMeal(value, recipe.data.selectedInitFoods[key], idx);
             });
             var dishDescList = angular.copy($rootScope.currentMenu.splitMealDesc.find(a => a.code === $rootScope.currentMeal).dishDesc);
+            var loop = true;
             angular.forEach(dishDescList, function (value, key) {
-                if (value.title === null && value.desc === null) {
-                    $rootScope.currentMenu.splitMealDesc.find(a => a.code === $rootScope.currentMeal).dishDesc[key] = recipe.dishDesc;
-                    return;
-                } else {
-                    $rootScope.currentMenu.splitMealDesc.find(a => a.code === $rootScope.currentMeal).dishDesc.push(recipe.dishDesc);
-                    return;
+                if (loop) {
+                    if (value.title === null && value.desc === null) {
+                        $rootScope.currentMenu.splitMealDesc.find(a => a.code === $rootScope.currentMeal).dishDesc[key] = recipe.dishDesc;
+                        loop = false;
+                    } else {
+                        $rootScope.currentMenu.splitMealDesc.find(a => a.code === $rootScope.currentMeal).dishDesc.push(recipe.dishDesc);
+                        loop = false;
+                    }
                 }
             });
 
@@ -5692,11 +5678,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         return recommendations;
     }
 
-    //$scope.toggleParamTpl = function (x) {
-    //    $scope.parametersTpl = x;
-    //}
-    //$scope.toggleParamTpl('parametersChartTpl');
-
     $scope.checkTotal = function (total, min, max) {
         var icon = 'pull-right fa fa-';
         if (total > max) {
@@ -5881,6 +5862,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     $scope.chartResp = function (h, h_resp) {
         return window.innerWidth < 767 ? h_resp : h;
+    }
+
+    $scope.clearMeal = function (currentMenu, meal) {
+        $rootScope.currentMenu.data.selectedFoods = currentMenu.data.selectedFoods.filter(a => a.meal.code !== meal);
+        $rootScope.currentMenu.data.selectedInitFoods = currentMenu.data.selectedInitFoods.filter(a => a.meal.code !== meal);
+        $rootScope.currentMenu.data.meals.filter(a => a.code === meal)[0].description = null;
+        $rootScope.currentMenu.splitMealDesc.filter(a => a.code === meal)[0].dishDesc = [{ title: null, desc: null, id: null }];
+        getTotals($rootScope.currentMenu);
     }
 
 }])
@@ -6389,20 +6378,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                             $scope.d.data.selectedInitFoods.push($rootScope.recipeData.selectedFoods[key]);
                         }
                     })
-                    debugger;
                     var splitMealDesc = $rootScope.currentMenu.splitMealDesc.filter(a => a.code === $rootScope.currentMealForRecipe)
                     if (splitMealDesc.length > 0) {
                         $scope.d.title = splitMealDesc[0].dishDesc[0].title;
                         $scope.d.description = splitMealDesc[0].dishDesc[0].desc;
                     }
-
-                    //angular.forEach($rootScope.recipeData.meals, function (value, key) {
-                    //    if (value.code == $rootScope.currentMealForRecipe) {
-                    //        
-                    //        debugger;
-                    //        $scope.d.description = value.description;
-                    //    }
-                    //})
                 }
             }
         }

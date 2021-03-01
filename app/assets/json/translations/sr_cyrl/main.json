@@ -2027,6 +2027,8 @@
   "description position": "Позиција описа",
   "above foods": "Изнад намирница",
   "under foods": "Испод намирница",
-  "g": "г"
+  "g": "г",
+  "remove recipe": "Бриши рецепт",
+  "clear all foods from the meal": "Очисти све намирнице из оброка"
 
 }

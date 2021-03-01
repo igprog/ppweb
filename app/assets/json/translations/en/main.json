@@ -2021,6 +2021,8 @@
   "description position": "Description position",
   "above foods": "Above foods",
   "under foods": "Under foods",
-  "g": "g"
+  "g": "g",
+  "remove recipe": "Remove recipe",
+  "clear all foods from the meal": "Clear all foods from the meal"
 
 }
