@@ -65,6 +65,9 @@
                                                     <md-input-container class="md-block mb-0" flex-gt-sm ng-repeat="dd in x.dishDesc track by $index">
                                                         <label>{{'meal title' | translate}}</label>
                                                         <input ng-model="dd.title" type="text">
+                                                        <div ng-hide="dd.id===null||dd.id===''">
+                                                            <a href="" class="small text-danger" title="{{'remove recipe' | translate}}" ng-click="removeDish(currentMenu, sectionIndex, $index, dd.id, x.code)"><i class="fa fa-times"></i> {{'remove recipe' | translate}}</a>
+                                                        </div>
                                                         <a ng-if="dd.title.length>0" href="" ng-click="addNewDishTitle(sectionIndex)" title="{{'add new dish title' | translate}}">+</a>
                                                         <a ng-if="x.dishDesc.length>1" href="" ng-click="removeNewDishTitle(sectionIndex, $index)" title="{{'remove dish title' | translate}}">-</a>
                                                     </md-input-container>

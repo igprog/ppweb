@@ -513,6 +513,31 @@ public class Menues : System.Web.Services.WebService {
         return xx;
     }
 
+    //private List<Meals.DishDesc> SplitMealTitleDesc(string description) {
+    //    List<Meals.DishDesc> xx = new List<Meals.DishDesc>();
+    //    if (description.Contains('~')) {
+    //        string[] desList = description.Split('|');
+    //        if (desList.Length > 0) {
+    //            var list = (from p_ in desList
+    //                        select new {
+    //                            title = p_.Split('~')[0],
+    //                            description = p_.Split('~').Length > 1 ? p_.Split('~')[1] : ""
+    //                        }).ToList();
+    //            foreach (var l in list) {
+    //                Meals.DishDesc x = new Meals.DishDesc();
+    //                x.title = l.title;
+    //                x.desc = l.description;
+    //                xx.Add(x);
+    //            }
+    //        }
+    //    } else {
+    //        Meals.DishDesc x = new Meals.DishDesc();
+    //        x.title = description;
+    //        xx.Add(x);
+    //    }
+    //    return xx;
+    //}
+
     private List<Meals.DishDesc> SplitMealTitleDesc(string description) {
         List<Meals.DishDesc> xx = new List<Meals.DishDesc>();
         if (description.Contains('~')) {
@@ -521,12 +546,14 @@ public class Menues : System.Web.Services.WebService {
                 var list = (from p_ in desList
                             select new {
                                 title = p_.Split('~')[0],
-                                description = p_.Split('~').Length > 1 ? p_.Split('~')[1] : ""
+                                description = p_.Split('~').Length > 1 ? p_.Split('~')[1] : "",
+                                id = p_.Split('~').Length == 3 ? p_.Split('~')[2] : null
                             }).ToList();
                 foreach (var l in list) {
                     Meals.DishDesc x = new Meals.DishDesc();
                     x.title = l.title;
                     x.desc = l.description;
+                    x.id = l.id;
                     xx.Add(x);
                 }
             }
@@ -538,6 +565,7 @@ public class Menues : System.Web.Services.WebService {
         return xx;
     }
 
+
     private List<Meals.NewMeal> CombineTitleDesc(NewMenu menu) {
         foreach (var meal in menu.data.meals) {
             var dishDesc = menu.splitMealDesc.Find(a => a.code == meal.code).dishDesc;
@@ -547,11 +575,12 @@ public class Menues : System.Web.Services.WebService {
                 if (idx > 0) {
                     sb.Append("|");  /***** new dish *****/
                 }
-                if (!string.IsNullOrWhiteSpace(dd.desc)) {
-                    sb.Append(string.Format("{0}~{1}", dd.title, dd.desc));
-                } else if (!string.IsNullOrWhiteSpace(dd.title) && string.IsNullOrWhiteSpace(dd.desc)) {
-                    sb.Append(string.Format("{0}", dd.title));
-                }
+                sb.Append(string.Format("{0}~{1}~{2}", dd.title, dd.desc, dd.id));
+                //if (!string.IsNullOrWhiteSpace(dd.desc)) {
+                //    sb.Append(string.Format("{0}~{1}", dd.title, dd.desc));
+                //} else if (!string.IsNullOrWhiteSpace(dd.title) && string.IsNullOrWhiteSpace(dd.desc)) {
+                //    sb.Append(string.Format("{0}", dd.title));
+                //}
                 idx ++;
             }
             meal.description = sb.ToString();

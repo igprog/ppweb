@@ -40,6 +40,7 @@ public class Meals : System.Web.Services.WebService {
     public class DishDesc {
         public string title;
         public string desc;
+        public string id;
     }
 
     [WebMethod]

@@ -308,6 +308,7 @@ public class Recipes : System.Web.Services.WebService {
             x.dishDesc = new Meals.DishDesc();
             x.dishDesc.title = x.title;
             x.dishDesc.desc = x.description;
+            x.dishDesc.id = x.id;
         }
         return x;
     }

@@ -586,7 +586,7 @@ public class Users : System.Web.Services.WebService {
             SR.DeleteSharedRecipeByUserId(x.userId);
             return "ok";
         } catch (Exception e) {
-            L.SendErrorLog(e, null, "Users", "Delete");
+            L.SendErrorLog(e, x.userId, "Users", "Delete");
             return (e.Message);
         }
     }
@@ -611,7 +611,7 @@ public class Users : System.Web.Services.WebService {
                 return JsonConvert.SerializeObject("you do not have permission to delete this account", Formatting.None);
             }
         } catch (Exception e) {
-            L.SendErrorLog(e, null, "Users", "DeleteAllUserGroup");
+            L.SendErrorLog(e, x.userId, "Users", "DeleteAllUserGroup");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
