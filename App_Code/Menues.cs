@@ -165,36 +165,11 @@ public class Menues : System.Web.Services.WebService {
     [WebMethod]
     public string Get(string userId, string id) {
         try {
-            NewMenu x = new NewMenu();
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
-                connection.Open();
-                string sql = @"SELECT id, title, diet, date, note, userId, clientId, userGroupId, energy
-                        FROM menues
-                        WHERE id = @id";
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                    command.Parameters.Add(new SQLiteParameter("id", id));
-                    Clients.Client client = new Clients.Client();
-                    using (SQLiteDataReader reader = command.ExecuteReader()) {
-                        while (reader.Read()) {
-                            x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                            x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                            x.diet = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                            x.date = reader.GetValue(3) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(3);
-                            x.note = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-                            x.userId = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5);
-                            x.client = (reader.GetValue(6) == DBNull.Value || reader.GetValue(7) == DBNull.Value) ? new Clients.NewClient() : client.GetClient(reader.GetString(7), reader.GetString(6));
-                            x.userGroupId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
-                            x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
-                            x.data = JsonConvert.DeserializeObject<Data>(GetJsonFile(userId, x.id));
-                            x.splitMealDesc = MealTitleDesc(x.data.meals);
-                            x.client.clientData = new ClientsData.NewClientData();
-                            x.client.clientData.myMeals = JsonConvert.DeserializeObject<MyMeals.NewMyMeals>(GetMyMealsJsonFile(userId, x.id));
-                        }
-                    } 
-                }
-            }  
-            return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+            return JsonConvert.SerializeObject(GetMenu(userId, id), Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "Menues", "Get");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -255,6 +230,7 @@ public class Menues : System.Web.Services.WebService {
             DeleteJson(userId, id);
             return "OK";
         } catch (Exception e) {
+            L.SendErrorLog(e, userId, "Menues", "Delete");
             return e.Message;
         }
     }
@@ -350,6 +326,37 @@ public class Menues : System.Web.Services.WebService {
     #endregion
 
     #region Methods
+    public NewMenu GetMenu(string userId, string id) {
+        NewMenu x = new NewMenu();
+        using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+            connection.Open();
+            string sql = @"SELECT id, title, diet, date, note, userId, clientId, userGroupId, energy
+                    FROM menues
+                    WHERE id = @id";
+            using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                command.Parameters.Add(new SQLiteParameter("id", id));
+                Clients.Client client = new Clients.Client();
+                using (SQLiteDataReader reader = command.ExecuteReader()) {
+                    while (reader.Read()) {
+                        x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                        x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                        x.diet = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+                        x.date = reader.GetValue(3) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(3);
+                        x.note = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
+                        x.userId = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5);
+                        x.client = (reader.GetValue(6) == DBNull.Value || reader.GetValue(7) == DBNull.Value) ? new Clients.NewClient() : client.GetClient(reader.GetString(7), reader.GetString(6));
+                        x.userGroupId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
+                        x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
+                        x.data = JsonConvert.DeserializeObject<Data>(GetJsonFile(userId, x.id));
+                        x.splitMealDesc = MealTitleDesc(x.data.meals);
+                        x.client.clientData = new ClientsData.NewClientData();
+                        x.client.clientData.myMeals = JsonConvert.DeserializeObject<MyMeals.NewMyMeals>(GetMyMealsJsonFile(userId, x.id));
+                    }
+                } 
+            }
+        }
+        return x;
+    }
     public void SaveAppMenuJsonToFile(string id, string lang, string json) {
         string path = string.Format(@"~/App_Data/menues/{0}", lang);
         string filepath = string.Format(@"~/App_Data/menues/{0}/{1}.json", lang, id);

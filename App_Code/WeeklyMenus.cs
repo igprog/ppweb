@@ -17,6 +17,7 @@ public class WeeklyMenus : System.Web.Services.WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     DataBase db = new DataBase();
     Translate t = new Translate();
+    Log L = new Log();
 
     public WeeklyMenus() {
     }
@@ -28,7 +29,6 @@ public class WeeklyMenus : System.Web.Services.WebService {
         public Diets.NewDiet diet;
         public List<string> menuList;
         public List<MenuDes> menuDes;
-        //public DateTime date;
         public string date;
         public Clients.NewClient client;
         public string userId;
@@ -63,7 +63,10 @@ public class WeeklyMenus : System.Web.Services.WebService {
     public string Load(string userId, string lang) {
         try {
             return JsonConvert.SerializeObject(LoadWeeklyMenus(userId, lang), Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "WeeklyMenus", "Load");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -97,10 +100,12 @@ public class WeeklyMenus : System.Web.Services.WebService {
                         }
                     }
                 }
-                connection.Close();
             }
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return (JsonConvert.SerializeObject(e.Message, Formatting.None)); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "WeeklyMenus", "Get");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     public List<MenuDes> GetMenuDes(SQLiteConnection connection, List<string> menuList, string lang) {
@@ -137,20 +142,22 @@ public class WeeklyMenus : System.Web.Services.WebService {
                 if(string.IsNullOrEmpty(x.id)) {
                     x.id = Convert.ToString(Guid.NewGuid());
                 }
-                string sql = "";
-                SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase));
-                connection.Open();
-                SQLiteCommand command = new SQLiteCommand(sql, connection);
-                sql = string.Format(@"BEGIN;
-                    INSERT OR REPLACE INTO weeklymenus (id, title, note, dietId, diet, menuList, date, clientId, userId, userGroupId)
-                    VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}');
-                    COMMIT;", x.id, x.title, x.note, x.diet.id, x.diet.diet, string.Join(",",x.menuList), x.date, x.client.clientId, x.userId, x.userGroupId);
-                command = new SQLiteCommand(sql, connection);
-                command.ExecuteNonQuery();
-                connection.Close();
+                string sql = string.Format(@"BEGIN;
+                                        INSERT OR REPLACE INTO weeklymenus (id, title, note, dietId, diet, menuList, date, clientId, userId, userGroupId)
+                                        VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}');
+                                        COMMIT;", x.id, x.title, x.note, x.diet.id, x.diet.diet, string.Join(",", x.menuList), x.date, x.client.clientId, x.userId, x.userGroupId);
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                    connection.Open();
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        command.ExecuteNonQuery();
+                    }
+                } 
                 return JsonConvert.SerializeObject(x, Formatting.None);
             }
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "WeeklyMenus", "Save");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -273,7 +280,10 @@ public class WeeklyMenus : System.Web.Services.WebService {
             x.vitaminK = f.SmartRound(xx.Average(a => a.vitaminK));
             x.price.value = Math.Round(xx.Average(a => a.price.value), 2);
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return (JsonConvert.SerializeObject(e.Message, Formatting.None)); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "WeeklyMenus", "GetWeeklyMenusTotals");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -285,12 +295,13 @@ public class WeeklyMenus : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
-            }
-                
+            } 
             List<NewWeeklyMenus> xx = LoadWeeklyMenus(userId, lang);
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return (JsonConvert.SerializeObject(e.Message, Formatting.None)); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "WeeklyMenus", "Delete");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
      public List<NewWeeklyMenus> LoadWeeklyMenus(string userId, string lang) {
@@ -324,7 +335,6 @@ public class WeeklyMenus : System.Web.Services.WebService {
                     }
                 }
             }
-            connection.Close();
         }
         return xx;
     }
@@ -342,7 +352,6 @@ public class WeeklyMenus : System.Web.Services.WebService {
                         }
                     }
                 }
-                connection.Close();
             }
             return result;
         } catch (Exception e) { return false; }

@@ -19,6 +19,7 @@ public class Foods : System.Web.Services.WebService {
     string userType0FoodLimit = ConfigurationManager.AppSettings["UserType0FoodLimit"];
     DataBase db = new DataBase();
     Translate T = new Translate();
+    Log L = new Log();
 
     public Foods() {
     }
@@ -196,23 +197,10 @@ public class Foods : System.Web.Services.WebService {
         public double vitaminC { get; set; }
         public double vitaminK { get; set; }
 
-        //public List<MealsTotalEnergy> mealsTotalEnergy = new List<MealsTotalEnergy>();
-
         public List<MealsTotal> mealsTotal = new List<MealsTotal>();
 
         public Prices.UnitPrice price = new Prices.UnitPrice();
     }
-
-
-    //public class MealsTotalEnergy {
-    //    public CodeEnegy meal = new CodeEnegy();
-    //}
-
-    //public class CodeEnegy {
-    //    public string code { get; set; }
-    //    public double energy { get; set; }
-    //    public double energyPercentage { get; set; }
-    //}
 
     public class MealsTotal {
         public string code;
@@ -438,106 +426,113 @@ public class Foods : System.Web.Services.WebService {
             MyFoods.Data myf = new MyFoods.Data();
             foodData.myFoods = myf.GetMyFoods(userId);
             return JsonConvert.SerializeObject(foodData, Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "Foods", "Load");
+            return JsonConvert.SerializeObject(e.Message);
+        }
     }
 
     [WebMethod]
     public string Get(string userId, string id) {
         try {
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase));
-            connection.Open();
-            string sql = @"SELECT f.id, f.food, f.foodGroup, fg.title, f.foodGroupVitaminLost, f.quantity, f.unit, f.mass, f.energy, f.carbohydrates, f.proteins, f.fats,
-                        f.cerealsServ, f.vegetablesServ, f.fruitServ, f.meatServ, f.milkServ, f.fatsServ, f.otherFoodsServ,
-                        f.starch, f.totalSugar, f.glucose, f.fructose, f.saccharose, f.maltose, f.lactose, f.fibers, f.saturatedFats,
-                        f.monounsaturatedFats, f.polyunsaturatedFats, f.trifluoroaceticAcid, f.cholesterol, f.sodium, f.potassium,
-                        f.calcium, f.magnesium,f.phosphorus, f.iron, f.copper, f.zinc, f.chlorine, f.manganese, f.selenium, f.iodine,
-                        f.retinol, f.carotene, f.vitaminD, f.vitaminE, f.vitaminB1, f.vitaminB2,f.vitaminB3, f.vitaminB6, f.vitaminB12,
-                        f.folate, f.pantothenicAcid, f.biotin, f.vitaminC, f.vitaminK
-                        FROM foods AS f
-                        LEFT OUTER JOIN foodGroups AS fg
-                        ON f.foodGroup = fg.code
-                        WHERE id = @id
-                        ORDER BY food ASC";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            command.Parameters.Add(new SQLiteParameter("id", id));
             NewFood x = new NewFood();
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
-                x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                x.food = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                x.foodGroup.code = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                x.foodGroup.title = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
-                x.foodGroup.parent = GetParentGroup(connection, x.foodGroup.code);
-                x.foodGroupVitaminLost = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-                x.thermalTreatments = GetThermalTreatments(connection, x.foodGroupVitaminLost);
-                x.meal.code = "B";
-                x.meal.title = Meals.GetMealTitle(x.meal.code, connection);
-                x.quantity = reader.GetValue(5) == DBNull.Value ? 0 : reader.GetInt32(5);
-                x.unit = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6);
-                x.mass = reader.GetValue(7) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(7));
-                x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
-                x.carbohydrates = reader.GetValue(9) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(9));
-                x.proteins = reader.GetValue(10) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(10));
-                x.fats = reader.GetValue(11) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(11));
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                connection.Open();
+                string sql = @"SELECT f.id, f.food, f.foodGroup, fg.title, f.foodGroupVitaminLost, f.quantity, f.unit, f.mass, f.energy, f.carbohydrates, f.proteins, f.fats,
+                            f.cerealsServ, f.vegetablesServ, f.fruitServ, f.meatServ, f.milkServ, f.fatsServ, f.otherFoodsServ,
+                            f.starch, f.totalSugar, f.glucose, f.fructose, f.saccharose, f.maltose, f.lactose, f.fibers, f.saturatedFats,
+                            f.monounsaturatedFats, f.polyunsaturatedFats, f.trifluoroaceticAcid, f.cholesterol, f.sodium, f.potassium,
+                            f.calcium, f.magnesium,f.phosphorus, f.iron, f.copper, f.zinc, f.chlorine, f.manganese, f.selenium, f.iodine,
+                            f.retinol, f.carotene, f.vitaminD, f.vitaminE, f.vitaminB1, f.vitaminB2,f.vitaminB3, f.vitaminB6, f.vitaminB12,
+                            f.folate, f.pantothenicAcid, f.biotin, f.vitaminC, f.vitaminK
+                            FROM foods AS f
+                            LEFT OUTER JOIN foodGroups AS fg
+                            ON f.foodGroup = fg.code
+                            WHERE id = @id
+                            ORDER BY food ASC";
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.Parameters.Add(new SQLiteParameter("id", id));
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                            x.food = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                            x.foodGroup.code = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+                            x.foodGroup.title = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
+                            x.foodGroup.parent = GetParentGroup(connection, x.foodGroup.code);
+                            x.foodGroupVitaminLost = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
+                            x.thermalTreatments = GetThermalTreatments(connection, x.foodGroupVitaminLost);
+                            x.meal.code = "B";
+                            x.meal.title = Meals.GetMealTitle(x.meal.code, connection);
+                            x.quantity = reader.GetValue(5) == DBNull.Value ? 0 : reader.GetInt32(5);
+                            x.unit = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6);
+                            x.mass = reader.GetValue(7) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(7));
+                            x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
+                            x.carbohydrates = reader.GetValue(9) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(9));
+                            x.proteins = reader.GetValue(10) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(10));
+                            x.fats = reader.GetValue(11) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(11));
 
-                x.servings.cerealsServ = reader.GetValue(12) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(12));
-                x.servings.vegetablesServ = reader.GetValue(13) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(13));
-                x.servings.fruitServ = reader.GetValue(14) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(14));
-                x.servings.meatServ = reader.GetValue(15) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(15));
-                x.servings.milkServ = reader.GetValue(16) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(16));
-                x.servings.fatsServ = reader.GetValue(17) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(17));
-                x.servings.otherFoodsServ = reader.GetValue(18) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(18));
-                x.servings.otherFoodsEnergy = x.servings.otherFoodsServ == 1 ? x.energy : 0;
+                            x.servings.cerealsServ = reader.GetValue(12) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(12));
+                            x.servings.vegetablesServ = reader.GetValue(13) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(13));
+                            x.servings.fruitServ = reader.GetValue(14) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(14));
+                            x.servings.meatServ = reader.GetValue(15) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(15));
+                            x.servings.milkServ = reader.GetValue(16) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(16));
+                            x.servings.fatsServ = reader.GetValue(17) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(17));
+                            x.servings.otherFoodsServ = reader.GetValue(18) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(18));
+                            x.servings.otherFoodsEnergy = x.servings.otherFoodsServ == 1 ? x.energy : 0;
 
-                x.starch = reader.GetValue(19) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(19));
-                x.totalSugar = reader.GetValue(20) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(20));
-                x.glucose = reader.GetValue(21) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(21));
-                x.fructose = reader.GetValue(22) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(22));
-                x.saccharose = reader.GetValue(23) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(23));
-                x.maltose = reader.GetValue(24) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(24));
-                x.lactose = reader.GetValue(25) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(25));
-                x.fibers = reader.GetValue(26) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(26));
-                x.saturatedFats = reader.GetValue(27) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(27));
-                x.monounsaturatedFats = reader.GetValue(28) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(28));
-                x.polyunsaturatedFats = reader.GetValue(29) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(29));
-                x.trifluoroaceticAcid = reader.GetValue(30) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(30));
-                x.cholesterol = reader.GetValue(31) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(31));
-                x.sodium = reader.GetValue(32) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(32));
-                x.potassium = reader.GetValue(33) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(33));
-                x.calcium = reader.GetValue(34) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(34));
-                x.magnesium = reader.GetValue(35) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(35));
-                x.phosphorus = reader.GetValue(36) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(36));
-                x.iron = reader.GetValue(37) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(37));
-                x.copper = reader.GetValue(38) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(38));
-                x.zinc = reader.GetValue(39) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(39));
-                x.chlorine = reader.GetValue(40) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(40));
-                x.manganese = reader.GetValue(41) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(41));
-                x.selenium = reader.GetValue(42) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(42));
-                x.iodine = reader.GetValue(43) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(43));
-                x.retinol = reader.GetValue(44) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(44));
-                x.carotene = reader.GetValue(45) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(45));
-                x.vitaminD = reader.GetValue(46) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(46));
-                x.vitaminE = reader.GetValue(47) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(47));
-                x.vitaminB1 = reader.GetValue(48) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(48));
-                x.vitaminB2 = reader.GetValue(49) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(49));
-                x.vitaminB3 = reader.GetValue(50) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(50));
-                x.vitaminB6 = reader.GetValue(51) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(51));
-                x.vitaminB12 = reader.GetValue(52) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(52));
-                x.folate = reader.GetValue(53) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(53));
-                x.pantothenicAcid = reader.GetValue(54) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(54));
-                x.biotin = reader.GetValue(55) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(55));
-                x.vitaminC = reader.GetValue(56) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(56));
-                x.vitaminK = reader.GetValue(57) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(57));
+                            x.starch = reader.GetValue(19) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(19));
+                            x.totalSugar = reader.GetValue(20) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(20));
+                            x.glucose = reader.GetValue(21) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(21));
+                            x.fructose = reader.GetValue(22) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(22));
+                            x.saccharose = reader.GetValue(23) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(23));
+                            x.maltose = reader.GetValue(24) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(24));
+                            x.lactose = reader.GetValue(25) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(25));
+                            x.fibers = reader.GetValue(26) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(26));
+                            x.saturatedFats = reader.GetValue(27) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(27));
+                            x.monounsaturatedFats = reader.GetValue(28) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(28));
+                            x.polyunsaturatedFats = reader.GetValue(29) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(29));
+                            x.trifluoroaceticAcid = reader.GetValue(30) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(30));
+                            x.cholesterol = reader.GetValue(31) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(31));
+                            x.sodium = reader.GetValue(32) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(32));
+                            x.potassium = reader.GetValue(33) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(33));
+                            x.calcium = reader.GetValue(34) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(34));
+                            x.magnesium = reader.GetValue(35) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(35));
+                            x.phosphorus = reader.GetValue(36) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(36));
+                            x.iron = reader.GetValue(37) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(37));
+                            x.copper = reader.GetValue(38) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(38));
+                            x.zinc = reader.GetValue(39) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(39));
+                            x.chlorine = reader.GetValue(40) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(40));
+                            x.manganese = reader.GetValue(41) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(41));
+                            x.selenium = reader.GetValue(42) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(42));
+                            x.iodine = reader.GetValue(43) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(43));
+                            x.retinol = reader.GetValue(44) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(44));
+                            x.carotene = reader.GetValue(45) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(45));
+                            x.vitaminD = reader.GetValue(46) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(46));
+                            x.vitaminE = reader.GetValue(47) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(47));
+                            x.vitaminB1 = reader.GetValue(48) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(48));
+                            x.vitaminB2 = reader.GetValue(49) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(49));
+                            x.vitaminB3 = reader.GetValue(50) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(50));
+                            x.vitaminB6 = reader.GetValue(51) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(51));
+                            x.vitaminB12 = reader.GetValue(52) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(52));
+                            x.folate = reader.GetValue(53) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(53));
+                            x.pantothenicAcid = reader.GetValue(54) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(54));
+                            x.biotin = reader.GetValue(55) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(55));
+                            x.vitaminC = reader.GetValue(56) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(56));
+                            x.vitaminK = reader.GetValue(57) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(57));
+                        }
+                    }
+                }
             }
-            connection.Close();
-
+                
             Prices.NewPrice p = new Prices.NewPrice();
             x.price = p.GetUnitPrice(userId, x.id);
             x.price.value = (x.price.value * x.mass)/1000;
 
-            string json = JsonConvert.SerializeObject(x, Formatting.None);
-            return json;
-        } catch (Exception e) { return ("Error: " + e); }
+            return JsonConvert.SerializeObject(x, Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "Foods", "Get");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -545,7 +540,8 @@ public class Foods : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(GetTotals_(selectedFoods, meals), Formatting.None);
         } catch(Exception e) {
-            return e.Message;
+            L.SendErrorLog(e, null, "Foods", "GetTotals");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
@@ -668,7 +664,7 @@ public class Foods : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(MultipleConsumers(foods, number), Formatting.None);
         } catch (Exception e) {
-            return e.Message;
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
@@ -697,21 +693,29 @@ public class Foods : System.Web.Services.WebService {
                 connection.Close();
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, "Foods", "LoadFoods");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
     public string IncludeThermalTreatment(NewFood initFood, NewFood food, ThermalTreatment thermalTreatment) {
         try {
             return JsonConvert.SerializeObject(IncludeTT(initFood, food, thermalTreatment), Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, "Foods", "IncludeThermalTreatment");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
     public string InitFoodForEdit(NewFood food) {
         try {
             return JsonConvert.SerializeObject(InitFood(food), Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
     #endregion
 
@@ -720,33 +724,35 @@ public class Foods : System.Web.Services.WebService {
         string group = "";
         try {
             string sql = @"SELECT parent FROM foodGroups WHERE code = @code";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            command.Parameters.Add(new SQLiteParameter("code", code));
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
-                group = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+            using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                command.Parameters.Add(new SQLiteParameter("code", code));
+                using (SQLiteDataReader reader = command.ExecuteReader()) {
+                    while (reader.Read()) {
+                        group = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                    }
+                }
             }
-        } catch (Exception e) { return ""; }
-        return group;
+            return group;
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     private List<FoodGroup> GetFoodGroups(SQLiteConnection connection) {
         List<FoodGroup> xx = new List<FoodGroup>();
-        try {
-            string sql = "SELECT code, title, parent, groupOrder FROM foodGroups ORDER BY groupOrder ASC";
-            using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                using (SQLiteDataReader reader = command.ExecuteReader()) {
-                    while (reader.Read()) {
-                        FoodGroup x = new FoodGroup();
-                        x.group.code = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                        x.group.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                        x.parent = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                        x.groupOrder = reader.GetValue(3) == DBNull.Value ? 0 : reader.GetInt32(3);
-                        xx.Add(x);
-                    }
+        string sql = "SELECT code, title, parent, groupOrder FROM foodGroups ORDER BY groupOrder ASC";
+        using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+            using (SQLiteDataReader reader = command.ExecuteReader()) {
+                while (reader.Read()) {
+                    FoodGroup x = new FoodGroup();
+                    x.group.code = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                    x.group.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                    x.parent = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+                    x.groupOrder = reader.GetValue(3) == DBNull.Value ? 0 : reader.GetInt32(3);
+                    xx.Add(x);
                 }
             }
-        } catch (Exception e) { return null; }
+        }
         return xx;
     }
 
@@ -776,58 +782,57 @@ public class Foods : System.Web.Services.WebService {
 
     private CodeTitle GetFoodGroupServ(SQLiteConnection connection, string code) {
         CodeTitle x = new CodeTitle();
-        try {
-            string sql = @"SELECT code, title
-                        FROM codeBook
-                        WHERE codeGroup = 'FGVL' AND code = @code";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
+        string sql = @"SELECT code, title
+                    FROM codeBook
+                    WHERE codeGroup = 'FGVL' AND code = @code";
+        using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
             command.Parameters.Add(new SQLiteParameter("code", code));
-            SQLiteDataReader reader = command.ExecuteReader();
-          
-            while (reader.Read()) {
-                x.code = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+            using (SQLiteDataReader reader = command.ExecuteReader()) {
+                while (reader.Read()) {
+                    x.code = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                    x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                }
             }
-        } catch (Exception e) { }
+        }
         return x;
     }
 
     private List<ThermalTreatment> GetThermalTreatments(SQLiteConnection connection, string foodGroupVitaminLost) {
         List<ThermalTreatment> xx = new List<ThermalTreatment>();
-        try {
             string sql = @"SELECT vl.foodGroupVitaminLost, vl.thermalTreatment, cb.title, vl.vitaminE, vl.vitaminB1, vl.vitaminB2, vl.vitaminB3, vl.vitaminB6, vl.vitaminB12, vl.folate, vl.pantothenicAcid, vl.biotin, vl.vitaminC
                         FROM vitaminLost AS vl
                         LEFT OUTER JOIN codeBook AS cb
                         ON vl.thermalTreatment = cb.code AND cb.codeGroup = 'TT'
                         WHERE vl.foodGroupVitaminLost = @foodGroupVitaminLost
                         ORDER BY cb.title ASC";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
+        using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
             command.Parameters.Add(new SQLiteParameter("foodGroupVitaminLost", foodGroupVitaminLost));
-            SQLiteDataReader reader = command.ExecuteReader();
-            if (reader.StepCount > 0) {
-                ThermalTreatment t = new ThermalTreatment();
-                t.thermalTreatment.title = "no thermal treatment";
-                xx.Add(t);
+            using (SQLiteDataReader reader = command.ExecuteReader()) {
+                if (reader.StepCount > 0) {
+                    ThermalTreatment t = new ThermalTreatment();
+                    t.thermalTreatment.title = "no thermal treatment";
+                    xx.Add(t);
+                }
+                while (reader.Read()) {
+                    ThermalTreatment x = new ThermalTreatment();
+                    x.foodGroupVitaminLost = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                    x.thermalTreatment.code = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                    x.thermalTreatment.title = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+                    x.isSelected = false;
+                    x.vitaminE = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
+                    x.vitaminB1 = reader.GetValue(4) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(4));
+                    x.vitaminB2 = reader.GetValue(5) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(5));
+                    x.vitaminB3 = reader.GetValue(6) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(6));
+                    x.vitaminB6 = reader.GetValue(7) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(7));
+                    x.vitaminB12 = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
+                    x.folate = reader.GetValue(9) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(9));
+                    x.pantothenicAcid = reader.GetValue(10) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(10));
+                    x.biotin = reader.GetValue(11) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(11));
+                    x.vitaminC = reader.GetValue(12) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(12));
+                    xx.Add(x);
+                }
             }
-            while (reader.Read()) {
-                ThermalTreatment x = new ThermalTreatment();
-                x.foodGroupVitaminLost = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                x.thermalTreatment.code = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                x.thermalTreatment.title = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                x.isSelected = false;
-                x.vitaminE = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
-                x.vitaminB1 = reader.GetValue(4) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(4));
-                x.vitaminB2 = reader.GetValue(5) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(5));
-                x.vitaminB3 = reader.GetValue(6) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(6));
-                x.vitaminB6 = reader.GetValue(7) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(7));
-                x.vitaminB12 = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
-                x.folate = reader.GetValue(9) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(9));
-                x.pantothenicAcid = reader.GetValue(10) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(10));
-                x.biotin = reader.GetValue(11) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(11));
-                x.vitaminC = reader.GetValue(12) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(12));
-                xx.Add(x);
-            }
-        } catch (Exception e) { return null; }
+        }
         return xx;
     }
 
@@ -3173,7 +3178,9 @@ public class Foods : System.Web.Services.WebService {
                 connection.Close();
             }
             return xx;
-        } catch (Exception e) { return null; }
+        } catch (Exception e) {
+            return null;
+        }
     }
     #endregion
 

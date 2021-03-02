@@ -4645,6 +4645,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     var getTotals = function (x) {
+        if (x === undefined) { return false; }
         $http({
             url: $sessionStorage.config.backend + webService + '/GetTotals',
             method: "POST",
@@ -5870,6 +5871,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $rootScope.currentMenu.data.meals.filter(a => a.code === meal)[0].description = null;
         $rootScope.currentMenu.splitMealDesc.filter(a => a.code === meal)[0].dishDesc = [{ title: null, desc: null, id: null }];
         getTotals($rootScope.currentMenu);
+    }
+
+    $scope.isVisibleClearMealBtn = function (selectedFoods, meal) {
+        return selectedFoods.length > 1 ? selectedFoods.filter(a => a.meal.code === meal).length > 1 : false;
     }
 
 }])
@@ -7345,6 +7350,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.consumers = 1;
     $scope.date = new Date(new Date($rootScope.currentMenu.date)).toLocaleDateString();
     $scope.author = $rootScope.user.firstName + ' ' + $rootScope.user.lastName;
+    $scope.printType = 0;
 
     $scope.getDay = function (x) {
         switch(x) {
@@ -7359,20 +7365,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
     }
 
-    function initPrintSettings() {
-        $http({
-            url: $sessionStorage.config.backend + 'PrintPdf.asmx/InitWeeklyMenuSettings',
-            method: "POST",
-            data: {}
-        })
-       .then(function (response) {
-           $scope.printSettings = JSON.parse(response.data.d);
-       },
-       function (response) {
-           alert(response.data.d)
-       });
-    };
-    initPrintSettings();
+
+    $scope.initPrintSettings = function (printType) {
+        functions.post('PrintPdf', printType === 0 ? 'InitWeeklyMenuSettings' : 'InitMenuSettings', {}).then(function (d) {
+            $scope.printSettings = d;
+            $scope.printSettings.weeklyMenuType = printType;
+        });
+    }
+    $scope.initPrintSettings($scope.printType);
 
     var emptyMenuList = true;
     var isEmptyList = function (x) {

@@ -112,13 +112,21 @@
                                     </tr>
                                     <tr ng-if="x.code===currentMeal" ng-repeat="x in currentMenu.data.meals" >
                                         <td class="align-top">
-                                            <button ng-if="currentMenu.data.selectedFoods.length>0" ng-click="clearMeal(currentMenu, x.code)" class="btn btn-outline-danger mt-1" title="{{'clear all foods from the meal' | translate}}"><i class="fa fa-times"></i></button>
+                                            <button ng-if="isVisibleClearMealBtn(currentMenu.data.selectedFoods, x.code)" ng-click="clearMeal(currentMenu, x.code)" class="btn btn-outline-danger mt-1" style="min-height:38px" title="{{'clear all foods from the meal' | translate}}"><i class="fa fa-times"></i></button>
                                         </td>
                                         <td colspan="7">
                                             <div class="text-capitalize">
                                                 <button ng-disabled="addFoodBtn" class="btn btn-primary mt-1" ng-click="openFoodPopup(null,null)"><i ng-class="addFoodBtnIcon"></i> {{'add food' | translate}}</button>
                                                 <button class="btn btn-outline-primary mt-1 ml-2" ng-click="openRecipePopup()"><i class="fa fa-concierge-bell"></i> {{'add recipe' | translate}}</button>
                                             </div>
+                                        </td>
+                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].energy.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].energy.perc| number:1}} %)</em></span></td>
+                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].carbohydrates.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].carbohydrates.perc| number:1}} %)</em></span></td>
+                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].proteins.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].proteins.perc| number:1}} %)</em></span></td>
+                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].fats.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].fats.perc| number:1}} %)</em></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8">
                                             <div ng-if="currentMenu.data.selectedFoods.length>0" class="pt-2">
                                                 <md-checkbox ng-model="config.showfoodgroupscolors" class="md-primary">
                                                     {{'color food groups' | translate}}
@@ -126,10 +134,6 @@
                                                 <i class="fa fa-info-circle text-info" style="cursor:pointer" ng-click="openColorGroupsInfoPopup()"></i>
                                             </div>
                                         </td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].energy.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].energy.perc| number:1}} %)</em></span></td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].carbohydrates.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].carbohydrates.perc| number:1}} %)</em></span></td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].proteins.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].proteins.perc| number:1}} %)</em></span></td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].fats.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].fats.perc| number:1}} %)</em></span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -172,8 +176,6 @@
                 <a ng-if="pdfLink!=null" href="{{pdfLink}}" class="btn btn-danger" download ng-click="hidePdfLink()"><i class="fa fa-file-pdf-o"></i> {{'take pdf' | translate}}</a>
                 <button ng-if="loginUser.adminType<2&&config.showsendmenu" ng-disabled="pdfLink==null" class="btn btn-outline-primary" title="{{'send menu to the clients email' | translate}}" ng-click="send()"><i class="fa fa-paper-plane"></i> <span class="d-none d-sm-inline">{{'send' | translate}}</span></button>
                 <button ng-disabled="isEmptyList()" class="btn btn-outline-primary" title="{{'shopping list' | translate}}" ng-click="openShoppingListPopup(weeklyMenu)"><i class="fa fa-{{creatingSLPdf==true?'spinner fa-spin':'shopping-basket'}}"></i> <span class="d-none d-sm-inline">{{'shopping list' | translate}}</span></button>
-                <!--<button ng-disabled="isEmptyList()||creatingSLPdf==true" ng-if="pdfSLLink==null" class="btn btn-outline-primary" title="{{'shopping list' | translate}}" ng-click="createShoppingList(weeklyMenu.menuList, consumers, printSettings)"><i class="fa fa-{{creatingSLPdf==true?'spinner fa-spin':'shopping-basket'}}"></i> <span class="hidden-xs">{{'shopping list' | translate}}</span></button>
-                <a ng-if="pdfSLLink!=null" href="{{pdfSLLink}}" class="btn btn-success" download ng-click="hidePdfSLLink()"><i class="fa fa-file-pdf-o"></i> {{'take pdf' | translate}}</a>-->
             </div>
             <div class="card-body">
                 <div class="row text-capitalize pt-2">
@@ -211,6 +213,16 @@
                     <div class="col-sm-5">
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border text-capitalize">{{'print settings' | translate}}</legend>
+                            <div class="align-bottom">
+                                <md-radio-group ng-model="printType" layout="row" class="md-primary" ng-click="initPrintSettings(printType)">
+                                    <md-radio-button ng-value="0">
+                                        <img src="./assets/img/single_page_print.png" class="img-fluid" /> {{'single-page print' | translate}}
+                                    </md-radio-button>
+                                    <md-radio-button ng-value="1">
+                                        <img src="./assets/img/multipage_print.png" class="img-fluid" /> {{'multipage print' | translate}}
+                                    </md-radio-button>
+                                </md-radio-group>
+                            </div>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <md-input-container class="md-block" flex-gt-sm>
@@ -297,7 +309,6 @@
 </script>
 
 <script type="text/ng-template" id="chartsTpl">
-
     <div class="text-center">
         <div class="card mb-2">
             <div class="card-header pointer" data-toggle="collapse" data-target="#energy_c">
@@ -353,7 +364,7 @@
             </div>
             <div id="serv_c" class="card-body collapse show p-2">
                 <canvas id="servChart" class="chart chart-bar"
-                        chart-data="servGraphData.data" chart-labels="servGraphData.labels" chart-colors="servGraphData.colors" 
+                        chart-data="servGraphData.data" chart-labels="servGraphData.labels" chart-colors="servGraphData.colors"
                         chart-series="servGraphData.series" chart-dataset-override="servGraphData.datasetOverride"></canvas>
             </div>
         </div>
@@ -364,7 +375,7 @@
             </div>
             <div id="meals_c" class="card-body collapse show p-2">
                 <canvas id="mealsChart" class="chart chart-bar"
-                        chart-data="mealsGraphData_menu.data" chart-labels="mealsGraphData_menu.labels" chart-colors="mealsGraphData_menu.colors" 
+                        chart-data="mealsGraphData_menu.data" chart-labels="mealsGraphData_menu.labels" chart-colors="mealsGraphData_menu.colors"
                         chart-series="mealsGraphData_menu.series" chart-options="mealsGraphData_menu.options" chart-dataset-override="mealsGraphData_menu.datasetOverride"></canvas>
             </div>
         </div>
@@ -375,7 +386,7 @@
             </div>
             <div id="mealsnutri_c" class="card-body collapse show p-2">
                 <canvas id="mealsNutriChart" class="chart chart-bar"
-                        chart-data="mealsNutriGraphData_menu.data" chart-labels="mealsNutriGraphData_menu.labels" chart-colors="mealsNutriGraphData_menu.colors" 
+                        chart-data="mealsNutriGraphData_menu.data" chart-labels="mealsNutriGraphData_menu.labels" chart-colors="mealsNutriGraphData_menu.colors"
                         chart-series="mealsNutriGraphData_menu.series" chart-options="mealsNutriGraphData_menu.options" chart-dataset-override="mealsNutriGraphData_menu.datasetOverride"></canvas>
             </div>
         </div>
