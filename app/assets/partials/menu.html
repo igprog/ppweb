@@ -193,7 +193,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-7">
+                    <div class="col-lg-7">
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border text-capitalize">{{'menus' | translate}}</legend>
                             <div ng-repeat="x in weeklyMenu.menuList track by $index" class="hover" ng-click="get($index)" title="{{'add menu' | translate}}" style="cursor:pointer">
@@ -210,20 +210,24 @@
                             </div>
                         </fieldset>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-lg-5">
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border text-capitalize">{{'print settings' | translate}}</legend>
-                            <div class="align-bottom">
-                                <md-radio-group ng-model="printType" layout="row" class="md-primary" ng-click="initPrintSettings(printType)">
-                                    <md-radio-button ng-value="0">
-                                        <img src="./assets/img/single_page_print.png" class="img-fluid" /> {{'single-page print' | translate}}
-                                    </md-radio-button>
-                                    <md-radio-button ng-value="1">
-                                        <img src="./assets/img/multipage_print.png" class="img-fluid" /> {{'multipage print' | translate}}
-                                    </md-radio-button>
-                                </md-radio-group>
+                            <div class="row text-center cursor text-capitalize">
+                                <div class="col-xl-4">
+                                    <div class="card h-100 card-block justify-content-end p-3 {{printType===0?'shadow':'bg-light text-reset small'}}" ng-click="initPrintSettings(0)">
+                                        <img src="./assets/img/single_page_print.png" class="img-fluid" />
+                                        <span class="mt-1">{{'table' | translate}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4">
+                                    <div class="card h-100 card-block justify-content-end p-3 {{printType===1?'shadow':'bg-light text-reset small'}}" ng-click="initPrintSettings(1)">
+                                        <img src="./assets/img/multipage_print.png" class="img-fluid" />
+                                        <span class="mt-1">{{'menus' | translate}}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="row">
+                            <div class="row mt-4">
                                 <div class="col-sm-6">
                                     <md-input-container class="md-block" flex-gt-sm>
                                         <label>{{'number of consumers' | translate}}</label>

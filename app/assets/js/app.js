@@ -7365,8 +7365,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
     }
 
-
     $scope.initPrintSettings = function (printType) {
+        $scope.printType = printType;
         functions.post('PrintPdf', printType === 0 ? 'InitWeeklyMenuSettings' : 'InitMenuSettings', {}).then(function (d) {
             $scope.printSettings = d;
             $scope.printSettings.weeklyMenuType = printType;
