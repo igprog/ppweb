@@ -510,7 +510,7 @@ public class PrintPdf : System.Web.Services.WebService {
             CreateFolder(path);
             string fileName = Guid.NewGuid().ToString();
             string filePath = Path.Combine(path, string.Format("{0}.pdf", fileName));
-            int rowsPerPage = 51;
+            int rowsPerPage = 45;
 
             var doc = new Document();
 
@@ -1949,23 +1949,15 @@ public class PrintPdf : System.Web.Services.WebService {
                                 if (!string.IsNullOrWhiteSpace(d.title)) {
                                     sb.AppendLine(d.title);
                                 }
-                                if (settings.descPosition == (int)DescPosition.top) {
-                                    if (!string.IsNullOrWhiteSpace(d.desc)) {
-                                        sb.AppendLine(d.desc);
-                                    }
+                                if (settings.descPosition == (int)DescPosition.top && !string.IsNullOrWhiteSpace(d.desc) && settings.showDescription) {
+                                    sb.AppendLine(d.desc);
                                 }
                             }
-                            //if (settings.descPosition == (int)DescPosition.top) {
-                            //    foreach (var d in dd.dishDesc) {
-                            //        sb.Append(d.title);
-                            //    }
-                            //    //sb = AppendMealDescription(sb, description, settings, true, false);
-                            //} else
-                            //{
-                            //    sb = AppendMealDescription(sb, description, settings, false, false);
-                            //}
                         }
                         sb.AppendLine();
+
+                        rowCount = AddRowCountDependingOfDescriptionLength(rowCount, sb);
+
                         doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
                     }
                     if (settings.showFoods) {
@@ -1978,23 +1970,20 @@ public class PrintPdf : System.Web.Services.WebService {
                             AppendMealTotalTbl(doc, totals.mealsTotal, meal[0].meal.code, settings, lang);
                         }
                     }
-                    if (settings.descPosition == (int)DescPosition.bottom) {
-                        if (!string.IsNullOrWhiteSpace(description)) {
-                            StringBuilder sb = new StringBuilder();
-                            foreach (var dd in currentMenu.splitMealDesc.Where(a => a.code == meal[0].meal.code)) {
-                                foreach (var d in dd.dishDesc) {
-                                    if (settings.descPosition == (int)DescPosition.bottom) {
-                                        if (!string.IsNullOrWhiteSpace(d.desc)) {
-                                            sb.AppendLine(d.desc);
-                                        }
+                    if (settings.descPosition == (int)DescPosition.bottom && !string.IsNullOrWhiteSpace(description) && settings.showDescription) {
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var dd in currentMenu.splitMealDesc.Where(a => a.code == meal[0].meal.code)) {
+                            foreach (var d in dd.dishDesc) {
+                                if (settings.descPosition == (int)DescPosition.bottom) {
+                                    if (!string.IsNullOrWhiteSpace(d.desc)) {
+                                        sb.AppendLine(d.desc);
                                     }
                                 }
                             }
-
-                            //sb = AppendMealDescription(sb, description, settings, false, true);
-                            sb.AppendLine();
-                            doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
                         }
+                        sb.AppendLine();
+                        rowCount = AddRowCountDependingOfDescriptionLength(rowCount, sb);
+                        doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
                     }
                 }
             }
@@ -2058,41 +2047,6 @@ public class PrintPdf : System.Web.Services.WebService {
         }
         return sb.ToString();
     }
-
-    //private string AppendMeal_old(List<Foods.NewFood> meal, List<Meals.NewMeal> meals, string lang, Foods.Totals totals, PrintMenuSettings settings) {
-    //    StringBuilder sb = new StringBuilder();
-    //    if (meal.Count > 0) {
-    //        if (meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
-    //            sb.AppendLine(string.Format(@"{0}", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, meals), lang)).ToUpper());
-    //            //sb.AppendLine(string.Format(@"{0}", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title), lang)).ToUpper());
-    //            rowCount = rowCount + 1;
-    //            string description = meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
-    //            if (!string.IsNullOrWhiteSpace(description)) {
-    //                sb = AppendMealDescription(sb, description, settings, false, false);
-    //            }
-    //            if (settings.showFoods) {
-    //                foreach (Foods.NewFood food in meal) {
-    //                    sb.AppendLine(AppendFoods(food, settings, lang));
-    //                }
-    //            }
-    //            if (settings.showMealsTotal) {
-    //                if (totals != null) {
-    //                    sb.AppendLine(string.Format(@""));
-    //                    Foods.MealsTotal ft = totals.mealsTotal.Where(a => a.code == meal[0].meal.code).FirstOrDefault();
-    //                    sb.AppendLine(string.Format(@"{0}: {1} kcal ({2}%), {3}: {4} g ({5}%), {6}: {7} g ({8}%), {9}: {10} g ({11}%)"
-    //                            , t.Tran("energy", lang), Math.Round(ft.energy.val, 1), Math.Round(ft.energy.perc, 1)
-    //                            , t.Tran("carbohydrates", lang), Math.Round(ft.carbohydrates.val, 1), Math.Round(ft.carbohydrates.perc, 1)
-    //                            , t.Tran("proteins", lang), Math.Round(ft.proteins.val, 1), Math.Round(ft.proteins.perc, 1)
-    //                            , t.Tran("fats", lang), Math.Round(ft.fats.val, 1), Math.Round(ft.fats.perc, 1))).ToString();
-    //                    rowCount = rowCount + 2;
-    //                }
-                    
-    //            }
-    //            //sb.AppendLine("__________________________________________________________________________________________________");
-    //        }
-    //    }
-    //    return sb.ToString();
-    //}
 
     private string AppendFoods(Foods.NewFood food, PrintMenuSettings settings, string lang) {
         string x = string.Format(@"- {0}{1}{2}{3}"
@@ -2478,36 +2432,6 @@ public class PrintPdf : System.Web.Services.WebService {
         }
         return sb;
     }
-
-    //private StringBuilder AppendMealDescription(StringBuilder sb, string description, PrintMenuSettings settings) {
-    //     if (description.Contains('~')) {
-    //        string[] desList = description.Split('|');
-    //        if (desList.Length > 0) {
-    //            var list = (from p_ in desList
-    //                        select new {
-    //                            title = p_.Split('~')[0],
-    //                            description = p_.Split('~').Length > 1 ? p_.Split('~')[1] : ""
-    //                        }).ToList();
-    //            foreach (var l in list) {
-    //                if (settings.showTitle) {
-    //                    sb.AppendLine(l.title);
-    //                    rowCount = rowCount + 1;
-    //                }
-    //                if (settings.showDescription) {
-    //                    sb.AppendLine(string.Format(@"{0}
-    //                                    ", l.description));
-    //                    rowCount = rowCount + 1;
-    //                }
-    //            }
-    //        }
-    //    } else {
-    //        if (settings.showDescription) {
-    //            sb.AppendLine(description);
-    //            rowCount = rowCount + 1;
-    //        }
-    //    }
-    //    return sb;
-    //}
 
     private void AppendTotal(PdfPTable table, string[] menuList, string userId) {
         StringBuilder sb = new StringBuilder();
@@ -2996,6 +2920,10 @@ IBAN HR8423400091160342496
         } catch(Exception e) {
             return e.Message;
         }
+    }
+
+    private int AddRowCountDependingOfDescriptionLength(int rowCount, StringBuilder sb) {
+        return sb.Length > 0 ? rowCount + (int)Math.Round(Convert.ToDecimal(sb.Length / 39), 0) + 1 : 0;
     }
 
     public class PDFFooter : PdfPageEventHelper {

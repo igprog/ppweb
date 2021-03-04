@@ -4146,7 +4146,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.loginUser = d.loginUser;
         $scope.pdfLink == null;
         $scope.creatingPdf = false;
-        $scope.rowsPerPage = 51;
+        $scope.rowsPerPage = 45;
 
         $scope.cancel = function () {
             $mdDialog.cancel();
