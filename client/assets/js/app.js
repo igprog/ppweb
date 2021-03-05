@@ -116,12 +116,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     var getLanguageTitle = function (x) {
         if ($scope.config !== undefined) {
             $scope.currLanguageTitle = $scope.config.languages.find(a => a.code === x).title;
-            //angular.forEach($scope.config.languages, function (value, key) {
-            //    if (value.code == x) {
-            //        $scope.currLanguageTitle = value.title;
-            //        return false;
-            //    }
-            //});
         }
     }
 
@@ -411,7 +405,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
 
     var consumers = 1;
 
-    $scope.rowsPerPage = 51;
+    $scope.rowsPerPage = 45;
     $scope.pdfLink = null;
     $scope.creatingPdf = false;
     $scope.createMenuPdf = function (rowsPerPage) {
