@@ -116,15 +116,7 @@ public class Calculations : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
-                            Pal x = new Pal();
-                            x.code = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                            x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                            x.description = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                            x.min = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
-                            x.max = reader.GetValue(4) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(4));
-                            x.value = Math.Round((x.min + x.max) / 2, 2);
-                            x.icon = GetPalIcon(x.code);
-                            xx.Add(x);
+                            xx.Add(GetPalData(reader));
                         }
                     }  
                 }  
@@ -164,12 +156,7 @@ public class Calculations : System.Web.Services.WebService {
                     command.Parameters.Add(new SQLiteParameter("palValue", palValue));
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
-                            x.code = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                            x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                            x.description = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                            x.min = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
-                            x.max = reader.GetValue(4) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(4));
-                            x.value = Math.Round((x.min + x.max) / 2, 2);
+                            x = GetPalData(reader);
                         }
                     }
                 }
@@ -178,6 +165,19 @@ public class Calculations : System.Web.Services.WebService {
         } catch (Exception e) {
             return new Pal();
         }
+    }
+
+    private Pal GetPalData(SQLiteDataReader reader) {
+        Pal x = new Pal();
+        x.code = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+        x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+        x.description = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+        x.min = reader.GetValue(3) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(3));
+        x.max = reader.GetValue(4) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(4));
+        x.value = Math.Round((x.min + x.max) / 2, 2);
+        x.icon = GetPalIcon(x.code);
+        return x;
+
     }
 
     private string GetPalIcon(string code) {

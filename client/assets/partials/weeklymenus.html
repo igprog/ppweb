@@ -1,0 +1,73 @@
+﻿<div class="container pb-5">
+    <h2 class="h3 mb-0 text-gray-800 text-capitalize">{{'weekly menus' | translate}}</h2>
+    <hr />
+    <div ng-if="d.length===0">
+        <div class="alert alert-danger">
+            {{'you still do not have any menus' | translate}}.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9">
+            <form class="d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <div class="input-group">
+                    <input ng-model="searchMenu" type="text" class="form-control border-1 small" placeholder="{{'search' | translate}}..." aria-label="{{'search' | translate}}" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" type="button">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-3 text-right">
+            <button ui-sref="menus" ui-sref-active="active" class="btn btn-outline-primary text-capitalize"><i class="fa fa-list"></i> {{'daily menus' | translate}}</button>
+        </div>
+    </div>
+    <div ng-if="d.length>0" class="table-responsive mt-2" style="height:70vh">
+        <div class="card border-left-main shadow mt-3" ng-repeat="x in d | filter: searchMenu | limitTo: limit">
+            <div class="card-body">
+                <div class="pointer">
+                    <div class="row no-gutters align-items-center py-2">
+                        <div class="col-sm-9 h5 font-weight-bold text-main mb-1">
+                            <div>
+                                <i class="fa fa-concierge-bell"></i> {{x.title}}
+                            </div>
+                            <div class="h5 mb-0 text-gray-800">
+                                <div class="small">
+                                    <p class="">{{x.note.length > 80 ? x.note.substring(0, 77) + '...' : x.note}}</p>
+                                    <em class="text-muted">{{x.diet.diet | translate}}</em>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 text-right">
+                            <div class="text-center d-inline-block justify-content-end cursor p-2 {{printType===0?'shadow':'bg-light text-reset small'}}" style="width:80px" ng-click="print(x, 0)">
+                                <img src="../app/assets/img/week_table_print.png" class="img-fluid" />
+                                <div class="pt-1">{{'table' | translate}}</div>
+                            </div>
+                            <div class="text-center d-inline-block justify-content-end cursor p-2 {{printType===1?'shadow':'bg-light text-reset small'}}" style="width:80px" ng-click="print(x, 1)">
+                                <img src="../app/assets/img/multi_page_print.png" class="img-fluid" />
+                                <div class="pt-1">{{'menus' | translate}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="currMenu===x.id">
+                        <hr />
+                        <div class="row justify-content-end">
+                            <div class="col-sm-3 text-center text-primary">
+                                <div ng-if="creatingPdf">
+                                    <i class="fa fa-spinner fa-spin fa-3x"></i>
+                                    <p class="pl-2">{{'please wait' | translate}}...</p>
+                                </div>
+                                <a ng-if="pdfLink!==null" href="{{pdfLink}}" class="btn btn-danger" download ng-click="hidePdfLink()"><i class="fa fa-file-pdf"></i> {{'take pdf' | translate}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-right mr-4 mt-2">
+            <a ng-if="d.length>=limit" href="" class="btn btn-outline-primary" ng-click="loadMore()"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</a>
+        </div>
+    </div>
+</div>
+

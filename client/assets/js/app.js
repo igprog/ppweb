@@ -31,6 +31,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
         .state('menus', {
             url: '/menus', templateUrl: './assets/partials/menus.html'
         })
+        .state('weeklymenus', {
+            url: '/weeklymenus', templateUrl: './assets/partials/weeklymenus.html', controller: 'weeklymenusCtrl'
+        })
         .state('menu', {
             url: '/menu', templateUrl: './assets/partials/menu.html'
         })
@@ -78,18 +81,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     $scope.today = new Date();
 
     function initPrintSettings() {
-        $http({
-            url: $sessionStorage.config.backend + 'PrintPdf.asmx/InitMenuSettings',
-            method: "POST",
-            data: {}
-        })
-       .then(function (response) {
-           $scope.settings = JSON.parse(response.data.d);
-           $scope.settings.showTotals = true;
-       },
-       function (response) {
-           alert(response.data.d)
-       });
+        functions.post('PrintPdf', 'InitMenuSettings', {}).then(function (d) {
+            $scope.settings = d;
+            $scope.settings.showTotals = true;
+        });
     };
 
     var saveVersion = function () {
@@ -145,54 +140,35 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
             alert($translate.instant('enter the activation code'));
             return false;
         }
-        $http({
-            url: $sessionStorage.config.backend + 'ClientApp.asmx/Activate',
-            method: 'POST',
-            data: { code: x }
-        })
-       .then(function (response) {
-           $scope.clientApp = JSON.parse(response.data.d);
-           if ($scope.clientApp.code === x) {
-               //$scope.setLanguage($scope.clientApp.lang);
-               localStorage.code = $scope.clientApp.code;
-               //localStorage.language = $scope.clientApp.lang;
-               //$sessionStorage.config.language = $scope.clientApp.lang;
-               $scope.clientId = $scope.clientApp.clientId;
-               $scope.userId = $scope.clientApp.userId;
-               initPrintSettings();
-               getClient();
-               loadPals();
-               $scope.loadMenues();
-               var lang = $scope.clientApp.lang;
-               if ($scope.config.language !== $scope.clientApp.lang) {
-                   lang = $scope.config.language;
-               }
-               if (localStorage.language !== undefined) {
-                   lang = localStorage.language;
-               }
-               $scope.setLanguage(lang);
-               $state.go('dashboard');
-           } else {
-               alert($translate.instant('wrong activation code'));
-           }
-       },
-       function (response) {
-           alert(response.data.d);
-       });
+        functions.post('ClientApp', 'Activate', { code: x }).then(function (d) {
+            $scope.clientApp = d;
+            if ($scope.clientApp.code === x) {
+                localStorage.code = $scope.clientApp.code;
+                $scope.clientId = $scope.clientApp.clientId;
+                $scope.userId = $scope.clientApp.userId;
+                initPrintSettings();
+                getClient();
+                loadPals();
+                $scope.loadMenues();
+                var lang = $scope.clientApp.lang;
+                if ($scope.config.language !== $scope.clientApp.lang) {
+                    lang = $scope.config.language;
+                }
+                if (localStorage.language !== undefined) {
+                    lang = localStorage.language;
+                }
+                $scope.setLanguage(lang);
+                $state.go('dashboard');
+            } else {
+                alert($translate.instant('wrong activation code'));
+            }
+        });
     }
 
     var loadPals = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'Calculations.asmx/LoadPal',
-            method: "POST",
-            data: ''
-        })
-      .then(function (response) {
-          $scope.pals = JSON.parse(response.data.d);
-      },
-      function (response) {
-          alert(response.data.d)
-      });
+        functions.post('Calculations', 'LoadPal', {}).then(function (d) {
+            $scope.pals = d;
+        });
     };
 
     var getConfig = function () {
@@ -226,7 +202,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
                   return false;
               }
 
-              //$sessionStorage.config = $scope.config;
               getClient();
               initPrintSettings();
               loadPals();
@@ -258,18 +233,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
 
     //********** New *****************
     var getClient = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'Clients.asmx/Get',
-            method: "POST",
-            data: { userId: $scope.userId, clientId: $scope.clientId }
-        })
-        .then(function (response) {
-            $scope.client = JSON.parse(response.data.d);
+        functions.post('Clients', 'Get', { userId: $scope.userId, clientId: $scope.clientId }).then(function (d) {
+            $scope.client = d;
             $scope.client.birthDate = new Date($scope.client.birthDate);
             getClientData();
-        },
-        function (response) {
-            alert(response.data.d)
         });
     }
 
@@ -285,33 +252,17 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     }
 
     var getClientData = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'ClientsData.asmx/Get',
-            method: "POST",
-            data: { userId: $scope.userId, clientId: $scope.clientId }
-        })
-        .then(function (response) {
-            $scope.clientData = JSON.parse(response.data.d);
+        functions.post('ClientsData', 'Get', { userId: $scope.userId, clientId: $scope.clientId }).then(function (d) {
+            $scope.clientData = d;
             $scope.clientData.date = new Date(new Date().setHours(0, 0, 0, 0));
             getActivitiesTotal($scope.clientData.activities);
             $scope.calculate();
-        },
-        function (response) {
-            alert(response.data.d)
         });
     }
 
     $scope.save = function (x) {
         x.date = functions.dateToString(x.date);
-        $http({
-            url: $sessionStorage.config.backend + 'ClientsData.asmx/Save',
-            method: "POST",
-            data: { userId: $scope.userId, x: x, userType: 0 }
-        })
-        .then(function (response) {
-        },
-        function (response) {
-            alert(response.data.d)
+        functions.post('ClientsData', 'Save', { userId: $scope.userId, x: x, userType: 0 }).then(function (d) {
         });
     }
 
@@ -321,16 +272,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
 
     var getCalculation = function () {
         if (isNaN($scope.clientData.weight) == true || isNaN($scope.clientData.height) == true || isNaN($scope.clientData.waist) == true || isNaN($scope.clientData.hip) == true) { return false; }
-        $http({
-            url: $sessionStorage.config.backend + 'Calculations.asmx/GetCalculation',
-            method: "POST",
-            data: { client: $scope.clientData, userType: 1 }
-        })
-        .then(function (response) {
-            $scope.calculation = JSON.parse(response.data.d);
-        },
-        function (response) {
-            alert(response.data.d)
+        functions.post('Calculations', 'GetCalculation', { client: $scope.clientData, userType: 1 }).then(function (d) {
+            $scope.calculation = d;
         });
     };
 
@@ -343,38 +286,21 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     $scope.loading = false;
     $scope.loadMenues = function () {
         $scope.loading = true;
-        $http({
-            url: $sessionStorage.config.backend + 'Menues.asmx/LoadClientMenues',
-            method: "POST",
-            data: { userId: $scope.userId, clientId: $scope.clientId }
-        })
-       .then(function (response) {
-           $scope.menus = JSON.parse(response.data.d);
-           angular.forEach($scope.menus, function (x, key) {
-               var date_ = new Date(x.date);
-               x.date = date_.toLocaleDateString();
-           });
-           $scope.loading = false;
-       },
-       function (response) {
-           $scope.loading = false;
-           alert(response.data.d);
-       });
+        functions.post('Menues', 'LoadClientMenues', { userId: $scope.userId, clientId: $scope.clientId }).then(function (d) {
+            $scope.menus = d;
+            angular.forEach($scope.menus, function (x, key) {
+                var date_ = new Date(x.date);
+                x.date = date_.toLocaleDateString();
+            });
+            $scope.loading = false;
+        });
     }
 
     $scope.getMenu = function (x) {
-        $http({
-            url: $sessionStorage.config.backend + 'Menues.asmx/Get',
-            method: "POST",
-            data: { userId: $scope.userId, id: x.id, }
-        })
-        .then(function (response) {
-            $scope.menu = JSON.parse(response.data.d);
+        functions.post('Menues', 'Get', { userId: $scope.userId, id: x.id }).then(function (d) {
+            $scope.menu = d;
             $scope.menu.client.clientData = $scope.clientData;
             getTotals($scope.menu);
-        },
-        function (response) {
-            alert(response.data.d);
         });
     }
 
@@ -389,18 +315,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     }
 
     var getTotals = function (x) {
-        $http({
-            url: $sessionStorage.config.backend + 'Foods.asmx/GetTotals',
-            method: "POST",
-            data: { selectedFoods: x.data.selectedFoods, meals: x.data.meals }
-        })
-       .then(function (response) {
-           $scope.totals = JSON.parse(response.data.d);
-           $scope.totals.price.currency = $scope.config.currency;
-       },
-       function (response) {
-           alert(response.data.d)
-       });
+        functions.post('Foods', 'GetTotals', { selectedFoods: x.data.selectedFoods, meals: x.data.meals }).then(function (d) {
+            $scope.totals = d;
+            $scope.totals.price.currency = $scope.config.currency;
+        });
     }
 
     var consumers = 1;
@@ -522,17 +440,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     var updateClient = function (x) {
         var c = angular.copy(x);
         c.birthDate = functions.dateToString(c.birthDate);
-        $http({
-            url: $sessionStorage.config.backend + 'Clients.asmx/UpdateClient',
-            method: 'POST',
-            data: { userId: $scope.userId, x: c }
-        })
-       .then(function (response) {
-           document.getElementById("mySidenav").style.width = "0";
-       },
-       function (response) {
-           alert(response.data.d);
-       });
+        functions.post('Clients', 'UpdateClient', { userId: $scope.userId, x: c }).then(function (d) {
+        });
     }
 
     $scope.setGenderTitle = function (x) {
@@ -600,54 +509,25 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
 .controller('dashboardCtrl', ['$scope', '$timeout', '$q', '$log', '$rootScope', '$localStorage', '$sessionStorage', '$window', '$http', '$translate', '$translatePartialLoader', 'functions', 'charts', function ($scope, $timeout, $q, $log, $rootScope, $localStorage, $sessionStorage, $window, $http, $translate, $translatePartialLoader, functions, charts) {
     
     var getClientData = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'ClientsData.asmx/Get',
-            method: "POST",
-            data: { userId: $scope.userId, clientId: $scope.clientId }
-        })
-        .then(function (response) {
-            $scope.clientData = JSON.parse(response.data.d);
+        functions.post('ClientsData', 'Get', { userId: $scope.userId, clientId: $scope.clientId }).then(function (d) {
+            $scope.clientData = d;
             $scope.clientData.date = new Date(new Date().setHours(0, 0, 0, 0));
-            //getActivitiesTotal($scope.clientData.activities);
             getCalculation();
             getClientLog();
-        },
-        function (response) {
-            alert(response.data.d)
         });
     }
 
     var getCalculation = function () {
         if (isNaN($scope.clientData.weight) == true || isNaN($scope.clientData.height) == true || isNaN($scope.clientData.waist) == true || isNaN($scope.clientData.hip) == true) { return false; }
-        $http({
-            url: $sessionStorage.config.backend + 'Calculations.asmx/GetCalculation',
-            method: "POST",
-            data: { client: $scope.clientData, userType: 1 }
-        })
-        .then(function (response) {
-            $scope.calculation = JSON.parse(response.data.d);
-        },
-        function (response) {
-            alert(response.data.d)
+        functions.post('Calculations', 'GetCalculation', { client: $scope.clientData, userType: 1 }).then(function (d) {
+            $scope.calculation = d;
         });
     };
 
     var getClientLog = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'ClientsData.asmx/GetClientLog',
-            method: "POST",
-            data: { userId: $scope.userId, clientId: $scope.clientId }
-        })
-        .then(function (response) {
-            $scope.clientLog = JSON.parse(response.data.d);
-            //angular.forEach($scope.clientLog, function (x, key) {
-            //    x.date = new Date(x.date);
-            //});
+        functions.post('ClientsData', 'GetClientLog', { userId: $scope.userId, clientId: $scope.clientId }).then(function (d) {
+            $scope.clientLog = d;
             setClientLogGraphData(0, $scope.clientLogsDays);
-            //drawChart();
-        },
-        function (response) {
-            alert(response.data.d)
         });
     }
 
@@ -733,20 +613,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     $scope.displayType = 0;
 
     var getClientLog = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'ClientsData.asmx/GetClientLog',
-            method: "POST",
-            data: { userId: $scope.userId, clientId: $scope.clientId }
-        })
-        .then(function (response) {
-            $scope.clientLog = JSON.parse(response.data.d);
+        functions.post('ClientsData', 'GetClientLog', { userId: $scope.userId, clientId: $scope.clientId }).then(function (d) {
+            $scope.clientLog = d;
             angular.forEach($scope.clientLog, function (x, key) {
                 x.date = new Date(x.date);
             });
             setClientLogGraphData(0, $scope.clientLogsDays);
-        },
-        function (response) {
-            alert(response.data.d)
         });
     }
     getClientLog();
@@ -754,16 +626,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     $scope.updateClientLog = function (x) {
         var cd = angular.copy(x);
         cd.date = functions.dateToString(cd.date);
-        $http({
-            url: $sessionStorage.config.backend + 'ClientsData.asmx/UpdateClientLog',
-            method: "POST",
-            data: { userId: $scope.userId, clientData: cd }
-        })
-        .then(function (response) {
+        functions.post('ClientsData', 'UpdateClientLog', { userId: $scope.userId, clientData: cd }).then(function (d) {
             getClientLog();
-        },
-        function (response) {
-            alert(response.data.d)
         });
     }
 
@@ -888,16 +752,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     }
 
     var removeClientLog = function (x) {
-        $http({
-            url: $sessionStorage.config.backend + 'ClientsData.asmx/Delete',
-            method: "POST",
-            data: { userId: $scope.userId, clientData: x }
-        })
-        .then(function (response) {
+        functions.post('ClientsData', 'Delete', { userId: $scope.userId, clientData: x }).then(function (d) {
             getClientLog();
-        },
-        function (response) {
-            alert(response.data.d)
         });
     }
 
@@ -905,7 +761,66 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
         setClientLogGraphData(type, clientLogsDays);
     }
 
-    }])
+}])
+
+.controller('weeklymenusCtrl', ['$scope', '$rootScope', '$http', '$translate', '$translatePartialLoader', 'functions', function ($scope, $rootScope, $http, $translate, $translatePartialLoader, functions) {
+    var webService = 'WeeklyMenus';
+    $scope.type = 0;
+    $scope.limit = 20;
+    $scope.printType = 1;
+    $scope.currMenu = null;
+
+    $scope.loadMore = function () {
+        $scope.limit += 20;
+    }
+
+    var load = function () {
+        $scope.loading = true;
+        functions.post(webService, 'LoadClientMenus', { userId: $scope.userId, clientId: $scope.clientId, lang: $scope.config.language }).then(function (d) {
+            $scope.d = d;
+            $scope.loading = false;
+        });
+    }
+    load();
+
+    $scope.creatingPdf = false;
+    $scope.pageSizes = ['A4', 'A3', 'A2', 'A1'];
+
+    var printWeeklyMenu = function (weeklyMenu, printSettings) {
+        $http({
+            url: '../PrintPdf.asmx/WeeklyMenuPdf',
+            method: "POST",
+            data: { userId: $scope.userId, weeklyMenu: weeklyMenu, consumers: 1, lang: $scope.config.language, settings: printSettings, date: null, author: null, headerInfo: null }
+        })
+          .then(function (response) {
+              var fileName = response.data.d;
+              $scope.pdfLink =  '../upload/users/' + $scope.userId + '/pdf/' + fileName + '.pdf';
+              $scope.creatingPdf = false;
+          },
+          function (response) {
+              $scope.creatingPdf = false;
+              alert(response.data.d)
+          });
+    }
+
+    $scope.print = function (weeklyMenu, printType) {
+        if ($scope.creatingPdf) { return; }
+        $scope.pdfLink = null;
+        $scope.creatingPdf = true;
+        $scope.currMenu = weeklyMenu.id;
+        functions.post('PrintPdf', printType === 0 ? 'InitWeeklyMenuSettings' : 'InitMenuSettings', {}).then(function (d) {
+            var printSettings = d;
+            $scope.printType = printType;
+            printWeeklyMenu(weeklyMenu, printSettings);
+        });
+    }
+
+    $scope.hidePdfLink = function () {
+        $scope.pdfLink = null;
+    }
+
+
+}])
 
 //-------------end Program Prehrane Controllers--------------------
 

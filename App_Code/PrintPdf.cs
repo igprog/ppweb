@@ -106,7 +106,7 @@ public class PrintPdf : System.Web.Services.WebService {
         x.printStyle = 0;
         x.showImg = false;
         x.descPosition = (int) DescPosition.bottom;
-        x.weeklyMenuType = (int) WeeklyMenuType.weekly;
+        x.weeklyMenuType = (int) WeeklyMenuType.daily;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 

@@ -1,10 +1,10 @@
 ﻿/*!
 functions.js
-(c) 2017-2019 IG PROG, www.igprog.hr
+(c) 2017-2021 IG PROG, www.igprog.hr
 */
 angular.module('functions', [])
 
-.factory('functions', ['$rootScope', '$window', '$translate', '$sessionStorage', function ($rootScope, $window, $translate, $sessionStorage) {
+.factory('functions', ['$rootScope', '$window', '$translate', '$sessionStorage', '$http', function ($rootScope, $window, $translate, $sessionStorage, $http) {
     return {
         isNullOrEmpty: function (x) {
             var res = false;
@@ -38,6 +38,15 @@ angular.module('functions', [])
             var diff = offset < 0 ? $sessionStorage.config.serverhostgreenwichtimediff + Math.abs(offset) : $sessionStorage.config.serverhostgreenwichtimediff - offset;
             date.setHours(date.getHours() + diff);
             return date;
+        },
+        post: function (service, webmethod, data) {
+            return $http({
+                url: '../' + service + '.asmx/' + webmethod, method: 'POST', data: data
+            }).then(function (response) {
+                return JSON.parse(response.data.d);
+            }, function (response) {
+                return response.data.d;
+            });
         }
     }
 }]);

@@ -432,10 +432,13 @@
   "attach the image": "Приложи слику",
   "enter the activation code": "Упишите активацијски код",
   "menu_": "Изборник",
-  "you are offline": "Niste na mreži",
+  "you are offline": "Нисте на мрежи",
   "check your connection and try again": "Проверите везу и покушајте поново",
   "total nutritional values": "Укупне нутритивне вредности",
   "remove image": "Бриши слику",
-  "rows per page": "Редова по страници"
+  "rows per page": "Редова по страници",
+  "daily menus": "Дневни јеловници",
+  "weekly menus": "Недељни јеловници",
+  "please wait": "Молимо сачекајте"
 
 }

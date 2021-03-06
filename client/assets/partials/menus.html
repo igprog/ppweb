@@ -6,17 +6,22 @@
             {{'you still do not have any menus' | translate}}.
         </div>
     </div>
-    <div>
-        <form class="d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <div class="input-group">
-                <input ng-model="searchMenu" type="text" class="form-control border-1 small" placeholder="{{'search' | translate}}..." aria-label="{{'search' | translate}}" aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-primary" type="button">
-                        <i class="fas fa-search fa-sm"></i>
-                    </button>
+    <div class="row">
+        <div class="col-sm-9">
+            <form class="d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <div class="input-group">
+                    <input ng-model="searchMenu" type="text" class="form-control border-1 small" placeholder="{{'search' | translate}}..." aria-label="{{'search' | translate}}" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" type="button">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
+        <div class="col-sm-3 text-right">
+            <button ui-sref="weeklymenus" ui-sref-active="active" class="btn btn-outline-primary text-capitalize"><i class="fa fa-list"></i> {{'weekly menus' | translate}}</button>
+        </div>
     </div>
     <div ng-if="menus.length>0" class="table-responsive mt-2" style="height:70vh">
         <table class="table table-sm table-hover">

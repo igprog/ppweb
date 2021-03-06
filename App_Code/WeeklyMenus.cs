@@ -59,10 +59,20 @@ public class WeeklyMenus : System.Web.Services.WebService {
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
-     [WebMethod]
+    [WebMethod]
     public string Load(string userId, string lang) {
         try {
-            return JsonConvert.SerializeObject(LoadWeeklyMenus(userId, lang), Formatting.None);
+            return JsonConvert.SerializeObject(LoadWeeklyMenus(userId, null, lang), Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, userId, "WeeklyMenus", "Load");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
+    }
+
+    [WebMethod]
+    public string LoadClientMenus(string userId, string clientId, string lang) {
+        try {
+            return JsonConvert.SerializeObject(LoadWeeklyMenus(userId, clientId, lang), Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, userId, "WeeklyMenus", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
@@ -81,22 +91,8 @@ public class WeeklyMenus : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
-                            x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                            x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                            x.note = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                            x.diet = new Diets.NewDiet();
-                            x.diet.id = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
-                            x.diet.diet = reader.GetValue(4) == DBNull.Value ? "" : t.Tran(reader.GetString(4), lang);
-                            x.menuList = reader.GetValue(5) == DBNull.Value ? new List<string>() : reader.GetString(5).Split(',').ToList();
-                            //TODO: menu data
+                            x = WeeklyMenuData(reader, lang);
                             x.menuDes = GetMenuDes(connection, x.menuList, lang);
-                            x.date = reader.GetValue(6) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(6);
-                            x.client = new Clients.NewClient();
-                            x.client.clientId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
-                            x.client.firstName = reader.GetValue(8) == DBNull.Value ? "" : reader.GetString(8);
-                            x.client.lastName = reader.GetValue(9) == DBNull.Value ? "" : reader.GetString(9);
-                            x.userId = reader.GetValue(10) == DBNull.Value ? "" : reader.GetString(10);
-                            x.userGroupId = reader.GetValue(11) == DBNull.Value ? "" : reader.GetString(11);
                         }
                     }
                 }
@@ -296,7 +292,7 @@ public class WeeklyMenus : System.Web.Services.WebService {
                     command.ExecuteNonQuery();
                 }
             } 
-            List<NewWeeklyMenus> xx = LoadWeeklyMenus(userId, lang);
+            List<NewWeeklyMenus> xx = LoadWeeklyMenus(userId, null, lang);
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, userId, "WeeklyMenus", "Delete");
@@ -304,39 +300,44 @@ public class WeeklyMenus : System.Web.Services.WebService {
         }
     }
 
-     public List<NewWeeklyMenus> LoadWeeklyMenus(string userId, string lang) {
+     public List<NewWeeklyMenus> LoadWeeklyMenus(string userId, string clientId, string lang) {
         db.CreateDataBase(userId, db.weeklymenus);
         List<NewWeeklyMenus> xx = new List<NewWeeklyMenus>();
         using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
             connection.Open();
-            string sql = @"SELECT w.id, w.title, w.note, w.dietId, w.diet, w.menuList, w.date, w.clientId, c.firstName, c.lastName, w.userId, w.userGroupId FROM weeklymenus w
-                    LEFT OUTER JOIN clients c ON w.clientId = c.clientId
-                    GROUP BY w.id
-                    ORDER BY w.rowid DESC";
+            string sql = string.Format(@"SELECT w.id, w.title, w.note, w.dietId, w.diet, w.menuList, w.date, w.clientId, c.firstName, c.lastName, w.userId, w.userGroupId FROM weeklymenus w
+                        LEFT OUTER JOIN clients c ON w.clientId = c.clientId
+                        {0}
+                        GROUP BY w.id
+                        ORDER BY w.rowid DESC", !string.IsNullOrEmpty(clientId) ? string.Format("WHERE w.clientId = '{0}'", clientId) : "");
             using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                 using (SQLiteDataReader reader = command.ExecuteReader()) {
                     while (reader.Read()) {
-                        NewWeeklyMenus x = new NewWeeklyMenus();
-                        x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                        x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                        x.note = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                        x.diet = new Diets.NewDiet();
-                        x.diet.id = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
-                        x.diet.diet = reader.GetValue(4) == DBNull.Value ? "" : t.Tran(reader.GetString(4), lang);
-                        x.menuList = reader.GetValue(5) == DBNull.Value ? new List<string>() : reader.GetString(5).Split(',').ToList();
-                        x.date = reader.GetValue(6) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(6);
-                        x.client = new Clients.NewClient();
-                        x.client.clientId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
-                        x.client.firstName = reader.GetValue(8) == DBNull.Value ? "" : reader.GetString(8);
-                        x.client.lastName = reader.GetValue(9) == DBNull.Value ? "" : reader.GetString(9);
-                        x.userId = reader.GetValue(10) == DBNull.Value ? "" : reader.GetString(10);
-                        x.userGroupId = reader.GetValue(11) == DBNull.Value ? "" : reader.GetString(11);
-                        xx.Add(x);
+                        xx.Add(WeeklyMenuData(reader, lang));
                     }
                 }
             }
         }
         return xx;
+    }
+
+    private NewWeeklyMenus WeeklyMenuData(SQLiteDataReader reader, string lang) {
+        NewWeeklyMenus x = new NewWeeklyMenus();
+        x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+        x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+        x.note = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+        x.diet = new Diets.NewDiet();
+        x.diet.id = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
+        x.diet.diet = reader.GetValue(4) == DBNull.Value ? "" : t.Tran(reader.GetString(4), lang);
+        x.menuList = reader.GetValue(5) == DBNull.Value ? new List<string>() : reader.GetString(5).Split(',').ToList();
+        x.date = reader.GetValue(6) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(6);
+        x.client = new Clients.NewClient();
+        x.client.clientId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
+        x.client.firstName = reader.GetValue(8) == DBNull.Value ? "" : reader.GetString(8);
+        x.client.lastName = reader.GetValue(9) == DBNull.Value ? "" : reader.GetString(9);
+        x.userId = reader.GetValue(10) == DBNull.Value ? "" : reader.GetString(10);
+        x.userGroupId = reader.GetValue(11) == DBNull.Value ? "" : reader.GetString(11);
+        return x;
     }
 
     private bool Check(string userId, string title) {

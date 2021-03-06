@@ -112,14 +112,18 @@
                         <a ui-sref="additionalactivities" ui-sref-active="active" href="" class="collapse-item"><i class="fa fa-running"></i><span class="pl-2">{{'additional activities' | translate}}</span></a>
                     </div>
                 </div>
-
             </div>
 
             <div class="nav-item">
-                <a ui-sref="menus" ui-sref-active="active" class="nav-link" href="">
-                    <i class="fas fa-fw fa-utensils"></i>
-                    <span>{{'menus' | translate}}</span>
+                <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#menus" aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-utensils"></i><span>{{'menus' | translate}}</span>
                 </a>
+                <div id="menus" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a ui-sref="menus" ui-sref-active="menus" href="" class="collapse-item"><i class="fas fa-fw fa-utensils"></i><span class="pl-2">{{'daily menus' | translate}}</span></a>
+                        <a ui-sref="weeklymenus" ui-sref-active="weeklymenus" href="" class="collapse-item"><i class="fa fa-list"></i><span class="pl-2">{{'weekly menus' | translate}}</span></a>
+                    </div>
+                </div>
             </div>
 
             <!-- Divider -->
