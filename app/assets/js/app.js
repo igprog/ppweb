@@ -1038,15 +1038,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         isadmin: false
     };
     $scope.adminLogin = function (x) {
-        $http({
-            url: $rootScope.config.backend + 'Admin.asmx/Login',
-            method: "POST",
-            data: { username: x.username, password: x.password }
-        })
-        .then(function (response) {
-            $scope.admin.isadmin = JSON.parse(response.data.d);
-        },
-        function (response) {
+        functions.post('Admin', 'Login', { username: x.username, password: x.password }).then(function (d) {
+            $scope.admin.isadmin = d;
         });
     }
 
@@ -1058,8 +1051,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 data: { userId: uid }
             })
             .then(function (response) {
-                if (JSON.parse(response.data.d).userId != null) {
+                if (JSON.parse(response.data.d).userId !== null) {
                     loginResponse(response);
+                    $rootScope.config.debug = true;
                 } else {
                     $rootScope.loading = false;
                     $scope.errorLogin = true;
@@ -1099,11 +1093,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
          }
 
          var forgotPassword = function (x) {
-             $http({
-                 url: $sessionStorage.config.backend + webService + '/ForgotPassword',
-                 method: "POST",
-                 data: { email: x, lang: $rootScope.config.language }
-             })
+            $http({
+                url: $sessionStorage.config.backend + webService + '/ForgotPassword',
+                method: "POST",
+                data: { email: x, lang: $rootScope.config.language }
+            })
            .then(function (response) {
                $mdDialog.hide();
                functions.alert(JSON.parse(response.data.d), '');

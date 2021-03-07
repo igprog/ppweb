@@ -34,7 +34,6 @@
                                 <th>{{'diet'| translate}}</th>
                                 <th class="text-capitalize">{{'date' | translate}}</th>
                                 <th>{{'note'| translate}}</th>
-                                <!--<th ng-if="config.debug">{{'client Id' | translate}}</th>-->
                                 <th>{{'client' | translate}}</th>
                                 <th></th>
                             </tr>
@@ -42,8 +41,7 @@
                                 <td class="nowrap" ng-click="confirm(x)">{{x.title}}</td>
                                 <td ng-click="confirm(x)">{{x.diet.diet}}</td>
                                 <td ng-click="confirm(x)">{{x.date | date:'dd.MM.yyyy'}}</td>
-                                <td class="nowrap" ng-click="confirm(x)">{{x.note}}</td>
-                                <!--<td ng-if="config.debug">{{x.client.clientId}}</td>-->
+                                <td class="nowrap" ng-click="confirm(x)">{{x.note.length > 40 ? x.note.substring(0, 37) + '...' : x.note}}</td>
                                 <td ng-click="confirm(x)">{{x.client.firstName}} {{x.client.lastName}}</td>
                                 <td ng-click="remove(x)"><button class="btn btn-outline-danger btn-circle"><i class="fa fa-trash-alt"></i></button></td>
                             </tr>
