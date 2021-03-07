@@ -213,7 +213,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
             return fileName;
         } catch(Exception e) {
-            L.SendErrorLog(e, userId, "PrintPdf", "MenuPdf_tbl");
+            L.SendErrorLog(e, currentMenu.id, userId, "PrintPdf", "MenuPdf_tbl");
             return e.Message;
         }
     }
@@ -375,7 +375,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
             return fileName;
         } catch(Exception e) {
-            L.SendErrorLog(e, userId, "PrintPdf", "MenuPdf_old");
+            L.SendErrorLog(e, currentMenu.id, userId, "PrintPdf", "MenuPdf_old");
             return e.Message;
         }
     }
@@ -498,7 +498,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
             return fileName;
         } catch(Exception e) {
-            L.SendErrorLog(e, userId, "PrintPdf", "WeeklyMenuPdf_weekly");
+            L.SendErrorLog(e, weeklyMenu.id, userId, "PrintPdf", "WeeklyMenuPdf_weekly");
             return e.Message;
         }
     }
@@ -537,7 +537,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
             return fileName;
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "PrintPdf", "WeeklyMenuPdf_daily");
+            L.SendErrorLog(e, weeklyMenu.id, userId, "PrintPdf", "WeeklyMenuPdf_daily");
             return e.Message;
         }
     }
@@ -1031,7 +1031,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
             return fileName;
         } catch(Exception e) {
-            L.SendErrorLog(e, userId, "PrintPdf", "MenuDetailsPdf_chart");
+            L.SendErrorLog(e, currentMenu.id, userId, "PrintPdf", "MenuDetailsPdf_chart");
             return e.Message;
         }
     }
@@ -1447,7 +1447,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
             return fileName;
         } catch(Exception e) {
-            L.SendErrorLog(e, userId, "PrintPdf", "MenuDetailsPdf_tbl");
+            L.SendErrorLog(e, currentMenu.id, userId, "PrintPdf", "MenuDetailsPdf_tbl");
             return e.Message;
         }
     }

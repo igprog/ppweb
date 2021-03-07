@@ -112,7 +112,7 @@ public class Recipes : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, "Recipes", "Search");
+            L.SendErrorLog(e, query, null, "Recipes", "Search");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -137,7 +137,10 @@ public class Recipes : System.Web.Services.WebService {
                 }
             }
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, id, null, "Recipes", "Get");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -163,7 +166,10 @@ public class Recipes : System.Web.Services.WebService {
             }
             SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.id, null, "Recipes", "Save");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -191,7 +197,10 @@ public class Recipes : System.Web.Services.WebService {
             SR.DeleteSharedRecipe(id);
             /*******************************************************************/
             return "OK";
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, id, null, "Recipes", "Delete");
+            return e.Message;
+        }
     }
 
     [WebMethod]
@@ -204,7 +213,10 @@ public class Recipes : System.Web.Services.WebService {
             MyFoods mf = new MyFoods();
             mf.Save(userId, food);
             return "saved";
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, recipe.id, null, "Recipes", "SaveAsFood");
+            return e.Message;
+        }
     }
     #endregion UsersRecipes
 

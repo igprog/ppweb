@@ -177,7 +177,7 @@ public class Users : System.Web.Services.WebService {
             x.headerInfo = "";
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, "Users", "Init");
+            L.SendErrorLog(e, null, null, "Users", "Init");
             return e.Message;
         }
     }
@@ -231,7 +231,7 @@ public class Users : System.Web.Services.WebService {
             x.datasum = GetDataSum(x.userGroupId, x.userId, x.userType, x.adminType);
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userName, "Users", "Login");
+            L.SendErrorLog(e, null, userName, "Users", "Login");
             return e.Message;
         }
     }
@@ -284,7 +284,7 @@ public class Users : System.Web.Services.WebService {
                 }
                 return "registration completed successfully";
             } catch (Exception e) {
-                L.SendErrorLog(e, x.email, "Users", "Signup");
+                L.SendErrorLog(e, x.userId, x.email, "Users", "Signup");
                 return e.Message;
             }
         }
@@ -341,7 +341,7 @@ public class Users : System.Web.Services.WebService {
 
             return JsonConvert.SerializeObject("saved", Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, x.userId, "Users", "Update");
+            L.SendErrorLog(e, null, x.userId, "Users", "Update");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -351,7 +351,7 @@ public class Users : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(GetUsers(limit, page, null, isDesc), Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, "Users", "Load");
+            L.SendErrorLog(e, null, null, "Users", "Load");
             return (e.Message);
         }
     }
@@ -374,7 +374,8 @@ public class Users : System.Web.Services.WebService {
             x.clientapp = ca.GetClientAppUsers();
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
-            return (e.Message);
+            L.SendErrorLog(e, null, null, "Users", "Load");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
@@ -467,7 +468,7 @@ public class Users : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, "Users", "Search");
+            L.SendErrorLog(e, query, null, "Users", "Search");
             return (e.Message);
         }
     }
@@ -520,7 +521,10 @@ public class Users : System.Web.Services.WebService {
             }
             x.datasum = GetDataSum(x.userGroupId, x.userId, x.userType, x.adminType);
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "Users", "Get");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -569,7 +573,10 @@ public class Users : System.Web.Services.WebService {
                 connection.Close();
             }   
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return ("error: " + e); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userGroupId, "Users", "GetUsersByUserGroup");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -586,8 +593,8 @@ public class Users : System.Web.Services.WebService {
             SR.DeleteSharedRecipeByUserId(x.userId);
             return "ok";
         } catch (Exception e) {
-            L.SendErrorLog(e, x.userId, "Users", "Delete");
-            return (e.Message);
+            L.SendErrorLog(e, null, x.userId, "Users", "Delete");
+            return e.Message;
         }
     }
 
@@ -611,7 +618,7 @@ public class Users : System.Web.Services.WebService {
                 return JsonConvert.SerializeObject("you do not have permission to delete this account", Formatting.None);
             }
         } catch (Exception e) {
-            L.SendErrorLog(e, x.userId, "Users", "DeleteAllUserGroup");
+            L.SendErrorLog(e, null, x.userId, "Users", "DeleteAllUserGroup");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -660,7 +667,10 @@ public class Users : System.Web.Services.WebService {
                 }
             }
             return JsonConvert.SerializeObject(response, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, email, "Users", "ForgotPassword");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -677,9 +687,10 @@ public class Users : System.Web.Services.WebService {
                     }
                 }
             }
-            return ("saved");
+            return "saved";
         } catch (Exception e) {
-            return (e.Message);
+            L.SendErrorLog(e, null, uid, "Users", "ResetPassword");
+            return e.Message;
         }
     }
 
@@ -688,7 +699,8 @@ public class Users : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(GetDataSum(userGroupId, userId, userType, adminType), Formatting.None);
         } catch (Exception e) {
-            return (e.Message);
+            L.SendErrorLog(e, null, userId, "Users", "GetUserSum");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
@@ -720,7 +732,10 @@ public class Users : System.Web.Services.WebService {
                 connection.Close();
             } 
             return JsonConvert.SerializeObject(response, Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userName, "Users", "ConfirmPayPal");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     //******** Only for correcting User tbl ***********
@@ -796,6 +811,7 @@ public class Users : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject("OK", Formatting.None);
         } catch (Exception e) {
+            L.SendErrorLog(e, null, x.userGroupId, "Users", "CreateSubusers");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -832,7 +848,10 @@ public class Users : System.Web.Services.WebService {
             }
 
             return JsonConvert.SerializeObject(response, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, x.userId, "Users", "ConfirmPayPal");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
     #endregion
 

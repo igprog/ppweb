@@ -203,7 +203,7 @@ public class Mail : System.Web.Services.WebService {
         } catch (Exception e) {
             resp.isSuccess = false;
             resp.msg = e.Message;
-            L.SendErrorLog(e, order.id, "Mail", "SendOrder");
+            L.SendErrorLog(e, order.id, order.id, "Mail", "SendOrder");
             return resp;
         }
     }
@@ -275,7 +275,7 @@ public class Mail : System.Web.Services.WebService {
         } catch (Exception e) {
             resp.isSuccess = false;
             resp.msg = e.Message;
-            L.SendErrorLog(e, sendTo, "Mail", "SendMail");
+            L.SendErrorLog(e, subject, sendTo, "Mail", "SendMail");
             return resp;
         }
     }

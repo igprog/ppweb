@@ -86,7 +86,7 @@ public class SharingRecipes : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "Recipes", "Load");
+            L.SendErrorLog(e, null, userId, "Recipes", "Load");
             return (JsonConvert.SerializeObject(e.Message, Formatting.None));
         }
     }
@@ -118,7 +118,7 @@ public class SharingRecipes : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "Recipes", "Search");
+            L.SendErrorLog(e, query, userId, "Recipes", "Search");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -155,7 +155,7 @@ public class SharingRecipes : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, id, "Recipes", "Get");
+            L.SendErrorLog(e, id, userId, "Recipes", "Get");
             return (e.Message);
         }
     }
@@ -186,7 +186,7 @@ public class SharingRecipes : System.Web.Services.WebService {
             x.sharingData.resp = "saved";
             return JsonConvert.SerializeObject(x.sharingData.resp, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, x.sharingData.recipeOwner.userId, "SharingRecipes", "Save");
+            L.SendErrorLog(e, x.id, x.sharingData.recipeOwner.userId, "SharingRecipes", "Save");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -206,7 +206,7 @@ public class SharingRecipes : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject("OK", Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, id, "SharingRecipes", "UpdateViews");
+            L.SendErrorLog(e, id, null, "SharingRecipes", "UpdateViews");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -217,7 +217,7 @@ public class SharingRecipes : System.Web.Services.WebService {
             DeleteSharedRecipe(id);
             return JsonConvert.SerializeObject("OK", Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, id, "SharingRecipes", "Delete");
+            L.SendErrorLog(e, id, null, "SharingRecipes", "Delete");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -240,8 +240,10 @@ public class SharingRecipes : System.Web.Services.WebService {
                 }
             }
             return result;
-
-        } catch (Exception e) { return false; }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "SharingRecipes", "CheckIfSharingUser");
+            return false;
+        }
     }
     #endregion WebMethods
 

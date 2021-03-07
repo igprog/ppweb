@@ -76,7 +76,7 @@ public class Usda : System.Web.Services.WebService {
             response.Close();
             return responseFromServer;
         } catch (Exception e) {
-            L.SendErrorLog(e, url, "Usda", "RequestData");
+            L.SendErrorLog(e, null, url, "Usda", "RequestData");
             return e.Message;
         } 
     }

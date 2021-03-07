@@ -129,7 +129,7 @@ public class Clients : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(GetClients(userId, user, null, null), Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "Clients", "Load");
+            L.SendErrorLog(e, null, userId, "Clients", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -180,7 +180,7 @@ public class Clients : System.Web.Services.WebService {
                 return JsonConvert.SerializeObject(r, Formatting.None);
             }
         } catch (Exception e) {
-            L.SendErrorLog(e, x.userId, "Clients", "Save");
+            L.SendErrorLog(e, x.clientId, x.userId, "Clients", "Save");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -218,7 +218,7 @@ public class Clients : System.Web.Services.WebService {
             x.userGroupId = U.GetUserGroupId(x.userId);
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "Clients", "Get");
+            L.SendErrorLog(e, clientId, userId, "Clients", "Get");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -239,7 +239,7 @@ public class Clients : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(GetClients(userId, user, null, null), Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "Clients", "Delete");
+            L.SendErrorLog(e, clientId, userId, "Clients", "Delete");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }

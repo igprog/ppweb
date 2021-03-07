@@ -123,7 +123,7 @@ public class Menues : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "Menus", "Load");
+            L.SendErrorLog(e, null, userId, "Menus", "Load");
             return (e.Message);
         }
     }
@@ -167,7 +167,7 @@ public class Menues : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(GetMenu(userId, id), Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "Menues", "Get");
+            L.SendErrorLog(e, id, userId, "Menues", "Get");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -210,7 +210,7 @@ public class Menues : System.Web.Services.WebService {
                 }
                 return JsonConvert.SerializeObject(x, Formatting.None);
             } catch (Exception e) {
-                L.SendErrorLog(e, userId, "Menues", "Save");
+                L.SendErrorLog(e, x.id, userId, "Menues", "Save");
                 return JsonConvert.SerializeObject(e.Message, Formatting.None);
             }
         }
@@ -230,7 +230,7 @@ public class Menues : System.Web.Services.WebService {
             DeleteJson(userId, id);
             return "OK";
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "Menues", "Delete");
+            L.SendErrorLog(e, id, userId, "Menues", "Delete");
             return e.Message;
         }
     }

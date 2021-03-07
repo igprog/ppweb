@@ -21,6 +21,7 @@ public class Log : System.Web.Services.WebService {
 
     #region Class
     public class NewErrorLog {
+        public string id;
         public string userId;
         public string service;
         public string method;
@@ -54,8 +55,9 @@ public class Log : System.Web.Services.WebService {
     #endregion WebMethods
 
     #region Methods
-    public void SendErrorLog(Exception e, string userId, string service, string method) {
+    public void SendErrorLog(Exception e, string id, string userId, string service, string method) {
         NewErrorLog x = new NewErrorLog();
+        x.id = id;
         x.userId = userId;
         x.service = service;
         x.method = method;
@@ -63,11 +65,13 @@ public class Log : System.Web.Services.WebService {
         x.msg = e.Message;
 
         string err = string.Format(@"## TIME: {0}
-SERVICE: {1}\{2}.asmx
-MESSAGE: {3}
-ID: {4}
+ID: {1}
+SERVICE: {2}\{3}.asmx
+MESSAGE: {4}
+USER_ID: {5}
 "
             , x.time.ToString()
+            , x.id
             , x.service
             , x.method
             , x.msg

@@ -89,7 +89,7 @@ public class MyFoods : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(foodData, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "MyFoods", "Load");
+            L.SendErrorLog(e, null, userId, "MyFoods", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -198,7 +198,7 @@ public class MyFoods : System.Web.Services.WebService {
 
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "MyFoods", "Get");
+            L.SendErrorLog(e, id, userId, "MyFoods", "Get");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -281,7 +281,7 @@ public class MyFoods : System.Web.Services.WebService {
             } 
             return "saved";
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "MyFoods", "Save");
+            L.SendErrorLog(e, x.id, userId, "MyFoods", "Save");
             return e.Message;
         }
     }
@@ -301,7 +301,7 @@ public class MyFoods : System.Web.Services.WebService {
             }
             return "ok";
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "MyFoods", "Delete");
+            L.SendErrorLog(e, id, userId, "MyFoods", "Delete");
             return e.Message;
         }
     }
@@ -326,7 +326,7 @@ public class MyFoods : System.Web.Services.WebService {
             return JsonConvert.SerializeObject(string.Format("there are {0} foods with the same id", count), Formatting.None);
         }
         catch (Exception e) {
-            L.SendErrorLog(e, userId, "MyFoods", "CountMyFoodsWithSameIdAsAppFoods");
+            L.SendErrorLog(e, null, userId, "MyFoods", "CountMyFoodsWithSameIdAsAppFoods");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }

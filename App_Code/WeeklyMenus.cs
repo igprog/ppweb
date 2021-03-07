@@ -64,7 +64,7 @@ public class WeeklyMenus : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(LoadWeeklyMenus(userId, null, lang), Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "WeeklyMenus", "Load");
+            L.SendErrorLog(e, null, userId, "WeeklyMenus", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -74,7 +74,7 @@ public class WeeklyMenus : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(LoadWeeklyMenus(userId, clientId, lang), Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "WeeklyMenus", "Load");
+            L.SendErrorLog(e, null, userId, "WeeklyMenus", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -99,7 +99,7 @@ public class WeeklyMenus : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "WeeklyMenus", "Get");
+            L.SendErrorLog(e, id, userId, "WeeklyMenus", "Get");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -151,7 +151,7 @@ public class WeeklyMenus : System.Web.Services.WebService {
                 return JsonConvert.SerializeObject(x, Formatting.None);
             }
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "WeeklyMenus", "Save");
+            L.SendErrorLog(e, x.id, userId, "WeeklyMenus", "Save");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -277,7 +277,7 @@ public class WeeklyMenus : System.Web.Services.WebService {
             x.price.value = Math.Round(xx.Average(a => a.price.value), 2);
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "WeeklyMenus", "GetWeeklyMenusTotals");
+            L.SendErrorLog(e, null, userId, "WeeklyMenus", "GetWeeklyMenusTotals");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -295,7 +295,7 @@ public class WeeklyMenus : System.Web.Services.WebService {
             List<NewWeeklyMenus> xx = LoadWeeklyMenus(userId, null, lang);
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "WeeklyMenus", "Delete");
+            L.SendErrorLog(e, id, userId, "WeeklyMenus", "Delete");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }

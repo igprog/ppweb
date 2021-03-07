@@ -427,7 +427,7 @@ public class Foods : System.Web.Services.WebService {
             foodData.myFoods = myf.GetMyFoods(userId);
             return JsonConvert.SerializeObject(foodData, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "Foods", "Load");
+            L.SendErrorLog(e, null, userId, "Foods", "Load");
             return JsonConvert.SerializeObject(e.Message);
         }
     }
@@ -530,7 +530,7 @@ public class Foods : System.Web.Services.WebService {
 
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, "Foods", "Get");
+            L.SendErrorLog(e, id, userId, "Foods", "Get");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -540,7 +540,7 @@ public class Foods : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(GetTotals_(selectedFoods, meals), Formatting.None);
         } catch(Exception e) {
-            L.SendErrorLog(e, null, "Foods", "GetTotals");
+            L.SendErrorLog(e, null, null, "Foods", "GetTotals");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -694,7 +694,7 @@ public class Foods : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, "Foods", "LoadFoods");
+            L.SendErrorLog(e, null, null, "Foods", "LoadFoods");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -704,7 +704,7 @@ public class Foods : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(IncludeTT(initFood, food, thermalTreatment), Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, "Foods", "IncludeThermalTreatment");
+            L.SendErrorLog(e, food.id, null, "Foods", "IncludeThermalTreatment");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
