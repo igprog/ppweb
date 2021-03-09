@@ -1,11 +1,11 @@
-﻿<%@ WebHandler Language="C#" Class="UploadProfileImg" %>
+﻿<%@ WebHandler Language="C#" Class="UploadProfileImgHandler" %>
 
 using System;
 using System.Web;
 using System.IO;
 using Igprog;
 
-public class UploadProfileImg : IHttpHandler {
+public class UploadProfileImgHandler : IHttpHandler {
     Global G = new Global();
     public void ProcessRequest (HttpContext context) {
         context.Response.ContentType = "text/plain";

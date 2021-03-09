@@ -678,31 +678,34 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var openReportABugPopupCtrl = function ($scope, $mdDialog, $http, d, $translate, functions) {
-        $scope.d = {
-            description: null,
-            email: functions.isNullOrEmpty(d.user) ? null : d.user.email,
-            userName: functions.isNullOrEmpty(d.user) ? null : d.user.userName,
-            alert_des: null,
-            alert_email: null
+        $scope.alert_des = null;
+        $scope.alert_email = null;
+
+        var init = function () {
+            functions.post('Tickets', 'Init', {}).then(function (d) {
+                $scope.d = d;
+                $scope.d.user = $rootScope.user;
+            });
         }
+        init();
 
         var send = function (x) {
             $scope.titlealert = null;
             $scope.emailalert = null;
-            if (functions.isNullOrEmpty(x.description)) {
-                x.alert_des = $translate.instant('description is required');
+            if (functions.isNullOrEmpty(x.desc)) {
+                $scope.alert_des = $translate.instant('description is required');
                 return false;
             }
-            if (functions.isNullOrEmpty(x.email)) {
-                x.alert_email = $translate.instant('email is required');
+            if (functions.isNullOrEmpty(x.user.email)) {
+                $scope.alert_email = $translate.instant('email is required');
                 return false;
             }
             $mdDialog.hide();
-            var body = x.description + '. E-mail: ' + x.email + ', User Name: ' + x.userName;
+            var body = x.desc + '. E-mail: ' + x.user.email + ', User Name: ' + x.user.userName;
             $http({
-                url: $sessionStorage.config.backend + 'Mail.asmx/SendMessage',
+                url: $sessionStorage.config.backend + 'Mail.asmx/SendTicketMessage',
                 method: "POST",
-                data: { sendTo: $sessionStorage.config.email, messageSubject: 'BUG - ' + x.email, messageBody: body, lang: $rootScope.config.language, send_cc: true }
+                data: { sendTo: $sessionStorage.config.email, messageSubject: 'BUG - ' + x.user.email, messageBody: body, lang: $rootScope.config.language, imgPath: x.imgPath, send_cc: true }
             })
             .then(function (response) {
                 functions.alert(response.data.d, '');
@@ -719,6 +722,43 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.confirm = function (x) {
             send(x);
         }
+
+        /********* Ticket Image *********/
+        $scope.uploadImg = function () {
+            var content = new FormData(document.getElementById("formUpload"));
+            $http({
+                url: $sessionStorage.config.backend + '/UploadTempImgHandler.ashx',
+                method: 'POST',
+                headers: { 'Content-Type': undefined },
+                data: content,
+            }).then(function (response) {
+                $scope.d.img = response.data;
+                $scope.d.imgPath = `../upload/users/${$scope.d.user.userGroupId}/temp/${$scope.d.img}`;
+            },
+           function (response) {
+               alert($translate.instant(response.data));
+           });
+        }
+
+        $scope.removeImg = function (x) {
+            if (confirm($translate.instant('remove image') + '?')) {
+                removeImg(x);
+            }
+        }
+
+        var removeImg = function (x) {
+            $http({
+                url: $sessionStorage.config.backend + 'Files.asmx/DeleteTempImg',
+                method: 'POST',
+                data: { x: x },
+            }).then(function (response) {
+                $scope.d.img = response.data.d;
+            },
+           function (response) {
+               alert($translate.instant(response.data.d));
+           });
+        }
+        /********* Ticket Image *********/
     };
 
     $rootScope.foodPopupCtrl = function ($scope, $mdDialog, d, $http, $translate) {
@@ -1975,7 +2015,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.uploadImg = function () {
             var content = new FormData(document.getElementById("formUpload"));
             $http({
-                url: $sessionStorage.config.backend + '/UploadProfileImg.ashx',
+                url: $sessionStorage.config.backend + '/UploadProfileImgHandler.ashx',
                 method: 'POST',
                 headers: { 'Content-Type': undefined },
                 data: content,
@@ -7344,7 +7384,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.consumers = 1;
     $scope.date = new Date(new Date($rootScope.currentMenu.date)).toLocaleDateString();
     $scope.author = $rootScope.user.firstName + ' ' + $rootScope.user.lastName;
-    $scope.printType = 0;
+    $scope.printType = 1;
 
     $scope.getDay = function (x) {
         switch(x) {

@@ -232,7 +232,7 @@ public class Users : System.Web.Services.WebService {
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, userName, "Users", "Login");
-            return e.Message;
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
@@ -352,7 +352,7 @@ public class Users : System.Web.Services.WebService {
             return JsonConvert.SerializeObject(GetUsers(limit, page, null, isDesc), Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, null, "Users", "Load");
-            return (e.Message);
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
@@ -469,7 +469,7 @@ public class Users : System.Web.Services.WebService {
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, query, null, "Users", "Search");
-            return (e.Message);
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 

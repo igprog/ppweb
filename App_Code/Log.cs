@@ -65,17 +65,17 @@ public class Log : System.Web.Services.WebService {
         x.msg = e.Message;
 
         string err = string.Format(@"## TIME: {0}
-ID: {1}
+USER_ID: {1}
 SERVICE: {2}\{3}.asmx
-MESSAGE: {4}
-USER_ID: {5}
+ID: {4}
+MESSAGE: {5}
 "
             , x.time.ToString()
-            , x.id
+            , x.userId
             , x.service
             , x.method
-            , x.msg
-            , x.userId);
+            , x.id
+            , x.msg);
 
         StringBuilder sb = new StringBuilder();
         Files F = new Files();

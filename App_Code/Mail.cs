@@ -144,6 +144,14 @@ public class Mail : System.Web.Services.WebService {
             return sent == true ? t.Tran("mail sent successfully", lang) : t.Tran("mail is not sent", lang);
         } catch (Exception e) { return (e.Message); }
     }
+
+    [WebMethod]
+    public string SendTicketMessage(string sendTo, string messageSubject, string messageBody, string lang, string imgPath, bool send_cc) {
+        try {
+            bool sent = SendMail(sendTo, messageSubject, messageBody, lang, imgPath, send_cc).isSuccess;
+            return sent == true ? t.Tran("ticket sent successfully", lang) : t.Tran("ticket is not sent", lang);
+        } catch (Exception e) { return (e.Message); }
+    }
     #endregion WebMethods
 
     #region Methods
@@ -262,6 +270,9 @@ public class Mail : System.Web.Services.WebService {
 {1}", body, footer);
             mail.IsBodyHtml = true;
             if (!string.IsNullOrEmpty(file)) {
+                if (file.Contains("?")) {
+                    file = file.Remove(file.IndexOf("?"));
+                }
                 Attachment attachment = new Attachment(Server.MapPath(file.Replace("../", "~/")));
                 mail.Attachments.Add(attachment);
             }
@@ -301,6 +312,9 @@ public class Mail : System.Web.Services.WebService {
             mail.Body = body;
             mail.IsBodyHtml = true;
             if(!string.IsNullOrEmpty(file)) {
+                if (file.Contains("?")) {
+                    file = file.Remove(file.IndexOf("?"));
+                }
                 Attachment attachment = new Attachment(Server.MapPath(file.Replace("../", "~/")));
                 mail.Attachments.Add(attachment);
             }

@@ -470,7 +470,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     $scope.uploadImg = function () {
         var content = new FormData(document.getElementById("formUpload"));
         $http({
-            url: $sessionStorage.config.backend + '/UploadProfileImg.ashx',
+            url: $sessionStorage.config.backend + '/UploadProfileImgHandler.ashx',
             method: 'POST',
             headers: { 'Content-Type': undefined },
             data: content,

@@ -103,6 +103,25 @@ public class Files : System.Web.Services.WebService {
             }
         } catch (Exception e) { return (e.Message); }
     }
+
+    [WebMethod]
+    public string DeleteTempImg(Tickets.NewTicket x) {
+        try {
+            string img = null;
+            if (x.img.Contains("?")) {
+                img = x.img.Remove(x.img.IndexOf("?"));
+            } else {
+                img = x.img;
+            }
+            string path = string.Format("~/upload/users/{0}/temp/{1}", x.user.userGroupId, img);
+            if (File.Exists(Server.MapPath(path))) {
+                File.Delete(Server.MapPath(path));
+                return null;
+            } else {
+                return "no file";
+            }
+        } catch (Exception e) { return (e.Message); }
+    }
     #endregion WebMethods
 
     #region Methods
