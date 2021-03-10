@@ -70,22 +70,28 @@ angular.module('app', [])
 
 }])
 
-.controller('applicationCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+.controller('applicationCtrl', ['$scope', '$http', '$rootScope', 'functions', function ($scope, $http, $rootScope, functions) {
 
     var load = function () {
-        $http({
-            url: $rootScope.config.backend + 'Instal.asmx/Load',
-            method: 'POST',
-            data: ''
-        })
-         .then(function (response) {
-             $scope.d = JSON.parse(response.data.d);
-         },
-         function (response) {
-             alert(response.data.d);
-         });
-        }
+        functions.post('Instal', 'Load', {}).then(function (d) {
+            $scope.d = d;
+        });
+    }
     load();
+
+    $scope.pp5DownloadEnableCode = null;
+    var getPp5DownloadEnableCode = function (x) {
+        functions.post('Files', 'GetTempFile', { fileName: 'pp5DownloadEnableCode.txt' }).then(function (d) {
+            $scope.pp5DownloadEnableCode = d;
+        });
+    };
+    getPp5DownloadEnableCode();
+
+    $scope.confirmPp5DownloadEnableCode = function (x) {
+        functions.post('Files', 'SaveTempFilePP5', { fileName: 'pp5DownloadEnableCode.txt', content: x }).then(function (d) {
+            alert(d);
+        });
+    };
 
 }])
 

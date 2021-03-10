@@ -22,14 +22,14 @@
                         <md-input-container class="md-block" style="margin:2px" flex-gt-sm>
                             <label class="text-capitalize">{{'description' | translate}}...</label>
                             <textarea ng-model="d.desc" rows="11" class="area"></textarea>
-                            <div ng-if="alert_des" class="text-danger">{{alert_des}}</div>
+                            <div ng-if="alert_des" class="text-danger mb-3">{{alert_des}}</div>
                         </md-input-container>
                     </div>
                     <div class="col-sm-5">
                         <div class="card shadow">
                             <div class="card-body">
                                 <div>
-                                    <label>{{'screenshot' | translate}}</label>
+                                    <label class="text-capitalize">{{'screenshot' | translate}}</label>
                                     <button ng-if="d.img" ng-click="removeImg(d)" class="btn btn-sm btn-outline-danger btn-circle float-right" title="{{'remove image' | translate}}"><i class="fa fa-times"></i></button>
                                 </div>
                                 <div ng-if="!d.img" class="text-center text-primary">
@@ -68,7 +68,7 @@
                     </md-input-container>
                 </div>
                 <div class="text-right text-capitalize">
-                    <a href="" class="btn btn-outline-primary" ng-click="confirm(d)" title="{{'send' | translate}}"><i class="fa fa-paper-plane"></i> {{'send' | translate }}</a>
+                    <button ng-disabled="sending" class="btn btn-outline-primary" ng-click="confirm(d)" title="{{sending==true ? ('sending' | translate) : ('send' | translate)}}"><i class="fa fa-{{sending===true?'spinner fa-spin':'paper-plane'}}"></i> {{sending==true ? ('sending' | translate) : ('send' | translate)}}</button>
                 </div>
             </div>
         </md-dialog-content>

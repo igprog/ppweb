@@ -16,10 +16,26 @@ public class Tickets : System.Web.Services.WebService {
     public class NewTicket {
         public string id;
         public string title;
+        public string desc;
         public string reportDate;
         public Users.NewUser user;
         public string img;
         public string imgPath;
+        public int status;
+        public int priority;
+    }
+
+    enum Status {
+        pending,
+        open,
+        closed,
+        rejected
+    }
+
+    enum Priority {
+        low,
+        medium,
+        height
     }
 
     [WebMethod]
@@ -27,10 +43,13 @@ public class Tickets : System.Web.Services.WebService {
         NewTicket x = new NewTicket();
         x.id = null;
         x.title = null;
+        x.desc = null;
         x.reportDate = DateTime.UtcNow.ToString();
         x.user = new Users.NewUser();
         x.img = null;
         x.imgPath = null;
+        x.status = (int) Status.pending;
+        x.priority = (int) Priority.height;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 

@@ -31,31 +31,32 @@ namespace Igprog {
         public string clientapp = "clientapp";
         public string bodyfat = "bodyfat";
         public string sharingrecipes = "sharingrecipes";
+        public string tickets = "tickets";
 
 
         #region CreateTable (users.ddb)
         public void Users(string path) {
             string sql = @"CREATE TABLE IF NOT EXISTS users
-                        (userId NVARCHAR (50),
+                        (userId NVARCHAR(50),
                         userType INTEGER,
-                        firstName NVARCHAR (50),
-                        lastName NVARCHAR (50),
-                        companyName NVARCHAR (50),
-                        address NVARCHAR (50),
-                        postalCode NVARCHAR (50),
-                        city NVARCHAR (50),
-                        country NVARCHAR (50),
-                        pin NVARCHAR (50),
-                        phone NVARCHAR (50),
-                        email NVARCHAR (50),
-                        userName NVARCHAR (50),
-                        password NVARCHAR (100),
+                        firstName NVARCHAR(50),
+                        lastName NVARCHAR(50),
+                        companyName NVARCHAR(50),
+                        address NVARCHAR(50),
+                        postalCode NVARCHAR(50),
+                        city NVARCHAR(50),
+                        country NVARCHAR(50),
+                        pin NVARCHAR(50),
+                        phone NVARCHAR(50),
+                        email NVARCHAR(50),
+                        userName NVARCHAR(50),
+                        password NVARCHAR(100),
                         adminType INTEGER,
                         userGroupId INTEGER,
                         activationDate VARCHAR(50),
                         expirationDate VARCHAR(50),
                         isActive INTEGER,
-                        ipAddress NVARCHAR (50))";
+                        ipAddress NVARCHAR(50))";
             CreateTable(path, sql);
         }
         #endregion
@@ -244,6 +245,18 @@ namespace Igprog {
             CreateTable(path, sql);
         }
 
+        public void Tickets(string path) {
+            string sql = @"CREATE TABLE IF NOT EXISTS tickets
+                (id VARCHAR(20) PRIMARY KEY,
+                userId VARCHAR(50),
+                title NVARCHAR(200),
+                desc TEXT,
+                reportDate VARCHAR(20),
+                imgPath VARCHAR(200),
+                status INTEGER,
+                priority INTEGER)";
+            CreateTable(path, sql);
+        }
         #endregion
 
         #region CreateTable (web page)

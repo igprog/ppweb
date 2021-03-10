@@ -1498,7 +1498,7 @@
   "select diet": "Odaberi dijetu",
   "additional activity": "Dodatna aktivnost",
   "description, meal preparation": "Opis, priprema jela",
-  "send": "pošalji",
+  "send": "Pošalji",
   "thermal treatment": "Termička obrada",
   "show more": "Prikaži više",
   "add": "Dodaj",
@@ -1555,7 +1555,7 @@
   "passwords are not the same": "Lozinke nisu jednake",
   "foods": "namirnice",
   "the order have been sent successfully": "Narudžba je uspješno poslana",
-  "sending": "šaljem",
+  "sending": "Šaljem",
   "user": "korisnik",
   "the selected additional energy expenditure is the same as recommended": "Odabrana dodatna energetska potrošnja je veća od preporučene",
   "clients": "klijenti",
@@ -2032,6 +2032,8 @@
   "under foods": "Ispod namirnica",
   "g": "g",
   "remove recipe": "Briši recept",
-  "clear all foods from the meal": "Očisti sve namirnice iz obroka"
+  "clear all foods from the meal": "Očisti sve namirnice iz obroka",
+  "not sent": "Nije poslano",
+  "successfully sent": "Uspješno poslano"
 
 }

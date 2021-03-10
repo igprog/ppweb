@@ -2032,6 +2032,8 @@
   "under foods": "Ispod namirnica",
   "g": "g",
   "remove recipe": "Briši recept",
-  "clear all foods from the meal": "Clear all foods from the meal"
+  "clear all foods from the meal": "Očisti sve namirnice iz obroka",
+  "Not sent": "Nije poslano",
+  "successfully sent": "Uspješno poslano"
 
 }

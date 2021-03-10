@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Services;
 using System.Configuration;
 using Newtonsoft.Json;
+using System.IO;
 
 /// <summary>
 /// Admin
@@ -35,6 +36,27 @@ public class Admin : System.Web.Services.WebService {
     [WebMethod]
     public string AddYear() {
         return JsonConvert.SerializeObject(DateTime.UtcNow.AddDays(366).ToString(), Formatting.None);
+    }
+
+    [WebMethod]
+    public string Check5DownloadEnableCode(string fileName, string code) {
+        try {
+            string content;
+            string path = "~/temp/" + fileName;
+            if (File.Exists(Server.MapPath(path))) {
+                content =  File.ReadAllText(Server.MapPath(path));
+            } else {
+                content = null;
+            }
+            if (!string.IsNullOrWhiteSpace(code) && code == content) {
+                return JsonConvert.SerializeObject(true, Formatting.None);
+            } else {
+                return JsonConvert.SerializeObject(false, Formatting.None);
+            }
+        }
+        catch (Exception e) {
+            return JsonConvert.SerializeObject(false, Formatting.None);
+        }
     }
 
 }

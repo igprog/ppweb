@@ -122,6 +122,28 @@ public class Files : System.Web.Services.WebService {
             }
         } catch (Exception e) { return (e.Message); }
     }
+
+    [WebMethod]
+    public string SaveTempFilePP5(string fileName, string content) {
+        try {
+            SaveTempFile(fileName, content);
+            return JsonConvert.SerializeObject("ok", Formatting.None);
+        } catch(Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
+    }
+
+    [WebMethod]
+    public string GetTempFile(string fileName) {
+        try {
+            string path = "~/temp/" + fileName;
+            if (File.Exists(Server.MapPath(path))) {
+                return File.ReadAllText(Server.MapPath(path));
+            } else {
+                return null;
+            }
+        } catch (Exception e) { return null; }
+    }
     #endregion WebMethods
 
     #region Methods

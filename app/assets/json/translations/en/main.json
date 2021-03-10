@@ -1491,7 +1491,7 @@
   "select diet": "Select diet",
   "additional activity": "Additional activity",
   "description, meal preparation": "Description, meal preparation",
-  "send": "send",
+  "send": "Send",
   "thermal treatment": "Thermal treatment",
   "show more": "Show more",
   "add": "add",
@@ -1548,7 +1548,7 @@
   "passwords are not the same": "passwords are not the same",
   "foods": "foods",
   "the order have been sent successfully": "The order have been sent successfully",
-  "sending": "sending",
+  "sending": "Sending",
   "user": "user",
   "the selected additional energy expenditure is the same as recommended": "The selected additional energy expenditure is the same as recommended",
   "clients": "clients",
@@ -2023,6 +2023,8 @@
   "under foods": "Under foods",
   "g": "g",
   "remove recipe": "Remove recipe",
-  "clear all foods from the meal": "Clear all foods from the meal"
+  "clear all foods from the meal": "Clear all foods from the meal",
+  "not sent": "Not sent",
+  "successfully sent": "Successfully sent"
 
 }

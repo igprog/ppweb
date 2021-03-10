@@ -25,6 +25,25 @@ angular.module('app', ['ngMaterial'])
     };
     getConfig();
 
+    $scope.pp5DownloadEnableCode = null;
+    $scope.showDownloadLink = false;
+    $scope.checkPp5DownloadEnableCode = function (code) {
+        $http({
+            url: $rootScope.config.backend + 'Admin.asmx/Check5DownloadEnableCode',
+            method: 'POST',
+            data: { fileName: 'pp5DownloadEnableCode.txt', code: code }
+        })
+     .then(function (response) {
+         $scope.showDownloadLink = JSON.parse(response.data.d);
+         if (!$scope.showDownloadLink) {
+             alert('Pogrešan kod!');
+         }
+     },
+     function (response) {
+         alert(JSON.parse(response.data.d));
+     });
+    }
+
     $scope.pp5lang = 'hr';
     $scope.setDownloadLink = function (x) {
         if (x == 'hr') { $scope.pp5downloadlink = './download/' + x + '/ProgramPrehrane5.exe'; }

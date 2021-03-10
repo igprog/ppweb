@@ -660,14 +660,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
     }
 
-    $scope.reportABug = function () {
-        openReportABugPopup();
+    /***** Ticket *****/
+    $scope.sendTicket = function () {
+        openSendTicketPopup();
     }
 
-    var openReportABugPopup = function () {
+    var openSendTicketPopup = function () {
         $mdDialog.show({
-            controller: openReportABugPopupCtrl,
-            templateUrl: 'assets/partials/popup/reportabug.html',
+            controller: openSendTicketPopupCtrl,
+            templateUrl: 'assets/partials/popup/ticket.html',
             parent: angular.element(document.body),
             clickOutsideToClose: true,
             d: { user: $rootScope.user }
@@ -677,9 +678,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
        });
     }
 
-    var openReportABugPopupCtrl = function ($scope, $mdDialog, $http, d, $translate, functions) {
+    var openSendTicketPopupCtrl = function ($scope, $mdDialog, $http, d, $translate, functions) {
         $scope.alert_des = null;
         $scope.alert_email = null;
+        $scope.sending = false;
 
         var init = function () {
             functions.post('Tickets', 'Init', {}).then(function (d) {
@@ -692,6 +694,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         var send = function (x) {
             $scope.titlealert = null;
             $scope.emailalert = null;
+            $scope.alert_des = null;
+            $scope.alert_email = null;
             if (functions.isNullOrEmpty(x.desc)) {
                 $scope.alert_des = $translate.instant('description is required');
                 return false;
@@ -700,17 +704,20 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 $scope.alert_email = $translate.instant('email is required');
                 return false;
             }
-            $mdDialog.hide();
             var body = x.desc + '. E-mail: ' + x.user.email + ', User Name: ' + x.user.userName;
+            $scope.sending = true;
             $http({
                 url: $sessionStorage.config.backend + 'Mail.asmx/SendTicketMessage',
                 method: "POST",
-                data: { sendTo: $sessionStorage.config.email, messageSubject: 'BUG - ' + x.user.email, messageBody: body, lang: $rootScope.config.language, imgPath: x.imgPath, send_cc: true }
+                data: { sendTo: $sessionStorage.config.email, messageSubject: 'TICKET - ' + x.user.email, messageBody: body, lang: $rootScope.config.language, imgPath: x.imgPath, send_cc: true }
             })
             .then(function (response) {
+                $scope.sending = false;
                 functions.alert(response.data.d, '');
+                $mdDialog.hide();
             },
             function (response) {
+                $scope.sending = false;
                 functions.alert($translate.instant(response.data.d), '');
             });
         }
@@ -760,6 +767,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
         /********* Ticket Image *********/
     };
+    /***** Ticket *****/
 
     $rootScope.foodPopupCtrl = function ($scope, $mdDialog, d, $http, $translate) {
         $scope.d = d;

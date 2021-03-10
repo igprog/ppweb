@@ -149,7 +149,7 @@ public class Mail : System.Web.Services.WebService {
     public string SendTicketMessage(string sendTo, string messageSubject, string messageBody, string lang, string imgPath, bool send_cc) {
         try {
             bool sent = SendMail(sendTo, messageSubject, messageBody, lang, imgPath, send_cc).isSuccess;
-            return sent == true ? t.Tran("ticket sent successfully", lang) : t.Tran("ticket is not sent", lang);
+            return sent == true ? t.Tran("successfully sent", lang) : string.Format("{0}! {1}.", t.Tran("not sent", lang), t.Tran("please try again", lang));
         } catch (Exception e) { return (e.Message); }
     }
     #endregion WebMethods
