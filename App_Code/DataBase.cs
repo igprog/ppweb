@@ -244,19 +244,6 @@ namespace Igprog {
                 PRIMARY KEY (recordDate, clientId))";
             CreateTable(path, sql);
         }
-
-        public void Tickets(string path) {
-            string sql = @"CREATE TABLE IF NOT EXISTS tickets
-                (id VARCHAR(20) PRIMARY KEY,
-                userId VARCHAR(50),
-                title NVARCHAR(200),
-                desc TEXT,
-                reportDate VARCHAR(20),
-                imgPath VARCHAR(200),
-                status INTEGER,
-                priority INTEGER)";
-            CreateTable(path, sql);
-        }
         #endregion
 
         #region CreateTable (web page)
@@ -317,6 +304,19 @@ namespace Igprog {
                 isPaid INTEGER,
                 paidAmount VARCHAR(50),
                 paidDate VARCHAR(50))";
+            CreateTable(path, sql);
+        }
+
+        public void Tickets(string path) {
+            string sql = @"CREATE TABLE IF NOT EXISTS tickets
+                (id VARCHAR(20) PRIMARY KEY,
+                userId VARCHAR(50),
+                title NVARCHAR(200),
+                desc TEXT,
+                reportDate VARCHAR(20),
+                imgPath VARCHAR(200),
+                status INTEGER,
+                priority INTEGER)";
             CreateTable(path, sql);
         }
         #endregion

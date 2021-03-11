@@ -682,6 +682,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.alert_des = null;
         $scope.alert_email = null;
         $scope.sending = false;
+        $scope.maxLength = 4000;
 
         var init = function () {
             functions.post('Tickets', 'Init', {}).then(function (d) {
@@ -698,6 +699,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $scope.alert_email = null;
             if (functions.isNullOrEmpty(x.desc)) {
                 $scope.alert_des = $translate.instant('description is required');
+                return false;
+            }
+            if (x.desc.length > $scope.maxLength) {
+                $scope.alert_des = `${$translate.instant('maximum number of characters is')} ${$scope.maxLength}`;
                 return false;
             }
             if (functions.isNullOrEmpty(x.user.email)) {
@@ -1723,15 +1728,19 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
     /********* Logo ************/
 
+    $scope.sending = false;
     $scope.sendDeleteAccountLink = function (user) {
+        $scope.sending = true;
         $http({
             url: $sessionStorage.config.backend + webService + '/SendDeleteAccountLink',
             method: 'POST',
             data: { x: user, lang: $rootScope.config.language }
         }).then(function (response) {
+            $scope.sending = false;
             functions.alert($translate.instant(response.data.d));
         },
        function (response) {
+           $scope.sending = false;
            functions.alert($translate.instant(response.data.d));
        });
     }
@@ -8386,9 +8395,13 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.confirm = function (user) {
-        var r = confirm($translate.instant('delete') + " " + user.firstName + " " + user.lastName + "?");
-        if (r === true) {
-            remove(user);
+        if (functions.isNullOrEmpty(user.userId)) {
+            functions.alert('choose user', '');
+        } else {
+            var r = confirm($translate.instant('delete') + " " + user.firstName + " " + user.lastName + "?");
+            if (r === true) {
+                remove(user);
+            }
         }
     }
 

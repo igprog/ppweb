@@ -189,7 +189,7 @@
                         </div>
                         <div id="deleteaccount" class="card-body collapse p-2">
                             <div>
-                                <button class="btn btn-outline-primary" ng-click="sendDeleteAccountLink(user)"><i class="fa fa-paper-plane"></i> {{'send delete user account link' | translate}}</button>
+                                <button ng-disabled="sending" class="btn btn-outline-primary" ng-click="sendDeleteAccountLink(user)"><i class="fa fa-{{sending===true?'spinner fa-spin':'paper-plane'}}"></i> {{'send delete user account link' | translate}}</button>
                             </div>
                         </div>
                     </div>

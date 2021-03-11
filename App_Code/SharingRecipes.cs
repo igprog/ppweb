@@ -169,7 +169,7 @@ public class SharingRecipes : System.Web.Services.WebService {
             if (!Check(x.id) || x.sharingData.adminSave) {
                 sql = string.Format(@"BEGIN;
                         INSERT OR REPLACE INTO recipes ({0})
-                        VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', {9}, '{10}', {11}, {12}, {13}, '{13}');
+                        VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', {9}, '{10}', {11}, {12}, {13}, '{14}');
                         COMMIT;", mainSql, x.id, x.sharingData.recipeOwner.userId, x.sharingData.recipeOwner.userGroupId, x.sharingData.recordDate, x.title, x.description, x.energy, x.mealGroup.code, x.sharingData.status.code, x.sharingData.status.note, x.sharingData.rank, x.sharingData.like, x.sharingData.views, x.sharingData.lang);
             } else {
                 sql = string.Format(@"UPDATE recipes SET recordDate = '{1}', title = '{2}', desc = '{3}', energy = '{4}', mealGroup = '{5}', status = {6}, lang = '{7}' WHERE id = '{0}'", x.id, x.sharingData.recordDate, x.title, x.description, x.energy, x.mealGroup.code, x.sharingData.status.code, x.sharingData.lang);

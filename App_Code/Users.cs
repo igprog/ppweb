@@ -601,7 +601,7 @@ public class Users : System.Web.Services.WebService {
     [WebMethod]
     public string DeleteAllUserGroup(NewUser x) {
         try {
-            if (x.userId == x.userGroupId) {
+            if (!string.IsNullOrWhiteSpace(x.userId) && x.userId == x.userGroupId) {
                 using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
                     connection.Open();
                     string sql = string.Format("DELETE FROM users WHERE userGroupId = '{0}'", x.userGroupId);
@@ -838,8 +838,7 @@ public class Users : System.Web.Services.WebService {
             string response = null;
             if (string.IsNullOrEmpty(x.userId)) {
                 response = t.Tran("user not found", lang);
-            }
-            else {
+            } else {
                 if (mail.SendMail(x.email, messageSubject, messageBody, lang, null, false).isSuccess) {
                     response = t.Tran("delete user account link has been sent to your email", lang);
                 } else {
@@ -849,7 +848,7 @@ public class Users : System.Web.Services.WebService {
 
             return JsonConvert.SerializeObject(response, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, x.userId, "Users", "ConfirmPayPal");
+            L.SendErrorLog(e, null, x.userId, "Users", "SendDeleteAccountLink");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
