@@ -524,13 +524,15 @@ public class PrintPdf : System.Web.Services.WebService {
             Foods F = new Foods();
             int idx = 0;
             foreach (var m in weeklyMenu.menuList) {
-                if (idx > 0 && idx < weeklyMenu.menuList.Count()) {
-                    doc.NewPage();
+                if (!string.IsNullOrEmpty(m)) {
+                    if (idx > 0 && idx < weeklyMenu.menuList.Count()) {
+                        doc.NewPage();
+                    }
+                    idx++;
+                    var currentMenu = M.GetMenu(userId, m);
+                    var totals = F.GetTotals_(currentMenu.data.selectedFoods, currentMenu.data.meals);
+                    CreateMenuPdfContent(doc, userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo, rowsPerPage);
                 }
-                idx++;
-                var currentMenu = M.GetMenu(userId, m);
-                var totals = F.GetTotals_(currentMenu.data.selectedFoods, currentMenu.data.meals);
-                CreateMenuPdfContent(doc, userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo, rowsPerPage);
             }
 
             doc.Close();
