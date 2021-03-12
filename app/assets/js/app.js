@@ -692,7 +692,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
         init();
 
-        var send = function (x) {
+        $scope.confirm = function (x, sendMail) {
             $scope.titlealert = null;
             $scope.emailalert = null;
             $scope.alert_des = null;
@@ -711,29 +711,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
             var body = x.desc + '. E-mail: ' + x.user.email + ', User Name: ' + x.user.userName;
             $scope.sending = true;
-            $http({
-                url: $sessionStorage.config.backend + 'Mail.asmx/SendTicketMessage',
-                method: "POST",
-                data: { sendTo: $sessionStorage.config.email, messageSubject: 'TICKET - ' + x.user.email, messageBody: body, lang: $rootScope.config.language, imgPath: x.imgPath, send_cc: true }
-            })
-            .then(function (response) {
-                $scope.sending = false;
-                functions.alert(response.data.d, '');
+            functions.post('Tickets', 'Save', { x: x, sendMail: sendMail, lang: $rootScope.config.language }).then(function (d) {
+                functions.alert(d.response.msg, '');
                 $mdDialog.hide();
-            },
-            function (response) {
-                $scope.sending = false;
-                functions.alert($translate.instant(response.data.d), '');
             });
         }
 
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
-
-        $scope.confirm = function (x) {
-            send(x);
-        }
 
         /********* Ticket Image *********/
         $scope.uploadImg = function () {

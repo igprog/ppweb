@@ -287,6 +287,37 @@ angular.module('app', [])
     }
     /***** Error Log *****/
 
+    /***** Tickets *****/
+    $scope.currIdx = null;
+    $scope.showTicketDetails = function (idx) {
+        $scope.currIdx = idx;
+    }
+
+    $scope.loadTickets = function () {
+        $scope.activeTab = 'tickets';
+        $scope.loading = true;
+        functions.post('Tickets', 'Load', {}).then(function (d) {
+            $scope.tickets = d;
+            $scope.loading = false;
+        });
+    }
+
+    $scope.saveTicket = function (x, sendMail) {
+        functions.post('Tickets', 'Save', {x, sendMail: sendMail, lang: 'hr'}).then(function (d) {
+            alert(d.response.msg);
+        });
+    }
+
+    $scope.removeTicket = function (x) {
+        if (confirm("Briši ticket: " + x.title + " (" + x.desc + ")?")) {
+            functions.post('Tickets', 'Delete', { id: x.id }).then(function (d) {
+                $scope.loadTickets();
+                alert(d);
+            });
+        }
+    }
+    /***** Tickets *****/
+
 }])
 
 .controller('ordersCtrl', ['$scope', '$http', '$rootScope', 'functions', function ($scope, $http, $rootScope, functions) {

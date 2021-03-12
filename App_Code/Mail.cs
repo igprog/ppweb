@@ -144,14 +144,6 @@ public class Mail : System.Web.Services.WebService {
             return sent == true ? t.Tran("mail sent successfully", lang) : t.Tran("mail is not sent", lang);
         } catch (Exception e) { return (e.Message); }
     }
-
-    [WebMethod]
-    public string SendTicketMessage(string sendTo, string messageSubject, string messageBody, string lang, string imgPath, bool send_cc) {
-        try {
-            bool sent = SendMail(sendTo, messageSubject, messageBody, lang, imgPath, send_cc).isSuccess;
-            return sent == true ? t.Tran("successfully sent", lang) : string.Format("{0}! {1}.", t.Tran("not sent", lang), t.Tran("please try again", lang));
-        } catch (Exception e) { return (e.Message); }
-    }
     #endregion WebMethods
 
     #region Methods
@@ -327,6 +319,13 @@ public class Mail : System.Web.Services.WebService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public Global.Response SendTicketMessage(string sendTo, string messageSubject, string messageBody, string lang, string imgPath, bool send_cc) {
+        Global.Response resp = new Global.Response();
+        resp.isSuccess = SendMail(sendTo, messageSubject, messageBody, lang, imgPath, send_cc).isSuccess;
+        resp.msg = true ? t.Tran("successfully sent", lang) : string.Format("{0}! {1}.", t.Tran("not sent", lang), t.Tran("please try again", lang));
+        return resp;
     }
 
     private string AppendMeal(Meals.NewMeal meal, List<Foods.NewFood> selectedFoods) {

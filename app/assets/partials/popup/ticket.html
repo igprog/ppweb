@@ -68,7 +68,7 @@
                     </md-input-container>
                 </div>
                 <div class="text-right text-capitalize">
-                    <button ng-disabled="sending" class="btn btn-outline-primary" ng-click="confirm(d)" title="{{sending==true ? ('sending' | translate) : ('send' | translate)}}"><i class="fa fa-{{sending===true?'spinner fa-spin':'paper-plane'}}"></i> {{sending==true ? ('sending' | translate) : ('send' | translate)}}</button>
+                    <button ng-disabled="sending" class="btn btn-outline-primary" ng-click="confirm(d, true)" title="{{sending==true ? ('sending' | translate) : ('send' | translate)}}"><i class="fa fa-{{sending===true?'spinner fa-spin':'paper-plane'}}"></i> {{sending==true ? ('sending' | translate) : ('send' | translate)}}</button>
                 </div>
             </div>
         </md-dialog-content>

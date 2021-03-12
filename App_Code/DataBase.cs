@@ -433,6 +433,9 @@ namespace Igprog {
                 case "sharingrecipes":
                     SharingRecipes(path);
                     break;
+                case "tickets":
+                    Tickets(path);
+                    break;
                 default:
                     break;
             }

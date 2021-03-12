@@ -21,8 +21,8 @@ public class Usda : System.Web.Services.WebService {
     public Usda() {
     }
 
-    string apiUrl = "https://api.nal.usda.gov/fdc/v1/";
-    string apiKey = "RqTcaxwMWOal7N4XZySPEtx8hZBXFkZ1v320FQwQ";
+    string apiUrl = ConfigurationManager.AppSettings["UsdaApiUrl"];
+    string apiKey = ConfigurationManager.AppSettings["UsdaApiKey"];
 
     /***** https://api.nal.usda.gov/fdc/v1/search?api_key=RqTcaxwMWOal7N4XZySPEtx8hZBXFkZ1v320FQwQ&generalSearchInput=Cheddar%20Cheese *****/
 
