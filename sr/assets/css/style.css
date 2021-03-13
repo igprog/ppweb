@@ -1,6 +1,6 @@
 ﻿ /*!
 style.css
-(c) 2017-2020 IG PROG, www.igprog.hr
+(c) 2017-2021 IG PROG, www.igprog.hr
 */
 html {
     height: auto;
@@ -351,6 +351,11 @@ legend.fieldset-border {
         float:none;
         padding: 0px 0px 20px 0px;
     }
+}
+
+.box-shadow {
+    box-shadow: 5px 10px 8px #888888;
+    margin: 20px
 }
 
 /***** Price box *****/

@@ -417,13 +417,23 @@
                                 <label ng-if="x.title"><i class="{{x.title}} text-{{x.status.style}}"></i> {{x.title}}</label>
                                 <p class="text-muted"><em>{{x.desc.length > 80 ? x.desc.substring(0, 77) + '...' : x.desc}}</em></p>
                             </div>
-                            <div>
-                                <a href="" ng-click="showTicketDetails($index)">Detalji <i class="fa fa-caret-right"></i></a>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <a href="" ng-click="showTicketDetails($index)">Detalji <i class="fa fa-caret-right"></i></a>
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    <code>{{x.user.firstName}} {{x.user.lastName}}</code>
+                                </div>
                             </div>
                         </div>
                         <div ng-if="currIdx===$index" class="panel-body">
                             <div class="row">
                                 <div class="col-sm-6">
+                                    <ul>
+                                        <li>Email: {{x.user.email}}</li>
+                                        <li>Prijavio: {{x.user.firstName}} {{x.user.lastName}}</li>
+                                    </ul>
+                                    <span>Opis:</span>
                                     <p>{{x.desc}}</p>
                                 </div>
                                 <div class="col-sm-6">
@@ -450,8 +460,8 @@
                                         <option value="2" ng-selected="x.priority==2?true:false">Visok</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-8 text-right">
-                                    <button class="btn btn-success" ng-click="saveTicket(x, false)"><i class="fa fa-floppy-o"></i> Spremi</button>
+                                <div class="col-sm-8 text-right" >
+                                    <button class="btn btn-success" ng-click="saveTicket(x, false)" ><i class="fa fa-floppy-o"></i> Spremi</button>
                                 </div>
                             </div>
                         </div>

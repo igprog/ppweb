@@ -8332,6 +8332,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         userName: null,
         password: null
     }
+    $scope.response = {
+        isSuccess: false,
+        msg: null
+    };
 
     queryString = location.search.split('&');
     if (queryString.length >= 1) {
@@ -8375,7 +8379,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             functions.alert($translate.instant('you do not have permission to delete this account'), '');
         } else {
             functions.post('Users', 'DeleteAllUserGroup', { x: user }).then(function (d) {
-                functions.alert($translate.instant(d), '');
+                $scope.response = d;
             });
         }
     }

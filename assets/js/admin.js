@@ -176,7 +176,7 @@ angular.module('app', [])
         } else {
             functions.post('Users', 'DeleteAllUserGroup', { x: user }).then(function (d) {
                 load($scope.limit);
-                alert(d);
+                alert(d.msg);
             });
         }
     }
@@ -298,13 +298,14 @@ angular.module('app', [])
         $scope.loading = true;
         functions.post('Tickets', 'Load', {}).then(function (d) {
             $scope.tickets = d;
+            $scope.currIdx = null;
             $scope.loading = false;
         });
     }
 
     $scope.saveTicket = function (x, sendMail) {
         functions.post('Tickets', 'Save', {x, sendMail: sendMail, lang: 'hr'}).then(function (d) {
-            alert(d.response.msg);
+            $scope.loadTickets();
         });
     }
 
@@ -312,7 +313,6 @@ angular.module('app', [])
         if (confirm("Briši ticket: " + x.title + " (" + x.desc + ")?")) {
             functions.post('Tickets', 'Delete', { id: x.id }).then(function (d) {
                 $scope.loadTickets();
-                alert(d);
             });
         }
     }

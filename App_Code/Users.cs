@@ -600,6 +600,7 @@ public class Users : System.Web.Services.WebService {
 
     [WebMethod]
     public string DeleteAllUserGroup(NewUser x) {
+        Global.Response response = new Global.Response();
         try {
             if (!string.IsNullOrWhiteSpace(x.userId) && x.userId == x.userGroupId) {
                 using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
@@ -613,13 +614,19 @@ public class Users : System.Web.Services.WebService {
                 SR.DeleteSharedRecipeByUserId(x.userGroupId);
                 Files f = new Files();
                 f.DeleteUserFolder(x.userGroupId);
-                return JsonConvert.SerializeObject("account has been deleted", Formatting.None);
+                response.isSuccess = true;
+                response.msg = "account has been deleted";
+                return JsonConvert.SerializeObject(response, Formatting.None);
             } else {
-                return JsonConvert.SerializeObject("you do not have permission to delete this account", Formatting.None);
+                response.isSuccess = false;
+                response.msg = "you do not have permission to delete this account";
+                return JsonConvert.SerializeObject(response, Formatting.None);
             }
         } catch (Exception e) {
+            response.isSuccess = false;
+            response.msg = e.Message;
             L.SendErrorLog(e, null, x.userId, "Users", "DeleteAllUserGroup");
-            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+            return JsonConvert.SerializeObject(response, Formatting.None);
         }
     }
 
@@ -1331,6 +1338,30 @@ public class Users : System.Web.Services.WebService {
             }
             return x;
         } catch (Exception e) { return e.Message; }
+    }
+
+    public NewUser GetUserInfo(string userId) {
+        NewUser x = new NewUser();
+        try {
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                connection.Open();
+                string sql = string.Format("SELECT userId, firstName, lastName, email FROM users WHERE userId = '{0}'", userId);
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            x.userId = reader.GetString(0);
+                            x.firstName = reader.GetValue(1) == DBNull.Value ? null : reader.GetString(1);
+                            x.lastName = reader.GetValue(2) == DBNull.Value ? null : reader.GetString(2);
+                            x.email = reader.GetValue(3) == DBNull.Value ? null : reader.GetString(3);
+                        }
+                    }   
+                }
+            }
+            return x;
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "Users", "GetUserInfo");
+            return x;
+        }
     }
     #endregion
 

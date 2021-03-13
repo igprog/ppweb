@@ -74,10 +74,17 @@
                     </div>
                 </div>
                 <div ng-if="user" class="text-center">
-                    <div class="m-2">
-                        {{'permanently delete user account' | translate}}
+                    <div ng-if="!response.isSuccess">
+                        <div class="m-2">
+                            {{'permanently delete user account' | translate}}
+                        </div>
+                        <button class="btn btn-danger btn-lg" ng-click="confirm(user)"><i class="fa fa-skull-crossbones"></i> {{'confirm' | translate}}</button>
                     </div>
-                    <button class="btn btn-danger btn-lg" ng-click="confirm(user)"><i class="fa fa-skull-crossbones"></i> {{'confirm' | translate}}</button>
+                    <div ng-if="response.msg">
+                        <div class="alert alert-{{response.isSuccess ? 'success': 'danger'}}">
+                            {{response.msg | translate}}.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

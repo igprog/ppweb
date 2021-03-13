@@ -185,7 +185,7 @@ angular.module('app', ['ngMaterial'])
         }
         $scope.signupok = false;
         $scope.sendicon = 'fa fa-spinner fa-spin';
-        $scope.sendicontitle = 'Šaljem';
+        $scope.sendicontitle = 'Sačekajte trenutak...';
         $scope.isSendButtonDisabled = true;
         $http({
             url: $rootScope.config.backend + 'Users.asmx/Signup',

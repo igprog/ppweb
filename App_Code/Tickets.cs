@@ -71,7 +71,7 @@ public class Tickets : System.Web.Services.WebService {
             List<NewTicket> xx = new List<NewTicket>();
             string path = Server.MapPath(string.Format("~/App_Data/{0}", dataBase));
             db.CreateGlobalDataBase(path, db.tickets);
-            string sql = string.Format(@"SELECT {0} FROM tickets ORDER BY rowid DESC", mainSql);
+            string sql = string.Format(@"SELECT {0} FROM tickets ORDER BY status, priority DESC", mainSql);
             using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
                 connection.Open();
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
@@ -140,6 +140,9 @@ public class Tickets : System.Web.Services.WebService {
                 }
             }
 
+            Users U = new Users();
+            x.user = U.GetUserInfo(x.user.userId);
+
             if (sendMail) {
                 Mail M = new Mail();
                 string myEmail = ConfigurationManager.AppSettings["myEmail"];
@@ -185,8 +188,9 @@ public class Tickets : System.Web.Services.WebService {
     private NewTicket GetData(SQLiteDataReader reader) {
         NewTicket x = new NewTicket();
         x.id = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
-        x.user = new Users.NewUser();
-        x.user.userId = reader.GetValue(1) == DBNull.Value ? null : reader.GetString(1);
+        string userId = reader.GetValue(1) == DBNull.Value ? null : reader.GetString(1);
+        Users U = new Users();
+        x.user = U.GetUserInfo(userId);
         x.title = reader.GetValue(2) == DBNull.Value ? null : reader.GetString(2);
         x.desc = reader.GetValue(3) == DBNull.Value ? null : reader.GetString(3);
         x.reportDate = reader.GetValue(4) == DBNull.Value ? null : reader.GetString(4);
