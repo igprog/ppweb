@@ -6585,6 +6585,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.userGroupId = $rootScope.user.userGroupId;
         $scope.sharingRecipes = false;
         $scope.searchValue = null;
+        $scope.loading = false;
 
         $scope.loadMore = function () {
             $scope.limit += 20;
@@ -6596,19 +6597,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 return false;
             }
             $scope.loading = true;
-            $http({
-                url: $sessionStorage.config.backend + 'Recipes.asmx/Load',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId }
-            })
-           .then(function (response) {
-               $scope.d = JSON.parse(response.data.d);
-               $scope.loading = false;
-           },
-           function (response) {
-               $scope.loading = false;
-               alert(response.data.d);
-           });
+            functions.post('Recipes', 'Load', { userId: $rootScope.user.userGroupId }).then(function (d) {
+                $scope.d = d;
+                $scope.loading = false;
+            });
         }
         load();
 
@@ -6677,24 +6669,29 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         /***** Shared Recipes *****/
-        var loadSharingRecipes = function (userId, status, showUserRecipes) {
-            functions.post('SharingRecipes', 'Load', { userId: userId, status: status, showUserRecipes: showUserRecipes }).then(function (d) {
+        $scope.languages = $rootScope.config.languages;
+        $scope.lang = null;
+        var loadSharingRecipes = function (userId, status, showUserRecipes, lang) {
+            $scope.lang = lang;
+            $scope.loading = true;
+            functions.post('SharingRecipes', 'Load', { userId: userId, status: status, showUserRecipes: showUserRecipes, lang: lang }).then(function (d) {
                 $scope.d = d;
                 $scope.sharingRecipes = true;
+                $scope.loading = false;
             });
         }
 
         $scope.showUserRecipes = false;
         $rootScope.showPointer = false;
         $scope.showUserRecipes = false;
-        $scope.loadSharingRecipes = function (userId, status, showUserRecipes) {
+        $scope.loadSharingRecipes = function (userId, status, showUserRecipes, lang) {
             $scope.showUserRecipes = showUserRecipes;
             if (status === null && !showUserRecipes) {
                 status = 1;
             }
             functions.post('SharingRecipes', 'CheckIfSharingUser', { userId: userId }).then(function (d) {
                 if (d) {
-                    loadSharingRecipes(userId, status, showUserRecipes);
+                    loadSharingRecipes(userId, status, showUserRecipes, lang);
                 } else {
                     $rootScope.showPointer = true;
                     functions.alert($translate.instant('share_alert'), '');
@@ -7003,8 +7000,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
     /********* Recipe Image *********/
 
-    /********* Sharing Recipes *********/
+    /********* Shared Recipes *********/
     $scope.saveSharedRecipe = function (x) {
+        debugger;
         if (x.id === null) {
             if (x.title !== null) {
                 functions.alert($translate.instant('save recipe'), '');
@@ -7020,6 +7018,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             if (x.isShared) {
                 x.sharingData.recipeOwner.userId = $rootScope.user.userId;
                 x.sharingData.recipeOwner.userGroupId = $rootScope.user.userGroupId;
+                x.sharingData.lang = $rootScope.config.language;
                 functions.post('SharingRecipes', 'Save', { x: x }).then(function (d) {
                     functions.alert($translate.instant(d), '');
                 });
@@ -7029,7 +7028,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
         }
     };
-    /********* Sharing Recipes *********/
+    /********* Shared Recipes *********/
 
 
 }])

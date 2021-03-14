@@ -247,7 +247,7 @@ angular.module('app', [])
     $scope.loadSharingRecipes = function () {
         $scope.activeTab = 'sharingRecipes';
         $scope.loading = true;
-        functions.post('SharingRecipes', 'Load', { userId: null, status: null, showUserRecipes: true }).then(function (d) {
+        functions.post('SharingRecipes', 'Load', { userId: null, status: null, showUserRecipes: true, lang: null }).then(function (d) {
             $scope.sharingRecipes = d;
             $scope.loading = false;
         });

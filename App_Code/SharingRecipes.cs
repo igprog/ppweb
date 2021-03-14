@@ -52,19 +52,22 @@ public class SharingRecipes : System.Web.Services.WebService {
 
     #region WebMethods
     [WebMethod]
-    public string Load(string userId, int? status, bool showUserRecipes) {
+    public string Load(string userId, int? status, bool showUserRecipes, string lang) {
         try {
             List<Recipes.NewRecipe> xx = new List<Recipes.NewRecipe>();
             string path = Server.MapPath(string.Format("~/App_Data/{0}", dataBase));
             db.CreateGlobalDataBase(path, db.sharingrecipes);
             string sql_condition = null;
-            if (!string.IsNullOrEmpty(userId) || status != null) {
+            if (!string.IsNullOrEmpty(userId) || status != null || !string.IsNullOrEmpty(lang)) {
                 sql_condition = "WHERE";
                 if (!string.IsNullOrEmpty(userId)) {
                     sql_condition = string.Format("{0} userId {1} '{2}'", sql_condition, showUserRecipes ? "=" : "<>", userId);
                 }
                 if (status != null && status >= 0) {
                     sql_condition = string.Format("{0} {1} status = '{2}'", sql_condition, !string.IsNullOrEmpty(userId) ? "AND" : "", status);
+                }
+                if (!string.IsNullOrEmpty(lang)) {
+                    sql_condition = string.Format("{0} {1} lang = '{2}'", sql_condition, !string.IsNullOrEmpty(userId) || status != null ? "AND" : "", lang);
                 }
             }
             string sql = string.Format(@"SELECT {0} FROM recipes {1} ORDER BY status ASC, rowid DESC", mainSql, sql_condition);
@@ -82,7 +85,6 @@ public class SharingRecipes : System.Web.Services.WebService {
                         }
                     } 
                 }
-                connection.Close();
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
@@ -139,7 +141,6 @@ public class SharingRecipes : System.Web.Services.WebService {
                             }
                         }
                     }
-                    connection.Close();
                 }
                 x.data = JsonConvert.DeserializeObject<Recipes.JsonFile>(R.GetJsonFile(x.sharingData.recipeOwner.userGroupId, x.id));
                 x.sharingData.recipeId = x.id;
@@ -181,7 +182,6 @@ public class SharingRecipes : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
             }
             x.sharingData.resp = "saved";
             return JsonConvert.SerializeObject(x.sharingData.resp, Formatting.None);
@@ -202,7 +202,6 @@ public class SharingRecipes : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
             }
             return JsonConvert.SerializeObject("OK", Formatting.None);
         } catch (Exception e) {

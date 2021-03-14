@@ -12,17 +12,34 @@
                 <li class="nav-item" ng-click="load()">
                     <a href="" ng-class="!sharingRecipes?'nav-link active':'nav-link'"><i class="fa fa-user"></i> {{'my recipes' | translate}}</a>
                 </li>
-                <li class="nav-item" ng-click="loadSharingRecipes(userId, 1, false)">
+                <li class="nav-item" ng-click="loadSharingRecipes(userId, 1, false, lang)">
                     <a href="" ng-class="sharingRecipes?'nav-link active':'nav-link'"><i class="fa fa-share-alt"></i> {{'shared recipes' | translate}}</a>
                 </li>
             </ul>
             <div ng-if="sharingRecipes" class="mt-3">
                 <p><em class="small text-muted">* {{'share_note' | translate}}.</em></p>
-                <md-input-container class="md-block mt-0 mb-0" flex-gt-sm ng-click="loadSharingRecipes(userId, null, showUserRecipes)">
-                    <md-checkbox md-no-ink aria-label={{'show only my' | translate}} ng-model="showUserRecipes" class="md-primary">
-                        {{'show only my' | translate}}
-                    </md-checkbox>
-                </md-input-container>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <md-input-container class="md-block mt-0 mb-0" flex-gt-sm ng-click="loadSharingRecipes(userId, null, showUserRecipes, lang)">
+                            <md-checkbox md-no-ink aria-label={{'show only my' | translate}} ng-model="showUserRecipes" class="md-primary">
+                                {{'show only my' | translate}}
+                            </md-checkbox>
+                        </md-input-container>
+                    </div>
+                    <div class="col-sm-3">
+                        <md-input-container class="md-block mt-0" flex-gt-xs>
+                            <label>{{'language' | translate}}</label>
+                            <md-select ng-model="lang" ng-change="loadSharingRecipes(userId, null, showUserRecipes, lang)">
+                                <md-option ng-selected="lang===null" ng-value="null" >
+                                    <md-checkbox ng-checked="lang===null" class="md-primary text-capitalize" aria-label="mealgroup">{{'all languages' | translate}}</md-checkbox>
+                                </md-option>
+                                <md-option ng-selected="x.code===lang" ng-value="x.code" ng-repeat="x in languages track by $index">
+                                    <md-checkbox ng-checked="x.code===lang" class="md-primary text-capitalize" aria-label="mealgroup">{{x.title | translate}}</md-checkbox>
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                </div>
             </div>
             <loading-directive value="loading"></loading-directive>
             <!--<div ng-if="d.length===0&&!sharingRecipes" class="mt-5">
