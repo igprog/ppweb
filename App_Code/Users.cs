@@ -84,8 +84,8 @@ public class Users : System.Web.Services.WebService {
         public int subuser { get; set; }
         public int total { get; set; }
         public double licencepercentage { get; set; }
-        public Object city { get; set; }
-        public Object monthly { get; set; }
+        public object city { get; set; }
+        public object monthly { get; set; }
         public int clientapp { get; set; }
     }
 
@@ -375,6 +375,41 @@ public class Users : System.Web.Services.WebService {
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, null, "Users", "Load");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
+    }
+
+    [WebMethod]
+    public string GetTotalActivatedUsersByCity() {
+        try {
+            List<string> xx = new List<string>();
+            string sql = "SELECT city FROM users WHERE activationDate <> expirationDate AND city <> ''";
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            string x = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
+                            xx.Add(x.ToUpper());
+                        }
+                    }
+                }
+            }
+
+            var cities = from r in xx
+                     group r by r into g
+                     select new { city = g.Key, count = g.Count() };
+
+            cities = cities.OrderByDescending(a => a.count);
+
+            var total = new {
+                cities = cities,
+                total = cities.Sum(a => a.count)
+            };
+
+            return JsonConvert.SerializeObject(total, Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, null, "Users", "GetTotalActivatedUsersByCity");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }

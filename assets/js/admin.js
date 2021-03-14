@@ -128,6 +128,14 @@ angular.module('app', [])
         total(year);
     }
 
+    $scope.getTotalActivatedUsersByCity = function () {
+        $scope.loading = true;
+        functions.post('Users', 'GetTotalActivatedUsersByCity', {}).then(function (d) {
+            $scope.activatedUsersByCity = d;
+            $scope.loading = false;
+        });
+    }
+
     var load = function (limit) {
         $scope.loading = true;
         functions.post('Users', 'Load', { limit: limit, page: $scope.page, isDesc: $scope.isDesc }).then(function (d) {

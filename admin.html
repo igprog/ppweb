@@ -315,6 +315,29 @@
                         </fieldset>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-5 pt20">
+                        <fieldset class="fieldset-border">
+                            <legend class="fieldset-border">Statistika po gradovima (ukupno)</legend>
+                            <button ng-click="getTotalActivatedUsersByCity()" class="btn btn-default">Pregled</button>
+                            <table ng-if="activatedUsersByCity" class="table table-condensed mt20">
+                                <tr>
+                                    <th class="text-left">Grad</th>
+                                    <th class="text-left">Licence</th>
+                                    <th></th>
+                                </tr>
+                                <tr ng-repeat="x in activatedUsersByCity.cities">
+                                    <td class="text-left">{{x.city}}</td>
+                                    <td class="text-left"><strong class="badge">{{x.count}}</strong></td>
+                                    <td class="text-left"><div style="width:{{x.count*10}}px; height:20px" class="bg-primary" title="{{x.name}}: {{x.count}}"></div></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="3"  class="text-right">Ukupno: {{activatedUsersByCity.total}}</th>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
+                </div>
             </div>
 
             <div ng-if="activeTab==='sharingRecipes'">
