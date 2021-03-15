@@ -17,35 +17,38 @@ public class UploadRecipeImgHandler : IHttpHandler {
                 HttpPostedFile file = files[i];
                 string fname = context.Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg/{2}", userId, recipeId, file.FileName));
                 string fname_temp = context.Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg/temp/{2}", userId, recipeId, file.FileName));
-                if (!string.IsNullOrEmpty(file.FileName)) {
-                    int fileLength = file.ContentLength;
-                    if (fileLength <= G.KBToByte(4000)) {
-                        string folderPath = context.Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg", userId, recipeId));
-                        string folderPath_temp = context.Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg/temp", userId, recipeId));
+                    if (!string.IsNullOrEmpty(file.FileName)) {
+                    if (G.CheckImgExtension(fname)) {
+                        int fileLength = file.ContentLength;
+                        if (fileLength <= G.KBToByte(4000)) {
+                            string folderPath = context.Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg", userId, recipeId));
+                            string folderPath_temp = context.Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg/temp", userId, recipeId));
 
-                        if (!Directory.Exists(folderPath)) {
-                            Directory.CreateDirectory(folderPath);
-                            Directory.CreateDirectory(folderPath_temp);
-                        } else {
-                            Directory.Delete(folderPath, true);
-                            Directory.CreateDirectory(folderPath);
-                            Directory.CreateDirectory(folderPath_temp);
-                        }
+                            if (!Directory.Exists(folderPath)) {
+                                Directory.CreateDirectory(folderPath);
+                                Directory.CreateDirectory(folderPath_temp);
+                            } else {
+                                Directory.Delete(folderPath, true);
+                                Directory.CreateDirectory(folderPath);
+                                Directory.CreateDirectory(folderPath_temp);
+                            }
 
-                        if (fileLength <= G.KBToByte(150)) {
-                            file.SaveAs(fname);
+                            if (fileLength <= G.KBToByte(150)) {
+                                file.SaveAs(fname);
+                            } else {
+                                file.SaveAs(fname_temp);
+                                G.CompressImage(fname_temp, file.FileName, folderPath, G.CompressionParam(fileLength));
+                            }
+                            if (Directory.Exists(folderPath_temp)) {
+                                Directory.Delete(folderPath_temp, true);
+                            }
+                            context.Response.Write(string.Format("{0}?v={1}", file.FileName, DateTime.Now.Ticks));
                         } else {
-                            file.SaveAs(fname_temp);
-                            G.CompressImage(fname_temp, file.FileName, folderPath, G.CompressionParam(fileLength));
+                            context.Response.Write("max upload file size is 4 MB");
                         }
-                        if (Directory.Exists(folderPath_temp)) {
-                            Directory.Delete(folderPath_temp, true);
-                        }
-                        context.Response.Write(string.Format("{0}?v={1}", file.FileName, DateTime.Now.Ticks));
                     } else {
-                        context.Response.Write("max upload file size is 4 MB");
+                        context.Response.Write("the file format is not allowed");
                     }
-
                 } else {
                     context.Response.Write("please choose a file to upload");
                 }

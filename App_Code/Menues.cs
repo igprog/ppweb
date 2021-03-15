@@ -219,16 +219,19 @@ public class Menues : System.Web.Services.WebService {
     [WebMethod]
     public string Delete(string userId, string id) {
         try {
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
-                connection.Open();
-                string sql = "delete from menues where id = @id";
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                    command.Parameters.Add(new SQLiteParameter("id", id));
-                    command.ExecuteNonQuery();
+            if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(id)) {
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                    connection.Open();
+                    string sql = string.Format("delete from menues where id = '{0}'", id);
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        command.ExecuteNonQuery();
+                    }
                 }
+                DeleteJson(userId, id);
+                return "OK";
+            } else {
+                return "error";
             }
-            DeleteJson(userId, id);
-            return "OK";
         } catch (Exception e) {
             L.SendErrorLog(e, id, userId, "Menues", "Delete");
             return e.Message;

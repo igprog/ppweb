@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Web;
 
 /// <summary>
@@ -87,25 +88,25 @@ namespace Igprog {
 
                 if (fileName.ToLower().EndsWith(".jpg") || fileName.ToLower().EndsWith(".jpeg")) {
                     encoderFound = true;
-                    encoder = GetEncoder(System.Drawing.Imaging.ImageFormat.Jpeg);
+                    encoder = GetEncoder(ImageFormat.Jpeg);
                 } else if (fileName.ToLower().EndsWith(".bmp")) {
                     encoderFound = true;
-                    encoder = GetEncoder(System.Drawing.Imaging.ImageFormat.Bmp);
+                    encoder = GetEncoder(ImageFormat.Bmp);
                 } else if (fileName.ToLower().EndsWith(".tiff")) {
                     encoderFound = true;
-                    encoder = GetEncoder(System.Drawing.Imaging.ImageFormat.Tiff);
+                    encoder = GetEncoder(ImageFormat.Tiff);
                 } else if (fileName.ToLower().EndsWith(".gif")) {
                     encoderFound = true;
-                    encoder = GetEncoder(System.Drawing.Imaging.ImageFormat.Gif);
+                    encoder = GetEncoder(ImageFormat.Gif);
                 } else if (fileName.ToLower().EndsWith(".png")) {
                     encoderFound = true;
-                    encoder = GetEncoder(System.Drawing.Imaging.ImageFormat.Png);
+                    encoder = GetEncoder(ImageFormat.Png);
                 }
 
                 if (encoderFound) {
-                    System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
-                    System.Drawing.Imaging.EncoderParameters myEncoderParameters = new System.Drawing.Imaging.EncoderParameters(1);
-                    System.Drawing.Imaging.EncoderParameter myEncoderParameter = new System.Drawing.Imaging.EncoderParameter(myEncoder, compression);
+                    Encoder myEncoder = Encoder.Quality;
+                    EncoderParameters myEncoderParameters = new EncoderParameters(1);
+                    EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, compression);
                     myEncoderParameters.Param[0] = myEncoderParameter;
                     string path = HttpContext.Current.Server.MapPath(string.Format("~/upload/"));
                     bitmap.Save(System.IO.Path.Combine(destinationFolder, fileName), encoder, myEncoderParameters);
@@ -170,6 +171,11 @@ namespace Igprog {
 
         public int KBToByte(int x) {
             return x * 1024;
+        }
+
+        public bool CheckImgExtension(string fname) {
+            string ext = Path.GetExtension(fname).ToLower();
+            return ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".tiff" || ext == "png";
         }
         #endregion ImageCompress
     }

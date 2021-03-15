@@ -461,7 +461,10 @@
                                     <p>{{x.desc}}</p>
                                 </div>
                                 <div class="col-sm-6">
-                                    <img ng-if="x.imgPath" src="{{x.imgPath}}" alt="{{x.imgPath}}" class="img-responsive">
+                                    <code>
+                                        <a ng-if="x.imgPath" href="{{x.imgPath}}" title="{{x.imgPath}}" class="small"><i class="fa fa-file"></i> {{x.imgPath}}</a>
+                                    </code>
+                                    <!--<img ng-if="x.imgPath" src="{{x.imgPath}}" alt="{{x.imgPath}}" class="img-responsive">-->
                                 </div>
                             </div>
                         </div>

@@ -6037,7 +6037,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             if (response.data.d != 'there is already a food with the same name') {
                 functions.alert($translate.instant(response.data.d), '');
                 $rootScope.loadFoods();
-                //loadMyFoods();
             } else {
                 functions.alert($translate.instant('there is already a food with the same name'), '');
             }
@@ -6090,19 +6089,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
         var load = function () {
             $scope.loading = true;
-            $http({
-                url: $sessionStorage.config.backend + 'MyFoods.asmx/Load',
-                method: "POST",
-                data: { userId: $sessionStorage.usergroupid }
-            })
-            .then(function (response) {
-                var data = JSON.parse(response.data.d);
+            functions.post('MyFoods', 'Load', { userId: $sessionStorage.usergroupid }).then(function (d) {
+                var data = d;
                 $scope.d = data.foods;
                 $scope.loading = false;
-            },
-            function (response) {
-                $scope.loading = false;
-                alert(response.data.d)
             });
         };
         load();
@@ -6112,18 +6102,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         var get = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + 'MyFoods.asmx/Get',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, id: x.id }
-            })
-          .then(function (response) {
-              var myFood = JSON.parse(response.data.d);
-              $mdDialog.hide(myFood);
-          },
-          function (response) {
-              alert(response.data.d)
-          });
+            functions.post('MyFoods', 'Get', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
+                var myFood = d;
+                $mdDialog.hide(myFood);
+            });
         }
 
         $scope.confirm = function (x) {
@@ -6146,18 +6128,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         var remove = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + webService + '/Delete',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, id: x.id }
-            })
-             .then(function (response) {
-                 $rootScope.loadFoods();
-                 //loadMyFoods();
-             },
-             function (response) {
-                 functions.alert($translate.instant(response.data.d), '');
-             });
+            functions.post('MyFoods', 'Delete', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
+                $rootScope.loadFoods();
+                load();
+            });
         }
     };
 

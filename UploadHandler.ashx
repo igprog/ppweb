@@ -16,16 +16,20 @@ public class UploadHandler : IHttpHandler {
                 HttpPostedFile file = files[i];
                 string fname = context.Server.MapPath(string.Format("~/upload/users/{0}/{1}", userId, "logo.png"));
                 if (!string.IsNullOrEmpty(file.FileName)) {
-                    int fileLength = file.ContentLength;
-                    if (fileLength <= G.KBToByte(4000)) {
+                    if (Path.GetExtension(file.FileName).ToLower() == ".png") {
+                        int fileLength = file.ContentLength;
+                        if (fileLength <= G.KBToByte(4000)) {
                         string folderPath = context.Server.MapPath(string.Format("~/upload/users/{0}", userId));
                         if (!Directory.Exists(folderPath)) {
                             Directory.CreateDirectory(folderPath);
                         }
                         file.SaveAs(fname);
                         context.Response.Write("OK");
+                        } else {
+                            context.Response.Write("max upload file size is 4 MB");
+                        }
                     } else {
-                        context.Response.Write("max upload file size is 4 MB");
+                        context.Response.Write("the file format is not allowed");
                     }
                 } else {
                     context.Response.Write("please choose a file to upload");

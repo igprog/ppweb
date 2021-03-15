@@ -289,17 +289,21 @@ public class MyFoods : System.Web.Services.WebService {
     [WebMethod]
     public string Delete(string userId, string id) {
         try {
-            DataBase db = new DataBase();
-            string sql = string.Format(@"BEGIN;
+            if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(id)) {
+                DataBase db = new DataBase();
+                string sql = string.Format(@"BEGIN;
                                         DELETE FROM myfoods WHERE id = '{0}';
                                         COMMIT;", id);
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
-                connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                    command.ExecuteNonQuery();
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                    connection.Open();
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        command.ExecuteNonQuery();
+                    }
                 }
+                return "ok";
+            } else {
+                return "error";
             }
-            return "ok";
         } catch (Exception e) {
             L.SendErrorLog(e, id, userId, "MyFoods", "Delete");
             return e.Message;
