@@ -2034,6 +2034,7 @@
   "remove recipe": "Briši recept",
   "clear all foods from the meal": "Očisti sve namirnice iz obroka",
   "not sent": "Nije poslano",
-  "successfully sent": "Uspješno poslano"
+  "successfully sent": "Uspješno poslano",
+  "the file format is not allowed": "Format datoteke nije dopušten"
 
 }

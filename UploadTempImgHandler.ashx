@@ -28,7 +28,7 @@ public class UploadTempImgHandler : IHttpHandler {
                                 Directory.CreateDirectory(folderPath);
                                 Directory.CreateDirectory(folderPath_temp);
                             } else {
-                                Directory.Delete(folderPath, true);
+                                // Directory.Delete(folderPath, true);
                                 Directory.CreateDirectory(folderPath);
                                 Directory.CreateDirectory(folderPath_temp);
                             }
@@ -40,9 +40,9 @@ public class UploadTempImgHandler : IHttpHandler {
                                 // If ext <> img or png
                                 G.CompressImage(fname_temp, file.FileName, folderPath, G.CompressionParam(fileLength));
                             }
-                            if (Directory.Exists(folderPath_temp)) {
-                                Directory.Delete(folderPath_temp, true);
-                            }
+                            //if (Directory.Exists(folderPath_temp)) {
+                            //    Directory.Delete(folderPath_temp, true);
+                            //}
                             context.Response.Write(string.Format("{0}?v={1}", file.FileName, DateTime.Now.Ticks));
                         } else {
                             context.Response.Write("max upload file size is 4 MB");

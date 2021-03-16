@@ -175,7 +175,7 @@ namespace Igprog {
 
         public bool CheckImgExtension(string fname) {
             string ext = Path.GetExtension(fname).ToLower();
-            return ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".tiff" || ext == "png";
+            return ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".tiff" || ext == ".png";
         }
         #endregion ImageCompress
     }

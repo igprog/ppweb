@@ -15,7 +15,7 @@ using System.Web.Services;
 public class Tickets : System.Web.Services.WebService {
     static string dataBase = ConfigurationManager.AppSettings["WebDataBase"];
     string dataSource = string.Format("~/App_Data/{0}", dataBase);
-    string mainSql = "id, userId, title, desc, reportDate, imgPath, status, priority";
+    string mainSql = "id, userId, title, desc, reportDate, filePath, status, priority, note";
     DataBase db = new DataBase();
     Log L = new Log();
 
@@ -28,10 +28,11 @@ public class Tickets : System.Web.Services.WebService {
         public string desc;
         public string reportDate;
         public Users.NewUser user;
-        public string img;
-        public string imgPath;
+        public string fileName;
+        public string filePath;
         public int status;
         public int priority;
+        public string note;
         public Global.Response response;
     }
 
@@ -56,10 +57,11 @@ public class Tickets : System.Web.Services.WebService {
         x.desc = null;
         x.reportDate = DateTime.UtcNow.ToString();
         x.user = new Users.NewUser();
-        x.img = null;
-        x.imgPath = null;
+        x.fileName = null;
+        x.filePath = null;
         x.status = (int) Status.pending;
         x.priority = (int) Priority.height;
+        x.note = null;
         x.response = new Global.Response();
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
@@ -122,7 +124,7 @@ public class Tickets : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string Save(NewTicket x, bool sendMail, string lang) {
+    public string Save(NewTicket x, bool sendMail, bool attachFile, string lang) {
         try {
             string path = Server.MapPath(string.Format("~/App_Data/{0}", dataBase));
             db.CreateGlobalDataBase(path, db.tickets);
@@ -131,8 +133,8 @@ public class Tickets : System.Web.Services.WebService {
             }
             string sql = string.Format(@"BEGIN;
                     INSERT OR REPLACE INTO tickets ({0})
-                    VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', {7}, {8});
-                    COMMIT;", mainSql, x.id, x.user.userId, x.title, x.desc, x.reportDate, x.imgPath, x.status, x.priority);
+                    VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', {7}, {8}, '{9}');
+                    COMMIT;", mainSql, x.id, x.user.userId, x.title, x.desc, x.reportDate, x.filePath, x.status, x.priority, x.note);
             using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
                 connection.Open();
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
@@ -146,7 +148,7 @@ public class Tickets : System.Web.Services.WebService {
             if (sendMail) {
                 Mail M = new Mail();
                 string myEmail = ConfigurationManager.AppSettings["myEmail"];
-                Global.Response mailResp = M.SendTicketMessage(myEmail, messageSubject: string.Format("TICKET - {0}", x.user.email), messageBody: x.desc, lang: lang, imgPath: x.imgPath, send_cc: true);
+                Global.Response mailResp = M.SendTicketMessage(myEmail, messageSubject: string.Format("TICKET - {0}", x.user.email), messageBody: x.desc, lang: lang, filePath: attachFile ? x.filePath : null, send_cc: true);
                 x.response = mailResp;
             } else {
                 x.response.isSuccess = true;
@@ -194,9 +196,10 @@ public class Tickets : System.Web.Services.WebService {
         x.title = reader.GetValue(2) == DBNull.Value ? null : reader.GetString(2);
         x.desc = reader.GetValue(3) == DBNull.Value ? null : reader.GetString(3);
         x.reportDate = reader.GetValue(4) == DBNull.Value ? null : reader.GetString(4);
-        x.imgPath = reader.GetValue(5) == DBNull.Value ? null : reader.GetString(5);
+        x.filePath = reader.GetValue(5) == DBNull.Value ? null : reader.GetString(5);
         x.status = reader.GetValue(6) == DBNull.Value ? 0 : reader.GetInt32(6);
         x.priority = reader.GetValue(7) == DBNull.Value ? 0 : reader.GetInt32(7);
+        x.note = reader.GetValue(8) == DBNull.Value ? null : reader.GetString(8);
         x.response = new Global.Response();
         return x;
     }

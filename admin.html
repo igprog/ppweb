@@ -215,7 +215,7 @@
                 </div>
             </div>
 
-            <div ng-if="activeTab==='total'">
+            <div ng-if="activeTab==='total'" class="small">
                 <div class="row mt20">
                     <div class="col-sm-4">
                         <div>
@@ -223,36 +223,38 @@
                         </div>
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">Statistika</legend>
-                            <table class="table table-condensed">
-                                <tr>
-                                    <td class="text-left">Registriranih korisnika:</td>
-                                    <td class="text-left"><strong>{{t.total}}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-left">Aktivnih korisnika:</td>
-                                    <td class="text-left"><strong>{{t.active}}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-left">Licence</td>
-                                    <td class="text-left"><strong>{{t.licence}}</strong> <span class="badge">{{t.licencepercentage}} %</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-left">Pod licence:</td>
-                                    <td class="text-left"><strong>{{t.subuser}}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-left">Demo:</td>
-                                    <td class="text-left"><strong>{{t.demo}}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-left">Istekle licence:</td>
-                                    <td class="text-left"><strong>{{t.expired}}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-left">Korisnici aplikacije za klijente:</td>
-                                    <td class="text-left"><strong>{{t.clientapp}}</strong></td>
-                                </tr>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-condensed">
+                                    <tr>
+                                        <td class="text-left">Registriranih korisnika:</td>
+                                        <td class="text-left"><strong>{{t.total}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Aktivnih korisnika:</td>
+                                        <td class="text-left"><strong>{{t.active}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Licence</td>
+                                        <td class="text-left"><strong>{{t.licence}}</strong> <span class="badge">{{t.licencepercentage}} %</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Pod licence:</td>
+                                        <td class="text-left"><strong>{{t.subuser}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Demo:</td>
+                                        <td class="text-left"><strong>{{t.demo}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Istekle licence:</td>
+                                        <td class="text-left"><strong>{{t.expired}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Korisnici aplikacije za klijente:</td>
+                                        <td class="text-left"><strong>{{t.clientapp}}</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
                         </fieldset>
                     </div>
                     <div class="col-sm-8">
@@ -275,43 +277,47 @@
                                 </div>
                                 <div id="chart_ppweb"></div>
                             </div>-->
-                            <table class="table table-condensed">
-                                <tr>
-                                    <th class="text-left">Mjesec</th>
-                                    <th class="text-left">Registracije</th>
-                                    <th class="text-left">Licence</th>
-                                    <th>Postotak</th>
-                                    <th style="width:30%"></th>
-                                </tr>
-                                <tr ng-repeat="x in t.monthly">
-                                    <td class="text-left">{{x.month}}</td>
-                                    <td class="text-left"><strong class="badge">{{x.registration}}</strong></td>
-                                    <td class="text-left"><strong class="badge">{{x.licence}}</strong></td>
-                                    <td>{{x.percentage}} %</td>
-                                    <td class="text-left">
-                                        <div style="width:{{x.registration*2}}px; height:10px" class="bg-primary" title="Registracije: {{x.registration}}"></div>
-                                        <div style="width:{{x.licence*2}}px; height:10px; background-color:red" title="Licence: {{x.licence}}"></div>
-                                        <div style="width:{{x.percentage*2}}px; height:10px; background-color:orange" title="Postotak: {{x.percentage}}%"></div>
-                                    </td>
-                                </tr>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-condensed">
+                                    <tr>
+                                        <th class="text-left">Mjesec</th>
+                                        <th class="text-left">Registracije</th>
+                                        <th class="text-left">Licence</th>
+                                        <th>Postotak</th>
+                                        <th style="width:30%"></th>
+                                    </tr>
+                                    <tr ng-repeat="x in t.monthly">
+                                        <td class="text-left">{{x.month}}</td>
+                                        <td class="text-left"><strong class="badge">{{x.registration}}</strong></td>
+                                        <td class="text-left"><strong class="badge">{{x.licence}}</strong></td>
+                                        <td>{{x.percentage}} %</td>
+                                        <td class="text-left">
+                                            <div style="width:{{x.registration*2}}px; height:10px" class="bg-primary" title="Registracije: {{x.registration}}"></div>
+                                            <div style="width:{{x.licence*2}}px; height:10px; background-color:red" title="Licence: {{x.licence}}"></div>
+                                            <div style="width:{{x.percentage*2}}px; height:10px; background-color:orange" title="Postotak: {{x.percentage}}%"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </fieldset>
                     </div>
                     <div class="col-sm-5 pt20">
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">Statistika po gradovima</legend>
-                            <table class="table table-condensed">
-                                <tr>
-                                    <th class="text-left">Grad</th>
-                                    <th class="text-left">Licence</th>
-                                    <th style="width:30%"></th>
-                                </tr>
-                                <tr ng-repeat="x in t.city">
-                                    <td class="text-left">{{x.name}}</td>
-                                    <td class="text-left"><strong class="badge">{{x.count}}</strong></td>
-                                    <td class="text-left"><div style="width:{{x.count*10}}px; height:20px" class="bg-primary" title="{{x.name}}: {{x.count}}"></div></td>
-                                </tr>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-condensed">
+                                    <tr>
+                                        <th class="text-left">Grad</th>
+                                        <th class="text-left">Licence</th>
+                                        <th style="width:30%"></th>
+                                    </tr>
+                                    <tr ng-repeat="x in t.city">
+                                        <td class="text-left">{{x.name}}</td>
+                                        <td class="text-left"><strong class="badge">{{x.count}}</strong></td>
+                                        <td class="text-left"><div style="width:{{x.count*10}}px; height:20px" class="bg-primary" title="{{x.name}}: {{x.count}}"></div></td>
+                                    </tr>
+                                </table>
+                            </div>
                         </fieldset>
                     </div>
                 </div>
@@ -320,21 +326,23 @@
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">Statistika po gradovima (ukupno)</legend>
                             <button ng-click="getTotalActivatedUsersByCity()" class="btn btn-default">Pregled</button>
-                            <table ng-if="activatedUsersByCity" class="table table-condensed mt20">
-                                <tr>
-                                    <th class="text-left">Grad</th>
-                                    <th class="text-left">Licence</th>
-                                    <th></th>
-                                </tr>
-                                <tr ng-repeat="x in activatedUsersByCity.cities">
-                                    <td class="text-left">{{x.city}}</td>
-                                    <td class="text-left"><strong class="badge">{{x.count}}</strong></td>
-                                    <td class="text-left"><div style="width:{{x.count*10}}px; height:20px" class="bg-primary" title="{{x.name}}: {{x.count}}"></div></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="3"  class="text-right">Ukupno: {{activatedUsersByCity.total}}</th>
-                                </tr>
-                            </table>
+                            <div class="table-responsive">
+                                <table ng-if="activatedUsersByCity" class="table table-condensed mt20">
+                                    <tr>
+                                        <th class="text-left">Grad</th>
+                                        <th class="text-left">Licence</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr ng-repeat="x in activatedUsersByCity.cities">
+                                        <td class="text-left">{{x.city}}</td>
+                                        <td class="text-left"><strong class="badge">{{x.count}}</strong></td>
+                                        <td class="text-left"><div style="width:{{x.count*10}}px; height:20px" class="bg-primary" title="{{x.name}}: {{x.count}}"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="3" class="text-right">Ukupno: {{activatedUsersByCity.total}}</th>
+                                    </tr>
+                                </table>
+                            </div>
                         </fieldset>
                     </div>
                 </div>
@@ -462,9 +470,8 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <code>
-                                        <a ng-if="x.imgPath" href="{{x.imgPath}}" title="{{x.imgPath}}" class="small"><i class="fa fa-file"></i> {{x.imgPath}}</a>
+                                        <a ng-if="x.filePath" href="{{x.filePath}}" title="{{x.filePath}}" class="small" target="_blank"><i class="fa fa-file"></i> {{x.filePath}}</a>
                                     </code>
-                                    <!--<img ng-if="x.imgPath" src="{{x.imgPath}}" alt="{{x.imgPath}}" class="img-responsive">-->
                                 </div>
                             </div>
                         </div>
@@ -487,7 +494,11 @@
                                         <option value="2" ng-selected="x.priority==2?true:false">Visok</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-8 text-right" >
+                                <div class="col-sm-6">
+                                    <span>Napomena:</span>
+                                    <textarea ng-model="x.note" type="text" class="form-control" rows="1" />
+                                </div>
+                                <div class="col-sm-2 text-right" >
                                     <button class="btn btn-success" ng-click="saveTicket(x, false)" ><i class="fa fa-floppy-o"></i> Spremi</button>
                                 </div>
                             </div>

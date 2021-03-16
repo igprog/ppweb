@@ -711,8 +711,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
             var body = x.desc + '. E-mail: ' + x.user.email + ', User Name: ' + x.user.userName;
             $scope.sending = true;
-            functions.post('Tickets', 'Save', { x: x, sendMail: sendMail, lang: $rootScope.config.language }).then(function (d) {
-                functions.alert(d.response.msg, '');
+            functions.post('Tickets', 'Save', { x: x, sendMail: sendMail, attachFile: true, lang: $rootScope.config.language }).then(function (d) {
+                functions.alert($translate.instant(d.response.msg), '');
                 $mdDialog.hide();
             });
         }
@@ -722,7 +722,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         /********* Ticket Image *********/
-        $scope.uploadImg = function () {
+        $scope.uploadFile = function () {
             var content = new FormData(document.getElementById("formUpload"));
             $http({
                 url: $sessionStorage.config.backend + '/UploadTempImgHandler.ashx',
@@ -730,27 +730,27 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 headers: { 'Content-Type': undefined },
                 data: content,
             }).then(function (response) {
-                $scope.d.img = response.data;
-                $scope.d.imgPath = `../upload/users/${$scope.d.user.userGroupId}/temp/${$scope.d.img}`;
+                $scope.d.fileName = response.data;
+                $scope.d.filePath = `../upload/users/${$scope.d.user.userGroupId}/temp/${$scope.d.fileName}`;
             },
            function (response) {
                alert($translate.instant(response.data));
            });
         }
 
-        $scope.removeImg = function (x) {
+        $scope.removeFile = function (x) {
             if (confirm($translate.instant('remove image') + '?')) {
-                removeImg(x);
+                removeFile(x);
             }
         }
 
-        var removeImg = function (x) {
+        var removeFile = function (x) {
             $http({
-                url: $sessionStorage.config.backend + 'Files.asmx/DeleteTempImg',
+                url: $sessionStorage.config.backend + 'Files.asmx/DeleteTempFile',
                 method: 'POST',
                 data: { x: x },
             }).then(function (response) {
-                $scope.d.img = response.data.d;
+                $scope.d.fileName = response.data.d;
             },
            function (response) {
                alert($translate.instant(response.data.d));
@@ -1666,7 +1666,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         if ($rootScope.user.adminType != 0) { return false; }
         var content = new FormData(document.getElementById("formUpload"));
         $http({
-            url: $sessionStorage.config.backend + '/UploadHandler.ashx',
+            url: $sessionStorage.config.backend + '/UploadLogoHandler.ashx',
             method: 'POST',
             headers: { 'Content-Type': undefined },
             data: content,

@@ -312,7 +312,7 @@ angular.module('app', [])
     }
 
     $scope.saveTicket = function (x, sendMail) {
-        functions.post('Tickets', 'Save', {x, sendMail: sendMail, lang: 'hr'}).then(function (d) {
+        functions.post('Tickets', 'Save', {x, sendMail: sendMail, attachFile: false, lang: 'hr'}).then(function (d) {
             $scope.loadTickets();
         });
     }

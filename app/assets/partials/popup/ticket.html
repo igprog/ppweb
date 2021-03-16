@@ -30,20 +30,20 @@
                             <div class="card-body">
                                 <div>
                                     <label class="text-capitalize">{{'screenshot' | translate}}</label>
-                                    <button ng-if="d.img" ng-click="removeImg(d)" class="btn btn-sm btn-outline-danger btn-circle float-right" title="{{'remove image' | translate}}"><i class="fa fa-times"></i></button>
+                                    <button ng-if="d.fileName" ng-click="removeFile(d)" class="btn btn-sm btn-outline-danger btn-circle float-right" title="{{'remove image' | translate}}"><i class="fa fa-times"></i></button>
                                 </div>
-                                <div ng-if="!d.img" class="text-center text-primary">
+                                <div ng-if="!d.fileName" class="text-center text-primary">
                                     <i class="fa fa-image fa-5x"></i>
                                 </div>
-                                <img ng-if="d.img" class="mx-auto d-block" src="{{d.imgPath}}" alt="{{d.img}}" style="height:15rem;width:15rem">
+                                <img ng-if="d.fileName" class="mx-auto d-block" src="{{d.filePath}}" alt="{{d.fileName}}" style="height:15rem;width:15rem">
                             </div>
                             <div class="card-footer">
-                                <form id="formUpload" ng-submit="uploadImg()" enctype="multipart/form-data" method="post">
+                                <form id="formUpload" ng-submit="uploadFile()" enctype="multipart/form-data" method="post">
                                     <input id="imgFolder" name="imgFolder" value="temp" type="text" hidden="hidden">
                                     <p class="text-muted small">*<em>{{'max upload file size is 4 MB' | translate}}.</em></p>
                                     <div class="custom-file">
                                         <input id="userid" name="userid" ng-model="d.user.userGroupId" type="text" hidden="hidden">
-                                        <input ng-model="d.img" name="UploadedFile" id="UploadedFile" type="file" accept="image/*" class="custom-file-input" style="background-color:transparent">
+                                        <input ng-model="d.fileName" name="UploadedFile" id="UploadedFile" type="file" accept="image/*" class="custom-file-input" style="background-color:transparent">
                                         <label class="custom-file-label" for="UploadedFile">{{'attach the image' | translate}}</label>
                                     </div>
                                     <div class="text-right pt-2">

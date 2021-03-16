@@ -314,9 +314,10 @@ namespace Igprog {
                 title NVARCHAR(200),
                 desc TEXT,
                 reportDate VARCHAR(20),
-                imgPath VARCHAR(200),
+                filePath VARCHAR(200),
                 status INTEGER,
-                priority INTEGER)";
+                priority INTEGER,
+                note VARCHAR(200))";
             CreateTable(path, sql);
         }
         #endregion

@@ -2025,6 +2025,7 @@
   "remove recipe": "Remove recipe",
   "clear all foods from the meal": "Clear all foods from the meal",
   "not sent": "Not sent",
-  "successfully sent": "Successfully sent"
+  "successfully sent": "Successfully sent",
+  "the file format is not allowed": "The file format is not allowed"
 
 }

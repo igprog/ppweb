@@ -2031,6 +2031,7 @@
   "remove recipe": "Бриши рецепт",
   "clear all foods from the meal": "Очисти све намирнице из оброка",
   "not sent": "Није послато",
-  "successfully sent": "Успешно послато"
+  "successfully sent": "Успешно послато",
+  "the file format is not allowed": "Формат датотеке није дозвољен"
 
 }

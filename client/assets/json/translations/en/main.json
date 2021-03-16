@@ -135,6 +135,8 @@
   "rows per page": "Rows per page",
   "daily menus": "Daily menus",
   "weekly menus": "Weekly menus",
-  "please wait": "Please wait"
+  "please wait": "Please wait",
+  "the file format is not allowed": "The file format is not allowed"
+
 
 }

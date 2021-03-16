@@ -321,9 +321,9 @@ public class Mail : System.Web.Services.WebService {
         }
     }
 
-    public Global.Response SendTicketMessage(string sendTo, string messageSubject, string messageBody, string lang, string imgPath, bool send_cc) {
+    public Global.Response SendTicketMessage(string sendTo, string messageSubject, string messageBody, string lang, string filePath, bool send_cc) {
         Global.Response resp = new Global.Response();
-        resp.isSuccess = SendMail(sendTo, messageSubject, messageBody, lang, imgPath, send_cc).isSuccess;
+        resp.isSuccess = SendMail(sendTo, messageSubject, messageBody, lang, filePath, send_cc).isSuccess;
         resp.msg = true ? t.Tran("successfully sent", lang) : string.Format("{0}! {1}.", t.Tran("not sent", lang), t.Tran("please try again", lang));
         return resp;
     }

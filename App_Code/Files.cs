@@ -105,15 +105,15 @@ public class Files : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string DeleteTempImg(Tickets.NewTicket x) {
+    public string DeleteTempFIle(Tickets.NewTicket x) {
         try {
-            string img = null;
-            if (x.img.Contains("?")) {
-                img = x.img.Remove(x.img.IndexOf("?"));
+            string fileName = null;
+            if (x.fileName.Contains("?")) {
+                fileName = x.fileName.Remove(x.fileName.IndexOf("?"));
             } else {
-                img = x.img;
+                fileName = x.fileName;
             }
-            string path = string.Format("~/upload/users/{0}/temp/{1}", x.user.userGroupId, img);
+            string path = string.Format("~/upload/users/{0}/temp/{1}", x.user.userGroupId, fileName);
             if (File.Exists(Server.MapPath(path))) {
                 File.Delete(Server.MapPath(path));
                 return null;

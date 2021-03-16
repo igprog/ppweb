@@ -134,6 +134,8 @@
   "rows per page": "Redova po stranici",
   "daily menus": "Dnevni jelovnici",
   "weekly menus": "Nedeljni jelovnici",
-  "please wait": "Molimo sačekajte"
+  "please wait": "Molimo sačekajte",
+  "the file format is not allowed": "Format datoteke nije dozvoljen"
+
 
 }
