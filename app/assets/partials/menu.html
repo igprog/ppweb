@@ -230,6 +230,10 @@
                                         <input ng-model="consumers" type="number" min="1" ng-change="hidePdfLink()">
                                     </md-input-container>
                                 </div>
+                                <div class="col-sm-6">
+                                    <label>{{'rows per page' | translate}}: <span class="badge badge-pill badge-secondary">{{printSettings.rowsPerPage}}</span></label>
+                                    <input ng-model="printSettings.rowsPerPage" type="range" min="30" max="70" class="slider">
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">

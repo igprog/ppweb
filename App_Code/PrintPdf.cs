@@ -7,7 +7,6 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.IO;
 using Newtonsoft.Json;
-using System.Data.SQLite;
 using System.Text;
 using System.Configuration;
 using Igprog;
@@ -82,6 +81,7 @@ public class PrintPdf : System.Web.Services.WebService {
         public bool showImg;
         public int descPosition;
         public int weeklyMenuType;
+        public int rowsPerPage;
     }
 
     #region WebMethods
@@ -107,6 +107,7 @@ public class PrintPdf : System.Web.Services.WebService {
         x.showImg = false;
         x.descPosition = (int) DescPosition.bottom;
         x.weeklyMenuType = (int) WeeklyMenuType.daily;
+        x.rowsPerPage = 45;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -132,6 +133,7 @@ public class PrintPdf : System.Web.Services.WebService {
         x.showImg = false;
         x.descPosition = (int)DescPosition.bottom;
         x.weeklyMenuType = (int)WeeklyMenuType.daily;
+        x.rowsPerPage = 45;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -184,15 +186,15 @@ public class PrintPdf : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string MenuPdf(string userId, Menues.NewMenu currentMenu, Foods.Totals totals, int consumers, string lang, PrintMenuSettings settings, string date, string author, string headerInfo, int rowsPerPage) {
+    public string MenuPdf(string userId, Menues.NewMenu currentMenu, Foods.Totals totals, int consumers, string lang, PrintMenuSettings settings, string date, string author, string headerInfo) {
         if (settings.printStyle == 0) {
-            return MenuPdf_tbl(userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo, rowsPerPage);
+            return MenuPdf_tbl(userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo);
         } else {
             return MenuPdf_old(userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo);
         }
     }
 
-    public string MenuPdf_tbl(string userId, Menues.NewMenu currentMenu, Foods.Totals totals, int consumers, string lang, PrintMenuSettings settings, string date, string author, string headerInfo, int rowsPerPage) {
+    public string MenuPdf_tbl(string userId, Menues.NewMenu currentMenu, Foods.Totals totals, int consumers, string lang, PrintMenuSettings settings, string date, string author, string headerInfo) {
         try {
             string path = Server.MapPath(string.Format("~/upload/users/{0}/pdf/", userId));
             DeleteFolder(path);
@@ -207,7 +209,7 @@ public class PrintPdf : System.Web.Services.WebService {
 
             doc.Open();
 
-            doc = CreateMenuPdfContent(doc, userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo, rowsPerPage);
+            doc = CreateMenuPdfContent(doc, userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo);
 
             doc.Close();
 
@@ -218,7 +220,7 @@ public class PrintPdf : System.Web.Services.WebService {
         }
     }
 
-    private Document CreateMenuPdfContent(Document doc, string userId, Menues.NewMenu currentMenu, Foods.Totals totals, int consumers, string lang, PrintMenuSettings settings, string date, string author, string headerInfo, int rowsPerPage) {
+    private Document CreateMenuPdfContent(Document doc, string userId, Menues.NewMenu currentMenu, Foods.Totals totals, int consumers, string lang, PrintMenuSettings settings, string date, string author, string headerInfo) {
         
         AppendHeader(doc, userId, headerInfo);
 
@@ -250,7 +252,7 @@ public class PrintPdf : System.Web.Services.WebService {
                 sb.AppendLine(string.Format(@"
                                         "));
             }
-            if (rowCount >= rowsPerPage && !firstPage) {
+            if (rowCount >= settings.rowsPerPage && !firstPage) {
                 doc.NewPage();
                 sb.AppendLine(string.Format(@"
                                         "));
@@ -510,7 +512,7 @@ public class PrintPdf : System.Web.Services.WebService {
             CreateFolder(path);
             string fileName = Guid.NewGuid().ToString();
             string filePath = Path.Combine(path, string.Format("{0}.pdf", fileName));
-            int rowsPerPage = 45;
+            //int rowsPerPage = 45;
 
             var doc = new Document();
 
@@ -531,7 +533,7 @@ public class PrintPdf : System.Web.Services.WebService {
                     idx++;
                     var currentMenu = M.GetMenu(userId, m);
                     var totals = F.GetTotals_(currentMenu.data.selectedFoods, currentMenu.data.meals);
-                    CreateMenuPdfContent(doc, userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo, rowsPerPage);
+                    CreateMenuPdfContent(doc, userId, currentMenu, totals, consumers, lang, settings, date, author, headerInfo);
                 }
             }
 

@@ -4183,7 +4183,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.loginUser = d.loginUser;
         $scope.pdfLink == null;
         $scope.creatingPdf = false;
-        $scope.rowsPerPage = 45;
+        //$scope.rowsPerPage = 45;
 
         $scope.cancel = function () {
             $mdDialog.cancel();
@@ -4234,7 +4234,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return splitMealDesc.find(a => a.code === x.code).dishDesc;
         }
 
-        $scope.printMenuPdf = function (consumers, date, author, rowsPerPage) {
+        $scope.printMenuPdf = function (consumers, date, author, settings) {
             if (angular.isDefined($rootScope.currentMenu)) {
                 $scope.creatingPdf = true;
                 $http({
@@ -4249,7 +4249,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     $http({
                         url: $sessionStorage.config.backend + 'PrintPdf.asmx/MenuPdf',
                         method: "POST",
-                        data: { userId: $sessionStorage.usergroupid, currentMenu: currentMenu, totals: $rootScope.totals, consumers: consumers, lang: $rootScope.config.language, settings: $scope.settings, date: date, author: author, headerInfo: d.user.headerInfo, rowsPerPage: rowsPerPage }
+                        data: { userId: $sessionStorage.usergroupid, currentMenu: currentMenu, totals: $rootScope.totals, consumers: consumers, lang: $rootScope.config.language, settings: settings, date: date, author: author, headerInfo: d.user.headerInfo }
                     })
                     .then(function (response) {
                         var fileName = response.data.d;

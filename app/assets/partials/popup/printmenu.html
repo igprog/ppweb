@@ -20,11 +20,11 @@
                                     <button ng-click="copyToClipboard('menu_container')" class="btn btn-outline-primary" title="{{'copy to clipboard' | translate}}"><span class="text-capitalize"><i class="fa fa-files-o"></i> {{'copy' | translate}}</span></button>
                                 </div>
                                 <div class="col-xl-4">
-                                    <label>{{'rows per page' | translate}}: <span class="badge badge-pill badge-secondary">{{rowsPerPage}}</span></label>
-                                    <input ng-model="rowsPerPage" type="range" min="30" max="70" class="slider">
+                                    <label>{{'rows per page' | translate}}: <span class="badge badge-pill badge-secondary">{{settings.rowsPerPage}}</span></label>
+                                    <input ng-model="settings.rowsPerPage" type="range" min="30" max="70" class="slider">
                                 </div>
                                 <div class="col-xl-4">
-                                    <button ng-if="pdfLink==null" ng-click="printMenuPdf(consumers, date, author, rowsPerPage)" class="btn btn-outline-primary text-capitalize" ng-disabled="creatingPdf==true"><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf-o'}}"></i> {{'create pdf' | translate}}</button>
+                                    <button ng-if="pdfLink==null" ng-click="printMenuPdf(consumers, date, author, settings.rowsPerPage, settings)" class="btn btn-outline-primary text-capitalize" ng-disabled="creatingPdf==true"><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf-o'}}"></i> {{'create pdf' | translate}}</button>
                                     <a ng-if="pdfLink!=null" href="{{pdfLink}}" class="btn btn-danger text-capitalize" download ng-click="hidePdfLink()">
                                         <i class="fa fa-file-pdf-o"></i> {{'take pdf' | translate}}
                                     </a>

@@ -323,16 +323,16 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
 
     var consumers = 1;
 
-    $scope.rowsPerPage = 45;
+    //$scope.rowsPerPage = 45;
     $scope.pdfLink = null;
     $scope.creatingPdf = false;
-    $scope.createMenuPdf = function (rowsPerPage) {
+    $scope.createMenuPdf = function (settings) {
         $scope.pdfLink = null;
         $scope.creatingPdf = true;
         $http({
             url: $sessionStorage.config.backend + 'PrintPdf.asmx/MenuPdf',
             method: "POST",
-            data: { userId: $scope.userId, currentMenu: $scope.menu, totals: $scope.totals, consumers: consumers, lang: $scope.config.language, settings: $scope.settings, date: null, author: null, headerInfo: null, rowsPerPage: rowsPerPage }
+            data: { userId: $scope.userId, currentMenu: $scope.menu, totals: $scope.totals, consumers: consumers, lang: $scope.config.language, settings: settings, date: null, author: null, headerInfo: null }
         })
         .then(function (response) {
             var fileName = response.data.d;
@@ -767,8 +767,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     var webService = 'WeeklyMenus';
     $scope.type = 0;
     $scope.limit = 20;
-    $scope.printType = 1;
+    $scope.weeklyMenuType = 1;
     $scope.currMenu = null;
+    $scope.rowsPerPage = 45;
 
     $scope.loadMore = function () {
         $scope.limit += 20;
@@ -803,14 +804,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
           });
     }
 
-    $scope.print = function (weeklyMenu, printType) {
+    $scope.print = function (weeklyMenu, weeklyMenuType, rowsPerPage) {
         if ($scope.creatingPdf) { return; }
         $scope.pdfLink = null;
         $scope.creatingPdf = true;
         $scope.currMenu = weeklyMenu.id;
-        functions.post('PrintPdf', printType === 0 ? 'InitWeeklyMenuSettings' : 'InitMenuSettings', {}).then(function (d) {
+        functions.post('PrintPdf', weeklyMenuType === 0 ? 'InitWeeklyMenuSettings' : 'InitMenuSettings', {}).then(function (d) {
             var printSettings = d;
-            $scope.printType = printType;
+            printSettings.rowsPerPage = rowsPerPage;
+            printSettings.weeklyMenuType = weeklyMenuType;
             printWeeklyMenu(weeklyMenu, printSettings);
         });
     }

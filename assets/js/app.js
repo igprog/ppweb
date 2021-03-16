@@ -85,7 +85,7 @@ angular.module('app', ['ngMaterial'])
      });
     }
 
-    $scope.showCustomers = true;
+    $scope.showCustomers = false;
     $scope.toggleCustomers = function () {
         $scope.showCustomers = !$scope.showCustomers;
     };
