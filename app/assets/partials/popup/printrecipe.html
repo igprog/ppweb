@@ -11,7 +11,7 @@
             <div class="md-dialog-content">
                 <div class="text-right">
                     <button ng-click="copyToClipboard('menu_container')" class="btn btn-outline-primary" title="{{'copy to clipboard' | translate}}"><span class="text-capitalize"><i class="fa fa-files-o"></i> {{'copy' | translate}}</span></button>
-                    <a ng-if="pdfLink==null" href="" ng-click="printRecipePdf(consumers, date, author)" class="btn btn-outline-primary text-capitalize" ng-disabled="creatingPdf==true"><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf-o'}}"></i> {{'create pdf' | translate}}</a>
+                    <a ng-if="pdfLink==null" href="" ng-click="printRecipePdf(settings)" class="btn btn-outline-primary text-capitalize" ng-disabled="creatingPdf==true"><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf-o'}}"></i> {{'create pdf' | translate}}</a>
                     <a ng-if="pdfLink!=null" href="{{pdfLink}}" class="btn btn-danger text-capitalize" download ng-click="hidePdfLink()">
                         <i class="fa fa-file-pdf-o"></i> {{'take pdf' | translate}}
                     </a>
@@ -20,7 +20,7 @@
                     <div class="col-sm-3">
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">{{'number of consumers' | translate}}</legend>
-                            <input ng-model="consumers" type="number" min="1" class="form-control" style="max-width:100px" ng-change="changeNumberOfConsumers(consumers)" allow-only-numberss>
+                            <input ng-model="settings.consumers" type="number" min="1" class="form-control" style="max-width:100px" ng-change="changeNumberOfConsumers(settings.consumers)" allow-only-numberss>
                         </fieldset>
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">{{'show in print' | translate}}</legend>
@@ -100,7 +100,7 @@
                                     <p>{{recipe.description}}</p>
                                 </div>-->
                                 <hr />
-                                <p ng-if="consumers > 1">{{'number of consumers' | translate}}: <strong>{{consumers}}</strong></p>
+                                <p ng-if="settings.consumers > 1">{{'number of consumers' | translate}}: <strong>{{settings.consumers}}</strong></p>
                                 <div ng-if="settings.showFoods" class="mt-2">
                                     <label class="text-uppercase font-weight-bold">{{'ingredients' | translate}}:</label>
                                     <div ng-repeat="y in foods track by $index">
@@ -109,7 +109,7 @@
                                 </div>
                                 <div ng-if="settings.showTotals">
                                     <hr />
-                                    <label><span class="text-uppercase">{{'total' | translate}}</span><span ng-if="consumers > 1"> ({{'per consumer' | translate}})</span>:</label>
+                                    <label><span class="text-uppercase">{{'total' | translate}}</span><span ng-if="settings.consumers > 1"> ({{'per consumer' | translate}})</span>:</label>
                                     <p>{{'energy value' | translate}}: <span>{{totals.energy}} kcal</span></p>
                                     <p>{{'carbohydrates' | translate}}: <span>{{totals.carbohydrates | number:1}} g, ({{totals.carbohydratesPercentage | number:1}} %)</span></p>
                                     <p>{{'proteins' | translate}}: <span>{{totals.proteins | number:1}} g, ({{totals.proteinsPercentage | number:1}} %)</span></p>

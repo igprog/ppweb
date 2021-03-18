@@ -12,7 +12,7 @@ using System.Web.Services;
 [WebService(Namespace = "http://programprehrane.com/app/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class Tickets : System.Web.Services.WebService {
+public class Tickets : WebService {
     static string dataBase = ConfigurationManager.AppSettings["WebDataBase"];
     string dataSource = string.Format("~/App_Data/{0}", dataBase);
     string mainSql = "id, userId, title, desc, reportDate, filePath, status, priority, note";

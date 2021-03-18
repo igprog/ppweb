@@ -1963,7 +1963,7 @@
   "recommended weight": "Preporučena težina",
   "value": "Vrijednost",
   "create an account": "Izradite korisnički račun",
-  "show title": "prikaži naziv",
+  "show title": "Prikaži naziv",
   "wrong user": "Pogrešan korisnik",
   "account has been deleted": "Račun je izbrisan",
   "delete user account": "Brisanje korisničkog računa",
@@ -2035,6 +2035,7 @@
   "clear all foods from the meal": "Očisti sve namirnice iz obroka",
   "Not sent": "Nije poslano",
   "successfully sent": "Uspješno poslano",
-  "the file format is not allowed": "Format datoteke nije dozvoljen"
+  "the file format is not allowed": "Format datoteke nije dozvoljen",
+  "all languages": "Svi jezici"
 
 }

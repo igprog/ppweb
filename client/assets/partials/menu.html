@@ -1,22 +1,22 @@
 ﻿<div class="container pb-5">
-    <div class="row">
-        <div class="col-xl-6">
-        </div>
+    <div class="row justify-content-end">
         <div class="col-xl-6">
             <fieldset class="fieldset-border" style="padding:0px 5px 5px 5px !important;">
                 <legend class="fieldset-border text-capitalize mb-0">{{'print' | translate}}</legend>
-                <div class="row">
-                    <div class="col-xl-6 text-center">
+                <div class="row text-right">
+                    <div class="col-sm-8">
                         <label>{{'rows per page' | translate}}: <span class="badge badge-pill badge-secondary">{{settings.rowsPerPage}}</span></label>
                         <input ng-model="settings.rowsPerPage" type="range" min="30" max="70" class="slider">
                     </div>
-                    <div class="col-xl-6 text-right">
+                    <div class="col-sm-4">
                         <button ng-if="!pdfLink" class="btn btn-outline-danger text-capitalize" ng-click="createMenuPdf(settings)" ng-disabled="creatingPdf==true"><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf'}}"></i> {{'create pdf' | translate}}</button>
                         <a ng-if="pdfLink" href="{{pdfLink}}" class="btn btn-danger text-capitalize" download ng-click="hidePdfLink()"><i class="fa fa-download"></i> {{'take pdf' | translate}}</a>
-                        <button ui-sref="menus" ui-sref-active="active" class="btn btn-outline-primary text-capitalize"><i class="fa fa-list"></i> {{'menus' | translate}}</button>
                     </div>
                 </div>
             </fieldset>
+        </div>
+        <div class="col-xl-2 text-right">
+            <button ui-sref="menus" ui-sref-active="active" class="btn btn-outline-primary text-capitalize"><i class="fa fa-list"></i> {{'menus' | translate}}</button>
         </div>
     </div>
     <div class="card mt-2">

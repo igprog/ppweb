@@ -172,10 +172,10 @@
                 <button class="btn btn-outline-primary" ng-click="search()"><i class="fa fa-search"></i> <span class="d-none d-sm-inline">{{'search' | translate}}</span></button>
                 <button ng-disabled="isEmptyList()" ng-click="save()" class="btn btn-outline-primary"><i class="fa fa-floppy-o"></i> <span class="d-none d-sm-inline">{{'save' | translate}}</span></button>
                 <button ng-disabled="isEmptyList()" ng-click="remove(weeklyMenu)" class="btn btn-outline-danger"><i class="fa fa-trash-alt"></i> <span class="d-none d-sm-inline text-capitalize">{{'delete' | translate}}</span></button>
-                <button ng-disabled="isEmptyList()||creatingPdf==true" ng-if="pdfLink==null" ng-click="printWeeklyMenu(consumers, printSettings, date, author)" class="btn btn-outline-primary"><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf-o'}}"></i> <span class="d-none d-sm-inline">{{'create pdf' | translate}}</span></button>
+                <button ng-disabled="isEmptyList()||creatingPdf==true" ng-if="pdfLink==null" ng-click="printWeeklyMenu(printSettings)" class="btn btn-outline-primary"><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf-o'}}"></i> <span class="d-none d-sm-inline">{{'create pdf' | translate}}</span></button>
                 <a ng-if="pdfLink!=null" href="{{pdfLink}}" class="btn btn-danger" download ng-click="hidePdfLink()"><i class="fa fa-file-pdf-o"></i> {{'take pdf' | translate}}</a>
                 <button ng-if="loginUser.adminType<2&&config.showsendmenu" ng-disabled="pdfLink==null" class="btn btn-outline-primary" title="{{'send menu to the clients email' | translate}}" ng-click="send()"><i class="fa fa-paper-plane"></i> <span class="d-none d-sm-inline">{{'send' | translate}}</span></button>
-                <button ng-disabled="isEmptyList()" class="btn btn-outline-primary" title="{{'shopping list' | translate}}" ng-click="openShoppingListPopup(weeklyMenu)"><i class="fa fa-{{creatingSLPdf==true?'spinner fa-spin':'shopping-basket'}}"></i> <span class="d-none d-sm-inline">{{'shopping list' | translate}}</span></button>
+                <button ng-disabled="isEmptyList()" class="btn btn-outline-primary" title="{{'shopping list' | translate}}" ng-click="openShoppingListPopup(weeklyMenu)"><i class="fa fa-shopping-basket"></i> <span class="d-none d-sm-inline">{{'shopping list' | translate}}</span></button>
             </div>
             <div class="card-body">
                 <div class="row text-capitalize pt-2">
@@ -227,7 +227,7 @@
                                 <div class="col-sm-6">
                                     <md-input-container class="md-block" flex-gt-sm>
                                         <label>{{'number of consumers' | translate}}</label>
-                                        <input ng-model="consumers" type="number" min="1" ng-change="hidePdfLink()">
+                                        <input ng-model="printSettings.consumers" type="number" min="1" ng-change="hidePdfLink()">
                                     </md-input-container>
                                 </div>
                                 <div class="col-sm-6">

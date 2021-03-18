@@ -321,27 +321,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
         });
     }
 
-    var consumers = 1;
-
-    //$scope.rowsPerPage = 45;
     $scope.pdfLink = null;
     $scope.creatingPdf = false;
     $scope.createMenuPdf = function (settings) {
         $scope.pdfLink = null;
         $scope.creatingPdf = true;
-        $http({
-            url: $sessionStorage.config.backend + 'PrintPdf.asmx/MenuPdf',
-            method: "POST",
-            data: { userId: $scope.userId, currentMenu: $scope.menu, totals: $scope.totals, consumers: consumers, lang: $scope.config.language, settings: settings, date: null, author: null, headerInfo: null }
-        })
-        .then(function (response) {
-            var fileName = response.data.d;
+        functions.post('PrintPdf', 'MenuPdf', { userId: $scope.userId, currentMenu: $scope.menu, totals: $scope.totals, lang: $scope.config.language, settings: settings }).then(function (d) {
+            var fileName = d;
             $scope.creatingPdf = false;
             $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $scope.userId + '/pdf/' + fileName + '.pdf';
-        },
-        function (response) {
-            $scope.creatingPdf = false;
-            alert(response.data.d)
         });
     }
 
@@ -769,11 +757,17 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     $scope.limit = 20;
     $scope.weeklyMenuType = 1;
     $scope.currMenu = null;
-    $scope.rowsPerPage = 45;
 
     $scope.loadMore = function () {
         $scope.limit += 20;
     }
+
+    var initSettings = function () {
+        functions.post('PrintPdf', 'InitMenuSettings', {}).then(function (d) {
+            $scope.rowsPerPage = d.rowsPerPage;
+        });
+    }
+    initSettings();
 
     var load = function () {
         $scope.loading = true;
@@ -788,20 +782,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
     $scope.pageSizes = ['A4', 'A3', 'A2', 'A1'];
 
     var printWeeklyMenu = function (weeklyMenu, printSettings) {
-        $http({
-            url: '../PrintPdf.asmx/WeeklyMenuPdf',
-            method: "POST",
-            data: { userId: $scope.userId, weeklyMenu: weeklyMenu, consumers: 1, lang: $scope.config.language, settings: printSettings, date: null, author: null, headerInfo: null }
-        })
-          .then(function (response) {
-              var fileName = response.data.d;
-              $scope.pdfLink =  '../upload/users/' + $scope.userId + '/pdf/' + fileName + '.pdf';
-              $scope.creatingPdf = false;
-          },
-          function (response) {
-              $scope.creatingPdf = false;
-              alert(response.data.d)
-          });
+        functions.post('PrintPdf', 'WeeklyMenuPdf', { userId: $scope.userId, weeklyMenu: weeklyMenu, lang: $scope.config.language, settings: printSettings }).then(function (d) {
+            var fileName = d;
+            $scope.pdfLink = '../upload/users/' + $scope.userId + '/pdf/' + fileName + '.pdf';
+            $scope.creatingPdf = false;
+        });
     }
 
     $scope.print = function (weeklyMenu, weeklyMenuType, rowsPerPage) {

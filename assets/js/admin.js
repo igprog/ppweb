@@ -324,6 +324,20 @@ angular.module('app', [])
             });
         }
     }
+
+    $scope.getStatusIcon = function (status) {
+        switch (status) {
+            case 0: return 'fa fa-exclamation-triangle fa-2x text-danger';
+                break;
+            case 1: return 'fa fa-eye fa-2x text-primary';
+                break;
+            case 2: return 'fa fa-check fa-2x text-success';
+                break;
+            case 3: return 'fa fa-times-circle fa-2x text-warning ';
+                break;
+            default: return null;
+        }
+    }
     /***** Tickets *****/
 
 }])

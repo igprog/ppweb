@@ -1954,7 +1954,7 @@
   "recommended weight": "Recommended Weight",
   "value": "Value",
   "create an account": "Create an Account",
-  "show title": "show title",
+  "show title": "Show title",
   "wrong user": "Wrong user",
   "account has been deleted": "Account has been deleted",
   "delete user account": "Delete User Account",
@@ -2026,6 +2026,7 @@
   "clear all foods from the meal": "Clear all foods from the meal",
   "not sent": "Not sent",
   "successfully sent": "Successfully sent",
-  "the file format is not allowed": "The file format is not allowed"
+  "the file format is not allowed": "The file format is not allowed",
+  "all languages": "All languages"
 
 }

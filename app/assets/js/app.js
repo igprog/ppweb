@@ -153,7 +153,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $http({
             url: $sessionStorage.config.backend + 'Calculations.asmx/Init',
             method: "POST",
-            data: { userType: 2 }  // data: { userType: $rootScope.user.userType }
+            data: { userType: 2 }
         })
         .then(function (response) {
             $rootScope.myCalculation = JSON.parse(response.data.d);
@@ -494,12 +494,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var saveClientData = function (x) {
-        /*if ($rootScope.user.licenceStatus == 'demo') {
-            if ($rootScope.newTpl == 'assets/partials/clientsdata.html') {
-                functions.demoAlert('the saving function is disabled in demo version');
-            }
-            return false;
-        }*/
         if (x.hip == '') { x.hip = 0; }
         if (x.waist == '') { x.waist = 0; }
         if (x.bodyFat.bodyFatPerc == '') { x.bodyFat.bodyFatPerc = 0; }
@@ -1039,7 +1033,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             localStorage.lastvisit = new Date();
         }
         if ($rootScope.user.licenceStatus === 'expired') {
-            //$rootScope.isLogin = false;
             functions.alert($translate.instant('your subscription has expired'), $translate.instant('renew subscription'));
             $state.go('dashboard');
             $state.go('order');
@@ -1425,7 +1418,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $scope.uid = null;
             getAppointmentsCountByUserId();
             $rootScope.getActiveEvents();
-            //$scope.toggleTpl('dashboard');
         },
        function (response) {
            functions.alert($translate.instant(response.data.d));
@@ -1539,7 +1531,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.newUser.userGroupId = $rootScope.user.userGroupId;
         $scope.newUser.expirationDate = $rootScope.user.expirationDate;
         $scope.newUser.isActive = true;
-        //$scope.newUser.adminType = 1;
         $scope.newUser.userType = $rootScope.user.userType;
 
         if ($scope.newUser.password == "" || $scope.passwordConfirm == "") {
@@ -1588,7 +1579,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             data: { userId: x }
         }).then(function (response) {
             $rootScope.user = JSON.parse(response.data.d);
-            //$rootScope.currTpl = 'assets/partials/user.html';
             $state.go('user');
 
         },
@@ -1812,8 +1802,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 	}
     /***** Internet speed test *****/
 
-
-
 }])
 
 .controller('clientsCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', '$timeout', 'charts', '$filter', 'functions', '$translate', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, $timeout, charts, $filter, functions, $translate, $state) {
@@ -1920,12 +1908,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $rootScope.client = response;
             $rootScope.currTpl = './assets/partials/main.html';
             $scope.toggleNewTpl('clientsdata');
-            //if ($rootScope.user.licenceStatus == 'demo') {
-            //    init($rootScope.client);
-            //    $rootScope.client.clientId = 'demo';
-            //} else {
-            //    $scope.get($rootScope.client);
-            //}
             $scope.get($rootScope.client);
         }, function () {
         });
@@ -1960,10 +1942,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     $scope.birthDateRequiredMsq = null;
                 }
             }
-            //if ($rootScope.user.licenceStatus == 'demo') {
-            //    $mdDialog.hide(x);
-            //    return false;
-            //}
+
             x.userId = $sessionStorage.userid;
             x.birthDate = functions.dateToString(x.birthDate);
             $http({
@@ -1977,7 +1956,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                    return false;
                }
                $scope.d = JSON.parse(response.data.d).data;
-               //$mdDialog.hide(JSON.parse(response.data.d).data);
            },
            function (response) {
                functions.alert($translate.instant(response.data.d), '');
@@ -2225,10 +2203,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.getClientLog = function (x) {
-        //if ($rootScope.user.licenceStatus == 'demo') {
-        //    $scope.toggleTpl('clientStatictic');
-        //    return false;
-        //}
         $http({
             url: $sessionStorage.config.backend + 'ClientsData.asmx/GetClientLog',
             method: "POST",
@@ -2490,18 +2464,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return false;
         }
         $scope.creatingPdf = true;
-        $http({
-            url: $sessionStorage.config.backend + 'PrintPdf.asmx/ClientPdf',
-            method: "POST",
-            data: { userId: $sessionStorage.usergroupid, client: $rootScope.client, clientData: $rootScope.clientData, lang: $rootScope.config.language, headerInfo: $rootScope.user.headerInfo }
-        }).then(function (response) {
+        functions.post('PrintPdf', 'ClientPdf', { userId: $sessionStorage.usergroupid, client: $rootScope.client, clientData: $rootScope.clientData, lang: $rootScope.config.language, headerInfo: $rootScope.user.headerInfo }).then(function (d) {
             $scope.creatingPdf = false;
-            var fileName = response.data.d;
+            var fileName = d;
             $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
-        },
-        function (response) {
-            $scope.creatingPdf = false;
-            alert(response.data.d)
         });
 
         $scope.hidePdfLink = function () {
@@ -2520,14 +2486,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         if (document.getElementById("clientDataChart") != null) {
             img = document.getElementById("clientDataChart").toDataURL("image/png").replace(/^data:image\/(png|jpg);base64,/, "");
         }
-        $http({
-            url: $sessionStorage.config.backend + 'PrintPdf.asmx/ClientLogPdf',
-            method: "POST",
-            data: { userId: $sessionStorage.usergroupid, client: $rootScope.client, clientData: $rootScope.clientData, clientLog: $scope.clientLog_, lang: $rootScope.config.language, imageData: img, headerInfo: $rootScope.user.headerInfo }
-        })
-        .then(function (response) {
+        functions.post('PrintPdf', 'ClientLogPdf', { userId: $sessionStorage.usergroupid, client: $rootScope.client, clientData: $rootScope.clientData, clientLog: $scope.clientLog_, lang: $rootScope.config.language, imageData: img, headerInfo: $rootScope.user.headerInfo }).then(function (d) {
             $scope.creatingPdf = false;
-            var fileName = response.data.d;
+            var fileName = d;
             $scope.pdfLink1 = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
         });
     }
@@ -2640,7 +2601,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 var res = JSON.parse(response.data.d);
                 $mdDialog.hide(res);
             });
-            //$mdDialog.hide(x);
         }
 
         initColor = function () {
@@ -2772,12 +2732,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             initTime();
         }
 
-        //$rootScope.detailCalculationOfEnergyExpenditure = function () {
-        //    $rootScope.showDetailCalculationOfEnergyExpenditure = !$rootScope.showDetailCalculationOfEnergyExpenditure;
-        //    init();
-        //    //$scope.clearDailyActivities();
-        //}
-
         var totalEnergy = function () {
             var e = 0;
             angular.forEach($scope.d.dailyActivities.activities, function (value, key) {
@@ -2801,17 +2755,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
             $scope.dailyActivity.id = angular.fromJson(x).id;
             $scope.dailyActivity.activity = angular.fromJson(x).activity;
-            //$scope.dailyActivity.from = $scope.from.hour + ':' + $scope.from.minute;
             $scope.dailyActivity.from.hour = $scope.from.hour;
             $scope.dailyActivity.from.min = $scope.from.min;
-            // $scope.dailyActivity.to = $scope.to.hour + ':' + $scope.to.minute;
             $scope.dailyActivity.to.hour = $scope.to.hour;
             $scope.dailyActivity.to.min = $scope.to.min;
             $scope.dailyActivity.duration = timeDiff($scope.from, $scope.to);
             $scope.dailyActivity.energy = energy(timeDiff($scope.from, $scope.to), angular.fromJson(x).factorKcal);
 
             $scope.d.dailyActivities.activities.push(angular.copy($scope.dailyActivity));
-            $scope.totalDailyEnergyExpenditure.value = totalEnergy(); // $scope.totalDailyEnergyExpenditure + $scope.dailyActivity.energy;
+            $scope.totalDailyEnergyExpenditure.value = totalEnergy();
             $scope.d.dailyActivities.energy = $scope.totalDailyEnergyExpenditure.value;
             $scope.totalDailyEnergyExpenditure.duration = totalDuration();
             $scope.d.dailyActivities.duration = $scope.totalDailyEnergyExpenditure.duration;
@@ -3140,19 +3092,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.creatingPdf = false;
     $scope.printPdf = function () {
         $scope.creatingPdf = true;
-        $http({
-            url: $sessionStorage.config.backend + 'PrintPdf.asmx/CalculationPdf',
-            method: "POST",
-            data: { userId: $sessionStorage.usergroupid, client: $rootScope.client, clientData: $rootScope.clientData, calculation: $rootScope.calculation, myCalculation: $rootScope.myCalculation, goal: $rootScope.goalWeightValue_, lang: $rootScope.config.language, headerInfo: $rootScope.user.headerInfo }
-        })
-        .then(function (response) {
-            var fileName = response.data.d;
+        functions.post('PrintPdf', 'CalculationPdf', { userId: $sessionStorage.usergroupid, client: $rootScope.client, clientData: $rootScope.clientData, calculation: $rootScope.calculation, myCalculation: $rootScope.myCalculation, goal: $rootScope.goalWeightValue_, lang: $rootScope.config.language, headerInfo: $rootScope.user.headerInfo }).then(function (d) {
+            var fileName = d;
             $scope.creatingPdf = false;
             $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
-        },
-        function (response) {
-            $scope.creatingPdf = false;
-            alert(response.data.d)
         });
     }
 
@@ -3238,7 +3181,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
         if (x === 'KMA' && $rootScope.clientData.bodyFat.bodyFatPerc == 0) {
             functions.alert($translate.instant('body fat is required'), '');
-            //$rootScope.newTpl = './assets/partials/clientsdata.html';
             $state.go('clientsdata');
             return false;
         }
@@ -3854,17 +3796,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     if ($rootScope.foods == undefined) { $rootScope.loadFoods(); };
 
     function initPrintSettings() {
-        $http({
-            url: $sessionStorage.config.backend + 'PrintPdf.asmx/InitMenuSettings',
-            method: "POST",
-            data: {}
-        })
-       .then(function (response) {
-           $scope.printSettings = JSON.parse(response.data.d);
-       },
-       function (response) {
-           alert(response.data.d)
-       });
+        functions.post('PrintPdf', 'InitMenuSettings', {}).then(function (d) {
+            $scope.printSettings = d;
+        });
     };
     initPrintSettings();
 
@@ -4177,35 +4111,26 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.client = d.client;
         $scope.totals = d.totals;
         $scope.settings = d.settings;
+        $scope.settings.headerInfo = d.user.headerInfo;
+        $scope.settings.date = new Date(new Date($scope.currentMenu.date)).toLocaleDateString();
+        $scope.settings.author = d.user.firstName + ' ' + d.user.lastName;
         $scope.config = d.config;
-        $scope.date = new Date(new Date($scope.currentMenu.date)).toLocaleDateString();
-        $scope.author = d.user.firstName + ' ' + d.user.lastName;
         $scope.loginUser = d.loginUser;
         $scope.pdfLink == null;
         $scope.creatingPdf = false;
-        //$scope.rowsPerPage = 45;
 
         $scope.cancel = function () {
             $mdDialog.cancel();
         };
 
-        $scope.consumers = 1;
         $scope.changeNumberOfConsumers = function (x) {
             if (x < 1 || functions.isNullOrEmpty(x)) { return false }
-            $scope.consumers = x;
-            $http({
-                url: $sessionStorage.config.backend + 'Foods.asmx/ChangeNumberOfConsumers',
-                method: "POST",
-                data: { foods: $scope.currentMenu.data.selectedFoods, number: x }
-            })
-           .then(function (response) {
-               $scope.foods = JSON.parse(response.data.d);
-           },
-           function (response) {
-               alert(response.data.d)
-           });
+            $scope.settings.consumers = x;
+            functions.post('Foods', 'ChangeNumberOfConsumers', { foods: $scope.currentMenu.data.selectedFoods, number: x }).then(function (d) {
+                $scope.foods = d;
+            });
         }
-        if (angular.isDefined($scope.currentMenu)) { $scope.changeNumberOfConsumers($scope.consumers); }
+        if (angular.isDefined($scope.currentMenu)) { $scope.changeNumberOfConsumers($scope.settings.consumers); }
 
         $scope.copyToClipboard = function (id) {
             return functions.copyToClipboard(id);
@@ -4235,34 +4160,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         $scope.printMenuPdf = function (consumers, date, author, settings) {
-            if (angular.isDefined($rootScope.currentMenu)) {
+            if (angular.isDefined($scope.currentMenu)) {
                 $scope.creatingPdf = true;
-                $http({
-                    url: $sessionStorage.config.backend + 'Foods.asmx/ChangeNumberOfConsumers',
-                    method: "POST",
-                    data: { foods: $rootScope.currentMenu.data.selectedFoods, number: consumers }
-                })
-                .then(function (response) {
-                    var foods = JSON.parse(response.data.d);
-                    var currentMenu = angular.copy($rootScope.currentMenu);
-                    currentMenu.data.selectedFoods = foods;
-                    $http({
-                        url: $sessionStorage.config.backend + 'PrintPdf.asmx/MenuPdf',
-                        method: "POST",
-                        data: { userId: $sessionStorage.usergroupid, currentMenu: currentMenu, totals: $rootScope.totals, consumers: consumers, lang: $rootScope.config.language, settings: settings, date: date, author: author, headerInfo: d.user.headerInfo }
-                    })
-                    .then(function (response) {
-                        var fileName = response.data.d;
-                        $scope.creatingPdf = false;
-                        $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
-                    },
-                    function (response) {
-                        $scope.creatingPdf = false;
-                        alert(response.data.d)
-                    });
-                },
-                function (response) {
-                    alert(response.data.d)
+                functions.post('PrintPdf', 'MenuPdf', { userId: $sessionStorage.usergroupid, currentMenu: $scope.currentMenu, totals: $rootScope.totals, lang: $rootScope.config.language, settings: settings }).then(function (d) {
+                    var fileName = d;
+                    $scope.creatingPdf = false;
+                    $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
                 });
             }
         }
@@ -4281,6 +4184,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 
         /**** send menu ***/
+        /*
         $scope.send = function () {
             if ($rootScope.currentMenu.data.selectedFoods.length == 0) {
                 return false;
@@ -4348,6 +4252,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
 
         };
+        */
         /*****send menu ***/
 
         $scope.collapse = function () {
@@ -4712,7 +4617,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             fats: []
         }
 
-
+        if ($rootScope.currentMenu === undefined) { return; }
         angular.forEach($rootScope.currentMenu.data.meals, function (value, key) {
             if (value.isSelected == true && angular.isDefined($rootScope.totals)) {
 
@@ -5607,19 +5512,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
         if (angular.isDefined($rootScope.currentMenu)) {
             var currentMenu = angular.copy($rootScope.currentMenu);
-            $http({
-                url: $sessionStorage.config.backend + 'PrintPdf.asmx/MenuDetailsPdf',
-                method: "POST",
-                data: { userId: $sessionStorage.usergroupid, currentMenu: currentMenu, calculation: $rootScope.calculation, totals: $rootScope.totals, recommendations: $rootScope.recommendations, lang: $rootScope.config.language, imageData: img, headerInfo: $rootScope.user.headerInfo }
-            })
-            .then(function (response) {
-                var fileName = response.data.d;
+            functions.post('PrintPdf', 'MenuDetailsPdf', { userId: $sessionStorage.usergroupid, currentMenu: currentMenu, calculation: $rootScope.calculation, totals: $rootScope.totals, recommendations: $rootScope.recommendations, lang: $rootScope.config.language, imageData: img, headerInfo: $rootScope.user.headerInfo }).then(function (d) {
+                var fileName = d;
                 $scope.creatingPdf1 = false;
                 $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
-            },
-            function (response) {
-                $scope.creatingPdf1 = false;
-                alert(response.data.d);
             });
         }
     }
@@ -5632,19 +5528,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             currentMenu.note = $rootScope.weeklyMenu.note;
             currentMenu.diet = $rootScope.weeklyMenu.diet.diet;
             var img = imageData();
-            $http({
-                url: $sessionStorage.config.backend + 'PrintPdf.asmx/MenuDetailsPdf',
-                method: "POST",
-                data: { userId: $sessionStorage.usergroupid, currentMenu: currentMenu, calculation: $rootScope.calculation, totals: $rootScope.totals, recommendations: $rootScope.recommendations, lang: $rootScope.config.language, imageData: img, headerInfo: $rootScope.user.headerInfo }
-            })
-            .then(function (response) {
-                var fileName = response.data.d;
+            functions.post('PrintPdf', 'MenuDetailsPdf', { userId: $sessionStorage.usergroupid, currentMenu: currentMenu, calculation: $rootScope.calculation, totals: $rootScope.totals, recommendations: $rootScope.recommendations, lang: $rootScope.config.language, imageData: img, headerInfo: $rootScope.user.headerInfo }).then(function (d) {
+                var fileName = d;
                 $scope.creatingPdf1 = false;
                 $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
-            },
-            function (response) {
-                $scope.creatingPdf1 = false;
-                alert(response.data.d);
             });
         }
     }
@@ -5824,22 +5711,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return functions.copyToClipboard(id);
         }
 
-        $scope.printShoppingListPdf = function (sl, n, s) {
+        $scope.printShoppingListPdf = function (sl, s) {
             $scope.creatingPdf = true;
+            s.headerInfo = $rootScope.user.headerInfo;
             if (angular.isDefined($scope.currentMenu)) {
-                $http({
-                    url: $sessionStorage.config.backend + 'PrintPdf.asmx/ShoppingList',
-                    method: "POST",
-                    data: { userId: $sessionStorage.usergroupid, shoppingList: sl, title: $scope.currentMenu.title, note: $scope.currentMenu.note, consumers: n, lang: $rootScope.config.language, settings: s, headerInfo: $rootScope.user.headerInfo }
-                })
-                .then(function (response) {
-                    var fileName = response.data.d;
+                functions.post('PrintPdf', 'ShoppingList', { userId: $sessionStorage.usergroupid, shoppingList: sl, title: $scope.currentMenu.title, note: $scope.currentMenu.note, lang: $rootScope.config.language, settings: s }).then(function (d) {
+                    var fileName = d;
                     $scope.creatingPdf = false;
                     $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
-                },
-                function (response) {
-                    $scope.creatingPdf = false;
-                    alert(response.data.d);
                 });
             }
         }
@@ -5980,7 +5859,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         })
      .then(function (response) {
          $rootScope.loadFoods();
-         //loadMyFoods();
          init();
      },
      function (response) {
@@ -6761,7 +6639,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             })
             .then(function (response) {
                 $rootScope.loadFoods();
-               // loadMyFoods();
                 $mdDialog.hide(x.recipe);
                 functions.alert($translate.instant(response.data.d), '');
             },
@@ -6786,7 +6663,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
     }
 
-    //TODO: Print recipe, BUG more consumers
     $scope.printRecipePreview = function (x) {
         if ($rootScope.user.userType < 2 || $rootScope.user.licenceStatus == 'demo') {
             functions.demoAlert('this function is available only in premium package');
@@ -6820,45 +6696,25 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         function initPrintSettings() {
-            $http({
-                url: $sessionStorage.config.backend + 'PrintPdf.asmx/InitRecipeSettings',
-                method: "POST",
-                data: {}
-            })
-           .then(function (response) {
-               $scope.settings = JSON.parse(response.data.d);
-           },
-           function (response) {
-               alert(response.data.d)
-           });
+            functions.post('PrintPdf', 'InitRecipeSettings', {}).then(function (d) {
+                $scope.settings = d;
+            });
         };
 
-        $scope.consumers = 1;
         $scope.changeNumberOfConsumers = function (x) {
             if (x < 1 || functions.isNullOrEmpty(x)) { return false }
-            $scope.consumers = x;
-            $http({
-                url: $sessionStorage.config.backend + 'Foods.asmx/ChangeNumberOfConsumers',
-                method: "POST",
-                data: { foods: $scope.recipe.data.selectedFoods, number: x }
-            })
-           .then(function (response) {
-               $scope.foods = JSON.parse(response.data.d);
-               initPrintSettings();
-           },
-           function (response) {
-               alert(response.data.d)
-           });
+            functions.post('Foods', 'ChangeNumberOfConsumers', { foods: $scope.recipe.data.selectedFoods, number: x }).then(function (d) {
+                $scope.foods = d;
+            });
         }
-        if (angular.isDefined($scope.recipe)) { $scope.changeNumberOfConsumers($scope.consumers); }
+        if (angular.isDefined($scope.recipe)) {
+            $scope.changeNumberOfConsumers(1);
+            initPrintSettings();
+        }
 
         $scope.copyToClipboard = function (id) {
             return functions.copyToClipboard(id);
         }
-
-        //$scope.getMealTitle = function (x) {
-        //    return $rootScope.getMealTitle(x);
-        //}
 
         $scope.getServDescription = function (x) {
             var des = "";
@@ -6878,32 +6734,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         
         $scope.pdfLink == null;
         $scope.creatingPdf = false;
-        $scope.printRecipePdf = function (consumers, date, author) {
+
+        $scope.printRecipePdf = function (settings) {
             if (angular.isDefined($scope.recipe)) {
                 $scope.creatingPdf = true;
-                $http({
-                    url: $sessionStorage.config.backend + 'Foods.asmx/ChangeNumberOfConsumers',
-                    method: "POST",
-                    data: { foods: $scope.recipe.data.selectedInitFoods, number: consumers }
-                })
-                .then(function (response) {
-                    $http({
-                        url: $sessionStorage.config.backend + 'PrintPdf.asmx/RecipePdf',
-                        method: "POST",
-                        data: { userId: $sessionStorage.usergroupid, recipe: $scope.recipe, totals: $scope.totals, consumers: consumers, lang: $rootScope.config.language, settings: $scope.settings, date: date, author: author, headerInfo: d.user.headerInfo }
-                    })
-                    .then(function (response) {
-                        var fileName = response.data.d;
-                        $scope.creatingPdf = false;
-                        $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
-                    },
-                    function (response) {
-                        $scope.creatingPdf = false;
-                        alert(response.data.d)
-                    });
-                },
-                function (response) {
-                    alert(response.data.d)
+                settings.headerInfo = d.user.headerInfo;
+                functions.post('PrintPdf', 'RecipePdf', { userId: $sessionStorage.usergroupid, recipe: $scope.recipe, totals: $scope.totals, lang: $rootScope.config.language, settings: settings }).then(function (d) {
+                    var fileName = d;
+                    $scope.creatingPdf = false;
+                    $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
                 });
             }
         }
@@ -6976,7 +6815,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     /********* Shared Recipes *********/
     $scope.saveSharedRecipe = function (x) {
-        debugger;
         if (x.id === null) {
             if (x.title !== null) {
                 functions.alert($translate.instant('save recipe'), '');
@@ -7638,27 +7476,18 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.creatingPdf = false;
     $scope.pageSizes = ['A4', 'A3', 'A2', 'A1'];
 
-    $scope.printWeeklyMenu = function (consumers, printSettings, date, author) {
+    $scope.printWeeklyMenu = function (printSettings) {
         if (emptyMenuList) {
             functions.alert($translate.instant('select menus'), '');
             return false;
         }
         $scope.pdfLink = null;
         $scope.creatingPdf = true;
-        $http({
-            url: $sessionStorage.config.backend + 'PrintPdf.asmx/WeeklyMenuPdf',
-            method: "POST",
-            data: { userId: $sessionStorage.usergroupid, weeklyMenu: $rootScope.weeklyMenu, consumers: consumers, lang: $rootScope.config.language, settings: printSettings, date: date, author: author, headerInfo: $rootScope.user.headerInfo }
-        })
-          .then(function (response) {
-              var fileName = response.data.d;
-              $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
-              $scope.creatingPdf = false;
-          },
-          function (response) {
-              $scope.creatingPdf = false;
-              alert(response.data.d)
-          });
+        functions.post('PrintPdf', 'WeeklyMenuPdf', { userId: $sessionStorage.usergroupid, weeklyMenu: $rootScope.weeklyMenu, lang: $rootScope.config.language, settings: printSettings }).then(function (d) {
+            var fileName = d;
+            $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
+            $scope.creatingPdf = false;
+        });
     }
 
     $scope.hidePdfLink = function () {
@@ -7687,7 +7516,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var openSearchMenuPopupCtrl = function ($scope, $mdDialog, $http, $translate, functions, d) {
-        var webService = 'WeeklyMenus.asmx';
+        var webService = 'WeeklyMenus';
         $scope.clientData = d.clientData;
         $scope.type = 0;
         $scope.limit = 20;
@@ -7698,19 +7527,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
         var load = function () {
             $scope.loading = true;
-            $http({
-                url: $sessionStorage.config.backend + webService + '/Load',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, lang: $rootScope.config.language }
-            })
-           .then(function (response) {
-               $scope.d = JSON.parse(response.data.d);
-               $scope.loading = false;
-           },
-           function (response) {
-               $scope.loading = false;
-               functions.alert(response.data.d, '');
-           });
+            functions.post(webService, 'Load', { userId: $rootScope.user.userGroupId, lang: $rootScope.config.language }).then(function (d) {
+                $scope.d = d;
+                $scope.loading = false;
+            });
         }
         load();
 
@@ -7733,17 +7553,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         var remove = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + webService + '/Delete',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, id: x.id, lang: $rootScope.config.language }
-            })
-          .then(function (response) {
-              $scope.d = JSON.parse(response.data.d);
-          },
-          function (response) {
-              alert(response.data.d)
-          });
+            functions.post(webService, 'Delete', { userId: $rootScope.user.userGroupId, id: x.id, lang: $rootScope.config.language }).then(function (d) {
+                $scope.d = d;
+            });
         }
 
         $scope.cancel = function () {
@@ -7751,17 +7563,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         var get = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + webService + '/Get',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, id: x.id, lang: $rootScope.config.language }
-            })
-            .then(function (response) {
-                var menu = JSON.parse(response.data.d);
+            functions.post(webService, 'Get', { userId: $rootScope.user.userGroupId, id: x.id, lang: $rootScope.config.language }).then(function (d) {
+                menu = d;
                 $mdDialog.hide(menu);
-            },
-            function (response) {
-                alert(response.data.d)
             });
         }
 
@@ -7895,6 +7699,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     //********* send ************
+    /*
     $scope.send = function () {
         openSendMenuPopup();
     }
@@ -7958,39 +7763,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             send();
         }
     };
+    */
 
-    //$scope.pdfSLLink = null;
-    //$scope.creatingSLPdf = false;
-    //$scope.createShoppingList = function (x, c, s) {
-    //    var printSetting = angular.copy(s);
-    //    $http({
-    //        url: $sessionStorage.config.backend + 'ShoppingList.asmx/CreateWeeklyShoppingList',
-    //        method: "POST",
-    //        data: { userId: $sessionStorage.usergroupid, menuList: x, consumers: c, lang: $rootScope.config.language }
-    //    })
-    //    .then(function (response) {
-    //        var shoppingList = JSON.parse(response.data.d);
-    //        if (shoppingList.total) {
-    //            if (shoppingList.total.price > 0) {
-    //                printSetting.showPrice = true;
-    //            }
-    //        }
-    //        // TODO: print settings
-    //        printSetting.showQty = true;
-    //        printSetting.showMass = true;
-    //        printSetting.showTitle = true;
-    //        printSetting.showDescription = true;
-
-    //        printShoppingListPdf(shoppingList, c, printSetting);
-
-    //    },
-    //    function (response) {
-    //        functions.alert($translate.instant(response.data.d), '');
-    //    });
-    //}
-
-
-    //TODO
     $scope.openShoppingListPopup = function (x) {
         if (x.length === 0) {
             return false;
@@ -8000,7 +7774,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             templateUrl: 'assets/partials/popup/shoppinglist.html',
             parent: angular.element(document.body),
             clickOutsideToClose: true,
-            d: { weeklyMenu: x }
+            d: { weeklyMenu: x, settings: $scope.printSettings }
         })
         .then(function (r) {
             alert(r);
@@ -8010,32 +7784,24 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     var shoppingListPdfCtrl = function ($scope, $rootScope, $mdDialog, $http, d, $translate, $translatePartialLoader) {
         $scope.currentMenu = d.weeklyMenu;
-        $scope.settings = d.settings;
-        $scope.consumers = 1;
+        var menuSettings = d.settings;
         $scope.pdfLink == null;
         $scope.creatingPdf = false;
         $scope.d = null;
 
-        var initSettings = function() {
-            $http({
-                url: $sessionStorage.config.backend + 'PrintPdf.asmx/InitShoppingListSettings',
-                method: "POST",
-                data: {}
-            })
-            .then(function (response) {
-                $scope.settings = JSON.parse(response.data.d);
-                createShoppingList($scope.currentMenu.menuList, $scope.settings);
-            },
-            function (response) {
-                functions.alert($translate.instant(response.data.d), '');
+        var initSettings = function () {
+            functions.post('PrintPdf', 'InitShoppingListSettings', {}).then(function (d) {
+                $scope.settings = d;
+                $scope.settings.consumers = menuSettings.consumers;
+                createShoppingList($scope.currentMenu.menuList, $scope.settings.consumers);
             });
         }
 
-        var createShoppingList = function (x, c) {
+        var createShoppingList = function (x, consumers) {
             $http({
                 url: $sessionStorage.config.backend + 'ShoppingList.asmx/CreateWeeklyShoppingList',
                 method: "POST",
-                data: { userId: $sessionStorage.usergroupid, menuList: x, consumers: c, lang: $rootScope.config.language }
+                data: { userId: $sessionStorage.usergroupid, menuList: x, consumers: consumers, lang: $rootScope.config.language }
             })
             .then(function (response) {
                 $scope.d = JSON.parse(response.data.d);
@@ -8060,22 +7826,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return functions.copyToClipboard(id);
         }
 
-        $scope.printShoppingListPdf = function (sl, n, s) {
+        $scope.printShoppingListPdf = function (sl, s) {
             $scope.creatingPdf = true;
+            s.headerInfo = $rootScope.user.headerInfo;
             if (angular.isDefined(sl)) {
-                $http({
-                    url: $sessionStorage.config.backend + 'PrintPdf.asmx/ShoppingList',
-                    method: "POST",
-                    data: { userId: $sessionStorage.usergroupid, shoppingList: sl, title: $scope.currentMenu.title, note: $scope.currentMenu.note, consumers: n, lang: $rootScope.config.language, settings: s, headerInfo: $rootScope.user.headerInfo }
-                })
-                .then(function (response) {
-                    var fileName = response.data.d;
+                functions.post('PrintPdf', 'ShoppingList', { userId: $sessionStorage.usergroupid, shoppingList: sl, title: $scope.currentMenu.title, note: $scope.currentMenu.note, lang: $rootScope.config.language, settings: s }).then(function (d) {
+                    var fileName = d;
                     $scope.creatingPdf = false;
                     $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
-                },
-                function (response) {
-                    $scope.creatingPdf = false;
-                    alert(response.data.d);
                 });
             }
         }
