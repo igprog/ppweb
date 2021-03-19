@@ -327,13 +327,13 @@ angular.module('app', [])
 
     $scope.getStatusIcon = function (status) {
         switch (status) {
-            case 0: return 'fa fa-exclamation-triangle fa-2x text-danger';
+            case 0: return 'fa fa-exclamation-triangle text-danger';
                 break;
-            case 1: return 'fa fa-eye fa-2x text-primary';
+            case 1: return 'fa fa-eye text-primary';
                 break;
-            case 2: return 'fa fa-check fa-2x text-success';
+            case 2: return 'fa fa-check text-success';
                 break;
-            case 3: return 'fa fa-times-circle fa-2x text-warning ';
+            case 3: return 'fa fa-times-circle text-warning ';
                 break;
             default: return null;
         }

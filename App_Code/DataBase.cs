@@ -317,7 +317,7 @@ namespace Igprog {
                 filePath VARCHAR(200),
                 status INTEGER,
                 priority INTEGER,
-                note VARCHAR(200))";
+                note NVARCHAR(200))";
             CreateTable(path, sql);
         }
         #endregion

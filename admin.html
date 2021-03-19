@@ -446,8 +446,9 @@
                         <div class="panel-heading">
                             <a href="" ng-click="removeTicket(x)" class="close" style="color:red!important" title="briši">&times;</a>
                             <div class="pt-2">
+                                <i class="{{getStatusIcon(x.status)}}" style="padding-right:5px"></i>
                                 <label ng-if="x.title">{{x.title}}</label>
-                                <p class="text-muted"><em>{{x.desc.length > 80 ? x.desc.substring(0, 77) + '...' : x.desc}}</em></p>
+                                <span class="text-muted"><em>{{x.desc.length > 80 ? x.desc.substring(0, 77) + '...' : x.desc}}</em></span>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
@@ -477,9 +478,6 @@
                         </div>
                         <div class="panel-footer">
                             <div class="row">
-                                <div class="col-sm-1 mt20">
-                                    <i ng-class="getStatusIcon(x.status)"></i>
-                                </div>
                                 <div class="col-sm-2">
                                     <span>Status:</span>
                                     <select ng-model="x.status" class="form-control" title="status">
@@ -497,7 +495,7 @@
                                         <option value="2" ng-selected="x.priority==2?true:false">Visok</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-5">
+                                <div class="col-sm-6">
                                     <span>Napomena:</span>
                                     <textarea ng-model="x.note" type="text" class="form-control" rows="1" />
                                 </div>
