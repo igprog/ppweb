@@ -3898,9 +3898,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
         })
         $rootScope.currentMenu.data.selectedFoods[idx] = functions.changeQuantity($rootScope.currentMenu.data.selectedInitFoods[idx], x, type);
-        if (x.quantity > 0.0001 && !isNaN(x.quantity) && x.mass > 0.0001 && !isNaN(x.mass)) {
-            getTotals($rootScope.currentMenu);
-        }
+        $timeout(function () {
+            if ($rootScope.currentMenu.data.selectedFoods[idx].quantity > 0.0001 && !isNaN($rootScope.currentMenu.data.selectedFoods[idx].quantity) && $rootScope.currentMenu.data.selectedFoods[idx].mass > 0.0001 && !isNaN($rootScope.currentMenu.data.selectedFoods[idx].mass)) {
+                getTotals($rootScope.currentMenu);
+            }
+        }, 200);
     }
 
     $scope.change = function (x, type, idx) {
