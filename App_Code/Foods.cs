@@ -310,70 +310,75 @@ public class Foods : System.Web.Services.WebService {
     [WebMethod]
     public string Init(string lang) {
         InitData data = new InitData();
-        using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
-            connection.Open();
-            NewFood x = new NewFood();
-            x.id = null;
-            x.food = null;
-            x.foodGroup = new Group();
-            x.foodGroupVitaminLost = "";
-            x.thermalTreatments = new List<ThermalTreatment>();
-            x.meal.code = "B";
-            x.meal.title = Meals.GetMealTitle(x.meal.code, connection);
-            x.quantity = 1;
-            x.unit = "";
-            x.mass = 0;
-            x.energy = 0;
-            x.carbohydrates = 0;
-            x.proteins = 0;
-            x.fats = 0;
-            x.servings = new Servings();
-            x.starch = 0;
-            x.totalSugar = 0;
-            x.glucose = 0;
-            x.fructose = 0;
-            x.saccharose = 0;
-            x.maltose = 0;
-            x.lactose = 0;
-            x.fibers = 0;
-            x.saturatedFats = 0;
-            x.monounsaturatedFats = 0;
-            x.polyunsaturatedFats = 0;
-            x.trifluoroaceticAcid = 0;
-            x.cholesterol = 0;
-            x.sodium = 0;
-            x.potassium = 0;
-            x.calcium = 0;
-            x.magnesium = 0;
-            x.phosphorus = 0;
-            x.iron = 0;
-            x.copper = 0;
-            x.zinc = 0;
-            x.chlorine = 0;
-            x.manganese = 0;
-            x.selenium = 0;
-            x.iodine = 0;
-            x.retinol = 0;
-            x.carotene = 0;
-            x.vitaminD = 0;
-            x.vitaminE = 0;
-            x.vitaminB1 = 0;
-            x.vitaminB2 = 0;
-            x.vitaminB3 = 0;
-            x.vitaminB6 = 0;
-            x.vitaminB12 = 0;
-            x.folate = 0;
-            x.pantothenicAcid = 0;
-            x.biotin = 0;
-            x.vitaminC = 0;
-            x.vitaminK = 0;
-            x.price = new Prices.UnitPrice();
-            data.food = x;
-            data.foodGroups = GetFoodGroups(connection);
-            connection.Close();
+        try {
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                connection.Open();
+                NewFood x = new NewFood();
+                x.id = null;
+                x.food = null;
+                x.foodGroup = new Group();
+                x.foodGroupVitaminLost = "";
+                x.thermalTreatments = new List<ThermalTreatment>();
+                x.meal.code = "B";
+                x.meal.title = Meals.GetMealTitle(x.meal.code, connection);
+                x.quantity = 1;
+                x.unit = "";
+                x.mass = 0;
+                x.energy = 0;
+                x.carbohydrates = 0;
+                x.proteins = 0;
+                x.fats = 0;
+                x.servings = new Servings();
+                x.starch = 0;
+                x.totalSugar = 0;
+                x.glucose = 0;
+                x.fructose = 0;
+                x.saccharose = 0;
+                x.maltose = 0;
+                x.lactose = 0;
+                x.fibers = 0;
+                x.saturatedFats = 0;
+                x.monounsaturatedFats = 0;
+                x.polyunsaturatedFats = 0;
+                x.trifluoroaceticAcid = 0;
+                x.cholesterol = 0;
+                x.sodium = 0;
+                x.potassium = 0;
+                x.calcium = 0;
+                x.magnesium = 0;
+                x.phosphorus = 0;
+                x.iron = 0;
+                x.copper = 0;
+                x.zinc = 0;
+                x.chlorine = 0;
+                x.manganese = 0;
+                x.selenium = 0;
+                x.iodine = 0;
+                x.retinol = 0;
+                x.carotene = 0;
+                x.vitaminD = 0;
+                x.vitaminE = 0;
+                x.vitaminB1 = 0;
+                x.vitaminB2 = 0;
+                x.vitaminB3 = 0;
+                x.vitaminB6 = 0;
+                x.vitaminB12 = 0;
+                x.folate = 0;
+                x.pantothenicAcid = 0;
+                x.biotin = 0;
+                x.vitaminC = 0;
+                x.vitaminK = 0;
+                x.price = new Prices.UnitPrice();
+                data.food = x;
+                data.foodGroups = GetFoodGroups(connection);
+            }
+            data.units = Units(lang);
+            return JsonConvert.SerializeObject(data, Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, null, "Foods", "Init");
+            return JsonConvert.SerializeObject(data, Formatting.None);
         }
-        data.units = Units(lang);
-        return JsonConvert.SerializeObject(data, Formatting.None);
+        
     }
 
     [WebMethod]
@@ -621,10 +626,10 @@ public class Foods : System.Web.Services.WebService {
         x.vitaminC = VitaminCRecommendation(client);
         x.vitaminK = VitaminKRecommendation(client);
 
-        string json = JsonConvert.SerializeObject(x, Formatting.None);
-        return json;
+        return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
+    /*   //***** Moved to functions.js *****
     [WebMethod]
     public string ChangeFoodQuantity(NewFood initFood, double newQuantity, double newMass, string type, ThermalTreatment thermalTreatment) {
         double k = 1;
@@ -653,6 +658,7 @@ public class Foods : System.Web.Services.WebService {
         }
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
+    */
 
     [WebMethod]
     public string GetUnits(string lang) {
@@ -1839,20 +1845,24 @@ public class Foods : System.Web.Services.WebService {
 
     private List<string> Units(string lang) {
         try {
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/"  + dataBase));
-            connection.Open();
-            string sql = @"SELECT DISTINCT unit FROM foods ORDER BY unit ASC";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
             List<string> xx = new List<string>();
-            string x = "";
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
-                x = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                xx.Add(T.Tran(x, lang));
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                connection.Open();
+                string sql = @"SELECT DISTINCT unit FROM foods ORDER BY unit ASC";
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    string x = "";
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            x = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                            xx.Add(T.Tran(x, lang));
+                        }
+                    }
+                }
+                return xx;
             }
-            connection.Close();
-            return xx;
-        } catch (Exception e) { return new List<string>(); }
+        } catch (Exception e) {
+            return new List<string>();
+        }
     }
 
     private string SmartUnit(double qty, string unit, string unit1, string unit2) {

@@ -2033,6 +2033,8 @@
   "not sent": "Није послато",
   "successfully sent": "Успешно послато",
   "the file format is not allowed": "Формат датотеке није дозвољен",
-  "all languages": "Сви језици"
+  "all languages": "Сви језици",
+  "quantity is required": "Количина је обавезна",
+  "mass is required": "Маса је обавезна"
 
 }

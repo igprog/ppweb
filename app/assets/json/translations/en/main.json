@@ -2027,6 +2027,8 @@
   "not sent": "Not sent",
   "successfully sent": "Successfully sent",
   "the file format is not allowed": "The file format is not allowed",
-  "all languages": "All languages"
+  "all languages": "All languages",
+  "quantity is required": "Quantity is required",
+  "mass is required": "Mass is required"
 
 }

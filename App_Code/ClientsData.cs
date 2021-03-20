@@ -21,6 +21,7 @@ public class ClientsData : System.Web.Services.WebService {
     DataBase db = new DataBase();
     Calculations C = new Calculations();
     Global g = new Global();
+    Log L = new Log();
 
     public ClientsData() {
     }
@@ -96,8 +97,7 @@ public class ClientsData : System.Web.Services.WebService {
         x.clientNote = null;
         x.bmrEquation = C.MifflinStJeor;
         x.bodyFat = new BodyFat.NewBodyFat();
-        string json = JsonConvert.SerializeObject(x, Formatting.None);
-        return json;
+        return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
     [WebMethod]
@@ -139,9 +139,11 @@ public class ClientsData : System.Web.Services.WebService {
                 x.myMeals = new MyMeals.NewMyMeals();
                 xx.Add(x);
             }
-            connection.Close();
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "ClientsData", "Load");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -189,13 +191,15 @@ public class ClientsData : System.Web.Services.WebService {
                         transaction.Commit();
                     }
                 }
-                connection.Close();
             }
             if (userType > 1) {
                 SaveMyMeals(userId, x.clientId, x.myMeals);
             }
-            return "saved";
-        } catch (Exception e) { return ("Error: " + e); }
+            return JsonConvert.SerializeObject(x, Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.id.ToString(), userId, "ClientsData", "Save");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -205,10 +209,12 @@ public class ClientsData : System.Web.Services.WebService {
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 x = GetClientData(userId, clientId, connection);
-                connection.Close();
             } 
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "ClientsData", "Get");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -249,12 +255,13 @@ public class ClientsData : System.Web.Services.WebService {
                         }
                     } 
                 } 
-                connection.Close();
             }
-            //xx = xx.OrderByDescending(a => Convert.ToDateTime(a.date)).ToList();
             xx = xx.OrderBy(a => Convert.ToDateTime(a.date)).ToList();
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "ClientsData", "GetClientLog");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -272,10 +279,12 @@ public class ClientsData : System.Web.Services.WebService {
                         transaction.Commit();
                     }
                 } 
-                connection.Close();
             }
-            return "saved";
-        } catch (Exception e) { return ("Error: " + e.Message); }
+            return JsonConvert.SerializeObject(clientData, Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, clientData.id.ToString(), userId, "ClientsData", "UpdateClientLog");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -287,10 +296,12 @@ public class ClientsData : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();
                 } 
-                connection.Close();
             }
-            return "OK";
-        } catch (Exception e) { return ("Error: " + e); }
+            return JsonConvert.SerializeObject("ok", Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, clientData.id.ToString(), userId, "ClientsData", "Delete");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     #region ClientApp

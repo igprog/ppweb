@@ -65,6 +65,11 @@
                                     <td class="nowrap">{{food.unit}}</td>
                                 </tr>
                                 <tr>
+                                    <td colspan="3">
+                                        <em ng-if="quantityAlert" class="text-danger">{{quantityAlert}}</em>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>{{'mass' | translate}}:</td>
                                     <td class="text-right">
                                         <div class="input-group" style="width:140px">
@@ -78,6 +83,11 @@
                                         </div>
                                     </td>
                                     <td>g</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <em ng-if="massAlert" class="text-danger">{{massAlert}}</em>
+                                    </td>
                                 </tr>
                                 <tr ng-if="food.servings.cerealsServ">
                                     <td colspan="3" class="text-center font-weight-bold"><span title="{{'unit servings' | translate}}">{{food.servings.cerealsServ | number:1}} {{'serv' | translate}}. {{'cereals_' | translate}}</span></td>

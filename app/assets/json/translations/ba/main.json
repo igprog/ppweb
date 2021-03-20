@@ -2036,6 +2036,8 @@
   "Not sent": "Nije poslano",
   "successfully sent": "Uspješno poslano",
   "the file format is not allowed": "Format datoteke nije dozvoljen",
-  "all languages": "Svi jezici"
+  "all languages": "Svi jezici",
+  "quantity is required": "Količina je obavezna",
+  "mass is required": "Masa je obavezna"
 
 }

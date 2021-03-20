@@ -150,18 +150,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $rootScope.initMyCalculation = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'Calculations.asmx/Init',
-            method: "POST",
-            data: { userType: 2 }
-        })
-        .then(function (response) {
-            $rootScope.myCalculation = JSON.parse(response.data.d);
+        functions.post('Calculations', 'Init', { userType: 2 }).then(function (d) {
+            $rootScope.myCalculation = d;
             $rootScope.myCalculation.recommendedEnergyIntake = null;
             $rootScope.myCalculation.recommendedEnergyExpenditure = null;
-        },
-        function (response) {
-            alert(response.data.d)
         });
     }
 
@@ -201,27 +193,19 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     getConfig();
 
     $rootScope.getUserSettings = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'Files.asmx/GetFile',
-            method: "POST",
-            data: { foldername: 'users/' + $rootScope.user.userGroupId, filename: 'settings' }
-        })
-       .then(function (response) {
-           $rootScope.settings = angular.fromJson(response.data.d);
-           if (response.data.d != null) {
-               if ($rootScope.settings.language != '') { $rootScope.config.language = $rootScope.settings.language; }
-               if ($rootScope.settings.currency != '') { $rootScope.config.currency = $rootScope.settings.currency; }
-           } else {
-               $rootScope.settings = {
-                   language: $rootScope.config.language,
-                   currency: $rootScope.config.currency
-               }
-           }
-           $sessionStorage.settings = $rootScope.settings;
-       },
-       function (response) {
-           functions.alert($translate.instant(response.data.d), '');
-       });
+        functions.post('Files', 'GetFile', { foldername: 'users/' + $rootScope.user.userGroupId, filename: 'settings' }).then(function (d) {
+            $rootScope.settings = d;
+            if (d !== null) {
+                if ($rootScope.settings.language != '') { $rootScope.config.language = $rootScope.settings.language; }
+                if ($rootScope.settings.currency != '') { $rootScope.config.currency = $rootScope.settings.currency; }
+            } else {
+                $rootScope.settings = {
+                    language: $rootScope.config.language,
+                    currency: $rootScope.config.currency
+                }
+            }
+            $sessionStorage.settings = $rootScope.settings;
+        });
     }
 
     $scope.currLanguageTitle = null
@@ -247,88 +231,46 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     $rootScope.loadFoods = function () {
         $rootScope.loading = true;
-        $http({
-            url: $sessionStorage.config.backend + 'Foods.asmx/Load',
-            method: "POST",
-            data: { userId:$sessionStorage.usergroupid, userType:$rootScope.user.userType, lang:$rootScope.config.language }
-        })
-        .then(function (response) {
-            var data = JSON.parse(response.data.d);
+        functions.post('Foods', 'Load', { userId: $sessionStorage.usergroupid, userType: $rootScope.user.userType, lang: $rootScope.config.language }).then(function (d) {
+            var data = d;
             $rootScope.foods = data.foods.concat(data.myFoods);
             $rootScope.myFoods = data.myFoods;
             $rootScope.foodGroups = data.foodGroups;
             $rootScope.loading = false;
-        },
-        function (response) {
-            $rootScope.loading = false;
-            alert(response.data.d)
         });
     };
 
     $rootScope.loadPals = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'Calculations.asmx/LoadPal',
-            method: "POST",
-            data: {}
-        })
-      .then(function (response) {
-          $rootScope.pals = JSON.parse(response.data.d);
-      },
-      function (response) {
-          alert(response.data.d)
-      });
+        functions.post('Calculations', 'LoadPal', {}).then(function (d) {
+            $rootScope.pals = d;
+        });
     };
 
     $rootScope.loadGoals = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'Goals.asmx/Load',
-            method: "POST",
-            data: ''
-        })
-        .then(function (response) {
-            $rootScope.goals = JSON.parse(response.data.d);
-        },
-        function (response) {
-            alert(response.data.d)
+        functions.post('Goals', 'Load', {}).then(function (d) {
+            $rootScope.goals = d;
         });
     };
 
     $rootScope.loadActivities = function () {
         $rootScope.loading = true;
-        $http({
-            url: $sessionStorage.config.backend + 'Activities.asmx/Load',
-            method: "POST",
-            data: { lang: $rootScope.config.language }
-        })
-        .then(function (response) {
-            $rootScope.activities = JSON.parse(response.data.d);
+        functions.post('Activities', 'Load', { lang: $rootScope.config.language }).then(function (d) {
+            $rootScope.activities = d;
             angular.forEach($rootScope.activities, function (value, key) {
                 $rootScope.activities[key].activity = $translate.instant($rootScope.activities[key].activity).replace('&gt;', '<').replace('&lt;', '>');
             })
             $rootScope.loading = false;
-        },
-        function (response) {
-            $rootScope.loading = false;
-            alert(response.data.d)
         });
     };
 
     $rootScope.loadDiets = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'Diets.asmx/Load',
-            method: "POST",
-            data: { lang: $rootScope.config.language }
-        })
-        .then(function (response) {
-            $rootScope.diets = JSON.parse(response.data.d);
+        functions.post('Diets', 'Load', { lang: $rootScope.config.language }).then(function (d) {
+            $rootScope.diets = d;
             angular.forEach($rootScope.diets, function (value, key) {
                 $rootScope.diets[key].diet = $translate.instant($rootScope.diets[key].diet).replace('&gt;', '<').replace('&lt;', '>');;
                 $rootScope.diets[key].dietDescription = $translate.instant($rootScope.diets[key].dietDescription).replace('&gt;', '<').replace('&lt;', '>');
                 $rootScope.diets[key].note = $translate.instant($rootScope.diets[key].note).replace('&gt;', '<').replace('&lt;', '>');
             })
-        },
-        function (response) {
-            alert(response.data.d)
         });
     };
 
@@ -336,17 +278,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $rootScope.getActiveEvents = function () {
         if ($rootScope.user.userType == 0) { return false; }
         var now = new Date().getTime();
-        $http({
-            url: $sessionStorage.config.backend + 'Scheduler.asmx/GetActiveEvents',
-            method: 'POST',
-            data: { user: $rootScope.user, now: now }
-        })
-       .then(function (response) {
-           $scope.activeEvents = JSON.parse(response.data.d);
-       },
-       function (response) {
-           functions.alert($translate.instant(response.data.d));
-       });
+        functions.post('Scheduler', 'GetActiveEvents', { user: $rootScope.user, now: now }).then(function (d) {
+            $scope.activeEvents = d;
+        });
     };
 
     $rootScope.loadData = function () {
@@ -500,17 +434,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         x.userId = $rootScope.user.userId;
         x.clientId = x.clientId == null ? $rootScope.client.clientId : x.clientId;
         x.date = functions.dateToString(x.date);
-        $http({
-            url: $sessionStorage.config.backend + 'ClientsData.asmx/Save',
-            method: 'POST',
-            data: { userId: $sessionStorage.usergroupid, x: x, userType: $rootScope.user.userType }
-        })
-       .then(function (response) {
-           $rootScope.clientData.date = new Date($rootScope.clientData.date);
-       },
-       function (response) {
-           alert(response.data.d)
-       });
+        functions.post('ClientsData', 'Save', { userId: $sessionStorage.usergroupid, x: x, userType: $rootScope.user.userType }).then(function (d) {
+            $rootScope.clientData.date = new Date($rootScope.clientData.date);
+        });
     }
 
     $scope.hideMsg = function () {
@@ -759,6 +685,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.foods = d.foods;
         $scope.myFoods = d.myFoods;
         $scope.foodGroups = d.foodGroups;
+        $scope.quantityAlert = null;
+        $scope.massAlert = null;
         var initFood = null;
 
         var initFoodForEdit = function (x) {
@@ -897,37 +825,36 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         $scope.confirm = function (x) {
+            $scope.quantityAlert = null;
+            $scope.massAlert = null;
+            if (functions.isNullOrEmpty(x.quantity) || x.quantity == 0) {
+                $scope.quantityAlert = $translate.instant('quantity is required');
+                return;
+            }
+            if (functions.isNullOrEmpty(x.mass) || x.mass == 0) {
+                $scope.massAlert = $translate.instant('mass is required');
+                return;
+            } 
             var data = { food: x, initFood: initFood }
             $mdDialog.hide(data);
         }
 
         $scope.changeQuantity = function (x, type) {
             isEditMode = false;
-            if (x.quantity > 0.0001 && isNaN(x.quantity) == false && x.mass > 0.0001 && isNaN(x.mass) == false) {
-                var currentFood = $scope.food.food;  // << in case where user change food title
-                $timeout(function () {
-                    $http({
-                        url: $sessionStorage.config.backend + 'Foods.asmx/ChangeFoodQuantity',
-                        method: "POST",
-                        data: { initFood: initFood, newQuantity: x.quantity, newMass: x.mass, type: type, thermalTreatment: $scope.selectedThermalTreatment }
-                    })
-                    .then(function (response) {
-                        $scope.food = JSON.parse(response.data.d);
-                        $scope.food.food = currentFood; // << in case where user change food title
-                    },
-                    function (response) {
-                    });
-                }, 600);
-            }
+            var currentFood = $scope.food.food;  // << in the case where user change food title
+            $scope.food = functions.changeQuantity(initFood, x, type);
+            $scope.food.food = currentFood;
         }
 
+
+        
         $scope.change = function (x, type) {
             if (type === 'quantity' && $scope.food.quantity + x > 0) {
-                $scope.food.quantity = $scope.food.quantity + x;
+                $scope.food.quantity = Number($scope.food.quantity) + Number(x);
                 $scope.changeQuantity($scope.food, 'quantity');
             }
             if (type === 'mass' && $scope.food.mass + x > 0) {
-                $scope.food.mass = $scope.food.mass + x;
+                $scope.food.mass = Number($scope.food.mass) + Number(x);
                 $scope.changeQuantity($scope.food, 'mass');
             }
         }
@@ -2498,7 +2425,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.clientLogDiff = function (type, clientLog, x, idx) {
-        if (x === undefined) { return false; }
+        if (x === undefined) { return; }
         var diff = 0;
         if (clientLog.length - idx == 1) return {
             diff: diff.toFixed(1),
@@ -3964,26 +3891,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.toggleAnalytics('chartsTpl');
 
     $scope.changeQuantity = function (x, type, idx) {
-        if (x.quantity > 0.0001 && isNaN(x.quantity) == false && x.mass > 0.0001 && isNaN(x.mass) == false) {
-			$scope.selectedThermalTreatment = null; //TODO
-            angular.forEach($rootScope.currentMenu.data.selectedFoods[idx].thermalTreatments, function (value, key) {
-                if (value.isSelected == true) {
-                    $scope.selectedThermalTreatment = value;
-                }
-            })
-            $timeout(function () {
-                $http({
-                    url: $sessionStorage.config.backend + webService + '/ChangeFoodQuantity',
-                    method: "POST",
-                    data: { initFood: $rootScope.currentMenu.data.selectedInitFoods[idx], newQuantity: x.quantity, newMass: x.mass, type: type, thermalTreatment: $scope.selectedThermalTreatment }
-                })
-                .then(function (response) {
-                    $rootScope.currentMenu.data.selectedFoods[idx] = JSON.parse(response.data.d);
-                    getTotals($rootScope.currentMenu);
-                },
-                function (response) {
-                });
-            }, 600);
+        $scope.selectedThermalTreatment = null; //TODO
+        angular.forEach($rootScope.currentMenu.data.selectedFoods[idx].thermalTreatments, function (value, key) {
+            if (value.isSelected == true) {
+                $scope.selectedThermalTreatment = value;
+            }
+        })
+        $rootScope.currentMenu.data.selectedFoods[idx] = functions.changeQuantity($rootScope.currentMenu.data.selectedInitFoods[idx], x, type);
+        if (x.quantity > 0.0001 && !isNaN(x.quantity) && x.mass > 0.0001 && !isNaN(x.mass)) {
+            getTotals($rootScope.currentMenu);
         }
     }
 

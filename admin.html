@@ -356,6 +356,9 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
+                            <div class="p5">
+                                Ukupno: <span class="badge">{{sharingRecipes.length}}</span>
+                            </div>
                             <div class="panel panel-default" ng-repeat="x in sharingRecipes track by $index">
                                 <div class="panel-heading">
                                     <a href="" ng-click="removeRecipe(x)" class="close" style="color:red!important" title="briši">&times;</a>
