@@ -100,48 +100,26 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <!--<div class="row m-2">
-                            <div class="col-sm-4">
-                                <div class="input-group">
-                                    <input ng-model="searchValue" class="form-control search" type="text" placeholder="{{'search' | translate}}..." />
-                                    <span class="input-group-append">
-                                        <button class="btn btn-outline-primary"><i class="fa fa-search" aria-hidden="true"></i>&#8203;</button>
-                                    </span>
+                        <div ng-if="clients.length>0">
+                            <div ng-repeat="x in clients | filter:searchValue | limitTo:5" class="py-1 my-1">
+                                <div class="row px-1 pointer">
+                                    <div class="col-1 px-1" ng-click="edit(x)" title="{{'edit' | translate}}">
+                                        <i ng-if="!x.profileImg" class="fa fa-user-circle fa-2x"></i>
+                                        <img ng-if="x.profileImg" src="../upload/users/{{x.userGroupId}}/clients/{{x.clientId}}/profileimg/{{x.profileImg}}" alt="{{x.profileImg}}" style="height:2rem;width:2rem" class="img-circle rounded-circle" />
+                                    </div>
+                                    <div class="col-6 px-1" ng-click="edit(x)" title="{{'edit' | translate}}">
+                                        {{x.firstName}} {{x.lastName}}
+                                    </div>
+                                    <div class="col-2 px-1" ng-click="edit(x)">
+                                        <i class="fa fa-{{x.gender.title}} fa-2x" title="{{x.gender.title | translate}}"></i>
+                                        <sup class="badge badge-secondary badge-pill align-top" title="{{'age' | translate}}">{{x.clientData.age}}</sup>
+                                    </div>
+                                    <div class="col-3 px-1 text-right">
+                                        <button class="btn btn-outline-primary" ng-click="getClient(x)" title="{{'create menu' | translate}}"><i class="fa fa-concierge-bell"></i> {{'create menu' | translate}}</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>-->
-                        <div ng-if="clients.length>0" class="table-responsive">
-                            <table class="table table-hover table-borderless">
-                                <thead>
-                                    <tr class="text-capitalize border-bottom">
-                                        <th style="width:20px"></th>
-                                        <th class="nowrap" style="width:40%">{{'client' | translate}}</th>
-                                        <th>{{'age' | translate}}</th>
-                                        <th>{{'gender' | translate}}</th>
-                                        <th>{{'phone' | translate}}</th>
-                                        <th colspan="2"></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="border-bottom pointer">
-                                    <tr ng-repeat="x in clients | filter:searchValue | limitTo:4">
-                                        <td ng-click="edit(x)" style="width:20px" title="{{'edit' | translate}}">
-                                            <i ng-if="!x.profileImg" class="fa fa-user-circle fa-2x"></i>
-                                            <img ng-if="x.profileImg" src="../upload/users/{{x.userGroupId}}/clients/{{x.clientId}}/profileimg/{{x.profileImg}}" alt="{{x.profileImg}}" style="height:2rem;width:2rem" class="img-circle rounded-circle" />
-                                        </td>
-                                        <td ng-click="getClient(x)" style="width:40%">{{x.firstName}} {{x.lastName}}</td>
-                                        <td ng-click="getClient(x)">{{x.clientData.age}}</td>
-                                        <td ng-click="getClient(x)" style="width:10%"><i class="fa fa-{{x.gender.title}} fa-2x"></i></td>
-                                        <td ng-click="getClient(x)">{{x.phone}}</td>
-                                        <td style="width:10px">
-                                            <button class="btn btn-outline-primary btn-circle" ng-click="edit(x)" title="{{'edit' | translate}}"><i class="fa fa-user-edit"></i></button>
-                                        </td>
-                                        <td style="width:10px">
-                                            <button class="btn btn-outline-primary btn-circle" ng-click="getClient(x)" title="{{'create menu' | translate}}"><i class="fa fa-concierge-bell"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="text-right">
+                            <div class="text-right pt-2">
                                 <a href="" class="small text-gray-500" ng-click="search()"><i class="fa fa-search"></i> {{'show all clients' | translate}}</a>
                             </div>
                         </div>

@@ -2035,6 +2035,9 @@
   "the file format is not allowed": "Формат датотеке није дозвољен",
   "all languages": "Сви језици",
   "quantity is required": "Количина је обавезна",
-  "mass is required": "Маса је обавезна"
+  "mass is required": "Маса је обавезна",
+  "show more info": "Прикажи више информација",
+  "cm": "цм",
+  "mg": "мг"
 
 }

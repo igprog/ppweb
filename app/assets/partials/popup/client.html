@@ -11,13 +11,13 @@
     </md-toolbar>
     <md-dialog-content class="mb-4">
         <div class="md-dialog-content">
-            <div class="pb-2">
+            <div class="pb-2 text-right">
                 <button class="btn btn-outline-primary" ng-click="save(d)" title="{{'save' | translate}}"><i class="fa fa-floppy-o"></i> {{'save' | translate}}</button>
                 <button ng-disabled="d.clientId===null" class="btn btn-outline-danger text-capitalize" title="{{'remove' | translate}}" ng-click="remove(d)"><i class="fa fa-trash-alt"></i> {{'delete' | translate}}</button>
-                <button ng-disabled="d.clientId===null" class="btn btn-outline-primary float-right" ng-click="forward(d)" title="{{'forward' | translate}}">{{'forward' | translate}} <i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+                <button ng-disabled="d.clientId===null" class="btn btn-outline-primary" ng-click="forward(d)" title="{{'forward' | translate}}">{{'forward' | translate}} <i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
             </div>
             <div class="row pt-3">
-                <div class="col-lg-7">
+                <div class="col-lg-7 mb-3">
                     <div layout-gt-sm="row">
                         <md-input-container class="md-block" flex-gt-sm>
                             <label>{{'first name' | translate}}</label>
@@ -40,21 +40,24 @@
                             <md-radio-button value="1" class="md-primary"><i class="fa fa-female pl-2 pr-1"></i>{{'female' | translate}}</md-radio-button>
                         </md-radio-group>
                     </div>
-                    <div layout-gt-sm="row">
-                        <md-input-container class="md-block" flex-gt-sm>
-                            <label>{{'phone' | translate}}</label>
-                            <input ng-model="d.phone" type="text">
-                        </md-input-container>
-                        <md-input-container class="md-block" flex-gt-sm>
-                            <label>{{'email' | translate}}</label>
-                            <input name="email" ng-model="d.email" minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
-                        </md-input-container>
-                    </div>
-                    <div layout-gt-sm="row">
-                        <md-input-container class="md-block m-0" flex-gt-sm>
-                            <label>{{'note' | translate}}</label>
-                            <textarea ng-model="d.note" rows="5" maxlength="1500" class="area"></textarea>
-                        </md-input-container>
+                    <a href="" ng-click="showMoreInfo(moreInfo)" class="pt-2 pb-4">{{'show more info' | translate}} <i class="fa fa-caret-{{!moreInfo?'right':'down'}}" aria-hidden="true"></i></a>
+                    <div ng-if="moreInfo" class="pt-3">
+                        <div layout-gt-sm="row">
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>{{'phone' | translate}}</label>
+                                <input ng-model="d.phone" type="text">
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>{{'email' | translate}}</label>
+                                <input name="email" ng-model="d.email" minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+                            </md-input-container>
+                        </div>
+                        <div layout-gt-sm="row">
+                            <md-input-container class="md-block m-0" flex-gt-sm>
+                                <label>{{'note' | translate}}</label>
+                                <textarea ng-model="d.note" rows="5" maxlength="1500" class="area"></textarea>
+                            </md-input-container>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-5">

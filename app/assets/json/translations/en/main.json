@@ -2029,6 +2029,9 @@
   "the file format is not allowed": "The file format is not allowed",
   "all languages": "All languages",
   "quantity is required": "Quantity is required",
-  "mass is required": "Mass is required"
+  "mass is required": "Mass is required",
+  "show more info": "Show more info",
+  "cm": "cm",
+  "mg":  "mg"
 
 }

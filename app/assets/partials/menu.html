@@ -83,10 +83,10 @@
                                     </tr>
                                     <tr ng-if="currentMenu.data.selectedFoods.length>0" ng-repeat="x in currentMenu.data.selectedFoods | filter:filterMeal track by $index" ng-class="getFoodGroupClass(x.foodGroup.code)" title="{{x.foodGroup.title}}">
                                         <td>
-                                            <button ng-click="removeFood(x, currentMenu.data.selectedFoods.indexOf(x))" class="btn btn-outline-danger btn-circle btn-sm" title="{{'delete' | translate}}"><i class="fa fa-times"></i></button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-circle btn-sm" ng-click="openFoodPopup(x, currentMenu.data.selectedFoods.indexOf(x))" title="{{'edit' | translate}}"><i class="fa fa-pencil-alt"></i></button>
+                                            <div class="btn-group">
+                                                <button ng-click="removeFood(x, currentMenu.data.selectedFoods.indexOf(x))" class="btn btn-outline-danger btn-circle btn-sm" title="{{'delete' | translate}}"><i class="fa fa-times"></i></button>
+                                                <button class="btn btn-outline-primary btn-circle btn-sm" ng-click="openFoodPopup(x, currentMenu.data.selectedFoods.indexOf(x))" title="{{'edit' | translate}}"><i class="fa fa-pencil-alt"></i></button>
+                                            </div>
                                         </td>
                                         <td class="pointer">
                                             <div>
@@ -112,9 +112,9 @@
                                     </tr>
                                     <tr ng-if="x.code===currentMeal" ng-repeat="x in currentMenu.data.meals" >
                                         <td class="align-top">
-                                            <button ng-if="isVisibleClearMealBtn(currentMenu.data.selectedFoods, x.code)" ng-click="clearMeal(currentMenu, x.code)" class="btn btn-outline-danger mt-1" style="min-height:38px" title="{{'clear all foods from the meal' | translate}}"><i class="fa fa-times"></i></button>
+                                            <button ng-if="isVisibleClearMealBtn(currentMenu.data.selectedFoods, x.code)" ng-click="clearMeal(currentMenu, x.code)" class="btn btn-outline-danger btn-block mt-1" style="min-height:38px" title="{{'clear all foods from the meal' | translate}}"><i class="fa fa-times"></i></button>
                                         </td>
-                                        <td colspan="7">
+                                        <td colspan="6">
                                             <div class="text-capitalize">
                                                 <button ng-disabled="addFoodBtn" class="btn btn-primary mt-1" ng-click="openFoodPopup(null,null)"><i ng-class="addFoodBtnIcon"></i> {{'add food' | translate}}</button>
                                                 <button class="btn btn-outline-primary mt-1 ml-2" ng-click="openRecipePopup()"><i class="fa fa-concierge-bell"></i> {{'add recipe' | translate}}</button>
@@ -126,7 +126,7 @@
                                         <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].fats.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].fats.perc| number:1}} %)</em></span></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="8">
+                                        <td colspan="11">
                                             <div ng-if="currentMenu.data.selectedFoods.length>0" class="pt-2">
                                                 <md-checkbox ng-model="config.showfoodgroupscolors" class="md-primary">
                                                     {{'color food groups' | translate}}
@@ -344,19 +344,19 @@
                     <div class="col chart-box">
                         <span>{{'carbohydrates' | translate}}</span>
                         <div id="carbohydratesChart" class="guage"></div>
-                        <div class="text-xs">{{totals.carbohydrates | number:1}} g <span>({{totals.carbohydratesPercentage | number:1}} %)</span></div>
+                        <div class="text-xs">{{totals.carbohydrates | number:1}} {{'g' | translate}} <span>({{totals.carbohydratesPercentage | number:1}} %)</span></div>
                         <em class="text-primary text-xs text-lowercase">{{'recommended' | translate}}: {{recommendations.carbohydratesPercentageMin | number:0}}-{{recommendations.carbohydratesPercentageMax | number:0}}%</em>
                     </div>
                     <div class="col chart-box">
                         <span>{{'proteins' | translate}}</span>
                         <div id="proteinsChart" class="guage"></div>
-                        <div class="text-xs">{{totals.proteins | number:1}} g <span>({{totals.proteinsPercentage | number:1}} %)</span></div>
+                        <div class="text-xs">{{totals.proteins | number:1}} {{'g' | translate}} <span>({{totals.proteinsPercentage | number:1}} %)</span></div>
                         <em class="text-primary text-xs text-lowercase">{{'recommended' | translate}}: {{recommendations.proteinsPercentageMin | number:0}}-{{recommendations.proteinsPercentageMax | number:0}}%</em>
                     </div>
                     <div class="col chart-box">
                         <span>{{'fats' | translate}}</span>
                         <div id="fatsChart" class="guage"></div>
-                        <div class="text-xs">{{totals.fats | number:1}} g <span>({{totals.fatsPercentage | number:1}} %)</span></div>
+                        <div class="text-xs">{{totals.fats | number:1}} {{'g' | translate}} <span>({{totals.fatsPercentage | number:1}} %)</span></div>
                         <em class="text-primary text-xs text-lowercase">{{'recommended' | translate}}: {{recommendations.fatsPercentageMin | number:0}}-{{recommendations.fatsPercentageMax | number:0}}%</em>
                     </div>
                 </div>
@@ -406,19 +406,19 @@
                     <div class="col chart-box">
                         <span>{{'saturated fats' | translate}}</span>
                         <div id="saturatedFatsChart" class="guage"></div>
-                        <div>{{totals.saturatedFats | number:1}} g </div>
+                        <div>{{totals.saturatedFats | number:1}} {{'g' | translate}}</div>
                         <em class="text-primary text-xs text-lowercase">{{'acceptable' | translate}}: {{recommendations.saturatedFats.ui | number:0}} g</em>
                     </div>
                     <div class="col chart-box">
                         <span>{{'trifluoroacetic acid' | translate}}</span>
                         <div id="trifluoroaceticAcidChart" class="guage"></div>
-                        <div>{{totals.trifluoroaceticAcid | number:1}} g</div>
+                        <div>{{totals.trifluoroaceticAcid | number:1}} {{'g' | translate}}</div>
                         <em class="text-primary text-xs text-lowercase">{{'acceptable' | translate}}: {{recommendations.trifluoroaceticAcid.ui | number:0}} g</em>
                     </div>
                     <div class="col chart-box">
                         <span>{{'cholesterol' | translate}}</span>
                         <div id="cholesterolChart" class="guage"></div>
-                        <div>{{totals.cholesterol | number:1}} mg </div>
+                        <div>{{totals.cholesterol | number:1}} {{'mg' | translate}} </div>
                         <em class="text-primary text-xs text-lowercase">{{'acceptable' | translate}}: {{recommendations.cholesterol.ui | number:0}} mg</em>
                     </div>
                 </div>

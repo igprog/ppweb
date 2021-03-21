@@ -766,8 +766,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                         $scope.food.thermalTreatments[key].thermalTreatment.title = $translate.instant($scope.food.thermalTreatments[key].thermalTreatment.title);
                     })
                     initFood = angular.copy($scope.food);
-                    $scope.loading = false;
                 }
+                $scope.loading = false;
             },
             function (response) {
                 alert(response.data.d)
@@ -1957,6 +1957,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
            });
         }
         /********* Profile Image *********/
+
+        $scope.moreInfo = false;
+        $scope.showMoreInfo = function (moreInfo) {
+            $scope.moreInfo = !moreInfo;
+        }
 
     }
 
