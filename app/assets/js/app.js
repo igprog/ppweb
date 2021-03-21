@@ -687,6 +687,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.foodGroups = d.foodGroups;
         $scope.quantityAlert = null;
         $scope.massAlert = null;
+        $scope.loading = false;
         var initFood = null;
 
         var initFoodForEdit = function (x) {
@@ -746,6 +747,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 getMyFoodDetails(x);
                 return false;
             }
+            $scope.loading = true;
             $http({
                 url: $sessionStorage.config.backend + 'Foods.asmx/Get',
                 method: "POST",
@@ -764,6 +766,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                         $scope.food.thermalTreatments[key].thermalTreatment.title = $translate.instant($scope.food.thermalTreatments[key].thermalTreatment.title);
                     })
                     initFood = angular.copy($scope.food);
+                    $scope.loading = false;
                 }
             },
             function (response) {
