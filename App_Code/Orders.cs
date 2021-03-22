@@ -20,6 +20,8 @@ public class Orders : System.Web.Services.WebService {
     DataBase db = new DataBase();
     Translate t = new Translate();
     Invoice I = new Invoice();
+    Log L = new Log();
+
     public Orders() { 
     }
     public class NewOrder {
@@ -122,6 +124,7 @@ public class Orders : System.Web.Services.WebService {
             xx = xx.Where(a => Convert.ToDateTime(a.orderDate).Year == year).ToList();  
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
+            L.SendErrorLog(e, year.ToString(), search, "Orders", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -227,22 +230,28 @@ public class Orders : System.Web.Services.WebService {
         catch (Exception e) {
             resp.isSuccess = false;
             resp.msg = e.Message;
-            return (resp);
+            L.SendErrorLog(e, x.id, x.email, "Orders", "SendOrder");
+            return resp;
         }
     }
 
     [WebMethod]
     public string Delete(string id) {
         try {
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
-                connection.Open();
-                string sql = string.Format("DELETE FROM orders WHERE id = '{0}'", id);
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                    command.ExecuteNonQuery();
+            if (!string.IsNullOrWhiteSpace(id)) {
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                    connection.Open();
+                    string sql = string.Format("DELETE FROM orders WHERE id = '{0}'", id);
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        command.ExecuteNonQuery();
+                    }
                 }
+                return JsonConvert.SerializeObject("OK", Formatting.None);
+            } else {
+                return JsonConvert.SerializeObject("Select ticket", Formatting.None);
             }
-            return JsonConvert.SerializeObject("ok", Formatting.None);
         } catch (Exception e) {
+            L.SendErrorLog(e, id, null, "Orders", "Delete");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }

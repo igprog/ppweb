@@ -2032,6 +2032,9 @@
   "mass is required": "Mass is required",
   "show more info": "Show more info",
   "cm": "cm",
-  "mg":  "mg"
+  "mg": "mg",
+  "swift code": "SWIFT CODE",
+  "payment outside croatia": "Payment outside Croatia",
+  "dashboard": "Dashboard"
 
 }

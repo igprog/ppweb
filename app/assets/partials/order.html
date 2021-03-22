@@ -142,22 +142,22 @@
                 <div ng-if="config.language!=='en'">
                     <div>
                         <pre>
-<span class="text-uppercase">{{'iban' | translate}}</span>: {{config.iban}}
+<span>{{'iban' | translate}}</span>: {{config.iban}}
 <span class="text-capitalize">{{'bank' | translate}}</span>: {{config.bank}}, {{config.language==='en'?'Croatia':'Hrvatska'}}
 <span class="text-capitalize">{{'recipient' | translate}}</span>: {{config.company}}
-<span class="text-capitalize">adresa</span>: {{config.address}}, {{config.language==='en'?'Croatia':'Hrvatska'}}
-<span class="text-capitalize">{{'payment description' | translate}}</span>: {{user.application}} {{user.version}}
+<span>{{'address' | translate}}</span>: {{config.address}}, {{config.language==='en'?'Croatia':'Hrvatska'}}
+<span>{{'payment description' | translate}}</span>: {{user.application}} {{user.version}}
 <span class="text-capitalize">{{'amount' | translate}}</span>: <span>{{user.price}}</span> kn
 Model: <span ng-if="user.pin">HR00</span><span ng-if="!user.pin">HR99</span>
 <span ng-if="user.pin">Poziv na broj: {{user.pin}}</span> 
                     </pre>
                     </div>
                     <div ng-hide="user.country.toLowerCase().startsWith('hr') || user.country.toLowerCase().startsWith('cr')">
-                        <b>Podaci za uplatu izvan Hrvatske:</b>
+                        <b>{{'payment outside croatia' | translate}}:</b>
                         <div>
                             <pre>
-IBAN računa: {{config.iban}}
-SWIFT CODE: {{config.swift}}
+{{'iban' | translate}}: {{config.iban}}
+{{'swift code' | translate}}: {{config.swift}}
 {{'amount' | translate}}: <span>{{user.priceEur | number:2}}</span> €
                         </pre>
                         </div>
@@ -168,7 +168,7 @@ SWIFT CODE: {{config.swift}}
                     <div>
                         <pre>
 <span class="text-uppercase">{{'iban' | translate}}</span>: {{config.iban}}
-<span class="text-uppercase">swift code</span>: {{config.swift}}
+<span class="text-uppercase">{{'swift code' | translate}}</span>: {{config.swift}}
 <span class="text-capitalize">{{'bank' | translate}}</span>: {{config.bank}}, {{config.language=='en'?'Croatia':'Hrvatska'}}
 <span class="text-capitalize">{{'recipient' | translate}}</span>: {{config.company}}
 <span class="text-capitalize">{{'address' | translate}}</span>: {{config.address}}, {{config.language=='en'?'Croatia':'Hrvatska'}}

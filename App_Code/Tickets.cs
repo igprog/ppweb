@@ -49,6 +49,8 @@ public class Tickets : WebService {
         height
     }
 
+
+    #region WebMethods
     [WebMethod]
     public string Init() {
         NewTicket x = new NewTicket();
@@ -66,7 +68,6 @@ public class Tickets : WebService {
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
-    #region WebMethods
     [WebMethod]
     public string Load() {
         try {
@@ -177,8 +178,11 @@ public class Tickets : WebService {
                         command.ExecuteNonQuery();
                     }
                 }
+                return JsonConvert.SerializeObject("OK", Formatting.None);
+            } else {
+                return JsonConvert.SerializeObject("Select ticket", Formatting.None);
             }
-            return JsonConvert.SerializeObject("OK", Formatting.None);
+            
         } catch (Exception e) {
             L.SendErrorLog(e, id, null, "Tickets", "Delete");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
