@@ -82,7 +82,7 @@
                                         <th class="text-right border-bottom align-bottom">{{'fats' | translate}}<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
                                     </tr>
                                     <tr ng-if="currentMenu.data.selectedFoods.length>0" ng-repeat="x in currentMenu.data.selectedFoods | filter:filterMeal track by $index" ng-class="getFoodGroupClass(x.foodGroup.code)" title="{{x.foodGroup.title}}">
-                                        <td>
+                                        <td colspan="2">
                                             <div class="btn-group">
                                                 <button ng-click="removeFood(x, currentMenu.data.selectedFoods.indexOf(x))" class="btn btn-outline-danger btn-circle btn-sm" title="{{'delete' | translate}}"><i class="fa fa-times"></i></button>
                                                 <button class="btn btn-outline-primary btn-circle btn-sm" ng-click="openFoodPopup(x, currentMenu.data.selectedFoods.indexOf(x))" title="{{'edit' | translate}}"><i class="fa fa-pencil-alt"></i></button>
@@ -114,7 +114,7 @@
                                         <td class="align-top">
                                             <button ng-if="isVisibleClearMealBtn(currentMenu.data.selectedFoods, x.code)" ng-click="clearMeal(currentMenu, x.code)" class="btn btn-outline-danger btn-block mt-1" style="min-height:38px" title="{{'clear all foods from the meal' | translate}}"><i class="fa fa-times"></i></button>
                                         </td>
-                                        <td colspan="6">
+                                        <td colspan="7">
                                             <div class="text-capitalize">
                                                 <button ng-disabled="addFoodBtn" class="btn btn-primary mt-1" ng-click="openFoodPopup(null,null)"><i ng-class="addFoodBtnIcon"></i> {{'add food' | translate}}</button>
                                                 <button class="btn btn-outline-primary mt-1 ml-2" ng-click="openRecipePopup()"><i class="fa fa-concierge-bell"></i> {{'add recipe' | translate}}</button>

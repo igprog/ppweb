@@ -354,7 +354,7 @@
                         <label class="lead text-primary">Učitavanje...</label>
                         <div><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
                     </div>
-                    <div class="row">
+                    <div ng-if="!loading" class="row">
                         <div class="col-lg-6">
                             <div class="p5">
                                 Ukupno: <span class="badge">{{sharingRecipes.length}}</span>

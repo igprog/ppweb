@@ -118,6 +118,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 .controller('AppCtrl', ['$scope', '$mdDialog', '$timeout', '$q', '$log', '$rootScope', '$localStorage', '$sessionStorage', '$window', '$http', '$translate', '$translatePartialLoader', 'functions', '$state', function ($scope, $mdDialog, $timeout, $q, $log, $rootScope, $localStorage, $sessionStorage, $window, $http, $translate, $translatePartialLoader, functions, $state) {
     $rootScope.loginUser = $sessionStorage.loginuser;
     $rootScope.user = $sessionStorage.user;
+    var queryLang = null;
+
     if ($rootScope.user === undefined) {
         $window.location.href = '/app/#/login';
     }
@@ -158,8 +160,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var getConfig = function () {
-        if (location.search.substring(1, 5) == 'lang') {
-            var queryLang = location.search.substring(6);
+        if (location.href.includes('?')) {
+            var queryStr = location.href.split('?')[1];
+            if (queryStr.substring(0, 4) === 'lang') {
+                queryLang = queryStr.substring(5);
+            }
         }
         $http.get('./config/config.json')
           .then(function (response) {
@@ -170,8 +175,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
               } else {
                   $rootScope.setLanguage($rootScope.config.language);
               }
-              if (angular.isDefined(queryLang)) {
-                  if (queryLang == 'hr' || queryLang == 'ba' || queryLang == 'sr' || queryLang == 'sr_cyrl' || queryLang == 'en') {
+              if (queryLang !== undefined) {
+                  if (queryLang === 'hr' || queryLang === 'ba' || queryLang === 'sr' || queryLang === 'sr_cyrl' || queryLang === 'en') {
                       $rootScope.setLanguage(queryLang);
                   }
               }
@@ -6776,7 +6781,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $window.location.href = '/app/#/login';
     }
 
-    var webService = 'Prices.asmx';
+    var webService = 'Prices';
     $scope.foodListType = 0;
     $scope.getFoodList = function (x) {
         $scope.foodList = x == 0 ? $rootScope.foods : $rootScope.myFoods;
@@ -6784,34 +6789,18 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.getFoodList($scope.foodListType);
 
     var init = function () {
-        $http({
-            url: $sessionStorage.config.backend + webService +'/Init',
-            method: "POST",
-            data: ''
-        })
-        .then(function (response) {
-            $scope.price = JSON.parse(response.data.d);
-            $scope.price.netPrice.currency = $sessionStorage.config.currency;
+        functions.post(webService, 'Init', {}).then(function (d) {
+            $scope.price = d;
+            $scope.price.netPrice.currency = $sessionStorage.config.currency;  // TODO currency to local storage or settings
             load();
-        },
-        function (response) {
-            functions.alert($translate.instant(response.data.d), '');
         });
     };
     init();
 
     var load = function () {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Load',
-            method: "POST",
-            data: { userId: $rootScope.user.userGroupId }
-        })
-       .then(function (response) {
-           $scope.prices = JSON.parse(response.data.d);
-       },
-       function (response) {
-           functions.alert($translate.instant(response.data.d), '');
-       });
+        functions.post(webService, 'Load', { userId: $rootScope.user.userGroupId }).then(function (d) {
+            $scope.prices = d;
+        });
     }
 
     $scope.selectFood = function (x) {
@@ -6835,21 +6824,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             functions.demoAlert('this function is not available in demo version');
             return false;
         }
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Save',
-            method: "POST",
-            data: { userId: $rootScope.user.userGroupId, x: x }
-        })
-       .then(function (response) {
-           load();
-           functions.alert($translate.instant(response.data.d), '');
-       },
-       function (response) {
-           functions.alert($translate.instant(response.data.d), '');
-       });
+        functions.post(webService, 'Save', { userId: $rootScope.user.userGroupId, x: x }).then(function (d) {
+            load();
+        });
     }
 
-    $scope.remove = function (x) {
+    $scope.remove = function (id) {
         var confirm = $mdDialog.confirm()
             .title($translate.instant('delete input') + '?')
             .textContent()
@@ -6857,23 +6837,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             .ok($translate.instant('yes'))
             .cancel($translate.instant('no'));
         $mdDialog.show(confirm).then(function () {
-            remove(x);
+            remove(id);
         }, function () {
         });
     };
 
-    var remove = function (x) {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Delete',
-            method: "POST",
-            data: { userId: $rootScope.user.userGroupId, x: x }
-        })
-       .then(function (response) {
-           load();
-       },
-       function (response) {
-           functions.alert($translate.instant(response.data.d), '');
-       });
+    var remove = function (id) {
+        functions.post(webService, 'Delete', { userId: $rootScope.user.userGroupId, id: id }).then(function (d) {
+            load();
+        });
     }
 
 }])
@@ -7107,14 +7079,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             method: "POST",
             data: { foldername: 'users/' + $rootScope.user.userGroupId, filename: 'settings', json: JSON.stringify(d) }
         })
-     .then(function (response) {
-         $rootScope.config.language = d.language;
-         $rootScope.config.currency = d.currency;
-         functions.alert($translate.instant('settings saved successfully'), '');
-     },
-     function (response) {
-         functions.alert($translate.instant(response.data.d), '');
-     });
+        .then(function (response) {
+            $rootScope.config.language = d.language;
+            $rootScope.config.currency = d.currency;
+            functions.alert($translate.instant('settings saved successfully'), '');
+        },
+        function (response) {
+            functions.alert($translate.instant(response.data.d), '');
+        });
     }
 
 }])

@@ -16,6 +16,7 @@ using Igprog;
 public class Prices : System.Web.Services.WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     DataBase db = new DataBase();
+    Log L = new Log();
 
     public Prices() { 
     }
@@ -32,23 +33,29 @@ public class Prices : System.Web.Services.WebService {
         public UnitPrice GetUnitPrice(string userId, string foodId) {
             string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
             DataBase db = new DataBase();
+            UnitPrice x = new UnitPrice();
             try {
-                SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase));
-                connection.Open();
-                string sql = @"SELECT unitPrice, currency, unit
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                    connection.Open();
+                    string sql = @"SELECT unitPrice, currency, unit
                         FROM prices WHERE foodId = @foodId";
-                SQLiteCommand command = new SQLiteCommand(sql, connection);
-                command.Parameters.Add(new SQLiteParameter("foodId", foodId));
-                UnitPrice x = new UnitPrice();
-                SQLiteDataReader reader = command.ExecuteReader();
-                while (reader.Read()) {
-                    x.value = reader.GetValue(0) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(0));
-                    x.currency = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                    x.unit = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        command.Parameters.Add(new SQLiteParameter("foodId", foodId));
+                        using (SQLiteDataReader reader = command.ExecuteReader()) {
+                            while (reader.Read()) {
+                                x.value = reader.GetValue(0) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(0));
+                                x.currency = reader.GetValue(1) == DBNull.Value ? null : reader.GetString(1);
+                                x.unit = reader.GetValue(2) == DBNull.Value ? null : reader.GetString(2);
+                            }
+                        }
+                    }
                 }
-                connection.Close();
                 return x;
-            } catch (Exception e) { return new UnitPrice(); }
+            } catch (Exception e) {
+                Log Log = new Log();
+                Log.SendErrorLog(e, foodId, userId, "Prices", "GetUnitPrice");
+                return x;
+            }
         }
 
     }
@@ -94,44 +101,47 @@ public class Prices : System.Web.Services.WebService {
         x.unitPrice.currency = null;
         x.unitPrice.unit = "g";
         x.note = null;
-        string json = JsonConvert.SerializeObject(x, Formatting.None);
-        return json;
+        return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
     [WebMethod]
     public string Load(string userId) {
         try {
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase));
-            connection.Open();
-            string sql = @"SELECT id, foodId, food, netPrice, currency, mass, unit, unitPrice, note
+            List<NewPrice> xx = new List<NewPrice>();
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                string sql = @"SELECT id, foodId, food, netPrice, currency, mass, unit, unitPrice, note
                         FROM prices
                         ORDER BY food ASC";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            List<NewPrice> xx = new List<NewPrice>();
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
-                NewPrice x = new NewPrice();
-                x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                x.food = new IdTitle();
-                x.food.id = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                x.food.title = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                x.netPrice = new ValueCurrency();
-                x.netPrice.value = reader.GetValue(3) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(3));
-                x.netPrice.currency = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-                x.mass = new ValueUnit();
-                x.mass.value = reader.GetValue(5) == DBNull.Value ? 1 : reader.GetInt32(5);
-                x.mass.unit = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6);
-                x.unitPrice = new UnitPrice();
-                x.unitPrice.value = reader.GetValue(7) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(7));
-                x.unitPrice.currency = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-                x.unitPrice.unit = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6);
-                x.note = reader.GetValue(8) == DBNull.Value ? "" : reader.GetString(8);
-                xx.Add(x);
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            NewPrice x = new NewPrice();
+                            x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                            x.food = new IdTitle();
+                            x.food.id = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                            x.food.title = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+                            x.netPrice = new ValueCurrency();
+                            x.netPrice.value = reader.GetValue(3) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(3));
+                            x.netPrice.currency = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
+                            x.mass = new ValueUnit();
+                            x.mass.value = reader.GetValue(5) == DBNull.Value ? 1 : reader.GetInt32(5);
+                            x.mass.unit = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6);
+                            x.unitPrice = new UnitPrice();
+                            x.unitPrice.value = reader.GetValue(7) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(7));
+                            x.unitPrice.currency = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
+                            x.unitPrice.unit = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6);
+                            x.note = reader.GetValue(8) == DBNull.Value ? "" : reader.GetString(8);
+                            xx.Add(x);
+                        }
+                    }
+                }
             }
-            connection.Close();
-            string json = JsonConvert.SerializeObject(xx, Formatting.None);
-            return json;
-        } catch (Exception e) { return ("Error: " + e); }
+            return JsonConvert.SerializeObject(xx, Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "Prices", "Load");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -147,44 +157,53 @@ public class Prices : System.Web.Services.WebService {
                 x.netPrice.value = x.unitPrice.value;
                 x.mass.value = 1000;
             }
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase));
-            connection.Open();
-            string sql = "";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            sql = @"BEGIN;
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                string sql = @"BEGIN;
                     INSERT OR REPLACE INTO prices (id, foodId, food, netPrice, currency, mass, unit, unitPrice, note)
                     VALUES (@id, @foodId, @food, @netPrice, @currency, @mass, @unit, @unitPrice, @note);
                     COMMIT;";
-            command = new SQLiteCommand(sql, connection);
-            command.Parameters.Add(new SQLiteParameter("id", x.id));
-            command.Parameters.Add(new SQLiteParameter("foodId", x.food.id));
-            command.Parameters.Add(new SQLiteParameter("food", x.food.title));
-            command.Parameters.Add(new SQLiteParameter("netPrice", x.netPrice.value));
-            command.Parameters.Add(new SQLiteParameter("currency", x.netPrice.currency));
-            command.Parameters.Add(new SQLiteParameter("mass", x.mass.value));
-            command.Parameters.Add(new SQLiteParameter("unit", x.mass.unit));
-            command.Parameters.Add(new SQLiteParameter("unitPrice", x.unitPrice.value));
-            command.Parameters.Add(new SQLiteParameter("note", x.note));
-            command.ExecuteNonQuery();
-            connection.Close();
-            return "saved";
-        } catch (Exception e) { return ("Error: " + e); }
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.Parameters.Add(new SQLiteParameter("id", x.id));
+                    command.Parameters.Add(new SQLiteParameter("foodId", x.food.id));
+                    command.Parameters.Add(new SQLiteParameter("food", x.food.title));
+                    command.Parameters.Add(new SQLiteParameter("netPrice", x.netPrice.value));
+                    command.Parameters.Add(new SQLiteParameter("currency", x.netPrice.currency));
+                    command.Parameters.Add(new SQLiteParameter("mass", x.mass.value));
+                    command.Parameters.Add(new SQLiteParameter("unit", x.mass.unit));
+                    command.Parameters.Add(new SQLiteParameter("unitPrice", x.unitPrice.value));
+                    command.Parameters.Add(new SQLiteParameter("note", x.note));
+                    command.ExecuteNonQuery();
+                }
+            }
+            return JsonConvert.SerializeObject("OK", Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.id, userId, "Prices", "Save");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
-     [WebMethod]
-    public string Delete(string userId, NewPrice x) {
+    [WebMethod]
+    public string Delete(string userId, string id) {
         try {
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase));
-            connection.Open();
-            string sql = @"BEGIN;
-                    DELETE FROM prices WHERE id = @id;
-                    COMMIT;";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            command.Parameters.Add(new SQLiteParameter("id", x.id));
-            command.ExecuteNonQuery();
-            connection.Close();
-            return "ok";
-        } catch (Exception e) { return ("Error: " + e); }
+            if (!string.IsNullOrWhiteSpace(id)) {
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                    connection.Open();
+                    string sql = string.Format(@"BEGIN;
+                    DELETE FROM prices WHERE id = '{0}';
+                    COMMIT;", id);
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        command.ExecuteNonQuery();
+                    }
+                    return JsonConvert.SerializeObject("OK", Formatting.None);
+                }
+            } else {
+                return JsonConvert.SerializeObject("Select Item", Formatting.None);
+            }
+        } catch (Exception e) {
+            L.SendErrorLog(e, id, userId, "Prices", "Delete");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
     #endregion WebMethods
 
@@ -192,17 +211,22 @@ public class Prices : System.Web.Services.WebService {
     private bool Check(string userId, NewPrice x) {
         try {
             bool result = false;
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase));
-            connection.Open();
-            string sql = string.Format(@"SELECT EXISTS (SELECT id FROM prices WHERE LOWER(food) = '{0}')", x.food.title.ToLower());
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
-                result = reader.GetBoolean(0);
-            }
-            connection.Close();
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                string sql = string.Format(@"SELECT EXISTS (SELECT id FROM prices WHERE LOWER(food) = '{0}'", x.food.title.ToLower());
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            result = reader.GetBoolean(0);
+                        }
+                    }
+                }
+            } 
             return result;
-        } catch (Exception e) { return false; }
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.id, userId, "Prices", "Check");
+            return false;
+        }
     }
     #endregion Methods
 
