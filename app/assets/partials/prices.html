@@ -5,7 +5,7 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-lg-6">
                     <div class="p-2">
                         <md-radio-group ng-model="foodListType" layout="row" flex-gt-sm ng-click="getFoodList(foodListType)">
                             <md-radio-button value="0" class="md-primary">{{'all foods' | translate}}</md-radio-button>
@@ -32,7 +32,7 @@
                                         <input ng-model="price.netPrice.value" class="form-control" style="min-width:75px" ng-change="calculateUnitPrice(price)" allow-only-numbers />
                                         <span class="input-group-append">
                                             <span class="input-group-text">
-                                                <span class="text-uppercase pr-1"><input ng-model="config.currency" style="width:80px; height:22px; border: 1px solid #ccc; border-radius:4px" class="form-control bg-light" /> /</span>
+                                                <span class="text-uppercase pr-1"><input ng-model="price.netPrice.currency" style="width:60px; height:22px; border: 1px solid #ccc; border-radius:4px" class="form-control bg-light" />/</span>
                                                 <input ng-model="price.mass.value" style="width:80px; height:22px; border: 1px solid #ccc; border-radius:4px" class="form-control bg-light" ng-change="calculateUnitPrice(price)" allow-only-numbers />
                                                 <span class="pl-1">{{price.mass.unit}}</span>
                                             </span>
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-lg-6">
                     <fieldset class="fieldset-border">
                         <legend class="fieldset-border text-capitalize">{{'price list' | translate}}</legend>
                         <div class="table-responsive">
@@ -60,17 +60,17 @@
                                 </tr>
                                 <tr ng-repeat="x in prices">
                                     <td>{{x.food.title}}</td>
-                                    <td class="text-right">
+                                    <td class="text-right"  style="width:260px">
                                         <div class="input-group">
-                                            <input ng-model="x.unitPrice.value" type="text" style="min-width:75px" allow-only-numbers class="form-control" />
+                                            <input ng-model="x.unitPrice.value" type="text" style="min-width:55px" allow-only-numbers class="form-control" />
                                             <span class="input-group-append">
-                                                <span class="input-group-text"><span class="text-uppercase">{{x.unitPrice.currency}}</span>/{{'kg' | translate}}</span>
+                                                <span class="input-group-text"><span class="text-uppercase"><input ng-model="x.netPrice.currency" style="width:60px; height:22px; border: 1px solid #ccc; border-radius:4px" class="form-control bg-light" /></span>/{{'kg' | translate}}</span>
                                             </span>
                                         </div>
                                     </td>
-                                    <td style="width:100px">
-                                        <button ng-click="save(x)" class="btn btn-outline-primary btn-circle"><i class="fa fa-floppy-o"></i></button>
-                                        <button ng-click="remove(x.id)" class="btn btn-outline-danger btn-circle"><i class="fa fa-trash-alt"></i></button>
+                                    <td class="text-right" style="width:80px">
+                                        <button ng-click="save(x)" class="btn btn-outline-primary btn-circle btn-sm"><i class="fa fa-floppy-o"></i></button>
+                                        <button ng-click="remove(x.id)" class="btn btn-outline-danger btn-circle btn-sm"><i class="fa fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
                             </table>

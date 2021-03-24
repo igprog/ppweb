@@ -1,7 +1,7 @@
 ﻿<md-dialog flex class="fixed-height">
     <md-toolbar class="bg-main">
         <div class="md-toolbar-tools">
-            <h2 class="text-capitalize">{{'menus' | translate}}</h2>
+            <h2>{{'menus' | translate}}</h2>
             <span flex></span>
             <a href="" class="btn btn-outline-light" ng-click="cancel()" title="{{'close' | translate}}">x</a>
         </div>
@@ -11,11 +11,9 @@
             <loading-directive value="loading"></loading-directive>
             <div ng-show="!loading" class="md-dialog-content">
                 <div ng-hide="hideNav" class="pt-3">
-                    <ul class="nav nav-tabs text-capitalize">
+                    <ul class="nav nav-tabs">
                         <li class="nav-item" ng-click="toggle('myMenus')"><a href="" ng-class="appMenues==false?'nav-link active':'nav-link'">{{'my menus' | translate}}</a></li>
                         <li ng-if="config.language!='en'" class="nav-item" ng-click="toggle('appMenus')"><a href="" ng-class="appMenues==true?'nav-link active':'nav-link'">{{'menu examples' | translate}}</a></li>
-                        <!--<li ng-class="appMenues==false?'active':''" ng-click="load()"><a href="" class="text-capitalize">{{'my menus' | translate}}</a></li>
-                        <li ng-if="config.language!='en'" ng-class="appMenues==true?'active':''" ng-click="loadAppMenues()"><a href="" class="text-capitalize">{{'menu examples' | translate}}</a></li>-->
                     </ul>
                 </div>
                 <div class="mt-4">

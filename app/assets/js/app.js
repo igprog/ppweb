@@ -169,6 +169,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $http.get('./config/config.json')
           .then(function (response) {
               $rootScope.config = response.data;
+              if (!functions.isNullOrEmpty(localStorage.currency)) {
+                  $rootScope.config.currency = localStorage.currency;
+              }
               $sessionStorage.config = response.data;
               if (localStorage.language) {
                   $rootScope.setLanguage(localStorage.language);
@@ -197,6 +200,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
     getConfig();
 
+    /*
     $rootScope.getUserSettings = function () {
         functions.post('Files', 'GetFile', { foldername: 'users/' + $rootScope.user.userGroupId, filename: 'settings' }).then(function (d) {
             $rootScope.settings = d;
@@ -212,6 +216,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $sessionStorage.settings = $rootScope.settings;
         });
     }
+    */
 
     $scope.currLanguageTitle = null
     var getLanguageTitle = function (x) {
@@ -6776,7 +6781,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 }])
 
-.controller('pricesCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$translate', 'functions', '$mdDialog', function ($scope, $http, $sessionStorage, $window, $rootScope, $translate, functions, $mdDialog) {
+.controller('pricesCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$translate', 'functions', '$mdDialog', '$localStorage', function ($scope, $http, $sessionStorage, $window, $rootScope, $translate, functions, $mdDialog, $localStorage) {
     if ($rootScope.user === undefined) {
         $window.location.href = '/app/#/login';
     }
@@ -6791,7 +6796,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     var init = function () {
         functions.post(webService, 'Init', {}).then(function (d) {
             $scope.price = d;
-            $scope.price.netPrice.currency = $sessionStorage.config.currency;  // TODO currency to local storage or settings
+            $scope.price.netPrice.currency = !functions.isNullOrEmpty(localStorage.currency) ? localStorage.currency : $sessionStorage.config.currency;
             load();
         });
     };
@@ -6817,13 +6822,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.save = function (x) {
-        if (x.food.title == null) {
+        if (x.food.title === null) {
             return false;
         }
-        if ($rootScope.user.licenceStatus == 'demo') {
+        if ($rootScope.user.licenceStatus === 'demo') {
             functions.demoAlert('this function is not available in demo version');
             return false;
         }
+        localStorage.currency = x.netPrice.currency;
+        $scope.price.netPrice.currency = localStorage.currency;
         functions.post(webService, 'Save', { userId: $rootScope.user.userGroupId, x: x }).then(function (d) {
             load();
         });
