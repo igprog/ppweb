@@ -2,8 +2,8 @@
     <ng-include src="'./assets/partials/main.html'"></ng-include>
     <div class="bg-white p-3" ng-cloak>
         <ul class="nav nav-tabs">
-            <li class="nav-item" ng-click="toggleMenu('dailyMenuTpl')"><a href="#" ng-class="menuTpl=='dailyMenuTpl'?'nav-link active':'nav-link'"><i class="fa fa-utensils"></i> <span class="text-capitalize">{{'daily menu' | translate}}</span></a></li>
-            <li class="nav-item" ng-click="toggleMenu('weeklyMenuTpl')"><a href="#" ng-class="menuTpl=='weeklyMenuTpl'?'nav-link active':'nav-link'"><i class="fa fa-files-o"></i> <span class="text-capitalize">{{'weekly menu' | translate}}</span></a></li>
+            <li class="nav-item" ng-click="toggleMenu('dailyMenuTpl')"><a href="#" ng-class="menuTpl=='dailyMenuTpl'?'nav-link active':'nav-link'"><i class="fa fa-utensils"></i> <span>{{'daily menu' | translate}}</span></a></li>
+            <li class="nav-item" ng-click="toggleMenu('weeklyMenuTpl')"><a href="#" ng-class="menuTpl=='weeklyMenuTpl'?'nav-link active':'nav-link'"><i class="fa fa-files-o"></i> <span>{{'weekly menu' | translate}}</span></a></li>
         </ul>
         <loading-directive value="loading"></loading-directive>
         <div ng-include="menuTpl" style="padding-top:20px"></div>
@@ -149,7 +149,7 @@
                             </div>
                         </div>
                         <div ng-if="totals.price.value>0" class="text-right m-2">
-                            <em class="text-primary"><span class="text-capitalize">{{'price' | translate}}</span>: <span>{{totals.price.value | number:2}}</span> <span class="text-uppercase">{{config.currency}}</span></em>
+                            <em class="text-primary"><span class="text-capitalize">{{'price' | translate}}</span>: <span>{{totals.price.value | number:2}}</span> <span class="text-uppercase">{{totals.price.currency}}</span></em>
                         </div>
                     </div>
                 </div>

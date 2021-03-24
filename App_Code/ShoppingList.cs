@@ -17,6 +17,7 @@ using Igprog;
 public class ShoppingList : System.Web.Services.WebService {
     string dataBase = ConfigurationManager.AppSettings["AppDataBase"];
     Translate t = new Translate();
+    Log L = new Log();
 
     public ShoppingList() {
     }
@@ -58,7 +59,8 @@ public class ShoppingList : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(CreateShoppingList(x, consumers, lang), Formatting.None);
         } catch (Exception e) {
-            return e.Message;
+            L.SendErrorLog(e, x[0].id, null, "ShoppingList", "Create");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
@@ -75,7 +77,8 @@ public class ShoppingList : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(CreateShoppingList(x, consumers, lang), Formatting.None);
         } catch (Exception e) {
-            return e.Message;
+            L.SendErrorLog(e, null, userId, "ShoppingList", "CreateWeeklyShoppingList");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
     #endregion
@@ -121,24 +124,29 @@ public class ShoppingList : System.Web.Services.WebService {
     }
 
     public List<FoodQty> LoadFoodQty() {
+        List<FoodQty> xx = new List<FoodQty>();
         try {
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase));
-            connection.Open();
-            string sql = "SELECT id, food, qty, unit FROM foodQty";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            List<FoodQty> xx = new List<FoodQty>();
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
-                FoodQty x = new FoodQty();
-                x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                x.food = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                x.qty = reader.GetValue(2) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(2));
-                x.unit = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
-                xx.Add(x);
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                connection.Open();
+                string sql = "SELECT id, food, qty, unit FROM foodQty";
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            FoodQty x = new FoodQty();
+                            x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                            x.food = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                            x.qty = reader.GetValue(2) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(2));
+                            x.unit = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
+                            xx.Add(x);
+                        }
+                    }
+                }
             }
-            connection.Close();
             return xx;
-        } catch (Exception e) { return new List<FoodQty>(); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, null, "ShoppingList", "LoadFoodQty");
+            return xx;
+        }
     }
 
     public NewShoppingList Deserialize(object x) {

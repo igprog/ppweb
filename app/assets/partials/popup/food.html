@@ -157,7 +157,9 @@
                                     <ng-include src="'parametersTpl'"></ng-include>
                                 </div>
                             </div>
-                            <em ng-if="food.price.value>0" class="pull-right">{{'price' | translate}}: {{food.price.value | number:2}} <span class="text-uppercase">{{d.config.currency}}</span></em>
+                            <div class="pt-2">
+                                <em ng-if="food.price.value>0" class="pull-right">{{'price' | translate}}: {{food.price.value | number:2}} <span class="text-uppercase">{{d.config.currency}}</span></em>
+                            </div>
                         </div>
                     </div>
                 </div>

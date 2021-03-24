@@ -26,50 +26,48 @@
   "languages": [
     {
       "code": "hr",
-      "title": "croatian"
+      "title": "croatian",
+      "currency": {
+        "code": "hrk",
+        "title": "kuna"
+      }
     },
     {
       "code": "ba",
-      "title": "bosnian"
+      "title": "bosnian",
+      "currency": {
+        "code": "bam",
+        "title": "marka"
+      }
     },
     {
       "code": "sr",
-      "title": "serbian (latin)"
+      "title": "serbian (latin)",
+      "currency": {
+        "code": "rsd",
+        "title": "srpski dinar"
+      }
     },
     {
       "code": "sr_cyrl",
-      "title": "serbian (cyrillic)"
+      "title": "serbian (cyrillic)",
+      "currency": {
+        "code": "rsd",
+        "title": "srpski dinar"
+      }
     },
     {
       "code": "en",
-      "title": "english"
+      "title": "english",
+      "currency": {
+        "code": "€",
+        "title": "euro"
+      }
     }
   ],
   "eur": 7.4,
   "usd": 6.3,
   "currency": "hrk",
-  "currencies": [
-    {
-      "code": "hrk",
-      "title": "kuna"
-    },
-    {
-      "code": "bam",
-      "title": "marka"
-    },
-    {
-      "code": "rsd",
-      "title": "srpski dinar"
-    },
-    {
-      "code": "€",
-      "title": "euro"
-    },
-    {
-      "code": "$",
-      "title": "dollar"
-    }
-  ],
   "showupdatedes": true,
   "showupdatedesinitvisible": false,
   "showlanguages": true,

@@ -51,29 +51,30 @@
                 <div class="col-lg-6">
                     <fieldset class="fieldset-border">
                         <legend class="fieldset-border text-capitalize">{{'price list' | translate}}</legend>
-                        <div class="table-responsive">
-                            <table class="table table-sm table-borderless">
-                                <tr class="border-bottom">
-                                    <th>{{'food' | translate}}</th>
-                                    <th>{{'net price' | translate}}</th>
-                                    <th></th>
-                                </tr>
-                                <tr ng-repeat="x in prices">
-                                    <td>{{x.food.title}}</td>
-                                    <td class="text-right"  style="width:260px">
+                        <form id="priceListFrm" class="input-group">
+                            <input ng-model="searchQuery" class="form-control search" type="text" placeholder="{{'search' | translate}}..." />
+                            <span class="input-group-append">
+                                <button class="btn btn-outline-primary" form="priceListFrm" type="submit" ng-click="load(searchQuery)"><i class="fa fa-search" aria-hidden="true"></i>&#8203;</button>
+                            </span>
+                        </form>
+                        <div class="card shadow mt-1" ng-repeat="x in prices track by $index">
+                            <div class="card-body p-2">
+                                <a href="" ng-click="remove(x.id)" class="close" title="{{'delete' | translate}}">&times;</a>
+                                <p class="px-2">{{x.food.title}}</p>
+                                <div class="row justify-content-end">
+                                    <div class="col-6 text-right pl-2">
                                         <div class="input-group">
                                             <input ng-model="x.unitPrice.value" type="text" style="min-width:55px" allow-only-numbers class="form-control" />
                                             <span class="input-group-append">
                                                 <span class="input-group-text"><span class="text-uppercase"><input ng-model="x.netPrice.currency" style="width:60px; height:22px; border: 1px solid #ccc; border-radius:4px" class="form-control bg-light" /></span>/{{'kg' | translate}}</span>
                                             </span>
                                         </div>
-                                    </td>
-                                    <td class="text-right" style="width:80px">
+                                    </div>
+                                    <div class="col-2 text-right">
                                         <button ng-click="save(x)" class="btn btn-outline-primary btn-circle btn-sm"><i class="fa fa-floppy-o"></i></button>
-                                        <button ng-click="remove(x.id)" class="btn btn-outline-danger btn-circle btn-sm"><i class="fa fa-trash-alt"></i></button>
-                                    </td>
-                                </tr>
-                            </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
                 </div>
