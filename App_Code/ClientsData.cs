@@ -60,17 +60,7 @@ public class ClientsData : System.Web.Services.WebService {
         public string bmrEquation;
 
         public BodyFat.NewBodyFat bodyFat = new BodyFat.NewBodyFat();
-
-
-        //public List<DetailEnergyExpenditure.Activity> dailyActivities = new List<DetailEnergyExpenditure.Activity>();
-
-        //TODO add detailTee;
     }
-
-    //public class DailyActivities {
-    //    public double energy;
-    //    public List<DetailEnergyExpenditure.Activity> activities = new List<DetailEnergyExpenditure.Activity>();
-    //}
 
     #region WebMethods
     [WebMethod]
@@ -102,42 +92,46 @@ public class ClientsData : System.Web.Services.WebService {
 
     [WebMethod]
     public string Load(string userId) {
+        List<NewClientData> xx = new List<NewClientData>();
         try {
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase));
-            connection.Open();
-            string sql = @"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId
+            db.CreateDataBase(userId, db.clientsData);
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                string sql = @"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId
                         FROM clientsdata as cd
                         LEFT OUTER JOIN clients as c
                         ON cd.clientId = c.clientId
                         ORDER BY cd.rowid DESC";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            List<NewClientData> xx = new List<NewClientData>();
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
-                NewClientData x = new NewClientData();
-                Calculations c = new Calculations();
-                Goals g = new Goals();
-                x.id = reader.GetInt32(0);
-                x.clientId = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                x.age = C.Age(reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2));
-                x.gender.value = reader.GetValue(3) == DBNull.Value ? 0 : reader.GetInt32(3);
-                x.gender.title = GetGender(x.gender.value).title;
-                x.height = reader.GetValue(4) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(4));
-                x.weight = reader.GetValue(5) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(5));
-                x.waist = reader.GetValue(6) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(6));
-                x.hip = reader.GetValue(7) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(7));
-                x.pal = c.GetPal(reader.GetValue(8) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(8)));
-                x.goal.code = reader.GetValue(9) == DBNull.Value ? "" : reader.GetString(9);
-                x.goal.title = g.GetGoal(x.goal.code).title;
-                x.activities = JsonConvert.DeserializeObject<List<Activities.ClientActivity>>(reader.GetString(10));
-                x.diet = JsonConvert.DeserializeObject<Diets.NewDiet>(reader.GetString(11));
-                x.meals = JsonConvert.DeserializeObject<List<Meals.NewMeal>>(reader.GetString(12));
-                x.date = reader.GetValue(13) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(13);
-                x.userId = reader.GetValue(14) == DBNull.Value ? "" : reader.GetString(14);
-                DetailEnergyExpenditure.DailyActivities da = new DetailEnergyExpenditure.DailyActivities();
-                x.dailyActivities = da.getDailyActivities(userId, x.clientId);
-                x.myMeals = new MyMeals.NewMyMeals();
-                xx.Add(x);
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            NewClientData x = new NewClientData();
+                            Calculations c = new Calculations();
+                            Goals g = new Goals();
+                            x.id = reader.GetInt32(0);
+                            x.clientId = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                            x.age = C.Age(reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2));
+                            x.gender.value = reader.GetValue(3) == DBNull.Value ? 0 : reader.GetInt32(3);
+                            x.gender.title = GetGender(x.gender.value).title;
+                            x.height = reader.GetValue(4) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(4));
+                            x.weight = reader.GetValue(5) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(5));
+                            x.waist = reader.GetValue(6) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(6));
+                            x.hip = reader.GetValue(7) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(7));
+                            x.pal = c.GetPal(reader.GetValue(8) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(8)));
+                            x.goal.code = reader.GetValue(9) == DBNull.Value ? "" : reader.GetString(9);
+                            x.goal.title = g.GetGoal(x.goal.code).title;
+                            x.activities = JsonConvert.DeserializeObject<List<Activities.ClientActivity>>(reader.GetString(10));
+                            x.diet = JsonConvert.DeserializeObject<Diets.NewDiet>(reader.GetString(11));
+                            x.meals = JsonConvert.DeserializeObject<List<Meals.NewMeal>>(reader.GetString(12));
+                            x.date = reader.GetValue(13) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(13);
+                            x.userId = reader.GetValue(14) == DBNull.Value ? "" : reader.GetString(14);
+                            DetailEnergyExpenditure.DailyActivities da = new DetailEnergyExpenditure.DailyActivities();
+                            x.dailyActivities = da.getDailyActivities(userId, x.clientId);
+                            x.myMeals = new MyMeals.NewMyMeals();
+                            xx.Add(x);
+                        }
+                    }
+                }
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
@@ -221,6 +215,7 @@ public class ClientsData : System.Web.Services.WebService {
     public string GetClientLog(string userId, string clientId) {
         try {
             List<NewClientData> xx = new List<NewClientData>();
+            db.CreateDataBase(userId, db.clientsData);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 string sql = string.Format(@"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId

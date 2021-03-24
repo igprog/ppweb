@@ -108,6 +108,7 @@ public class Prices : System.Web.Services.WebService {
     public string Load(string query, string userId) {
         try {
             List<NewPrice> xx = new List<NewPrice>();
+            db.CreateDataBase(userId, db.prices);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 string sql = string.Format(@"SELECT id, foodId, food, netPrice, currency, mass, unit, unitPrice, note
