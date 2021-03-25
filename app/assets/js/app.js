@@ -976,10 +976,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
         }
 
-        /**** TODO (QUERY STRING) *****
-        var lang = $sessionStorage.config.language;
-        $window.location.href = lang == 'hr' ? '../app/' : '../app/?lang=' + lang;
-        ***************/
+        /***** activity.log *****/
+        activityLog($rootScope.user.userId, 'LOGIN', new Date().toGMTString());
+    }
+
+    var activityLog = function (userId, activity, dateTime) {
+        debugger;
+        functions.post('Log', 'SaveActivityLog', { userId: userId, activity: activity, dateTime: dateTime }).then(function (d) {
+        });
     }
 
     /***** Login As *****/

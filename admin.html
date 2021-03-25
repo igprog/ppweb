@@ -87,6 +87,7 @@
                     <li ng-class="showUsers==false?'active':''" ng-click="total(year)"><a href=""><i class="fa fa-bar-chart"></i> Analitika</a></li>-->
                     <li ng-class="activeTab==='sharingRecipes'?'active':''" ng-click="loadSharingRecipes()"><a href=""><i class="fa fa-share-alt"></i> Podijeljeni Recepti</a></li>
                     <li ng-class="activeTab==='errorLog'?'active':''" ng-click="loadErrorLog()"><a href=""><i class="fa fa-exclamation-triangle"></i> Error Log</a></li>
+                    <li ng-class="activeTab==='activityLog'?'active':''" ng-click="loadActivityLog()"><a href=""><i class="fa fa-sign-in"></i> Activity Log</a></li>
                     <li ng-class="activeTab==='tickets'?'active':''" ng-click="loadTickets()"><a href=""><i class="fa fa-ticket"></i> Tickets</a></li>
                 </ul>
             </div>
@@ -430,7 +431,33 @@
                                 <div class="panel-body">
                                     <textarea ng-model="errorLog" rows="30" class="form-control" style="background-color:#3a3a3a; color:#65cdec"></textarea>
                                     <div class="text-right mt10">
-                                        <button class="btn btn-default" ng-click="saveErrorLog(errorLog)"><i class="fa fa-floppy-o"></i> Spremi</button>
+                                        <button class="btn btn-default" ng-click="saveLog('error.log', errorLog)"><i class="fa fa-floppy-o"></i> Spremi</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="activeTab==='activityLog'">
+                <div class="mt20">
+                    <div ng-if="loading" class="text-center text-primary">
+                        <label class="lead text-primary">Učitavanje...</label>
+                        <div><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div>
+                                        <label>Activity Log</label>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <textarea ng-model="activityLog" rows="30" class="form-control" style="background-color:#3a3a3a; color:#03f144"></textarea>
+                                    <div class="text-right mt10">
+                                        <button class="btn btn-default" ng-click="saveLog('activity.log', activityLog)"><i class="fa fa-floppy-o"></i> Spremi</button>
                                     </div>
                                 </div>
                             </div>

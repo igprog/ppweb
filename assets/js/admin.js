@@ -288,12 +288,23 @@ angular.module('app', [])
             $scope.loading = false;
         });
     }
+    /***** Error Log *****/
 
-    $scope.saveErrorLog = function (x) {
-        functions.post('Log', 'Save', { fileName: 'error.log', content: x }).then(function (d) {
+    /***** Activity Log *****/
+    $scope.loadActivityLog = function () {
+        $scope.activeTab = 'activityLog';
+        $scope.loading = true;
+        functions.post('Log', 'Load', { fileName: 'activity.log' }).then(function (d) {
+            $scope.activityLog = d;
+            $scope.loading = false;
         });
     }
-    /***** Error Log *****/
+    /***** Activity Log *****/
+
+    $scope.saveLog = function (filName, x) {
+        functions.post('Log', 'Save', { fileName: filName, content: x }).then(function (d) {
+        });
+    }
 
     /***** Tickets *****/
     $scope.currIdx = null;

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Services;
 using System.Text;
 using System.Configuration;
@@ -13,8 +10,9 @@ using Newtonsoft.Json;
 [WebService(Namespace = "http://programprehrane.com/app/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class Log : System.Web.Services.WebService {
+public class Log : WebService {
     public static string errorLog = ConfigurationManager.AppSettings["ErrorLog"];
+    public static string activityLog = ConfigurationManager.AppSettings["ActivityLog"];
 
     public Log(){
     }
@@ -27,6 +25,12 @@ public class Log : System.Web.Services.WebService {
         public string method;
         public DateTime time;
         public string msg;
+    }
+
+    public class NewActivityLog {
+        public string userId;
+        public string activity;
+        public string time;
     }
     #endregion Class
 
@@ -48,6 +52,30 @@ public class Log : System.Web.Services.WebService {
             Files F = new Files();
             F.SaveTempFile(fileName, content);
             return JsonConvert.SerializeObject(content, Formatting.Indented);
+        } catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.Indented);
+        }
+    }
+
+    [WebMethod]
+    public string SaveActivityLog(string userId, string activity, string dateTime) {
+        try {
+            NewActivityLog x = new NewActivityLog();
+            x.userId = userId;
+            x.activity = activity;
+            x.time = dateTime;
+
+            string log = string.Format(@"## TIME: {0}; ACTIVITY: {1}; USER_ID: {2}", x.time, x.activity, x.userId);
+
+            StringBuilder sb = new StringBuilder();
+            Files F = new Files();
+            string oldLog = F.ReadTempFile(activityLog);
+            if (oldLog != null) {
+                sb.AppendLine(oldLog);
+            }
+            sb.AppendLine(log);
+            F.SaveTempFile(activityLog, sb.ToString());
+            return JsonConvert.SerializeObject("ok", Formatting.Indented);
         } catch (Exception e) {
             return JsonConvert.SerializeObject(e.Message, Formatting.Indented);
         }
