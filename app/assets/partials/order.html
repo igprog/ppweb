@@ -148,8 +148,8 @@
 <span>{{'address' | translate}}</span>: {{config.address}}, {{config.language==='en'?'Croatia':'Hrvatska'}}
 <span>{{'payment description' | translate}}</span>: {{user.application}} {{user.version}}
 <span class="text-capitalize">{{'amount' | translate}}</span>: <span>{{user.price}}</span> kn
-Model: <span ng-if="user.pin">HR00</span><span ng-if="!user.pin">HR99</span>
-<span ng-if="user.pin">Poziv na broj: {{user.pin}}</span> 
+<span>{{'model' | translate}}</span>: <span ng-if="user.pin">HR00</span><span ng-if="!user.pin">HR99</span>
+<span ng-if="user.pin">{{'reference number' | translate}}: {{user.pin}}</span> 
                     </pre>
                     </div>
                     <div ng-hide="user.country.toLowerCase().startsWith('hr') || user.country.toLowerCase().startsWith('cr')">

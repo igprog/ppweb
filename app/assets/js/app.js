@@ -981,7 +981,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var activityLog = function (userId, activity, dateTime) {
-        debugger;
         functions.post('Log', 'SaveActivityLog', { userId: userId, activity: activity, dateTime: dateTime }).then(function (d) {
         });
     }
@@ -6708,7 +6707,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $window.location.href = '/app/#/login';
     }
 
-    $scope.application = $translate.instant('nutrition program web');
+    $scope.application = $rootScope.config.title; // $translate.instant('nutrition program web');
     $scope.version = 'STANDARD';
     $scope.userType = 1;
     $scope.showAlert = false;

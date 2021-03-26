@@ -307,15 +307,22 @@ angular.module('app', [])
     }
 
     /***** Tickets *****/
+    $scope.ticketType = 0;
+    $scope.ticketStatus = null;
     $scope.currIdx = null;
     $scope.showTicketDetails = function (idx) {
         $scope.currIdx = idx;
     }
 
-    $scope.loadTickets = function () {
+    $scope.loadTickets = function (type, status) {
+        type = JSON.parse(type);
+        status = JSON.parse(status);
+        $scope.ticketType = type;
+        $scope.ticketStatus = status;
         $scope.activeTab = 'tickets';
         $scope.loading = true;
-        functions.post('Tickets', 'Load', {}).then(function (d) {
+
+        functions.post('Tickets', 'Load', {type: type, status: status }).then(function (d) {
             $scope.tickets = d;
             $scope.currIdx = null;
             $scope.loading = false;
@@ -324,14 +331,20 @@ angular.module('app', [])
 
     $scope.saveTicket = function (x, sendMail) {
         functions.post('Tickets', 'Save', {x, sendMail: sendMail, attachFile: false, lang: 'hr'}).then(function (d) {
-            $scope.loadTickets();
+            $scope.loadTickets($scope.ticketType, $scope.ticketStatus);
+        });
+    }
+
+    $scope.addTicket = function () {
+        functions.post('Tickets', 'Init', {}).then(function (d) {
+            $scope.tickets.unshift(d);
         });
     }
 
     $scope.removeTicket = function (x) {
         if (confirm("Briši ticket: " + x.title + " (" + x.desc + ")?")) {
             functions.post('Tickets', 'Delete', { id: x.id }).then(function (d) {
-                $scope.loadTickets();
+                $scope.loadTickets($scope.ticketType, $scope.ticketStatus);
             });
         }
     }

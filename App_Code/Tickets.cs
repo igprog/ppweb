@@ -69,12 +69,25 @@ public class Tickets : WebService {
     }
 
     [WebMethod]
-    public string Load() {
+    public string Load(int? type, int? status) {
         try {
             List<NewTicket> xx = new List<NewTicket>();
             string path = Server.MapPath(string.Format("~/App_Data/{0}", dataBase));
             db.CreateGlobalDataBase(path, db.tickets);
-            string sql = string.Format(@"SELECT {0} FROM tickets ORDER BY status, priority DESC", mainSql);
+            string sqlCondition = null;
+            string andCondition = type != null && status != null ? "AND" : null;
+            if (type == 0) {
+                sqlCondition = "userId <> ''";
+            } else if (type == 1) {
+                sqlCondition = "userId = ''";
+            }
+            if (status != null) {
+                sqlCondition = string.Format("{0} {1} status = {2}", sqlCondition, andCondition, status);
+            }
+            if (!string.IsNullOrWhiteSpace(sqlCondition)) {
+                sqlCondition = string.Format("WHERE {0}", sqlCondition);
+            }
+            string sql = string.Format(@"SELECT {0} FROM tickets {1} ORDER BY status, priority DESC", mainSql, sqlCondition);
             using (SQLiteConnection connection = new SQLiteConnection(string.Format("Data Source={0}", Server.MapPath(dataSource)))) {
                 connection.Open();
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {

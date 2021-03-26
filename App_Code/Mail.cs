@@ -186,7 +186,7 @@ public class Mail : System.Web.Services.WebService {
             //*****************Send mail to me****************
 
             //************ Send mail to customer****************
-            messageSubject = (order.application == "Program Prehrane 5.0" ? order.application : t.Tran("nutrition program web", lang)) + " - " + t.Tran("payment details", lang);
+            messageSubject = order.application; // (order.application == "Program Prehrane 5.0" ? order.application : t.Tran("nutrition program web", lang)) + " - " + t.Tran("payment details", lang);
             messageBody = PaymentDetails(order, lang);
             resp = SendMail(order.email, messageSubject, messageBody, lang, file, false);
             //************ Send mail to customer****************

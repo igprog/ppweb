@@ -88,7 +88,7 @@
                     <li ng-class="activeTab==='sharingRecipes'?'active':''" ng-click="loadSharingRecipes()"><a href=""><i class="fa fa-share-alt"></i> Podijeljeni Recepti</a></li>
                     <li ng-class="activeTab==='errorLog'?'active':''" ng-click="loadErrorLog()"><a href=""><i class="fa fa-exclamation-triangle"></i> Error Log</a></li>
                     <li ng-class="activeTab==='activityLog'?'active':''" ng-click="loadActivityLog()"><a href=""><i class="fa fa-sign-in"></i> Activity Log</a></li>
-                    <li ng-class="activeTab==='tickets'?'active':''" ng-click="loadTickets()"><a href=""><i class="fa fa-ticket"></i> Tickets</a></li>
+                    <li ng-class="activeTab==='tickets'?'active':''" ng-click="loadTickets(0, null)"><a href=""><i class="fa fa-ticket"></i> Tickets</a></li>
                 </ul>
             </div>
             <div ng-if="activeTab==='users'">
@@ -472,65 +472,90 @@
                         <label class="lead text-primary">Učitavanje...</label>
                         <div><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
                     </div>
-                    <div class="panel panel-default" ng-repeat="x in tickets track by $index">
-                        <div class="panel-heading">
-                            <a href="" ng-click="removeTicket(x)" class="close" style="color:red!important" title="briši">&times;</a>
-                            <div class="pt-2">
-                                <i class="{{getStatusIcon(x.status)}}" style="padding-right:5px"></i>
-                                <label ng-if="x.title">{{x.title}}</label>
-                                <span class="text-muted"><em>{{x.desc.length > 80 ? x.desc.substring(0, 77) + '...' : x.desc}}</em></span>
+                    <div ng-if="!loading">
+                        <div class="row p5">
+                            <div class="col-sm-3 p5">
+                                <select ng-model="ticketType" class="form-control" title="status" ng-change="loadTickets(ticketType, ticketStatus)">
+                                    <option value=null ng-selected="ticketType==null?true:false">Svi Ticketi</option>
+                                    <option value="0" ng-selected="ticketType==0?true:false">Korisnički Ticketi</option>
+                                    <option value="1" ng-selected="ticketType==1?true:false">Moji Ticketi</option>
+                                </select>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <a href="" ng-click="showTicketDetails($index)">Detalji <i class="fa fa-caret-right"></i></a>
-                                </div>
-                                <div class="col-sm-6 text-right">
-                                    <code>{{x.user.firstName}} {{x.user.lastName}}</code>
-                                </div>
+                            <div class="col-sm-3 p5">
+                                <select ng-model="ticketStatus" class="form-control" title="status" ng-change="loadTickets(ticketType, ticketStatus)">
+                                    <option value=null ng-selected="ticketStatus==null?true:false">Svi</option>
+                                    <option value="0" ng-selected="ticketStatus==0?true:false">Na čekanju</option>
+                                    <option value="1" ng-selected="ticketStatus==1?true:false">Otvoren</option>
+                                    <option value="2" ng-selected="ticketStatus==2?true:false">Zatvoren</option>
+                                    <option value="3" ng-selected="ticketStatus==3?true:false">Odbijen</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3 p5 text-right">
+                                <button ng-click="addTicket()" class="btn btn-success"><i class="fa fa-plus"></i> Novi Ticket</button>
                             </div>
                         </div>
-                        <div ng-if="currIdx===$index" class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <ul>
-                                        <li>Email: {{x.user.email}}</li>
-                                        <li>Prijavio: {{x.user.firstName}} {{x.user.lastName}}</li>
-                                    </ul>
+                        <div class="panel panel-default" ng-repeat="x in tickets track by $index">
+                            <div class="panel-heading">
+                                <a href="" ng-click="removeTicket(x)" class="close" style="color:red!important" title="briši">&times;</a>
+                                <div class="form-inline pt-2">
+                                    <i class="{{getStatusIcon(x.status)}}" style="padding-right:5px"></i>
+                                    <input ng-model="x.title" class="form-control" />
+                                    <span class="text-muted"><em>{{x.desc.length > 80 ? x.desc.substring(0, 77) + '...' : x.desc}}</em></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <a href="" ng-click="showTicketDetails($index)">Detalji <i class="fa fa-caret-right"></i></a>
+                                    </div>
+                                    <div class="col-sm-6 text-right">
+                                        <code>{{x.user.firstName}} {{x.user.lastName}}</code>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="currIdx===$index" class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <ul>
+                                            <li>Email: {{x.user.email}}</li>
+                                            <li>Prijavio: {{x.user.firstName}} {{x.user.lastName}}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <code ng-if="x.filePath">
+                                            <a ng-if="x.filePath" href="{{x.filePath}}" title="{{x.filePath}}" class="small" target="_blank"><i class="fa fa-file"></i> {{x.filePath}}</a>
+                                        </code>
+                                    </div>
+                                </div>
+                                <div>
                                     <span>Opis:</span>
-                                    <p>{{x.desc}}</p>
-                                </div>
-                                <div class="col-sm-6">
-                                    <code ng-if="x.filePath">
-                                        <a ng-if="x.filePath" href="{{x.filePath}}" title="{{x.filePath}}" class="small" target="_blank"><i class="fa fa-file"></i> {{x.filePath}}</a>
-                                    </code>
+                                    <textarea ng-model="x.desc" typeof="text" class="form-control" rows="3" />
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel-footer">
-                            <div class="row">
-                                <div class="col-sm-2">
-                                    <span>Status:</span>
-                                    <select ng-model="x.status" class="form-control" title="status">
-                                        <option value="0" ng-selected="x.status==0?true:false">Na čekanju</option>
-                                        <option value="1" ng-selected="x.status==1?true:false">Otvoren</option>
-                                        <option value="2" ng-selected="x.status==2?true:false">Zatvoren</option>
-                                        <option value="3" ng-selected="x.status==3?true:false">Odbijen</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-2">
-                                    <span>Prioritet:</span>
-                                    <select ng-model="x.priority" class="form-control" title="status">
-                                        <option value="0" ng-selected="x.priority==0?true:false">Nizak</option>
-                                        <option value="1" ng-selected="x.priority==1?true:false">Srednji</option>
-                                        <option value="2" ng-selected="x.priority==2?true:false">Visok</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6">
-                                    <span>Napomena:</span>
-                                    <textarea ng-model="x.note" type="text" class="form-control" rows="1" />
-                                </div>
-                                <div class="col-sm-2 text-right">
-                                    <button class="btn btn-success mt20" ng-click="saveTicket(x, false)" ><i class="fa fa-floppy-o"></i> Spremi</button>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <span>Status:</span>
+                                        <select ng-model="x.status" class="form-control" title="status">
+                                            <option value="0" ng-selected="x.status==0?true:false">Na čekanju</option>
+                                            <option value="1" ng-selected="x.status==1?true:false">Otvoren</option>
+                                            <option value="2" ng-selected="x.status==2?true:false">Zatvoren</option>
+                                            <option value="3" ng-selected="x.status==3?true:false">Odbijen</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <span>Prioritet:</span>
+                                        <select ng-model="x.priority" class="form-control" title="status">
+                                            <option value="0" ng-selected="x.priority==0?true:false">Nizak</option>
+                                            <option value="1" ng-selected="x.priority==1?true:false">Srednji</option>
+                                            <option value="2" ng-selected="x.priority==2?true:false">Visok</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span>Napomena:</span>
+                                        <textarea ng-model="x.note" type="text" class="form-control" rows="1" />
+                                    </div>
+                                    <div class="col-sm-2 text-right">
+                                        <button class="btn btn-success mt20" ng-click="saveTicket(x, false)"><i class="fa fa-floppy-o"></i> Spremi</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

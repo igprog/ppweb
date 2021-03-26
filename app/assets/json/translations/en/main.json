@@ -1553,7 +1553,7 @@
   "the selected additional energy expenditure is the same as recommended": "The selected additional energy expenditure is the same as recommended",
   "clients": "clients",
   "web": "web",
-  "nutrition program web": "Nutrition Program Web",
+  "nutrition program web": "Nutri Prog",
   "delete choosen activity": "delete choosen activity",
   "show all": "show all",
   "gender": "gender",
@@ -2035,6 +2035,8 @@
   "mg": "mg",
   "swift code": "SWIFT CODE",
   "payment outside croatia": "Payment outside Croatia",
-  "dashboard": "Dashboard"
+  "dashboard": "Dashboard",
+  "model": "Model",
+  "reference number": "Reference number"
 
 }
