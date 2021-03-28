@@ -12,11 +12,53 @@ using Newtonsoft.Json;
 [WebService(Namespace = "http://programprehrane.com/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class Files : System.Web.Services.WebService {
+public class Files : WebService {
     public Files() {
     }
 
+    public class NewSettings {
+        public Discount discount;
+        public string pp5DownloadEnableCode;
+    }
+    public class Discount {
+        public int perc;
+        public string dateFrom;
+        public string dateTo;
+    }
+
     #region WebMethods
+    [WebMethod]
+    public string LoadSettings() {
+        return JsonConvert.SerializeObject(GetSettingsData(), Formatting.None);
+    }
+
+    public NewSettings GetSettingsData() {
+        string jsonStr = GetFile("json", "settings");
+        NewSettings x = new NewSettings();
+        if (!string.IsNullOrEmpty(jsonStr)) {
+            x = JsonConvert.DeserializeObject<NewSettings>(jsonStr);
+        } else {
+            x.discount = new Discount();
+        }
+        return x;
+    }
+
+
+    [WebMethod]
+    public string SaveSettings(NewSettings settings) {
+        try {
+            string path = "~/App_Data/json";
+            string filepath = path + "/settings.json";
+            CreateFolder(path);
+            WriteFile(filepath, JsonConvert.SerializeObject(settings, Formatting.None));
+            return JsonConvert.SerializeObject(settings, Formatting.None);
+        }
+        catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
+    }
+
+
     [WebMethod]
     public string SaveJsonToFile(string foldername, string filename, string json) {
         try {
@@ -25,7 +67,7 @@ public class Files : System.Web.Services.WebService {
             CreateFolder(path);
             WriteFile(filepath, json);
             return GetFile(foldername, filename);
-        } catch(Exception e) { return ("Error: " + e); }
+        } catch(Exception e) { return e.Message; }
     }
 
     [WebMethod]
@@ -38,7 +80,7 @@ public class Files : System.Web.Services.WebService {
             } else {
                 return null;
             }
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) { return e.Message; }
     }
 
     [WebMethod]

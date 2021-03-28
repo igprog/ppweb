@@ -977,7 +977,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         /***** activity.log *****/
-        activityLog($rootScope.user.userId, 'LOGIN', new Date().toGMTString());
+        activityLog($rootScope.user.userId, 'LOGIN', new Date().toLocaleString());
     }
 
     var activityLog = function (userId, activity, dateTime) {

@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Web;
 
+
 /// <summary>
 /// Global
 /// </summary>
@@ -178,5 +179,9 @@ namespace Igprog {
             return ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".tiff" || ext == ".png";
         }
         #endregion ImageCompress
+
+        public string RemoveSingleQuotes(string x) {
+            return !string.IsNullOrWhiteSpace(x) ? x.Contains("'") ? x.Replace("'", "") : x : x;
+        }
     }
 }

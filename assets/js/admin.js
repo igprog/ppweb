@@ -79,20 +79,6 @@ angular.module('app', [])
     }
     load();
 
-    $scope.pp5DownloadEnableCode = null;
-    var getPp5DownloadEnableCode = function (x) {
-        functions.post('Files', 'GetTempFile', { fileName: 'pp5DownloadEnableCode.txt' }).then(function (d) {
-            $scope.pp5DownloadEnableCode = d;
-        });
-    };
-    getPp5DownloadEnableCode();
-
-    $scope.confirmPp5DownloadEnableCode = function (x) {
-        functions.post('Files', 'SaveTempFilePP5', { fileName: 'pp5DownloadEnableCode.txt', content: x }).then(function (d) {
-            alert(d);
-        });
-    };
-
 }])
 
 .controller('webAppCtrl', ['$scope', '$http', '$rootScope', 'functions', function ($scope, $http, $rootScope, functions) {
@@ -629,6 +615,23 @@ angular.module('app', [])
                 alert(response.data.d);
             });
         }
+    }
+
+}])
+
+.controller('settingsCtrl', ['$scope', '$http', '$rootScope', 'functions', function ($scope, $http, $rootScope, functions) {
+
+    var load = function () {
+        functions.post('Files', 'LoadSettings', {}).then(function (d) {
+            $scope.settings = d;
+        });
+    }
+    load();
+
+    $scope.save = function (settings) {
+        functions.post('Files', 'SaveSettings', { settings: settings }).then(function (d) {
+            $scope.settings = d;
+        });
     }
 
 }])

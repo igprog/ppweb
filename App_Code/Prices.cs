@@ -33,6 +33,7 @@ public class Prices : System.Web.Services.WebService {
         public UnitPrice GetUnitPrice(string userId, string foodId) {
             string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
             DataBase db = new DataBase();
+            db.CreateDataBase(userId, db.prices);
             UnitPrice x = new UnitPrice();
             try {
                 using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {

@@ -36,11 +36,11 @@ public class PrintPdf : WebService {
     public Foods.Totals weeklyMenuTotal = new Foods.Totals();
 
     int rowCount = 0;  // menu rows counter
-    static string menuPage = null;
-    static string menuTitle = null;
-    static string menuAuthor = null;
-    static string menuDate = null;
-    static PrintMenuSettings menuSettings = new PrintMenuSettings();
+    private static string menuPage = null;
+    private static string menuTitle = null;
+    private static string menuAuthor = null;
+    private static string menuDate = null;
+    private static PrintMenuSettings menuSettings = new PrintMenuSettings();
 
     Color bg_light_blue = new Color(222, 243, 255);
     Color bg_light_gray = new Color(240, 240, 240);
@@ -249,12 +249,8 @@ public class PrintPdf : WebService {
         AppendMenuInfo(doc, currentMenu.title, currentMenu.note, currentMenu.client, settings, lang);
 
         menuTitle = currentMenu.title;
-        if (settings.showDate && !string.IsNullOrEmpty(settings.date)) {
-            menuDate = string.Format("{0}: {1}", t.Tran("creation date", lang), settings.date);
-        }
-        if (settings.showAuthor && !string.IsNullOrEmpty(settings.author)) {
-            menuAuthor = string.Format("{0}: {1}", t.Tran("author of the menu", lang), settings.author);
-        }
+        menuDate = settings.showDate && !string.IsNullOrWhiteSpace(settings.date) ? string.Format("{0}: {1}", t.Tran("creation date", lang), settings.date) : null;
+        menuAuthor = settings.showAuthor && !string.IsNullOrWhiteSpace(settings.author) ? string.Format("{0}: {1}", t.Tran("author of the menu", lang), settings.author) : null;
 
         AppendFoodsHeaderTbl(doc, settings, lang);
 
@@ -541,7 +537,7 @@ public class PrintPdf : WebService {
             //int rowsPerPage = 45;
 
             var doc = new Document();
-
+            
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
             writer.PageEvent = new PDFFooter();
             menuSettings = settings;
@@ -1946,6 +1942,7 @@ public class PrintPdf : WebService {
     }
 
     protected void DeleteFolder(string path) {
+        //TODO: check BUG: The process cannot access the file '316bb38a-a35e-4e70-a975-eff34af7f4ba.pdf' because it is being used by another process..pdf
         if (Directory.Exists(path)) {
             Directory.Delete(path, true);
         }
@@ -2981,18 +2978,6 @@ IBAN HR8423400091160342496
             table.AddCell(new PdfPCell(new Phrase(menuSettings.showDate ? menuDate : "", font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
             table.AddCell(new PdfPCell(new Phrase(menuPage, font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, HorizontalAlignment = 2, BorderColor = Color.GRAY });
             table.WriteSelectedRows(0, -1, 30, document.Bottom, writer.DirectContent);
-
-            //BUG 
-            //table.AddCell(new PdfPCell(new Phrase(menuAuthor, font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
-            //table.AddCell(new PdfPCell(new Phrase(menuTitle, font)) { Border = PdfPCell.TOP_BORDER, Padding = 2, MinimumHeight = 10, HorizontalAlignment = 2, BorderColor = Color.GRAY });
-            //table.WriteSelectedRows(0, -1, 30, document.Bottom + 12, writer.DirectContent);
-
-            //table = new PdfPTable(2);
-            //table.TotalWidth = 530f;
-            //table.AddCell(new PdfPCell(new Phrase(menuDate, font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, BorderColor = Color.GRAY });
-            //table.AddCell(new PdfPCell(new Phrase(menuPage, font)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 10, HorizontalAlignment = 2, BorderColor = Color.GRAY });
-            //table.WriteSelectedRows(0, -1, 30, document.Bottom, writer.DirectContent);
-
 
             //base.OnEndPage(writer, document);
             //PdfPTable tabFot = new PdfPTable(new float[] { 1F });

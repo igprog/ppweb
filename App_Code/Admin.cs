@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Services;
 using System.Configuration;
 using Newtonsoft.Json;
-using System.IO;
 
 /// <summary>
 /// Admin
@@ -13,7 +9,7 @@ using System.IO;
 [WebService(Namespace = "http://programprehrane.com/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class Admin : System.Web.Services.WebService {
+public class Admin : WebService {
     string supervisorUserName = ConfigurationManager.AppSettings["SupervisorUserName"];
     string supervisorPassword = ConfigurationManager.AppSettings["SupervisorPassword"];
     string supervisorUserName1 = ConfigurationManager.AppSettings["SupervisorUserName1"];
@@ -41,14 +37,9 @@ public class Admin : System.Web.Services.WebService {
     [WebMethod]
     public string Check5DownloadEnableCode(string fileName, string code) {
         try {
-            string content;
-            string path = "~/temp/" + fileName;
-            if (File.Exists(Server.MapPath(path))) {
-                content =  File.ReadAllText(Server.MapPath(path));
-            } else {
-                content = null;
-            }
-            if (!string.IsNullOrWhiteSpace(code) && code == content) {
+            Files F = new Files();
+            string pp5DownloadEnableCode = F.GetSettingsData().pp5DownloadEnableCode;
+            if (!string.IsNullOrWhiteSpace(code) && code == pp5DownloadEnableCode) {
                 return JsonConvert.SerializeObject(true, Formatting.None);
             } else {
                 return JsonConvert.SerializeObject(false, Formatting.None);

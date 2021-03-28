@@ -291,7 +291,7 @@
                                     </md-checkbox>
                                 </div>
                                 <div class="col-sm-9 mt-2">
-                                    <input ng-if="printSettings.showDate" ng-model="date" class="form-control" ng-change="setDate(date)" />
+                                    <input ng-if="printSettings.showDate" ng-model="printSettings.date" class="form-control" ng-change="setDate(date)" />
                                 </div>
                             </div>
                             <div class="row">
@@ -301,7 +301,7 @@
                                     </md-checkbox>
                                 </div>
                                 <div class="col-sm-9 mt-2">
-                                    <input ng-if="printSettings.showAuthor" ng-model="author" class="form-control" ng-change="setAuthor(author)" />
+                                    <input ng-if="printSettings.showAuthor" ng-model="printSettings.author" class="form-control" ng-change="setAuthor(author)" />
                                 </div>
                             </div>
                         </fieldset>

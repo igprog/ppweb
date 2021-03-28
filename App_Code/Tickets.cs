@@ -145,6 +145,10 @@ public class Tickets : WebService {
             if (string.IsNullOrEmpty(x.id)) {
                 x.id = Convert.ToString(Guid.NewGuid());
             }
+            Global G = new Global();
+            x.title = G.RemoveSingleQuotes(x.title);
+            x.desc = G.RemoveSingleQuotes(x.desc);
+            x.note = G.RemoveSingleQuotes(x.note);
             string sql = string.Format(@"BEGIN;
                     INSERT OR REPLACE INTO tickets ({0})
                     VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', {7}, {8}, '{9}');

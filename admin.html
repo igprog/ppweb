@@ -4,8 +4,13 @@
     <title>Program Prehrane - Admin</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="assets/css/vendor/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="assets/css/vendor/font-awesome.min.css">-->
+    <link rel="stylesheet" href="../assets/css/vendor/bootstrap.min.css">
+    <!--*********** FontAwesome ***********-->
+    <script src="../assets/js/vendor/fontawesome.min.js"></script>
+    <script src="../assets/js/vendor/solid.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/vendor/solid.min.css">
+    <!--*********** FontAwesome ***********-->
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/vendor/jquery.min.js"></script>
     <script src="../assets/js/vendor/bootstrap.min.js"></script>
@@ -23,52 +28,50 @@
     </style>
 </head>
 <body ng-app="app" ng-controller="adminCtrl" style="color:black">
-
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="" class="navbar-brand">Admin</a>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li><a href="../index.html" target="_blank"><span class="fa fa-home"></span> Home</a></li>
-                    <li ng-if="islogin" ng-click="toggleTpl('programPrehraneWeb')"><a href="#">Web App</a></li>
-                    <li ng-if="islogin" ng-click="toggleTpl('programPrehrane5')"><a href="#">Instalacije</a></li>
-                    <li ng-if="islogin" ng-click="toggleTpl('orders')"><a href="#">Narudžbe</a></li>
-                    <li ng-if="islogin" ng-click="toggleTpl('invoices')"><a href="#">Računi</a></li>
-                </ul>
-                <ul ng-if="islogin" class="nav navbar-nav navbar-right">
-                    <li ng-click="logout()"><a href="#"><span class="fa fa-sign-in"></span> Odjava</a></li>
-                </ul>
-            </div>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <a href="" class="navbar-brand">Admin</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav" ng-cloak>
+                <li class="nav-item"><a href="../index.html" class="nav-link" target="_blank"><span class="fa fa-home"></span> Home</a></li>
+                <li ng-if="islogin" class="nav-item" ng-click="toggleTpl('programPrehraneWeb')"><a href="" class="nav-link">Web App</a></li>
+                <li ng-if="islogin" class="nav-item" ng-click="toggleTpl('programPrehrane5')"><a href="" class="nav-link">Instalacije</a></li>
+                <li ng-if="islogin" class="nav-item" ng-click="toggleTpl('orders')"><a href="" class="nav-link">Narudžbe</a></li>
+                <li ng-if="islogin" class="nav-item" ng-click="toggleTpl('invoices')"><a href="" class="nav-link">Računi</a></li>
+                <li ng-if="islogin" class="nav-item" ng-click="toggleTpl('settings')"><a href="" class="nav-link">Postavke</a></li>
+            </ul>
+            <ul class="navbar-nav ml-auto" ng-cloak>
+                <li ng-click="logout()" class="nav-item"><a href="" class="nav-link"><span class="fa fa-sign-out-alt"></span> Odjava</a></li>
+            </ul>
         </div>
     </nav>
 
     <div ng-include="tpl" style="padding-top:20px"></div>
 
     <script type="text/ng-template" id="login">
-        <div class="container" style="padding-bottom:20px">
+        <div class="container pt-5">
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-lg-4">
                     <fieldset class="fieldset-border">
                         <legend class="fieldset-border">Login</legend>
                         <form id="loginform">
-                            <div class="input-group" style="margin:5px 0px 0px 0px">
-                                <span class="input-group-addon"><i class="fa fa-user-o"></i></span>
+                            <div class="input-group mt-3 p-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                </div>
                                 <input ng-model="user.username" type="text" class="form-control" name="email" placeholder="Email">
                             </div>
-                            <div class="input-group" style="margin:5px 0px 0px 0px">
-                                <span class="input-group-addon"><i class="fa fa-unlock"></i></span>
+                            <div class="input-group p-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-unlock"></i></span>
+                                </div>
                                 <input ng-model="user.password" type="password" class="form-control" name="password" placeholder="Password">
                             </div>
                         </form>
-                        <div>
-                            <button type="submit" form="loginform" ng-click="login(user)" class="btn btn-default pull-right" style="margin:5px 0px 0px 0px"><i class="fa fa-key"></i> Login</button>
+                        <div class="text-right p-2">
+                            <button type="submit" form="loginform" ng-click="login(user)" class="btn btn-outline-primary"><i class="fa fa-key"></i> Login</button>
                         </div>
                     </fieldset>
                 </div>
@@ -81,25 +84,23 @@
             <h2>Program Prehrane Web</h2>
             <div>
                 <ul class="nav nav-tabs">
-                    <li ng-class="activeTab==='users'?'active':''" ng-click="search(searchQuery, showActive, limit, isDesc)"><a href=""><i class="fa fa-users"></i> Korisnici</a></li>
-                    <li ng-class="activeTab==='total'?'active':''" ng-click="total(year)"><a href=""><i class="fa fa-bar-chart"></i> Analitika</a></li>
-                    <!--<li ng-class="showUsers==true?'active':''" ng-click="search(searchQuery, showActive, limit, isDesc)"><a href=""><i class="fa fa-users"></i> Korisnici</a></li>
-                    <li ng-class="showUsers==false?'active':''" ng-click="total(year)"><a href=""><i class="fa fa-bar-chart"></i> Analitika</a></li>-->
-                    <li ng-class="activeTab==='sharingRecipes'?'active':''" ng-click="loadSharingRecipes()"><a href=""><i class="fa fa-share-alt"></i> Podijeljeni Recepti</a></li>
-                    <li ng-class="activeTab==='errorLog'?'active':''" ng-click="loadErrorLog()"><a href=""><i class="fa fa-exclamation-triangle"></i> Error Log</a></li>
-                    <li ng-class="activeTab==='activityLog'?'active':''" ng-click="loadActivityLog()"><a href=""><i class="fa fa-sign-in"></i> Activity Log</a></li>
-                    <li ng-class="activeTab==='tickets'?'active':''" ng-click="loadTickets(0, null)"><a href=""><i class="fa fa-ticket"></i> Tickets</a></li>
+                    <li class="nav-item" ng-class="activeTab==='users'?'nav-link active':'nav-link'" ng-click="search(searchQuery, showActive, limit, isDesc)"><a href=""><i class="fa fa-users"></i> Korisnici</a></li>
+                    <li class="nav-item" ng-class="activeTab==='total'?'nav-link active':'nav-link'" ng-click="total(year)"><a href=""><i class="fa fa-chart-bar"></i> Analitika</a></li>
+                    <li class="nav-item" ng-class="activeTab==='sharingRecipes'?'nav-link active':'nav-link'" ng-click="loadSharingRecipes()"><a href=""><i class="fa fa-share-alt"></i> Podijeljeni Recepti</a></li>
+                    <li class="nav-item" ng-class="activeTab==='errorLog'?'nav-link active':'nav-link'" ng-click="loadErrorLog()"><a href=""><i class="fa fa-exclamation-triangle"></i> Error Log</a></li>
+                    <li class="nav-item" ng-class="activeTab==='activityLog'?'nav-link active':'nav-link'" ng-click="loadActivityLog()"><a href=""><i class="fa fa-sign-in-alt"></i> Activity Log</a></li>
+                    <li class="nav-item" ng-class="activeTab==='tickets'?'nav-link active':'nav-link'" ng-click="loadTickets(0, null)"><a href=""><i class="fa fa-ticket-alt"></i> Tickets</a></li>
                 </ul>
             </div>
             <div ng-if="activeTab==='users'">
-                <div class="row pt5">
+                <div class="row p-1">
                     <div class="col-sm-3">
                         <form>
                             <span class="p5">Pretraži:</span>
                             <div class="input-group">
                                 <input ng-model="searchQuery" type="text" class="form-control" placeholder="Ime, E-mail, ID...">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default" type="submit" ng-click="search(searchQuery, showActive, limit, isDesc)">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit" ng-click="search(searchQuery, showActive, limit, isDesc)">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
@@ -107,24 +108,24 @@
                         </form>
                     </div>
                     <div class="col-sm-1">
-                        <span class="p5">Limit: <input ng-model="limit" class="form-control" /></span>
+                        <span>Limit: <input ng-model="limit" class="form-control" /></span>
                     </div>
                 </div>
-                <div class="checkbox">
-                    <label class="p5"><input type="checkbox" ng-model="showDetails" />Prikaži detalje / uredi</label>
-                    <label class="p5"><input type="checkbox" ng-model="showActive" ng-click="search(searchQuery, showActive, limit, isDesc)" />Prikaži aktivne</label>
+                <div class="checkbox p-1">
+                    <label><input type="checkbox" ng-model="showDetails" />Prikaži detalje / uredi</label>
+                    <label><input type="checkbox" ng-model="showActive" ng-click="search(searchQuery, showActive, limit, isDesc)" />Prikaži aktivne</label>
                 </div>
                 <div ng-if="loading" class="text-center text-primary">
                     <label class="lead text-primary">Učitavanje...</label>
                     <div><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
                 </div>
-                <div ng-if="!loading" style="margin-bottom:2px">
-                    <button class="btn btn-default" ng-click="prevPage(limit)"><i class="fa fa-arrow-left"></i> Nazad</button>
-                    <span class="badge">{{page}}</span>
-                    <button class="btn btn-default" ng-click="nextPage(limit)">Naprijed <i class="fa fa-arrow-right"></i></button>
+                <div ng-if="!loading" class="p-1">
+                    <button class="btn btn-outline-secondary" ng-click="prevPage(limit)"><i class="fa fa-arrow-left"></i> Nazad</button>
+                    <span class="badge badge-secondary">{{page}}</span>
+                    <button class="btn btn-outline-secondary" ng-click="nextPage(limit)">Naprijed <i class="fa fa-arrow-right"></i></button>
                 </div>
-                <div ng-if="!loading" class="table-responsive" style="height:70vh">
-                    <table class="table table-condensed text-small">
+                <div ng-if="!loading" class="table-responsive" style="max-height:70vh">
+                    <table class="table table-sm">
                         <tr>
                             <th></th>
                             <th>Br. <a href="" ng-click="search(searchQuery, showActive, limit, !isDesc)" title="{{isDesc?'Prikaži najstarije':'Prikaži najnovije'}}"><i class="fa fa-sort"></i></a></th>
@@ -151,12 +152,9 @@
                             <th>Broj korisnika</th>
                             <th colspan="3"></th>
                         </tr>
-                        <!--<tr ng-if="$index>=idxStart && $index<idxEnd" ng-repeat="x in d | filter:searchsignup" ng-class="x.userId!=x.userGroupId?'text-muted':''">-->
                         <tr ng-class="x.userId!=x.userGroupId?'text-muted':''" ng-repeat="x in d track by $index">
-                            <!--<td>{{d.length - $index}}</td>-->
                             <td>
                                 <button ng-click="info(x)" class="btn btn-info" data-toggle="modal" data-target="#myModal"><i class="fa fa-info"></i></button>
-                                <!--<button ng-if="showDetails" ng-click="updateInfo(x.email)" class="btn btn-warning" ><i class="fa fa-wrench"></i></button>-->
                             </td>
                             <td>{{x.rowid}}</td>
                             <td ng-if="showDetails" class="nowrap">{{x.userId}}</td>
@@ -181,7 +179,7 @@
                             <td><input ng-disabled="!showDetails" ng-model="x.activationDate" type="text" /></td>
                             <td><input ng-disabled="!showDetails" ng-model="x.expirationDate" type="text" /></td>
                             <td ng-if="showDetails">
-                                <button class="btn btn-default" ng-click="addYear($index)" title="Produži na godinu dana"><i class="fa fa-caret-right"></i></button>
+                                <button class="btn btn-outline-primary" ng-click="addYear($index)" title="Produži na godinu dana"><i class="fa fa-caret-right"></i></button>
                             </td>
                             <td><input ng-disabled="!showDetails" ng-model="x.isActive" type="checkbox" class="form-control" /></td>
                             <td>{{x.licenceStatus}}</td>
@@ -194,7 +192,7 @@
                             </td>
                             <td><input ng-disabled="!showDetails||x.userType<2||x.userId!=x.userGroupId" ng-model="x.maxNumberOfUsers" type="number" class="form-control" /></td>
                             <td>{{x.subusers + 1}}</td>
-                            <td><button ng-disabled="!showDetails" ng-click="update(x)" class="btn btn-success"><i class="fa fa-floppy-o"></i> Spremi</button></td>
+                            <td><button ng-disabled="!showDetails" ng-click="update(x)" class="btn btn-success"><i class="fa fa-save"></i> Spremi</button></td>
                             <td>
                                 <div ng-if="x.maxNumberOfUsers>5&&showDetails&&x.userType==2&&x.userId==x.userGroupId" class="input-group">
                                     <input ng-model="prefix" type="text" class="form-control" placeholder="Prefiks..." style="min-width:100px">
@@ -205,18 +203,18 @@
                                     </div>
                                 </div>
                             </td>
-                            <td ng-if="config.debug"><button ng-disabled="!showDetails" ng-click="remove(x)" class="btn btn-danger"><i class="fa fa-trash-o"></i> Briši</button></td>
+                            <td ng-if="config.debug"><button ng-disabled="!showDetails" ng-click="remove(x)" class="btn btn-danger"><i class="fa fa-trash-alt"></i> Briši</button></td>
                         </tr>
                     </table>
                 </div>
-                <div ng-if="!loading" style="margin-top:2px">
-                    <button class="btn btn-default" ng-click="prevPage()"><i class="fa fa-arrow-left"></i> Nazad</button>
-                    <span class="badge">{{page}}</span>
-                    <button class="btn btn-default" ng-click="nextPage()">Naprijed <i class="fa fa-arrow-right"></i></button>
+                <div ng-if="!loading" class="mt-1">
+                    <button class="btn btn-outline-secondary" ng-click="prevPage()"><i class="fa fa-arrow-left"></i> Nazad</button>
+                    <span class="badge badge-secondary">{{page}}</span>
+                    <button class="btn btn-outline-secondary" ng-click="nextPage()">Naprijed <i class="fa fa-arrow-right"></i></button>
                 </div>
             </div>
 
-            <div ng-if="activeTab==='total'" class="small">
+            <div ng-if="activeTab==='total'">
                 <div class="row mt20">
                     <div class="col-sm-4">
                         <div>
@@ -225,7 +223,7 @@
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">Statistika</legend>
                             <div class="table-responsive">
-                                <table class="table table-condensed">
+                                <table class="table table-sm">
                                     <tr>
                                         <td class="text-left">Registriranih korisnika:</td>
                                         <td class="text-left"><strong>{{t.total}}</strong></td>
@@ -236,7 +234,7 @@
                                     </tr>
                                     <tr>
                                         <td class="text-left">Licence</td>
-                                        <td class="text-left"><strong>{{t.licence}}</strong> <span class="badge">{{t.licencepercentage}} %</span></td>
+                                        <td class="text-left"><strong>{{t.licence}}</strong> <span class="badge badge-success">{{t.licencepercentage}} %</span></td>
                                     </tr>
                                     <tr>
                                         <td class="text-left">Pod licence:</td>
@@ -279,7 +277,7 @@
                                 <div id="chart_ppweb"></div>
                             </div>-->
                             <div class="table-responsive">
-                                <table class="table table-condensed">
+                                <table class="table table-sm">
                                     <tr>
                                         <th class="text-left">Mjesec</th>
                                         <th class="text-left">Registracije</th>
@@ -289,8 +287,8 @@
                                     </tr>
                                     <tr ng-repeat="x in t.monthly">
                                         <td class="text-left">{{x.month}}</td>
-                                        <td class="text-left"><strong class="badge">{{x.registration}}</strong></td>
-                                        <td class="text-left"><strong class="badge">{{x.licence}}</strong></td>
+                                        <td class="text-left"><strong class="badge badge-secondary">{{x.registration}}</strong></td>
+                                        <td class="text-left"><strong class="badge badge-secondary">{{x.licence}}</strong></td>
                                         <td>{{x.percentage}} %</td>
                                         <td class="text-left">
                                             <div style="width:{{x.registration*2}}px; height:10px" class="bg-primary" title="Registracije: {{x.registration}}"></div>
@@ -306,7 +304,7 @@
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">Statistika po gradovima</legend>
                             <div class="table-responsive">
-                                <table class="table table-condensed">
+                                <table class="table table-sm">
                                     <tr>
                                         <th class="text-left">Grad</th>
                                         <th class="text-left">Licence</th>
@@ -314,7 +312,7 @@
                                     </tr>
                                     <tr ng-repeat="x in t.city">
                                         <td class="text-left">{{x.name}}</td>
-                                        <td class="text-left"><strong class="badge">{{x.count}}</strong></td>
+                                        <td class="text-left"><strong class="badge badge-secondary">{{x.count}}</strong></td>
                                         <td class="text-left"><div style="width:{{x.count*10}}px; height:20px" class="bg-primary" title="{{x.name}}: {{x.count}}"></div></td>
                                     </tr>
                                 </table>
@@ -326,9 +324,9 @@
                     <div class="col-sm-5 pt20">
                         <fieldset class="fieldset-border">
                             <legend class="fieldset-border">Statistika po gradovima (ukupno)</legend>
-                            <button ng-click="getTotalActivatedUsersByCity()" class="btn btn-default">Pregled</button>
+                            <button ng-click="getTotalActivatedUsersByCity()" class="btn btn-outline-primary">Pregled</button>
                             <div class="table-responsive">
-                                <table ng-if="activatedUsersByCity" class="table table-condensed mt20">
+                                <table ng-if="activatedUsersByCity" class="table table-sm mt20">
                                     <tr>
                                         <th class="text-left">Grad</th>
                                         <th class="text-left">Licence</th>
@@ -336,7 +334,7 @@
                                     </tr>
                                     <tr ng-repeat="x in activatedUsersByCity.cities">
                                         <td class="text-left">{{x.city}}</td>
-                                        <td class="text-left"><strong class="badge">{{x.count}}</strong></td>
+                                        <td class="text-left"><strong class="badge badge-secondary">{{x.count}}</strong></td>
                                         <td class="text-left"><div style="width:{{x.count*10}}px; height:20px" class="bg-primary" title="{{x.name}}: {{x.count}}"></div></td>
                                     </tr>
                                     <tr>
@@ -357,18 +355,18 @@
                     </div>
                     <div ng-if="!loading" class="row">
                         <div class="col-lg-6">
-                            <div class="p5">
-                                Ukupno: <span class="badge">{{sharingRecipes.length}}</span>
+                            <div class="p-2 p-3">
+                                Ukupno: <span class="badge badge-secondary">{{sharingRecipes.length}}</span>
                             </div>
-                            <div class="panel panel-default" ng-repeat="x in sharingRecipes track by $index">
-                                <div class="panel-heading">
+                            <div class="card m-3" ng-repeat="x in sharingRecipes track by $index">
+                                <div class="card-header">
                                     <a href="" ng-click="removeRecipe(x)" class="close" style="color:red!important" title="briši">&times;</a>
                                     <div class="pt-2">
                                         <label><i class="{{x.sharingData.status.ico}} text-{{x.sharingData.status.style}}"></i> {{x.title}}</label>
                                         <p class="text-muted"><em>{{x.description.length > 80 ? x.description.substring(0, 77) + '...' : x.description}}</em></p>
                                     </div>
                                 </div>
-                                <div class="panel-body">
+                                <div class="card-body p-2">
                                     <div class="row">
                                         <div class="col-sm-3">
                                             <img ng-if="x.recipeImg" src="{{x.recipeImgPath}}" alt="{{x.recipeImg}}" style="height:6rem;width:6rem" class="img-circle rounded-circle">
@@ -386,12 +384,12 @@
                                                 <p class="small text-muted">User ID: {{x.sharingData.recipeOwner.userId}}</p>
                                                 <p class="small text-muted">Grupa obroka: {{x.mealGroup.code}} - {{x.mealGroup.title}}</p>
                                                 <p class="small text-muted">Jezik: {{x.sharingData.lang}}</p>
-                                                <p class="small text-muted">Pregledi: <span class="badge">{{x.sharingData.views}}</span></p>
+                                                <p class="small text-muted">Pregledi: <span class="badge badge-secondary">{{x.sharingData.views}}</span></p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div ng-if="x.data.selectedFoods" class="panel-footer">
+                                <div ng-if="x.data.selectedFoods" class="card-footer">
                                     <div class="row">
                                         <div class="col-sm-3">
                                             <select ng-model="x.sharingData.status.code" class="form-control" title="status">
@@ -404,7 +402,7 @@
                                             <input ng-model="x.sharingData.status.note" class="form-control" placeholder="Napomena..." />
                                         </div>
                                         <div class="col-sm-3 text-right">
-                                            <button class="btn btn-success" ng-click="saveSharingRecipe(x)"><i class="fa fa-floppy-o"></i> Spremi</button>
+                                            <button class="btn btn-outline-success" ng-click="saveSharingRecipe(x)"><i class="fa fa-save"></i> Spremi</button>
                                         </div>
                                     </div>
                                 </div>
@@ -422,16 +420,16 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
+                            <div class="card">
+                                <div class="card-header">
                                     <div>
                                         <label>Error Log</label>
                                     </div>
                                 </div>
-                                <div class="panel-body">
+                                <div class="card-body">
                                     <textarea ng-model="errorLog" rows="30" class="form-control" style="background-color:#3a3a3a; color:#65cdec"></textarea>
                                     <div class="text-right mt10">
-                                        <button class="btn btn-default" ng-click="saveLog('error.log', errorLog)"><i class="fa fa-floppy-o"></i> Spremi</button>
+                                        <button class="btn btn-outline-primary" ng-click="saveLog('error.log', errorLog)"><i class="fa fa-save"></i> Spremi</button>
                                     </div>
                                 </div>
                             </div>
@@ -441,23 +439,23 @@
             </div>
 
             <div ng-if="activeTab==='activityLog'">
-                <div class="mt20">
+                <div class="mt-3">
                     <div ng-if="loading" class="text-center text-primary">
                         <label class="lead text-primary">Učitavanje...</label>
                         <div><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
                     </div>
                     <div class="row">
                         <div class="col-lg-9">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
+                            <div class="card">
+                                <div class="card-header">
                                     <div>
                                         <label>Activity Log</label>
                                     </div>
                                 </div>
-                                <div class="panel-body">
+                                <div class="card-body">
                                     <textarea ng-model="activityLog" rows="30" class="form-control" style="background-color:#3a3a3a; color:#03f144"></textarea>
                                     <div class="text-right mt10">
-                                        <button class="btn btn-default" ng-click="saveLog('activity.log', activityLog)"><i class="fa fa-floppy-o"></i> Spremi</button>
+                                        <button class="btn btn-outline-primary" ng-click="saveLog('activity.log', activityLog)"><i class="fa fa-save"></i> Spremi</button>
                                     </div>
                                 </div>
                             </div>
@@ -467,13 +465,13 @@
             </div>
 
             <div ng-if="activeTab==='tickets'">
-                <div class="mt20">
+                <div class="mt-3">
                     <div ng-if="loading" class="text-center text-primary">
                         <label class="lead text-primary">Učitavanje...</label>
                         <div><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
                     </div>
                     <div ng-if="!loading">
-                        <div class="row p5">
+                        <div class="row p-2 pl-3">
                             <div class="col-sm-3 p5">
                                 <select ng-model="ticketType" class="form-control" title="status" ng-change="loadTickets(ticketType, ticketStatus)">
                                     <option value=null ng-selected="ticketType==null?true:false">Svi Ticketi</option>
@@ -491,11 +489,11 @@
                                 </select>
                             </div>
                             <div class="col-sm-3 p5 text-right">
-                                <button ng-click="addTicket()" class="btn btn-success"><i class="fa fa-plus"></i> Novi Ticket</button>
+                                <button ng-click="addTicket()" class="btn btn-outline-success"><i class="fa fa-plus"></i> Novi Ticket</button>
                             </div>
                         </div>
-                        <div class="panel panel-default" ng-repeat="x in tickets track by $index">
-                            <div class="panel-heading">
+                        <div class="card m-3" ng-repeat="x in tickets track by $index">
+                            <div class="card-header">
                                 <a href="" ng-click="removeTicket(x)" class="close" style="color:red!important" title="briši">&times;</a>
                                 <div class="form-inline pt-2">
                                     <i class="{{getStatusIcon(x.status)}}" style="padding-right:5px"></i>
@@ -511,7 +509,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div ng-if="currIdx===$index" class="panel-body">
+                            <div ng-if="currIdx===$index" class="card-body p-2">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <ul>
@@ -530,7 +528,7 @@
                                     <textarea ng-model="x.desc" typeof="text" class="form-control" rows="3" />
                                 </div>
                             </div>
-                            <div class="panel-footer">
+                            <div class="card-footer p-2">
                                 <div class="row">
                                     <div class="col-sm-2">
                                         <span>Status:</span>
@@ -554,7 +552,7 @@
                                         <textarea ng-model="x.note" type="text" class="form-control" rows="1" />
                                     </div>
                                     <div class="col-sm-2 text-right">
-                                        <button class="btn btn-success mt20" ng-click="saveTicket(x, false)"><i class="fa fa-floppy-o"></i> Spremi</button>
+                                        <button class="btn btn-outline-success mt20" ng-click="saveTicket(x, false)"><i class="fa fa-save"></i> Spremi</button>
                                     </div>
                                 </div>
                             </div>
@@ -569,32 +567,33 @@
                     <!-- Modal content-->
                     <div class="modal-content">
                         <div class="modal-header">
+                            <h4 class="modal-title">{{currUser.firstName}} {{currUser.lastName}}</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <div>
-                                {{currUser.firstName}} {{currUser.lastName}}
-                            </div>
-                            <div>
-                                {{currUser.companyName}}
-                            </div>
                         </div>
                         <div class="modal-body">
+                            <p>{{currUser.companyName}}</p>
+                            <ul class="small">
+                                <li>UserId: {{currUser.userId}}</li>
+                                <li>UserGroupId: {{currUser.userGroupId}}</li>
+                            </ul>
+                            <hr />
                             <h4 class="modal-title">Ukupno:</h4>
                             <ul class="list-group">
-                                <li class="list-group-item">Klijenti: <span class="badge">Ukupno: {{userTotal.clients.total}}, Tekući mjesec: {{userTotal.clients.currMonthTotal}} ({{userTotal.clients.maxMonthlyNumberOfClients}})</span></li>
-                                <li class="list-group-item">Jelovnici: <span class="badge">{{userTotal.menues}}</span></li>
-								<li class="list-group-item">Tjedni jelovnici: <span class="badge">{{userTotal.weeklyMenus}}</span></li>
+                                <li class="list-group-item">Klijenti: <span class="badge badge-secondary float-right">Ukupno: {{userTotal.clients.total}}, Tekući mjesec: {{userTotal.clients.currMonthTotal}} ({{userTotal.clients.maxMonthlyNumberOfClients}})</span></li>
+                                <li class="list-group-item">Jelovnici: <span class="badge badge-secondary float-right">{{userTotal.menues}}</span></li>
+								<li class="list-group-item">Tjedni jelovnici: <span class="badge badge-secondary float-right">{{userTotal.weeklyMenus}}</span></li>
                                 <li class="list-group-item">Namirnice: 
-                                    <button ng-if="userTotal.myfoods>0" ng-click="countMyFoodsWithSameIdAsAppFoods(currUser)" class="btn btn-default"><i class="fa fa-check"></i> Provjeri Moje Namirnice</button> 
-                                    <button ng-if="userTotal.myfoods>0" ng-click="fixMyFoodsId(currUser)" class="btn btn-default"><i class="fa fa-wrench"></i> Popravi ID</button> 
-                                    <span class="badge">{{userTotal.myfoods}}</span>
+                                    <button ng-if="userTotal.myfoods>0" ng-click="countMyFoodsWithSameIdAsAppFoods(currUser)" class="btn btn-outline-primary btn-sm"><i class="fa fa-check"></i> Provjeri Moje Namirnice</button> 
+                                    <button ng-if="userTotal.myfoods>0" ng-click="fixMyFoodsId(currUser)" class="btn btn-outline-primary btn-sm"><i class="fa fa-wrench"></i> Popravi ID</button> 
+                                    <span class="badge badge-secondary float-right">{{userTotal.myfoods}}</span>
                                 </li>
-                                <li class="list-group-item">Recepti: <span class="badge">{{userTotal.recipes}}</span></li>
-                                <li class="list-group-item">Obroci: <span class="badge">{{userTotal.meals}}</span></li>
-                                <li class="list-group-item">Kalendar: <span class="badge">{{userTotal.scheduler.total}}</span></li>
+                                <li class="list-group-item">Recepti: <span class="badge badge-secondary float-right">{{userTotal.recipes}}</span></li>
+                                <li class="list-group-item">Obroci: <span class="badge badge-secondary float-right">{{userTotal.meals}}</span></li>
+                                <li class="list-group-item">Kalendar: <span class="badge badge-secondary float-right">{{userTotal.scheduler.total}}</span></li>
                             </ul>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+                            <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Zatvori</button>
                         </div>
                     </div>
                 </div>
@@ -605,22 +604,9 @@
     <script type="text/ng-template" id="programPrehrane5">
         <div ng-controller="applicationCtrl" class="container-fluid">
             <h2>Program Prehrane 5.0</h2>
-            <div class="row">
-                <div class="col-sm-3">
-                    <label class="control-label">Download enable code:</label>
-                    <div class="input-group">
-                        <input ng-model="pp5DownloadEnableCode" type="text" class="form-control" placeholder="Code...">
-                        <div class="input-group-btn">
-                            <button ng-click="confirmPp5DownloadEnableCode(pp5DownloadEnableCode)" class="btn btn-default" type="submit">
-                                <i class="fa fa-check"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <h3>Instalacije i aktivacije</h3>
             <div class="table-responsive table-scroll" style="max-height:600px">
-                <table class="table table-condensed text-small">
+                <table class="table table-sm">
                     <tr>
                         <td>Br.</td>
                         <th>Datum</th>
@@ -655,8 +641,8 @@
                     <form>
                         <div class="input-group">
                             <input ng-model="searchOrders" type="text" class="form-control" placeholder="Pretraži...">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit" ng-click="load(year, searchOrders)">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit" ng-click="load(year, searchOrders)">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </div>
@@ -665,7 +651,7 @@
                 </div>
             </div>
             <div class="table-responsive table-scroll" style="max-height:600px">
-                <table class="table table-condensed text-small">
+                <table class="table table-sm">
                     <tr>
                         <th></th>
                         <th>Br.</th>
@@ -689,7 +675,7 @@
                         <th></th>
                     </tr>
                     <tr ng-repeat="x in orders">
-                        <td><button class="btn btn-success" ng-click="createInvoice(x, 'invoices')"><i class="fa fa-file-text-o"></i> Račun</button></td>
+                        <td><button class="btn btn-outline-success" ng-click="createInvoice(x, 'invoices')"><i class="fa fa-file-invoice"></i> Račun</button></td>
                         <td>{{orders.length - $index}}</td>
                         <td>{{x.orderNumber}}</td>
                         <td style="white-space: nowrap">{{x.orderDate}}</td>
@@ -708,7 +694,7 @@
                         <td>{{x.price}}</td>
                         <td>{{x.additionalService}}</td>
                         <td>{{x.note}}</td>
-                        <td><button ng-click="remove(x)" class="btn btn-danger"><i class="fa fa-trash-o"></i> Briši</button></td>
+                        <td><button ng-click="remove(x)" class="btn btn-outline-danger"><i class="fa fa-trash-alt"></i> Briši</button></td>
                     </tr>
                 </table>
             </div>
@@ -720,8 +706,8 @@
             <h2>Računi</h2>
             <div>
                 <ul class="nav nav-tabs">
-                    <li ng-class="showInvoices==false?'active':''" ng-click="init()"><a href=""><i class="fa fa-file-text-o"></i> Novi račun</a></li>
-                    <li ng-class="showInvoices==true?'active':''" ng-click="load(year, null)"><a href=""><i class="fa fa-files-o"></i> Pregled računa</a></li>
+                    <li class="nav-item" ng-class="!showInvoices?'nav-link active':'nav-link'" ng-click="init()"><a href=""><i class="fa fa-file-text-o"></i> Novi račun</a></li>
+                    <li class="nav-item" ng-class="showInvoices?'nav-link active':'nav-link'" ng-click="load(year, null)"><a href=""><i class="fa fa-files-o"></i> Pregled računa</a></li>
                 </ul>
             </div>
             <div ng-if="showInvoices">
@@ -735,8 +721,8 @@
                         <form>
                             <div class="input-group">
                                 <input ng-model="searchInvoices" type="text" class="form-control" placeholder="Pretraži...">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default" type="submit" ng-click="load(year, searchInvoices)">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit" ng-click="load(year, searchInvoices)">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
@@ -745,7 +731,7 @@
                     </div>
                 </div>
                 <div class="table-responsive table-scroll" style="height:70vh">
-                    <table class="table table-condensed text-small">
+                    <table class="table table-sm">
                         <tr>
                             <td colspan="6"></td>
                             <td class="text-right">Ukupno:</td>
@@ -770,9 +756,9 @@
                         <tr ng-repeat="x in invoices.data" class="{{x.isPaid==0?'bg-danger':''}}">
                             <td class="nowrap">
                                 <button class="btn btn-primary m2" ng-click="get(x)" title="Uredi"><i class="fa fa-eye"></i></button>
-                                <a href="{{config.backend + 'upload/invoice/' + x.year + '/'+ x.fileName + '.pdf'}}" class="btn btn-danger m2" download title="PDF"><i class="fa fa-file-pdf-o" style="color:white"></i></a>
+                                <a href="{{config.backend + 'upload/invoice/' + x.year + '/'+ x.fileName + '.pdf'}}" class="btn btn-outline-danger m2" download title="PDF"><i class="fa fa-file-pdf-o" style="color:white"></i></a>
                                 <button class="btn btn-warning m2" ng-click="copy(x)" title="Kopiraj"><i class="fa fa-copy"></i></button>
-                                <button ng-if="config.debug" class="btn btn-danger m2" ng-click="removeInvoice(x, year, searchInvoices)" title="Briši"><i class="fa fa-trash-o"></i></button>
+                                <button ng-if="config.debug" class="btn btn-outline-danger m2" ng-click="removeInvoice(x, year, searchInvoices)" title="Briši"><i class="fa fa-trash-alt"></i></button>
                             </td>
                             <td>{{x.number}}</td>
                             <td>{{x.dateAndTime}}</td>
@@ -794,14 +780,14 @@
                 <div class="row mt20">
                     <div class="col-sm-4">
                         <div class="table-responsive">
-                            <table class="table table-condensed text-small">
+                            <table class="table table-sm">
                                 <tr>
                                     <td>Broj računa</td>
                                     <td>
                                         <div class="input-group">
                                             <input ng-model="i.number" type="number" class="form-control text-right" />
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-default" type="submit">/1/1</button>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="submit">/1/1</button>
                                             </div>
                                         </div>
                                     </td>
@@ -858,7 +844,7 @@
                     <div class="col-sm-8">
                         <label>Stavke:</label>
                         <div class="table-responsive">
-                            <table class="table table-condensed table-bordered">
+                            <table class="table table-sm">
                                 <tr>
                                     <th style="width:50px"></th>
                                     <th style="min-width:300px">Naziv proizvoda / usluge</th>
@@ -866,13 +852,13 @@
                                     <th class="nowrap" style="width:80px">Jedinična cijena (kn)</th>
                                 </tr>
                                 <tr ng-repeat="x in i.items">
-                                    <td><button class="btn btn-danger" ng-click="remove($index)"><i class="fa fa-minus"></i></button></td>
+                                    <td><button class="btn btn-outline-danger" ng-click="remove($index)"><i class="fa fa-minus"></i></button></td>
                                     <td><input ng-model="x.title" type="text" class="form-control" ng-change="getTotal(i.items)" /></td>
                                     <td><input ng-model="x.qty" type="number" min="0" class="form-control" ng-change="getTotal(i.items)" /></td>
                                     <td><input ng-model="x.unitPrice" type="number" class="form-control text-right" ng-change="getTotal(i.items)" /></td>
                                 </tr>
                                 <tr>
-                                    <td><button class="btn btn-success" ng-click="add()"><i class="fa fa-plus"></i></button></td>
+                                    <td><button class="btn btn-outline-success" ng-click="add()"><i class="fa fa-plus"></i></button></td>
                                     <td colspan="2" class="text-right">Ukupno:</td>
                                     <td><input ng-model="total" type="number" class="form-control text-right" readonly /></td>
                                 </tr>
@@ -881,8 +867,8 @@
                         <div class="checkbox">
                             <label><input ng-model="i.isPaid" type="checkbox" ng-click="setPaidAmount(i)" /> Plaćeno</label>
                         </div>
-                        <div ng-if="i.isPaid" class="teble-responsive well">
-                            <table class="table table-condensed text-small">
+                        <div ng-if="i.isPaid" class="teble-responsive card">
+                            <table class="table table-sm">
                                 <tr>
                                     <td>Uplaćeni iznos</td>
                                     <td><input ng-model="i.paidAmount" type="number" class="form-control" /></td>
@@ -893,7 +879,7 @@
                                 </tr>
                             </table>
                             <div class="text-right">
-                                <button class="btn btn-success" ng-click="saveDb(i)"><i class="fa fa-{{loading_2==true?'spinner fa-spin':'floppy-o'}}"></i> Spremi</button>
+                                <button class="btn btn-outline-success" ng-click="saveDb(i)"><i class="fa fa-{{loading_2==true?'spinner fa-spin':'save'}}"></i> Spremi</button>
                             </div>
                         </div>
                         <div style="margin-bottom:100px">
@@ -920,21 +906,21 @@
                             <div class="checkbox">
                                 <label><input ng-model="i.isForeign" type="checkbox" /> Inozemni račun</label>
                             </div>
-                            <div ng-show="i.isForeign" class="row well">
+                            <div ng-show="i.isForeign" class="row card">
                                 <span class="col-sm-4" for="email">Ukupno (€):</span>
                                 <div class="col-sm-8">
                                     <input ng-model="i.totPrice_eur" class="form-control" type="number" />
                                 </div>
                             </div>
                             <div class="mt10">
-                                <button class="btn btn-danger" ng-click="createPdf(i)"><i class="fa fa-{{loading==true?'spinner fa-spin':'file-pdf-o'}}"></i> Kreiraj PDF</button>
+                                <button class="btn btn-outline-danger" ng-click="createPdf(i)"><i class="fa fa-{{loading==true?'spinner fa-spin':'file-pdf-o'}}"></i> Kreiraj PDF</button>
                             </div>
                             <div class="m10">
                                 <a ng-if="pdfTempLink" href="{{pdfTempLink}}" download><i class="fa fa-file-pdf-o"></i> {{pdfTempLink}}</a>
                             </div>
                             <div class="row m10">
                                 <div class="col-sm-4">
-                                    <button ng-if="pdfTempLink" href="" class="btn btn-success btn-block" ng-click="save(i)"><i class="fa fa-{{loading_1==true?'spinner fa-spin':'floppy-o'}}"></i> Spremi PDF</button>
+                                    <button ng-if="pdfTempLink" href="" class="btn btn-outline-success btn-block" ng-click="save(i)"><i class="fa fa-{{loading_1==true?'spinner fa-spin':'save'}}"></i> Spremi PDF</button>
                                 </div>
                                 <div class="col-sm-8">
                                     <a ng-if="pdfLink" href="{{pdfLink}}" download><i class="fa fa-file-pdf-o"></i> {{pdfLink}}</a>
@@ -945,14 +931,53 @@
                 </div>
                 <hr />
             </div>
+        </div>
+    </script>
 
-            <!--invoice
-            <pre>{{i | json}}</pre>
-            invoices
-            <pre>{{invoices | json}}</pre>
-            order
-            <pre>{{o | json}}</pre>-->
-
+    <script type="text/ng-template" id="settings">
+        <div ng-controller="settingsCtrl" class="container">
+            <h2>Postavke</h2>
+            <div class="text-right m-2">
+                <button ng-click="save(settings)" class="btn btn-success"><i class="fa fa-save"></i> Spremi</button>
+            </div>
+            <div class="card m-2">
+                <div class="card-header">Popust</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Postotak:</label>
+                                <input ng-model="settings.discount.perc" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Od:</label>
+                                <input ng-model="settings.discount.dateFrom" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Do:</label>
+                                <input ng-model="settings.discount.dateTo" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card m-2">
+                <div class="card-header">Program Prehrane 5.0</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Download Enable Code:</label>
+                                <input ng-model="settings.pp5DownloadEnableCode" type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </script>
 
