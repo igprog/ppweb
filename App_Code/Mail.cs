@@ -388,11 +388,11 @@ public class Mail : System.Web.Services.WebService {
 <p>{10}: {2} {3}</p>
 <p>{11}: <b>{12} {13}</b></p>
 <hr/>
-<a href=""https://www.nutriprog.com/paypal.html""><img alt=""PayPal"" src=""https://www.nutriprog.com/assets/img/paypal.jpg""></a>
+{14}
 <hr/>
 <br />
 <br />
-<p>{14}</p>
+<p>{15}</p>
 <br />"
 , t.Tran("dear", lang)
 , t.Tran("thank you for your interest in", lang)
@@ -408,6 +408,7 @@ public class Mail : System.Web.Services.WebService {
 , t.Tran("amount", lang)
 , Math.Round(user.price / usd, 2)
 , "$"
+, user.discountCoeff == 0 ? @"<a href=""https://www.nutriprog.com/paypal.html""><img alt=""PayPal"" src=""https://www.nutriprog.com/assets/img/paypal.jpg""></a>" : null
 , t.Tran("best regards", lang));
             default:
                 return
@@ -435,7 +436,7 @@ public class Mail : System.Web.Services.WebService {
 <br />"
 , user.application
 , user.version
-, user.price
+, user.discountCoeff > 0 ? user.priceWithDiscount : user.price
 , string.IsNullOrWhiteSpace(user.pin) ? "" : string.Format("Poziv na broj: {0}", user.pin)
 , Math.Round(user.priceEur, 2)
 , string.IsNullOrWhiteSpace(user.pin) ? "HR99" : "HR00"
@@ -447,9 +448,12 @@ public class Mail : System.Web.Services.WebService {
 <p>IBAN: HR84 2340 0091 1603 4249 6</p>
 <p>SWIFT CODE: PBZGHR2X</p>
 <p>Iznos: <b>{0} €</b></p>
-<a href=""https://www.programprehrane.com/paypal.html""><img alt=""PayPal"" src=""https://www.programprehrane.com/assets/img/paypal.jpg""></a>
+{1}
 <hr/>
-<br />", Math.Round(user.priceEur, 2)) : "");
+<br />"
+, Math.Round(user.discountCoeff > 0 ? user.priceWithDiscountEur : user.priceEur, 2)
+, user.discountCoeff == 0 ? @"<a href=""https://www.programprehrane.com/paypal.html""><img alt=""PayPal"" src=""https://www.programprehrane.com/assets/img/paypal.jpg""></a>" : null)
+: null);
         }
     }
     #endregion methods

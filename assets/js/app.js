@@ -2,9 +2,65 @@
 app.js
 (c) 2018-2021 IG PROG, www.igprog.hr
 */
-angular.module('app', ['ngMaterial'])
+angular.module('app', ['ui.router', 'ngMaterial'])
 
-.config(['$httpProvider', function ($httpProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
+
+    $stateProvider
+        .state('home', {
+            url: '/', templateUrl: './assets/pages/home.html', controller: 'appCtrl'
+        })
+        .state('about', {
+            url: '/o-programu', templateUrl: './assets/pages/about.html', controller: 'appCtrl'
+        })
+        .state('pricing', {
+            url: '/cijene', templateUrl: './assets/pages/pricing.html', controller: 'appCtrl'
+        })
+        .state('registration', {
+            url: '/registracija', templateUrl: './assets/pages/registration.html', controller: 'signupCtrl'
+        })
+        .state('order', {
+            url: '/narudzba', templateUrl: './assets/pages/order.html', controller: 'orderCtrl'
+        })
+        .state('contact', {
+            url: '/kontakt', templateUrl: './assets/pages/contact.html', controller: 'appCtrl'
+        })
+        .state('uputa', {
+            url: '/uputa', templateUrl: './assets/pages/uputa.html'
+        })
+        .state('obavijesti', {
+            url: '/obavijesti', templateUrl: './assets/pages/obavijesti.html'
+        })
+        .state('cesto-postavljana-pitanja', {
+            url: '/cesto-postavljana-pitanja', templateUrl: './assets/pages/cesto-postavljana-pitanja.html', controller: 'loginCtrl'
+        })
+        .state('bmi', {
+            url: '/bmi', templateUrl: './assets/pages/bmi.html', controller: 'bmiCtrl'
+        })
+        .state('aplikacija-za-klijente', {
+            url: '/aplikacija-za-klijente', templateUrl: './assets/pages/aplikacija-za-klijente.html'
+        })
+        .state('izrada-uravnotezenog-jelovnika', {
+            url: '/izrada-uravnotezenog-jelovnika', templateUrl: './assets/pages/izrada-uravnotezenog-jelovnika.html'
+        })
+        .state('plan-prehrane', {
+            url: '/plan-prehrane', templateUrl: './assets/pages/plan-prehrane.html'
+        })
+        .state('tablica-namirnica', {
+            url: '/tablica-namirnica', templateUrl: './assets/pages/tablica-namirnica.html', controller: 'foodCtrl'
+        })
+        .state('program-prehrane-za-skole', {
+            url: '/program-prehrane-za-skole', templateUrl: './assets/pages/program-prehrane-za-skole.html'
+        })
+        .state('program-prehrane-5', {
+            url: '/program-prehrane-5', templateUrl: './assets/pages/program-prehrane-5.html', controller: 'appCtrl'
+        })
+        .state('povijest', {
+            url: '/povijest', templateUrl: './assets/pages/povijest.html'
+        })
+
+    $urlRouterProvider.otherwise("/");
+
     //--------------disable catche---------------------
     if (!$httpProvider.defaults.headers.get) {
         $httpProvider.defaults.headers.get = {};
@@ -237,8 +293,8 @@ angular.module('app', ['ngMaterial'])
 }])
 
 .controller('orderCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
-    $scope.application = $rootScope.application;
-    $scope.version = $rootScope.version;
+    $scope.application = $rootScope.application; // === undefined ? 'Program Prehrane Web' : $rootScope.application;
+    $scope.version = $rootScope.version; // === undefined ? 'PREMIUM' : $rootScope.version;
     $scope.userType = 1;
     $scope.showAlert = false;
     $scope.sendicon = 'fa fa-angle-double-right';
@@ -274,6 +330,7 @@ angular.module('app', ['ngMaterial'])
               init();
           });
     };
+    debugger;
     if ($rootScope.config == undefined) {
         getConfig();
     } else {
@@ -335,6 +392,11 @@ angular.module('app', ['ngMaterial'])
         var additionalUsers = $scope.premiumUsers > 5 && $scope.user.userType == 2 ? ($scope.premiumUsers - 5) * 500 : 0;  // 500kn/additional user;
         $scope.user.price = totalprice + additionalUsers;
         $scope.user.priceEur = (totalprice + additionalUsers) / $rootScope.config.eur;
+
+        if ($scope.user.discountCoeff > 0) {
+            $scope.user.priceWithDiscount = $scope.user.price - (Math.round($scope.user.price * $scope.user.discountCoeff) * 100 / 100);
+            $scope.user.priceWithDiscountEur = $scope.user.priceEur - (Math.round($scope.user.priceEur * $scope.user.discountCoeff) * 100 / 100);
+        }
     }
 
     $scope.order = function (application, version) {
@@ -542,6 +604,61 @@ angular.module('app', ['ngMaterial'])
         $scope.limit += x;
     }
 
+}])
+
+.controller('bmiCtrl', ['$scope', '$timeout', 'charts', function ($scope, $timeout, charts) {
+    $scope.d = {
+        height: null,
+        weight: null,
+        bmi: null,
+        description: '',
+        css: '',
+        calculate: function () {
+            this.bmi = (this.weight * 10000 / (this.height * this.height)).toFixed(1);
+            this.description = getBmiTitle(this.bmi).des;
+            this.css = getBmiTitle(this.bmi).css;
+            getCharts();
+        }
+    }
+
+    var getBmiTitle = function (x) {
+        var res = {
+            des: '',
+            css: ''
+        }
+        if (x < 18.5) { res.des = 'snižena tjelesna masa', res.css = 'info'; }
+        if (x >= 18.5 && x <= 25) { res.des = "normalan tjelesna masa"; res.css = 'success'; }
+        if (x > 25 && x < 30) { res.des = "povišena tjelesna masa"; res.css = 'warning'; }
+        if (x >= 30) { res.des = "gojaznost"; res.css = 'danger'; }
+        return res;
+    }
+
+    var bmiChart = function () {
+        var id = 'bmiChart';
+        var value = $scope.d.bmi;
+        var unit = 'BMI';
+        var options = {
+            title: 'BMI',
+            min: 15,
+            max: 34,
+            greenFrom: 18.5,
+            greenTo: 25,
+            yellowFrom: 25,
+            yellowTo: 30,
+            redFrom: 30,
+            redTo: 34,
+            minorTicks: 5
+        };
+        google.charts.setOnLoadCallback(charts.guageChart(id, value, unit, options));
+    }
+
+    var getCharts = function () {
+        google.charts.load('current', { 'packages': ['gauge'] });
+        $timeout(function () {
+            bmiChart();
+        }, 300);
+    }
+    getCharts();
 }])
 
 /***** Directive *****/

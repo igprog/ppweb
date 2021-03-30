@@ -50,4 +50,17 @@ public class Admin : WebService {
         }
     }
 
+    [WebMethod]
+    public string GetDiscount() {
+        Files.Discount discount = new Files.Discount();
+        try {
+            Files F = new Files();
+            discount = F.GetSettingsData().discount;
+            return JsonConvert.SerializeObject(discount, Formatting.None);
+        }
+        catch (Exception e) {
+            return JsonConvert.SerializeObject(discount, Formatting.None);
+        }
+    }
+
 }

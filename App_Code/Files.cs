@@ -21,7 +21,7 @@ public class Files : WebService {
         public string pp5DownloadEnableCode;
     }
     public class Discount {
-        public int perc;
+        public double perc;
         public string dateFrom;
         public string dateTo;
     }

@@ -30,7 +30,7 @@
                     <strong>{{errorMesage}}</strong>
                 </div>
                 <div class="row m-1">
-                    <div class="col-sm-2 text-capitalize">{{'package' | translate}}: <a href="{{config.webpageurl}}#pricing" target="_blank" title="{{'about packages' | translate}}" class="text-primary"><i class="fa fa-info-circle"></i></a> </div>
+                    <div class="col-sm-3 text-capitalize">{{'package' | translate}}: <a href="{{config.webpageurl}}#pricing" target="_blank" title="{{'about packages' | translate}}" class="text-primary"><i class="fa fa-info-circle"></i></a> </div>
                     <div class="col-sm-4">
                         <select ng-model="user.userType" class="form-control" ng-change="calculatePrice()">
                             <option ng-value="0" ng-selected="user.userType==0?true:false">START</option>
@@ -40,13 +40,13 @@
                     </div>
                 </div>
                 <div ng-if="user.userType==2" class="row m-1">
-                    <div class="col-sm-2">{{'number of users' | translate}}: </div>
+                    <div class="col-sm-3">{{'number of users' | translate}}: </div>
                     <div class="col-sm-4">
                         <select ng-model="premiumUsers" ng-options="x for x in maxUsers" class="form-control" ng-change="setPremiumUsers(premiumUsers)"></select>
                     </div>
                 </div>
                 <div class="row m-1">
-                    <div class="col-sm-2 text-capitalize">{{'subscribe' | translate}}: </div>
+                    <div class="col-sm-3 text-capitalize">{{'subscribe' | translate}}: </div>
                     <div class="col-sm-4">
                         <select ng-model="user.licence" class="form-control" ng-change="calculatePrice()">
                             <option value="1" ng-selected="user.licence==1?true:false">{{'1 year' | translate}}</option>
@@ -54,11 +54,24 @@
                         </select>
                     </div>
                 </div>
-                <div class="row m-1 h5 mt-2">
-                    <div class="col-sm-2 text-capitalize">{{'price' | translate}}:</div>
+                <div class="row m-1 mt-2">
+                    <div class="col-sm-3 text-capitalize">{{'price' | translate}}:</div>
                     <div class="col-sm-6">
-                        <h3 ng-if="config.language!=='en'" class="lead font-weight-bold">{{user.price}} kn ({{user.priceEur | number:2}} €)</h3>
-                        <h3 ng-if="config.language==='en'" class="lead font-weight-bold">{{user.price / config.usd | number:2}} €</h3>
+                        <div ng-if="user.discountCoeff === 0">
+                            <h3 ng-if="config.language!=='en'" class="lead font-weight-bold">{{user.price}} kn ({{user.priceEur | number:2}} €)</h3>
+                            <h3 ng-if="config.language==='en'" class="lead font-weight-bold">{{user.price / config.usd | number:2}} $</h3>
+                        </div>
+                        <div ng-if="user.discountCoeff > 0">
+                            <s ng-if="config.language!=='en'" class="lead">{{user.price}} kn ({{user.priceEur | number:2}} €)</s>
+                            <s ng-if="config.language==='en'" class="lead">{{user.price / config.usd | number:2}} $</s>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="user.discountCoeff > 0" class="row m-1 mt-2">
+                    <div class="col-sm-3">{{'price with discount' | translate}} ({{user.discountCoeff * 100}}%):</div>
+                    <div class="col-sm-6">
+                        <h3 ng-if="config.language!=='en'" class="lead font-weight-bold">{{user.priceWithDiscount}} kn ({{user.priceWithDiscountEur | number:2}} €)</h3>
+                        <h3 ng-if="config.language==='en'" class="lead font-weight-bold">{{user.priceWithDiscountEur / config.usd | number:2}} $</h3>
                     </div>
                 </div>
                 <hr />
@@ -119,7 +132,7 @@
                             </md-input-container>
                         </div>
                         <div class="text-right">
-                            <button class="btn btn-primary text-capitalize" ng-disabled="isSendButtonDisabled" ng-click="sendOrder(user)">{{sendicontitle}} <span ng-class="sendicon"></span></button>
+                            <button class="btn btn-primary" ng-disabled="isSendButtonDisabled" ng-click="sendOrder(user)">{{sendicontitle}} <span ng-class="sendicon"></span></button>
                         </div>
                     </div>
                 </div>
@@ -147,7 +160,7 @@
 <span class="text-capitalize">{{'recipient' | translate}}</span>: {{config.company}}
 <span>{{'address' | translate}}</span>: {{config.address}}, {{config.language==='en'?'Croatia':'Hrvatska'}}
 <span>{{'payment description' | translate}}</span>: {{user.application}} {{user.version}}
-<span class="text-capitalize">{{'amount' | translate}}</span>: <span>{{user.price}}</span> kn
+<span class="text-capitalize">{{'amount' | translate}}</span>: <span ng-if="user.discountCoeff === 0">{{user.price}}</span><span ng-if="user.discountCoeff > 0">{{user.priceWithDiscount}}</span> kn
 <span>{{'model' | translate}}</span>: <span ng-if="user.pin">HR00</span><span ng-if="!user.pin">HR99</span>
 <span ng-if="user.pin">{{'reference number' | translate}}: {{user.pin}}</span> 
                     </pre>
@@ -158,7 +171,7 @@
                             <pre>
 {{'iban' | translate}}: {{config.iban}}
 {{'swift code' | translate}}: {{config.swift}}
-{{'amount' | translate}}: <span>{{user.priceEur | number:2}}</span> €
+{{'amount' | translate}}: <span ng-if="user.discountCoeff === 0">{{user.priceEur | number:2}}</span><span ng-if="user.discountCoeff > 0">{{user.priceWithDiscountEur | number:2}}</span> €
                         </pre>
                         </div>
                     </div>
@@ -177,11 +190,12 @@
                     </pre>
                     </div>
                 </div>
-                <div ng-hide="user.country.toLowerCase().startsWith('hr') || user.country.toLowerCase().startsWith('cr')">
+                <div ng-hide="user.country.toLowerCase().startsWith('hr') || user.country.toLowerCase().startsWith('cr') || user.discountCoeff > 0">
                     <div ng-if="config.language!='en'" ng-include="'./assets/partials/paypal.html'"></div>
                     <div ng-if="config.language=='en'" ng-include="'./assets/partials/paypal_usd.html'"></div>
                 </div>
             </div>
         </div>
     </div>
+    <json-directive data="user" desc="'user'"></json-directive>
 </div>

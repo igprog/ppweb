@@ -38,7 +38,12 @@ s0.parentNode.insertBefore(s1,s0);
     <link href="https://www.programprehrane.com/" rel="canonical" />
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="assets/css/vendor/font-awesome.min.css">
+    <!--<link rel="stylesheet" href="assets/css/vendor/font-awesome.min.css">-->
+    <!--*********** FontAwesome ***********-->
+    <script src="../assets/js/vendor/fontawesome.min.js"></script>
+    <script src="../assets/js/vendor/solid.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/vendor/solid.min.css">
+    <!--*********** FontAwesome ***********-->
     <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/vendor/angular-material.min.css">
     <link rel="stylesheet" type="text/css" href="../assets/css/vendor/jquery.floating-social-share.min.css" />
@@ -49,404 +54,64 @@ s0.parentNode.insertBefore(s1,s0);
     <script src="assets/js/vendor/angular-animate.min.js"></script>
     <script src="assets/js/vendor/angular-aria.min.js"></script>
     <script src="assets/js/vendor/angular-messages.min.js"></script>
+    <script src="assets/js/vendor/angular-ui-router.min.js"></script>
     <script src="assets/js/vendor/angular-material.min.js"></script>
 	<link rel="icon" type="image/x-icon" href="/favicon.ico?v=1" />
     <link href='https://fonts.googleapis.com/css?family=Encode Sans Expanded' rel='stylesheet'>
 </head>
 <body id="home" ng-app="app" ng-controller="appCtrl" data-spy="scroll" data-target=".navbar" data-offset="60" >
-
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html" style="padding-top:2px !important" title="Program Prehrane"><img src="assets/img/logo.svg" alt="Program Prehrane"></a>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#about" title="o programu"><i class="fa fa-info"></i> O aplikaciji</a></li>
-                    <li><a href="#pricing" title="cijena"><i class="fa fa-usd"></i> Cijene</a></li>
-                    <li><a href="#registration" title="registracija"><i class="fa fa-user-plus"></i> Registracija</a></li>
-                    <li><a href="#order" title="narudžba"><i class="fa fa-shopping-cart"></i> Narudžba</a></li>
-                    <li><a href="#contact" title="kontakt"><i class="fa fa-comment"></i> Kontakt</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Dokumentacija"><i class="fa fa-book"></i> Dokumenti<span class="caret"></span></a>
-                        <ul class="dropdown-menu" style="background-color:#353535">
-                            <li style="padding:5px"><a href="uputa.html" title="Uputa"><i class="fa fa-question-circle"></i> Uputa</a></li>
-                            <li style="padding:5px"><a href="obavijesti.html" title="Obavijesti o nadogradnjama"><i class="fa fa-info"></i> Obavijesti o nadogradnjama</a></li>
-                            <li style="padding:5px"><a href="cesto-postavljana-pitanja.html" title="Često postavljana pitanja"><i class="fa fa-question"></i> Često postavljana pitanja</a></li>
-                            <li style="padding:5px"><a href="bmi.html" title="BMI Kalkulator"><i class="fa fa-calculator"></i> BMI Kalkulator</a></li>
-                            <li style="padding:5px"><a href="izrada-uravnotezenog-jelovnika.html" title="Izrada uravnoteženog jelovnika"><i class="fa fa-cutlery"></i> Izrada uravnoteženog jelovnika</a></li>
-                            <li style="padding:5px"><a href="plan-prehrane.html" title="Plan prehrane"><i class="fa fa-calendar"></i> Plan prehrane</a></li>
-                            <li style="padding:5px"><a href="tablica-namirnica.html" title="Tablic namirnica"><i class="fa fa-apple"></i> Tablica namirnica</a></li>
-                            <li style="padding:5px"><a href="program-prehrane-za-skole.html" title="Program Prehrane za škole"><i class="fa fa-graduation-cap"></i> Program Prehrane za škole</a></li>
-                            <li style="padding:5px"><a href="aplikacija-za-klijente.html" title="Program Prehrane za škole"><i class="fa fa-user-o"></i> Aplikacija za klijente</a></li>
-                            <li style="padding:5px"><a href="../app/licence.txt" title="Uvjeti korištenja"><i class="fa fa-file-text-o"></i> Uvjeti korištenja</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" title="hrvatski" href="#"><i class="fa fa-sign-in"></i> App<span class="caret"></span></a>
-                        <ul class="dropdown-menu" style="background-color:#353535">
-                            <li style="padding:5px"><a href="../app/" title="aplikacija za nutricioniste"><i class="fa fa-sign-in"></i> Aplikacija za nutricioniste</a></li>
-                            <li style="padding:5px"><a href="../aplikacija-za-klijente.html" title="aplikacija za klijente"><i class="fa fa-user-o"></i> Aplikacija za klijente</a></li>
-                        </ul>
-                    </li>
-                    <!--<li><a href="../app/" title="prijava u aplikaciju"><i class="fa fa-sign-in"></i> App</a></li>-->
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" title="hrvatski" href="#"><i class="fa fa-globe"></i> Hr<span class="caret"></span></a>
-                        <ul class="dropdown-menu" style="background-color:#353535">
-                            <li style="padding:5px"><a href="/sr" title="srpski"><i class="fa fa-globe"></i> Sr</a></li>
-                            <li style="padding:5px"><a href="https://www.nutriprog.com" title="engleski"><i class="fa fa-globe"></i> En</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <a ui-sref="home" href="" class="navbar-brand" style="padding-top:2px !important" title="Program Prehrane"><img src="assets/img/logo.svg" alt="Program Prehrane"></a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a ui-sref="about" href="" class="nav-link" title="o programu"><i class="fa fa-info"></i> O aplikaciji</a></li>
+                <li class="nav-item"><a ui-sref="pricing" href="" class="nav-link" title="cijena"><i class="fa fa-usd"></i> Cijene</a></li>
+                <li class="nav-item"><a ui-sref="registration" href="" class="nav-link" title="registracija"><i class="fa fa-user-plus"></i> Registracija</a></li>
+                <li class="nav-item"><a ui-sref="order" href="" class="nav-link" title="narudžba"><i class="fa fa-shopping-cart"></i> Narudžba</a></li>
+                <li class="nav-item"><a ui-sref="contact" href="" class="nav-link" title="kontakt"><i class="fa fa-comment"></i> Kontakt</a></li>
+                <li class="nav-item dropdown">
+                    <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown" title="Dokumentacija"><i class="fa fa-book"></i> Dokumenti<span class="caret"></span></a>
+                    <div class="dropdown-menu" style="background-color:#353535">
+                        <a ui-sref="uputa" href="" class="dropdown-item" title="Uputa"><i class="fa fa-question-circle"></i> Uputa</a>
+                        <a ui-sref="obavijesti" href="" class="dropdown-item" title="Obavijesti o nadogradnjama"><i class="fa fa-info"></i> Obavijesti o nadogradnjama</a>
+                        <a ui-sref="cesto-postavljana-pitanja" href="" class="dropdown-item" title="Često postavljana pitanja"><i class="fa fa-question"></i> Često postavljana pitanja</a>
+                        <a ui-sref="povijest" href="" class="dropdown-item" title="Povijest"><i class="fa fa-history"></i> Povijest</a>
+                        <a ui-sref="bmi" class="dropdown-item" href="" title="BMI Kalkulator"><i class="fa fa-calculator"></i> BMI Kalkulator</a>
+                        <a ui-sref="izrada-uravnotezenog-jelovnika" href="" class="dropdown-item" title="Izrada uravnoteženog jelovnika"><i class="fa fa-cutlery"></i> Izrada uravnoteženog jelovnika</a>
+                        <a ui-sref="plan-prehrane" href="" class="dropdown-item" title="Plan prehrane"><i class="fa fa-calendar"></i> Plan prehrane</a>
+                        <a ui-sref="tablica-namirnica" href="" class="dropdown-item" title="Tablic namirnica"><i class="fa fa-apple"></i> Tablica namirnica</a>
+                        <a ui-sref="program-prehrane-za-skole" href="" class="dropdown-item" title="Program Prehrane za škole"><i class="fa fa-graduation-cap"></i> Program Prehrane za škole</a>
+                        <a ui-sref="aplikacija-za-klijente" href="" class="dropdown-item" title="Program Prehrane za škole"><i class="fa fa-user-o"></i> Aplikacija za klijente</a>
+                        <a href="../app/licence.txt" class="dropdown-item" title="Uvjeti korištenja"><i class="fa fa-file-text-o"></i> Uvjeti korištenja</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" title="hrvatski" href="#"><i class="fa fa-sign-in"></i> App<span class="caret"></span></a>
+                    <div class="dropdown-menu" style="background-color:#353535">
+                        <a href="../app/" class="dropdown-item" title="aplikacija za nutricioniste"><i class="fa fa-sign-in"></i> Aplikacija za nutricioniste</a>
+                        <a ui-sref="aplikacija-za-klijente" href="" class="dropdown-item" title="aplikacija za klijente"><i class="fa fa-user-o"></i> Aplikacija za klijente</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" title="hrvatski" href="#"><i class="fa fa-globe"></i> Hr<span class="caret"></span></a>
+                    <div class="dropdown-menu" style="background-color:#353535">
+                        <a href="/sr" class="dropdown-item" title="srpski"><i class="fa fa-globe"></i> Sr</a>
+                        <a href="https://www.nutriprog.com" class="dropdown-item" title="engleski"><i class="fa fa-globe"></i> En</a>
+                    </div>
+                </li>
+            </ul>
         </div>
     </nav>
-    <div class="jumbotron text-left">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <a href="#about" style="text-decoration:none" title="program prehrane">
-                    <h1 class="main-text">Program Prehrane Web</h1>
-                    <h2 class="lead"><strong>Web aplikacija za nutricioniste</strong></h2>
-                </a>
-                <div class="text-left">
-                    <a href="../app/" class="btn btn-default m10 main-border" style="width:260px" title="ulaz u aplikaciju"><i class="fa fa-sign-in fa-2x"></i> <span class="lead"> Ulaz za Korisnike</span></a>
-                    <a href="#registration" class="btn btn-default m10 main" style="width:260px" title="postani korisnik"><i class="fa fa-user-plus fa-2x"></i> <span class="lead"> Postani Korisnik</span></a>
-                </div>
-            </div>
-        </div>
-        <div ng-if="config.freetrial" class="row" ng-cloak>
-            <div class="col-md-8 col-md-offset-4">
-                <a href="#registration" style="text-decoration:none" title="Program Prehrane 15-dana besplatno">
-                    <label class="lead" style="font-weight:bold; color:#e40202; background-color:#fff; text-shadow: 2px 2px 4px #000000;">15 dana besplatno !</label>
-                </a>
-            </div>
-        </div>
 
+    <div class="container pt-5">
+        <ui-view autoscroll="false"></ui-view>
     </div>
-    <div class="container text-center">
-        <div class="row p10">
-            <div class="col-sm-3 p10">
-                <i class="fa fa-calculator main-text fa-3x"></i>
-                <h2 style="margin-bottom:0px" class="lead">Izračun</h2>
-                <h3 class="small" style="margin:5px">Izračun <a href="bmi.html" class="nodecoration" title="Indeks tjelesne mase | BMI Kalkulator">BMI</a>, energetske potrošnje i preporučenog energetskog unosa</h3>
-            </div>
-            <div class="col-sm-3 p10">
-                <i class="fa fa-bicycle main-text fa-3x"></i>
-                <h2 style="margin-bottom:0px" class="lead">Tjelesna aktivnost</h2>
-                <h3 class="small" style="margin:5px">Izrada plana treninga i detaljni izračun energetske potrošnje</h3>
-            </div>
-            <div class="col-sm-3 p10">
-                <i class="fa fa-heartbeat main-text fa-3x"></i>
-                <h2 style="margin-bottom:0px" class="lead">Preporuke</h2>
-                <h3 class="small" style="margin:5px">Preporuke za razne dobne skupine i više vrsta dijeta</h3>
-            </div>
-            <div class="col-sm-3 p10">
-                <a href="plan-prehrane.html" class="nodecoration" title="plan prehrane">
-                    <i class="fa fa-cutlery main-text fa-3x"></i>
-                    <h2 style="margin-bottom:0px" class="lead">Plan prehrane</h2>
-                    <h3 class="small" style="margin:5px">Izrada dnevnih i tjednih planova prehrane za pojedince i skupine konzumenata</h3>
-                </a>
-            </div>
-        </div>
-        <div class="row pt10">
-            <div class="col-sm-3 p10">
-                <i class="fa fa-pie-chart main-text fa-3x"></i>
-                <h2 style="margin-bottom:0px" class="lead">Analiza</h2>
-                <h3 class="small" style="margin:5px">Analiza dnevnih i tjednih jelovnika, grafički i tabelarni prikazi</h3>
-            </div>
-            <div class="col-sm-3 p10">
-                <i class="fa fa-bar-chart main-text fa-3x"></i>
-                <h2 style="margin-bottom:0px" class="lead">Pacijenti</h2>
-                <h3 class="small" style="margin:5px">Baza pacijenata. Praćenje antropometrijskih parametara</h3>
-            </div>
-            <div class="col-sm-3 p10">
-                <a href="aplikacija-za-klijente.html" class="nodecoration" title="aplikacija za klijente">
-                    <i class="fa fa-mobile main-text fa-3x"></i>
-                    <h2 style="margin-bottom:0px" class="lead">Klijent App</h2>
-                    <h3 class="small" style="margin:5px">Dozvolite svojim pacijentima da putem aplikacije sami prate svoje mjere i preuzimaju jelovnike</h3>
-                </a>
-            </div>
-            <div class="col-sm-3 p10">
-                <i class="fa fa-shopping-basket main-text fa-3x"></i>
-                <h2 style="margin-bottom:0px" class="lead">Košarica</h2>
-                <h3 class="small" style="margin:5px">Izračun cijene jelovnika i kreiranje šoping liste</h3>
-            </div>
-        </div>
-    </div>
+    
 
-    <div id="about" class="container pt60">
-        <div>
-            <h2>O aplikaciji</h2><br>
-            <p class="text-justify">
-                <iframe name="video" title="youtube video" class="video-frame" height="325" src="https://www.youtube.com/embed/Pz61JmLZ-bg" frameborder="0" allowfullscreen"></iframe>
-                <a href="../app/" title="web aplikacija"><strong>Program Prehrane Web</strong></a> omogućava utvrđivanje stanja uhranjenosti i energetske potrošnje pojedinca te izradu uravnoteženih jelovnika utemeljenu na znanstvenim spoznajama na polju nutriconizma.
-                Osmišljavanjem jelovnika korištenjem ove aplikacije, prehrana krajnjih korisnika postaje uravnotežena i raznolika
-                što se može zahvaliti činjenici da se izrada jelovnika bazira na preporučenom broju jediničnih serviranja svih skupina namirnica <em>(piramida prehrane)</em> te njihovih energetskih, makro i mikronutiritivnih vrijednost.
-                S obzirom da web aplikacija <a href="../app/" title="web aplikacija"><strong>Program Prehrane Web</strong></a> sadrži bazu od preko <a href="tablica-namirnica.html" class="nodecoration" title="Tablica namirnica">700 namirnica i jela</a> moguće je zadovoljiti zahtjeve većine korisnika po pitanju izbora namirnica.
-                Osim toga aplikacija pruža mogućnost unosa vlastitih namirnica i njihovih makro i mikronutritivnih vrijednosti.
-                Nadalje, kad se govori o problemu prekomjerne tjelesne mase, preporuča se uz promjenu prehrambenih navika, u svakodnevicu uključiti i dodatnu tjelesnu aktivnost,
-                pa tako program nudi podatke o energetskoj potrošnji za preko 400 tjelesnih aktivnosti. <br />
-                Osim preporuka za izradu plana prehrane za mršavljenje, program nudi i preporuke za debljanje kod osoba sa sniženom tjelesnom masom i preporuke za povećenje mišićne mase,
-                kao i preporuke za više vrsta dijeta kao što su <em>redukcijska dijeta, visokoproteinska dijeta , ulkusna dijeta, dijabetička dijeta, semivegetarijanska dijeta i dr...</em><br />
-                Više o karakteristikama i funkcijama aplikacije pogledajte <a href="#pricing" title="cijene"><strong>ovdje...</strong></a>
-            </p>
-        </div>
-        <div ng-include="'./assets/partials/slider.html'"></div>
-        <div>
-            <p class="text-justify">
-                <a href="../app/" title="web aplikacija"><strong>Program Prehrane Web</strong></a> je online aplikacija i za razliku od stare <a href="program-prehrane-5.html" target="_blank" title="program prehrane 5.0" rel="noopener"><strong>verziju 5.0</strong></a> nije potrebna instalacija na računalo,
-                već je dovoljna samo registracija u sustav, a aplikaciji možete pristupiti sa bilo kojeg računala koji ima pristup internetu neovisno o operativnom sustavu. Još jedna od prednosti u odnosu na <a href="program-prehrane-5.html" target="_blank" title="program prehrane 5.0" rel="noopener"><strong>verziju 5.0</strong></a> je u tome
-                što zajedničkoj bazi podataka može pristupiti više korisnika (nutricionista) unutar jednog tima. Svi podaci (podaci o klijentima, jelovnici, vlastite namirnice i recepti se spremaju na server i nema opasnosti od gubitka podataka zbog kvara ili zamjene računala).
-                Dizajn aplikacije je responzivan što znači da se automatski prilagođava rezoluciji monitora bilo kojeg uređaja (računalo, tablet, mobitel). <br />
-            </p>
-        </div>
-    </div>
-
-    <div id="pricing" class="container bg-grey pt60">
-        <div class="text-center">
-            <h2>Program Prehrane Web - Paketi</h2>
-        </div>
-        <div class="row slideanim">
-            <div class="col-sm-4">
-                <div class="panel panel-default text-center zoom" style="padding:0">
-                    <div class="panel-heading main">
-                        <h3>START</h3>
-                    </div>
-                    <div class="panel-body">
-                        <h4><strong>550.00 kn</strong> / 1 godina</h4>
-                        <h5><strong>880.00 kn</strong> / 2 godine</h5>
-                        <hr />
-                        <ul class="list-group">
-                            <li class="list-group-item">Broj korisnika: <strong>1</strong></li>
-                            <li class="list-group-item">Broj klijenata: <strong>5/mjesečno</strong></li>
-                            <li class="list-group-item">Broj namirnica: <strong>668</strong></li>
-                            <li class="list-group-item"><s>Pristup USDA bazi namirnica</s></li>
-                            <li class="list-group-item">Maksimalni broj obroka: <strong>6</strong></li>
-                            <li class="list-group-item">Metode izračuna BMR: <strong>1</strong></li>
-                            <li class="list-group-item"><s>Kalkulator masnog tkiva</s></li>
-                            <li class="list-group-item"><s>Kastom obroci</s></li>
-                            <li class="list-group-item"><s>Kalendar termina</s></li>
-                            <!--<li class="list-group-item"><s>Slanje jelovnika na e-mail klijenta</s></li>-->
-                            <li class="list-group-item"><s>Aplikacija za klijente</s></li>
-                            <li class="list-group-item"><s>Šoping lista</s></li>
-                        </ul>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="p5">
-                            <a href="#details" class="btn btn-default btn-block btn-lg m2" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="ribbon"><span>Preporuka</span></div>
-                <div class="panel panel-default text-center zoom" style="padding:0; box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
-                    <div class="panel-heading main">
-                        <h3>STANDARD</h3>
-                    </div>
-                    <div class="panel-body">
-                        <h4><strong>950.00 kn</strong> / 1 godina</h4>
-                        <h5><strong>1,520.00 kn</strong> / 2 godine</h5>
-                        <hr />
-                        <ul class="list-group">
-                            <li class="list-group-item">Broj korisnika: <strong>2</strong></li>
-                            <li class="list-group-item">Broj klijenata: <strong>20/mjesečno</strong></li>
-                            <li class="list-group-item">Broj namirnica: <strong>724</strong></li>
-                            <li class="list-group-item"><s>Pristup USDA bazi namirnica</s></li>
-                            <li class="list-group-item">Maksimalni broj obroka: <strong>6</strong></li>
-                            <li class="list-group-item">Metode izračuna BMR: <strong>4</strong></li>
-                            <li class="list-group-item"><s>Kalkulator masnog tkiva</s></li>
-                            <li class="list-group-item"><s>Kastom obroci</s></li>
-                            <li class="list-group-item">Kalendar termina</li>
-                            <!--<li class="list-group-item">Slanje jelovnika na e-mail klijenta</li>-->
-                            <li class="list-group-item">Aplikacija za klijente</li>
-                            <li class="list-group-item"><s>Šoping lista</s></li>
-                        </ul>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="p5">
-                            <a href="#details" class="btn btn-default btn-block btn-lg m2" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="panel panel-default text-center zoom" style="padding:0">
-                    <div class="panel-heading main">
-                        <h3>PREMIUM</h3>
-                    </div>
-                    <div class="panel-body">
-                        <h4><strong>{{premiumPriceOneYear | number : 2}} kn</strong> / 1 godina</h4>
-                        <h5><strong>{{premiumPriceTwoYear | number: 2}} kn</strong> / 2 godine</h5>
-                        <hr />
-                        <ul class="list-group">
-                            <li class="list-group-item">Broj korisnika:
-                                <strong>
-                                    <select ng-model="premiumUsers" ng-options="x for x in maxUsers" style="height:30px" ng-change="getPremiumPrice(premiumUsers)"></select>
-                                </strong>
-                            </li>
-                            <li class="list-group-item">Broj klijenata: <strong>neograničeno</strong></li>
-                            <li class="list-group-item">Broj namirnica: <strong>724</strong></li>
-                            <li class="list-group-item">Pristup USDA bazi namirnica</li>
-                            <li class="list-group-item">Maksimalni broj obroka: <strong>9</strong></li>
-                            <li class="list-group-item">Metode izračuna BMR: <strong>5</strong></li>
-                            <li class="list-group-item">Kalkulator masnog tkiva</li>
-                            <li class="list-group-item">Kastom obroci</li>
-                            <li class="list-group-item">Kalendar termina</li>
-                            <!--<li class="list-group-item">Slanje jelovnika na e-mail klijenta</li>-->
-                            <li class="list-group-item">Aplikacija za klijente</li>
-                            <li class="list-group-item">Šoping lista</li>
-                        </ul>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="p5">
-                            <a href="#details" class="btn btn-default btn-block btn-lg m2" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="details" ng-include="'./assets/partials/details.html'"></div>
-
-    <div class="container">
-        <a href="uputa.html" title="Program Prehrane Web - Uputa ua korištenje"><i class="fa fa-book"></i> Uputa za korištenje</a>
-    </div>
-
-    <div id="demo" class="container text-left pt60">
-        <h2 class="text-center">Demo verzija</h2>
-        <p class="text-justify">
-            U demo verziji možete isprobati većinu funkcionalnosti. Neke su funkcionalnosti 
-            onemogućene kao npr: kod izrade jelovnika maksimalan broj odabranih namirnica je 10, onemogućeno je snimanja podataka (snimanje jelovnika, recepata, namirnica, cijena, detaljne energetske potrošnje i dr), korištenje kalendara, kreiranje šoping liste, dodavanje novih korisnika itd.
-        </p>
-    </div>
-
-    <div id="registration" class="container text-left pt60">
-        <h2 class="text-center">Registracija</h2>
-        <div id="webapp" class="col-md-8 col-md-offset-2">
-            <div ng-include="'./assets/partials/signup.html'"></div>
-        </div>
-    </div>
-
-    <div id="order" ng-controller="webAppCtrl" class="container text-left pt60">
-        <h2 class="text-center">NARUDŽBA</h2>
-        <div>
-            <h3>Postupak narudžbe:</h3>
-            <ol>
-                <li>Ukoliko se već niste registrirali, prvo se <a href="#registration" title="registracija">registrirajte</a>.</li>
-                <li>U narudžbenici upišite e-mail i lozinku koju ste odabrali prilikom registracije i kliknite na tipku <kbd>Dalje >></kbd>.</li>
-                <li>Odaberite paket (<em>START, STANDARD ili PREMIUM</em>) i trajanje pretplate (<em>jedna ili dvije godine</em>) i popunite sva obavezna polja
-                    <p class="small"><em>* ako se račun izdaje na tvrtku odaberite <strong>pravna osoba</strong>.</em></p>
-                </li>
-                <li>Pošaljite narudžbu klikom na <kbd>Dalje >></kbd>.</li>
-                <li>Na Vaš e-mail ćete dobiti podatke za uplatu.</li>
-                <li>Aplikacija postaje aktivna nakon primitka Vaše uplate ili nakon što nam pošaljete potvrdu o uplati.</li>
-            </ol>
-        </div>
-        <div ng-include="'./assets/partials/order.html'" class="col-md-8 col-md-offset-2"></div>
-    </div>
-
-    <div class="container mt20 pt60">
-        <hr />
-        <div class="row">
-            <div class="col-sm-4">
-                <img src="../assets/img/mockup_600x400.jpg" alt="mockup" title="Program Prehrane" class="img-responsive">
-            </div>
-            <div class="col-sm-8">
-                <h4>POVIJEST:</h4>
-                <p class="text-justify">
-                    <a href="../app/" title="web aplikacija"><strong>Program Prehrane Web</strong></a> nasljednica je <a href="#awards" title="priznanja">višestruko nagrađivanog</a> računalnog programa <a href="program-prehrane-5.html" target="_blank" title="program prehrane 5.0" rel="noopener"><strong>Program Prehrane 5.0</strong></a>,
-                    a nastala je iz potrebe za izradom alata koji će nutricionistima i zdravstvenim djelatnicima ali
-                    i svim pojedincima koji vode računa o zdravoj i uravnoteženoj prehrani omogućiti brzu i jednostavnu izradu <a href="plan-prehrane.html" class="nodecoration" title="izrada plana prehrane">plana prehrane</a> i programa tjelesne aktivnosti.<br />
-                    <strong>Program Prehrane</strong> se na tržištu nalazi već više od {{year - 2008}} godina, a do sada je doživio 7 verzija.<br />
-                    Osim hrvatske verzije, program je preveden na bosanski, <a href="./sr" title="Program ishrane | srpska verzija">srpski</a> i <a href="https://www.nutriprog.com" title="NutriProg.com | engleska verzija">engleski</a> jezik.
-                </p>
-                <div class="table-responsive">
-                    <table class="table table-condensed">
-                        <tr>
-                            <th></th>
-                            <th>Verzija</th>
-                            <th>Godina izdanja</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="../assets/img/povijest/pp1.jpg" title="pp1">
-                                    <img src="../assets/img/povijest/pp1.jpg" alt="pp1" style="width:60px" />
-                                </a>
-                            </td>
-                            <td>Program Prehrane 1.0</td>
-                            <td>2008</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="../assets/img/povijest/pp2.jpg" title="pp2">
-                                    <img src="../assets/img/povijest/pp2.jpg" alt="pp2" style="width:60px" />
-                                </a>
-                            </td>
-                            <td>Program Prehrane 2.0</td>
-                            <td>2012</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="../assets/img/povijest/pp3.jpg" title="pp3">
-                                    <img src="../assets/img/povijest/pp3.jpg" alt="pp3" style="width:60px" />
-                                </a>
-                            </td>
-                            <td>Program Prehrane 3.0</td>
-                            <td>2012</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="../assets/img/povijest/pp4.jpg" title="pp4">
-                                    <img src="../assets/img/povijest/pp4.jpg" alt="pp4" style="width:60px" />
-                                </a></td>
-                            <td>Program Prehrane 4.0</td>
-                            <td>2013</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="../assets/img/povijest/pp5.jpg" title="pp5">
-                                    <img src="../assets/img/povijest/pp5.jpg" alt="pp5" style="width:60px" />
-                                </a>
-                            </td>
-                            <td><a href="program-prehrane-5.html" target="_blank" title="računalni program" rel="noopener"><strong>Program Prehrane 5.0</strong></a></td>
-                            <td>2014</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="../assets/img/povijest/ppweb1.png" title="ppweb1">
-                                    <img src="../assets/img/povijest/ppweb1.png" alt="ppweb1" style="width:60px" />
-                                </a>
-                            </td>
-                            <td><a href="/app_v_1_4_8/index.html" target="_blank" title="Program Prehrane Web Ver. 1" rel="noopener"><strong>Program Prehrane Web Ver. 1</strong></a></td>
-                            <td>2017</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="../assets/img/povijest/ppweb2.png" title="ppweb2">
-                                    <img src="../assets/img/povijest/ppweb2.png" alt="ppweb2" style="width:60px" />
-                                </a>
-                            </td>
-                            <td><a href="/app/index.html" target="_blank" title="Program Prehrane Web Ver. 2" rel="noopener"><strong>Program Prehrane Web Ver. 2</strong></a></td>
-                            <td>2020</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div ng-include="'./assets/partials/awards.html'"></div>
-
-    <div ng-include="'./assets/partials/customers.html'"></div>
-
-    <div ng-include="'./assets/partials/info.html'"></div>
+    
 
     <footer class="container-fluid text-center pt60">
         <!--<div class="navbar-fixed-bottom m10" style="margin-bottom:60px">
@@ -461,8 +126,8 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
     </footer>
 
-    <script src="assets/js/app.js?v=1.0.0"></script>
-    <script src="assets/js/main.js?v=1.0.0"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/main.js"></script>
     <script type="text/javascript" src="../assets/js/vendor/jquery.floating-social-share.min.js"></script>
 
     <script>

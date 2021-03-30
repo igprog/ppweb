@@ -1,0 +1,89 @@
+﻿<div class="container pt60">
+    <h1>BMI - Indeks tjelesne mase</h1>
+    <div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-8">
+                <p class="text-justify">
+                    Određivanje indeksa tjelesne mase (ITM) (eng. Body Mass Index; <strong>BMI</strong>) danas je
+                    najrasprostranjeniji način kojim se dovode u vezu tjelesna masa i visina. ITM se koristi zbog
+                    velike povezanosti sa sastavom tijela. <br />
+                    Indeks tjelesne mase ne koristi se za utvrđivanje uhranjenosti trudnica i sportaša.
+                    ITM tjelesno aktivnih ljudi nerijetko je veći od 25 kg/m2, no važno je znati da se ovdje ne radi
+                    o povećanoj masi masnog tkiva, vec o povećanoj mišićnoj masi.
+                    Govori li se o općoj populaciji, veće vrijednosti ITM-a vezuju se uz povećan rizik za visoki
+                    krvni tlak, šećernu bolest II. tipa te bolesti srca i krvnih žila. Njegovo značajno povećanje u
+                    kasnijem životnom dobu veoma povečava učestalost ishemijske bolesti srca. Također je
+                    povećana tjelesna masa u pozitivnoj korelaciji s pojavom žučnih kamenaca, bolesti jetre,
+                    postoperativnih komplikacija te smrti tijekom operacija. Komplikacije povezane s artritisom,
+                    posebice kukova i koljena, češće su kod osoba neprimjereno visoke tjelesne mase. Gojaznost
+                    je povezana s karcinomom debelog crijeva, karcinomom prostate kod muškaraca te dojki,
+                    maternice i jajnika kod žena. Pothranjenost je, s druge strane, povezana s većom smrtnosti
+                    uslijed raka pluća i žučnjaka.
+                </p>
+            </div>
+            <div class="col-sm-4">
+                <a href="../" title="Web aplikacija za izradu uravnoteženih jelovnika i plana tjelesne aktivnosti">
+                    <img src="../assets/img/monitor.png" class="img-thumbnail m10" alt="Web aplikacija Program Prehrane Web" style="float: right;" />
+                    <em class="small">*Web aplikacija Program Prehrane Web</em>
+                </a>
+            </div>
+        </div>
+        <div class="mt20">
+            <p>
+                Formula za izračun indeksa tjelesne mase je: <strong>BMI=m/h<sup>2</sup></strong> gdje je <strong>m</strong> tjelesna masa u kg, a <strong>h</strong> visina u metrima.<br />
+                Npr. ako ste visoki 165 cm teški 60 kg Vaš BMI je 60/(1,65 * 1,65) = 22 kg/m<sup>2</sup>.
+            </p>
+        </div>
+        <div class="row well">
+            <h2>BMI Kalkulator</h2>
+            <div class="col-sm-2">
+                <div>
+                    <label>Visina (cm)</label>
+                    <input ng-model="d.height" class="form-control" type="number" />
+                </div>
+                <div>
+                    <label>Masa (kg)</label>
+                    <input ng-model="d.weight" class="form-control" type="number" />
+                </div>
+                <div class="mt10  text-right">
+                    <button ng-click="d.calculate()" class="btn-lg btn-default">Izračunaj BMI</button>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div id="bmiChart" style="height:200px; width:200px; margin:auto"></div>
+            </div>
+            <div class="col-sm-6">
+                <div ng-if="d.bmi" class="alert alert-{{d.css}}" ng-cloak>
+                    <h3>BMI: {{d.bmi}} kg/m<sup>2</sup></h3>
+                    <strong class="text-uppercase">{{d.description}}</strong>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <h3>Kategorizacija</h3>
+            <table class="table">
+                <tr>
+                    <th>BMI</th>
+                    <th>tjelesna masa</th>
+                </tr>
+                <tr>
+                    <td>< 18.5</td>
+                    <td>Snižena tjelesna masa</td>
+                </tr>
+                <tr>
+                    <td>18.5 - 25</td>
+                    <td>Normalna tjelesna masa</td>
+                </tr>
+                <tr>
+                    <td>25 - 30</td>
+                    <td>Povišena tjelesna masa</td>
+                </tr>
+                <tr>
+                    <td>> 30</td>
+                    <td>Gojaznost</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

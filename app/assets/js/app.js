@@ -981,8 +981,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var activityLog = function (userId, activity, dateTime) {
-        functions.post('Log', 'SaveActivityLog', { userId: userId, activity: activity, dateTime: dateTime }).then(function (d) {
-        });
+        if ($rootScope.config.showactivitylog) {
+            functions.post('Log', 'SaveActivityLog', { userId: userId, activity: activity, dateTime: dateTime }).then(function (d) {
+            });
+        }
     }
 
     /***** Login As *****/
@@ -6823,6 +6825,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         var additionalUsers = $scope.premiumUsers > 5 && $scope.user.userType == 2 ? ($scope.premiumUsers - 5) * 500 : 0;  // 500kn/additional user;
         $scope.user.price = totalprice + additionalUsers;
         $scope.user.priceEur = (totalprice + additionalUsers) / $rootScope.config.eur;
+
+        if ($scope.user.discountCoeff > 0) {
+            $scope.user.priceWithDiscount = $scope.user.price - (Math.round($scope.user.price * $scope.user.discountCoeff) * 100 / 100);
+            $scope.user.priceWithDiscountEur = $scope.user.priceEur - (Math.round($scope.user.priceEur * $scope.user.discountCoeff) * 100 / 100);
+        }
+
     }
 
     if ($rootScope.config == undefined) {
@@ -6864,7 +6872,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         user.maxNumberOfUsers = $scope.premiumUsers;
 
         $scope.sendicon = 'fa fa-spinner fa-spin';
-        $scope.sendicontitle = $translate.instant('sending');
+        $scope.sendicontitle = $translate.instant('sending') + '...  ' + $translate.instant('please wait');
         $scope.isSendButtonDisabled = true;
         $http({
             url: $rootScope.config.backend + 'Orders.asmx/SendOrder',

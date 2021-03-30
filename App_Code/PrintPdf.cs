@@ -1943,9 +1943,11 @@ public class PrintPdf : WebService {
 
     protected void DeleteFolder(string path) {
         //TODO: check BUG: The process cannot access the file '316bb38a-a35e-4e70-a975-eff34af7f4ba.pdf' because it is being used by another process..pdf
-        if (Directory.Exists(path)) {
-            Directory.Delete(path, true);
-        }
+        try {
+            if (Directory.Exists(path)) {
+                Directory.Delete(path, true);
+            }
+        } catch (Exception e) {}
     }
 
     private void AppendMeal(Document doc, List<Foods.NewFood> meal, Menues.NewMenu currentMenu, string lang, Foods.Totals totals, PrintMenuSettings settings) {

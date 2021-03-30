@@ -629,6 +629,10 @@ angular.module('app', [])
     load();
 
     $scope.save = function (settings) {
+        if (settings.discount.perc === undefined || settings.discount.perc === null || settings.discount.perc < 0 || settings.discount.perc > 99) {
+            alert('Popust mora biti brojčana vrijednost od 0 do 99.');
+            return;
+        }
         functions.post('Files', 'SaveSettings', { settings: settings }).then(function (d) {
             $scope.settings = d;
         });

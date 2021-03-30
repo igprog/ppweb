@@ -49,6 +49,9 @@ public class Orders : WebService {
         public bool eInvoice;
         public int maxNumberOfUsers;
         public bool isForeign;
+        public double discountCoeff;
+        public double priceWithDiscount;
+        public double priceWithDiscountEur;
     }
 
     [WebMethod]
@@ -78,6 +81,10 @@ public class Orders : WebService {
         x.eInvoice = false;
         x.maxNumberOfUsers = 1;
         x.isForeign = false;
+        Files F = new Files();
+        x.discountCoeff = F.GetSettingsData().discount.perc / 100.0;
+        x.priceWithDiscount = 0.0;
+        x.priceWithDiscountEur = 0.0;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -116,6 +123,7 @@ public class Orders : WebService {
                             x.additionalService = reader.GetValue(19) == DBNull.Value ? "" : reader.GetString(19);
                             x.note = reader.GetValue(20) == DBNull.Value ? "" : reader.GetString(20);
                             x.eInvoice = false;
+                            x.discountCoeff = 0;
                             xx.Add(x);
                         }
                     }
@@ -154,8 +162,11 @@ public class Orders : WebService {
                         , x.maxNumberOfUsers > 5 ? string.Format("({0} korisnika)", x.maxNumberOfUsers) : ""
                         , string.Format("- {0} god. licenca", x.licenceNumber));
             item.qty = Convert.ToInt32(x.licenceNumber);
-            item.unitPrice = x.price;
-            i.total = x.price * item.qty;
+            //item.unitPrice = x.price;
+            item.unitPrice = x.discountCoeff > 0 ? x.priceWithDiscount : x.price;
+
+            //i.total = x.price * item.qty;
+            i.total = x.discountCoeff > 0 ? x.priceWithDiscount * item.qty : x.price * item.qty;
             i.items.Add(item);
             i.showSignature = true;
             i.isForeign = x.isForeign;
@@ -197,8 +208,8 @@ public class Orders : WebService {
                     command.Parameters.Add(new SQLiteParameter("version", x.version));
                     command.Parameters.Add(new SQLiteParameter("licence", x.licence));
                     command.Parameters.Add(new SQLiteParameter("licenceNumber", x.licenceNumber));
-                    command.Parameters.Add(new SQLiteParameter("price", x.price));
-                    command.Parameters.Add(new SQLiteParameter("priceEur", x.priceEur));
+                    command.Parameters.Add(new SQLiteParameter("price", x.discountCoeff > 0 ? x.priceWithDiscount : x.price));
+                    command.Parameters.Add(new SQLiteParameter("priceEur", x.discountCoeff > 0 ? x.priceWithDiscountEur : x.priceEur));
                     command.Parameters.Add(new SQLiteParameter("orderDate", Convert.ToString(x.orderDate)));
                     command.Parameters.Add(new SQLiteParameter("additionalService", x.additionalService));
                     command.Parameters.Add(new SQLiteParameter("note", x.note));
@@ -220,7 +231,8 @@ public class Orders : WebService {
 
             PrintPdf PDF = new PrintPdf();
             i.docType = (int)Invoice.DocType.offer;
-            i.totPrice_eur = x.priceEur;
+            // i.totPrice_eur = x.priceEur;
+            i.totPrice_eur = x.discountCoeff > 0 ? x.priceWithDiscountEur : x.priceEur;
             string offerPdf = PDF.CreateInvoicePdf(i);
             string offerPdfPath = !string.IsNullOrEmpty(offerPdf) ? string.Format("~/upload/invoice/temp/{0}.pdf", offerPdf) : null;
             Mail m = new Mail();
