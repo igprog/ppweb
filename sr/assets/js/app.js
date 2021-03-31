@@ -142,7 +142,7 @@ angular.module('app', ['ngMaterial'])
     var validationFormDanger = function () {
         $scope.msg.css = 'danger';
         $scope.msg.icon = 'exclamation';
-        $scope.sendicon = 'fa fa-sign-in';
+        $scope.sendicon = 'fa fa-sign-in-alt';
         $scope.sendicontitle = 'REGISTRACIJA';
         $scope.signupok = false;
         $scope.isSendButtonDisabled = false;
@@ -152,12 +152,12 @@ angular.module('app', ['ngMaterial'])
         $scope.msg.css = 'success';
         $scope.msg.icon = 'check';
         $scope.signupok = true;
-        $scope.sendicon = 'fa fa-sign-in';
+        $scope.sendicon = 'fa fa-sign-in-alt';
         $scope.sendicontitle = 'REGISTRACIJA';
         $scope.isSendButtonDisabled = true;
     }
 
-    $scope.sendicon = 'fa fa-sign-in';
+    $scope.sendicon = 'fa fa-sign-in-alt';
     $scope.sendicontitle = 'REGISTRACIJA';
     $scope.isSendButtonDisabled = false;
     $scope.signup = function (user, emailConfirm, passwordConfirm, accept) {
@@ -207,7 +207,7 @@ angular.module('app', ['ngMaterial'])
        function (response) {
            alert(response.data.d);
            $scope.signupok = false;
-           $scope.sendicon = 'fa fa-sign-in';
+           $scope.sendicon = 'fa fa-sign-in-alt';
            $scope.sendicontitle = 'REGISTRACIJA';
            $scope.isSendButtonDisabled = true;
        });

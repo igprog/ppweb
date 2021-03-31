@@ -1,16 +1,18 @@
 ﻿<div id="contact" class="bg-grey" ng-cloak>
-    <div class="container pt60">
-        <div ng-controller="contactCtrl" class="row mb20">
+    <div class="container pt-5">
+        <div ng-controller="contactCtrl" class="row mb-3">
             <div class="col-sm-5">
                 <h2>KONTAKT</h2>
-                <label>IG PROG, obrt za računalno programiranje</label>
-                <p>OIB {{config.oib}}</p>
-                <p>IBAN {{config.iban}}</p>
-                <p><span class="fa fa-home"></span> {{config.address}}</p>
-                <p><a href="" title="tel"><span class="fa fa-phone"></span> {{config.phone}}</a></p>
-                <p><a href="" title="email"><span class="fa fa-envelope"></span> {{config.email}}</a></p>
-                <p><a href="https://www.{{config.domain}}" title="web"><span class="fa fa-globe"></span> www.{{config.domain}}</a> | <a href="https://www.igprog.hr" title="ig prog" target="_blank"> www.igprog.hr</a></p>
-                <p><a href="{{config.instagram.url}}" title="instagram"><span class="fa fa-instagram"></span> {{config.instagram.name}}</a></p>
+                <div class="small">
+                    <label>IG PROG, obrt za računalno programiranje</label>
+                    <p>OIB {{config.oib}}</p>
+                    <p>IBAN {{config.iban}}</p>
+                    <p><span class="fa fa-home"></span> {{config.address}}</p>
+                    <!--<p><a href="" title="tel"><span class="fa fa-phone"></span> {{config.phone}}</a></p>-->
+                    <p><a href="" title="email"><span class="fa fa-envelope"></span> {{config.email}}</a></p>
+                    <p><a href="https://www.{{config.domain}}" title="web"><span class="fa fa-globe"></span> www.{{config.domain}}</a> | <a href="https://www.igprog.hr" title="ig prog" target="_blank"> www.igprog.hr</a></p>
+                    <p><a href="{{config.instagram.url}}" title="instagram"><span class="fa fa-instagram"></span> {{config.instagram.name}}</a></p>
+                </div>
             </div>
             <div class="col-sm-7">
                 <div ng-include="'./assets/partials/contact.html'"></div>

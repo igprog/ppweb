@@ -68,37 +68,37 @@ s0.parentNode.insertBefore(s1,s0);
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><a ui-sref="about" href="" class="nav-link" title="o programu"><i class="fa fa-info"></i> O aplikaciji</a></li>
-                <li class="nav-item"><a ui-sref="pricing" href="" class="nav-link" title="cijena"><i class="fa fa-usd"></i> Cijene</a></li>
+                <li class="nav-item"><a ui-sref="pricing" href="" class="nav-link" title="cijena"><i class="fa fa-dollar-sign"></i> Cijene</a></li>
                 <li class="nav-item"><a ui-sref="registration" href="" class="nav-link" title="registracija"><i class="fa fa-user-plus"></i> Registracija</a></li>
                 <li class="nav-item"><a ui-sref="order" href="" class="nav-link" title="narudžba"><i class="fa fa-shopping-cart"></i> Narudžba</a></li>
                 <li class="nav-item"><a ui-sref="contact" href="" class="nav-link" title="kontakt"><i class="fa fa-comment"></i> Kontakt</a></li>
                 <li class="nav-item dropdown">
                     <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown" title="Dokumentacija"><i class="fa fa-book"></i> Dokumenti<span class="caret"></span></a>
-                    <div class="dropdown-menu" style="background-color:#353535">
+                    <div class="dropdown-menu dropdown-menu-right" style="background-color:#353535">
                         <a ui-sref="uputa" href="" class="dropdown-item" title="Uputa"><i class="fa fa-question-circle"></i> Uputa</a>
                         <a ui-sref="obavijesti" href="" class="dropdown-item" title="Obavijesti o nadogradnjama"><i class="fa fa-info"></i> Obavijesti o nadogradnjama</a>
                         <a ui-sref="cesto-postavljana-pitanja" href="" class="dropdown-item" title="Često postavljana pitanja"><i class="fa fa-question"></i> Često postavljana pitanja</a>
                         <a ui-sref="povijest" href="" class="dropdown-item" title="Povijest"><i class="fa fa-history"></i> Povijest</a>
                         <a ui-sref="bmi" class="dropdown-item" href="" title="BMI Kalkulator"><i class="fa fa-calculator"></i> BMI Kalkulator</a>
-                        <a ui-sref="izrada-uravnotezenog-jelovnika" href="" class="dropdown-item" title="Izrada uravnoteženog jelovnika"><i class="fa fa-cutlery"></i> Izrada uravnoteženog jelovnika</a>
+                        <a ui-sref="izrada-uravnotezenog-jelovnika" href="" class="dropdown-item" title="Izrada uravnoteženog jelovnika"><i class="fa fa-utensils"></i> Izrada uravnoteženog jelovnika</a>
                         <a ui-sref="plan-prehrane" href="" class="dropdown-item" title="Plan prehrane"><i class="fa fa-calendar"></i> Plan prehrane</a>
-                        <a ui-sref="tablica-namirnica" href="" class="dropdown-item" title="Tablic namirnica"><i class="fa fa-apple"></i> Tablica namirnica</a>
+                        <a ui-sref="tablica-namirnica" href="" class="dropdown-item" title="Tablic namirnica"><i class="fa fa-apple-alt"></i> Tablica namirnica</a>
                         <a ui-sref="program-prehrane-za-skole" href="" class="dropdown-item" title="Program Prehrane za škole"><i class="fa fa-graduation-cap"></i> Program Prehrane za škole</a>
-                        <a ui-sref="aplikacija-za-klijente" href="" class="dropdown-item" title="Program Prehrane za škole"><i class="fa fa-user-o"></i> Aplikacija za klijente</a>
-                        <a href="../app/licence.txt" class="dropdown-item" title="Uvjeti korištenja"><i class="fa fa-file-text-o"></i> Uvjeti korištenja</a>
+                        <a ui-sref="aplikacija-za-klijente" href="" class="dropdown-item" title="Program Prehrane za škole"><i class="fa fa-user"></i> Aplikacija za klijente</a>
+                        <a href="../app/licence.txt" class="dropdown-item" title="Uvjeti korištenja"><i class="fa fa-file-alt"></i> Uvjeti korištenja</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" title="hrvatski" href="#"><i class="fa fa-sign-in"></i> App<span class="caret"></span></a>
-                    <div class="dropdown-menu" style="background-color:#353535">
-                        <a href="../app/" class="dropdown-item" title="aplikacija za nutricioniste"><i class="fa fa-sign-in"></i> Aplikacija za nutricioniste</a>
-                        <a ui-sref="aplikacija-za-klijente" href="" class="dropdown-item" title="aplikacija za klijente"><i class="fa fa-user-o"></i> Aplikacija za klijente</a>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" title="hrvatski" href="#"><i class="fa fa-sign-in-alt"></i> App<span class="caret"></span></a>
+                    <div class="dropdown-menu dropdown-menu-right" style="background-color:#353535">
+                        <a href="../app/" class="dropdown-item" title="aplikacija za nutricioniste"><i class="fa fa-user-md"></i> Aplikacija za nutricioniste</a>
+                        <a ui-sref="aplikacija-za-klijente" href="" class="dropdown-item" title="aplikacija za klijente"><i class="fa fa-user"></i> Aplikacija za klijente</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" title="hrvatski" href="#"><i class="fa fa-globe"></i> Hr<span class="caret"></span></a>
-                    <div class="dropdown-menu" style="background-color:#353535">
-                        <a href="/sr" class="dropdown-item" title="srpski"><i class="fa fa-globe"></i> Sr</a>
+                    <div class="dropdown-menu dropdown-menu-right" style="background-color:#353535">
+                        <a ui-sref="sr" href="" class="dropdown-item" title="srpski"><i class="fa fa-globe"></i> Sr</a>
                         <a href="https://www.nutriprog.com" class="dropdown-item" title="engleski"><i class="fa fa-globe"></i> En</a>
                     </div>
                 </li>
@@ -106,21 +106,11 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
     </nav>
 
-    <div class="container pt-5">
+    <div class="pt-5">
         <ui-view autoscroll="false"></ui-view>
     </div>
     
-
-    
-
     <footer class="container-fluid text-center pt60">
-        <!--<div class="navbar-fixed-bottom m10" style="margin-bottom:60px">
-            <a href="#home" title="Na vrh">
-                <span class="fa fa-chevron-up fa-3x"></span>
-            </a>
-        </div>
-        <hr />-->
-        <!--<p>Program Prehrane je deponiran u Hrvatskoj autorskoj agenciji - Centru za intelektualno vlasništvo d.o.o. u Zagrebu.</p>-->
         <div ng-cloak>
             <span class="small">Copyright © {{year}} <a href="https://www.igprog.hr" title="igprog.hr">IG PROG</a></span>
         </div>

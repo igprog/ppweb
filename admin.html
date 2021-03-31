@@ -57,21 +57,21 @@
                     <fieldset class="fieldset-border">
                         <legend class="fieldset-border">Login</legend>
                         <form id="loginform">
-                            <div class="input-group mt-3 p-2">
+                            <div class="input-group mt-3 p-1">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-user"></i></span>
                                 </div>
                                 <input ng-model="user.username" type="text" class="form-control" name="email" placeholder="Email">
                             </div>
-                            <div class="input-group p-2">
+                            <div class="input-group p-1">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-unlock"></i></span>
                                 </div>
                                 <input ng-model="user.password" type="password" class="form-control" name="password" placeholder="Password">
                             </div>
                         </form>
-                        <div class="text-right p-2">
-                            <button type="submit" form="loginform" ng-click="login(user)" class="btn btn-outline-primary"><i class="fa fa-key"></i> Login</button>
+                        <div class="text-right p-1">
+                            <button type="submit" form="loginform" ng-click="login(user)" class="btn btn-outline-secondary"><i class="fa fa-key"></i> Login</button>
                         </div>
                     </fieldset>
                 </div>
@@ -525,7 +525,7 @@
                                 </div>
                                 <div>
                                     <span>Opis:</span>
-                                    <textarea ng-model="x.desc" typeof="text" class="form-control" rows="3" />
+                                    <textarea ng-model="x.desc" typeof="text" class="form-control" rows="8" />
                                 </div>
                             </div>
                             <div class="card-footer p-2">
@@ -706,8 +706,8 @@
             <h2>Računi</h2>
             <div>
                 <ul class="nav nav-tabs">
-                    <li class="nav-item" ng-class="!showInvoices?'nav-link active':'nav-link'" ng-click="init()"><a href=""><i class="fa fa-file-text-o"></i> Novi račun</a></li>
-                    <li class="nav-item" ng-class="showInvoices?'nav-link active':'nav-link'" ng-click="load(year, null)"><a href=""><i class="fa fa-files-o"></i> Pregled računa</a></li>
+                    <li class="nav-item" ng-class="!showInvoices?'nav-link active':'nav-link'" ng-click="init()"><a href=""><i class="fa fa-file"></i> Novi račun</a></li>
+                    <li class="nav-item" ng-class="showInvoices?'nav-link active':'nav-link'" ng-click="load(year, null)"><a href=""><i class="fa fa-copy"></i> Pregled računa</a></li>
                 </ul>
             </div>
             <div ng-if="showInvoices">
@@ -735,9 +735,9 @@
                         <tr>
                             <td colspan="6"></td>
                             <td class="text-right">Ukupno:</td>
-                            <td class="text-right nowrap"><label class="bg-info p5">{{invoices.total | currency : ""}} kn</label></td>
-                            <td class="text-right nowrap"><label class="bg-success p5">{{invoices.paidAmount | currency : ""}} kn</label></td>
-                            <td class="text-right nowrap"><label class="bg-{{invoices.restToPaid>=0?'success':'danger'}} p5">{{invoices.restToPaid | currency : ""}} kn</label></td>
+                            <td class="text-right nowrap"><label class="bg-info text-white font-weight-bold p-1 px-2">{{invoices.total | currency : ""}} kn</label></td>
+                            <td class="text-right nowrap"><label class="bg-success text-white font-weight-bold p-1 px-2">{{invoices.paidAmount | currency : ""}} kn</label></td>
+                            <td class="text-right nowrap"><label class="bg-{{invoices.restToPaid>=0?'success':'danger'}} text-white font-weight-bold p-1 px-2">{{invoices.restToPaid | currency : ""}} kn</label></td>
                             <td></td>
                         </tr>
                         <tr>
@@ -753,12 +753,12 @@
                             <th class="nowrap text-right">Ostatak (kn)</th>
                             <th>Datum uplate</th>
                         </tr>
-                        <tr ng-repeat="x in invoices.data" class="{{x.isPaid==0?'bg-danger':''}}">
+                        <tr ng-repeat="x in invoices.data" class="{{x.isPaid==0?'bg-danger text-white':''}}">
                             <td class="nowrap">
                                 <button class="btn btn-primary m2" ng-click="get(x)" title="Uredi"><i class="fa fa-eye"></i></button>
-                                <a href="{{config.backend + 'upload/invoice/' + x.year + '/'+ x.fileName + '.pdf'}}" class="btn btn-outline-danger m2" download title="PDF"><i class="fa fa-file-pdf-o" style="color:white"></i></a>
+                                <a href="{{config.backend + 'upload/invoice/' + x.year + '/'+ x.fileName + '.pdf'}}" class="btn btn-danger m2" download title="PDF"><i class="fa fa-file-pdf" style="color:white"></i></a>
                                 <button class="btn btn-warning m2" ng-click="copy(x)" title="Kopiraj"><i class="fa fa-copy"></i></button>
-                                <button ng-if="config.debug" class="btn btn-outline-danger m2" ng-click="removeInvoice(x, year, searchInvoices)" title="Briši"><i class="fa fa-trash-alt"></i></button>
+                                <button ng-if="config.debug" class="btn btn-danger m2" ng-click="removeInvoice(x, year, searchInvoices)" title="Briši"><i class="fa fa-trash-alt"></i></button>
                             </td>
                             <td>{{x.number}}</td>
                             <td>{{x.dateAndTime}}</td>
@@ -913,17 +913,17 @@
                                 </div>
                             </div>
                             <div class="mt10">
-                                <button class="btn btn-outline-danger" ng-click="createPdf(i)"><i class="fa fa-{{loading==true?'spinner fa-spin':'file-pdf-o'}}"></i> Kreiraj PDF</button>
+                                <button class="btn btn-outline-danger" ng-click="createPdf(i)"><i class="fa fa-{{loading==true?'spinner fa-spin':'file-pdf'}}"></i> Kreiraj PDF</button>
                             </div>
                             <div class="m10">
-                                <a ng-if="pdfTempLink" href="{{pdfTempLink}}" download><i class="fa fa-file-pdf-o"></i> {{pdfTempLink}}</a>
+                                <a ng-if="pdfTempLink" href="{{pdfTempLink}}" download><i class="fa fa-file-pdf"></i> {{pdfTempLink}}</a>
                             </div>
                             <div class="row m10">
                                 <div class="col-sm-4">
                                     <button ng-if="pdfTempLink" href="" class="btn btn-outline-success btn-block" ng-click="save(i)"><i class="fa fa-{{loading_1==true?'spinner fa-spin':'save'}}"></i> Spremi PDF</button>
                                 </div>
                                 <div class="col-sm-8">
-                                    <a ng-if="pdfLink" href="{{pdfLink}}" download><i class="fa fa-file-pdf-o"></i> {{pdfLink}}</a>
+                                    <a ng-if="pdfLink" href="{{pdfLink}}" download><i class="fa fa-file-pdf"></i> {{pdfLink}}</a>
                                 </div>
                             </div>
                         </div>

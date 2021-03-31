@@ -58,6 +58,9 @@ angular.module('app', ['ui.router', 'ngMaterial'])
         .state('povijest', {
             url: '/povijest', templateUrl: './assets/pages/povijest.html'
         })
+        .state('sr', {
+            url: '/sr', templateUrl: './assets/pages/home-sr.html'
+        })
 
     $urlRouterProvider.otherwise("/");
 
@@ -219,7 +222,7 @@ angular.module('app', ['ui.router', 'ngMaterial'])
     var validationFormDanger = function () {
         $scope.msg.css = 'danger';
         $scope.msg.icon = 'exclamation';
-        $scope.sendicon = 'fa fa-sign-in';
+        $scope.sendicon = 'fa fa-sign-in-alt';
         $scope.sendicontitle = 'REGISTRACIJA';
         $scope.signupok = false;
         $scope.isSendButtonDisabled = false;
@@ -229,12 +232,12 @@ angular.module('app', ['ui.router', 'ngMaterial'])
         $scope.msg.css = 'success';
         $scope.msg.icon = 'check';
         $scope.signupok = true;
-        $scope.sendicon = 'fa fa-sign-in';
+        $scope.sendicon = 'fa fa-sign-in-alt';
         $scope.sendicontitle = 'REGISTRACIJA';
         $scope.isSendButtonDisabled = true;
     }
 
-    $scope.sendicon = 'fa fa-sign-in';
+    $scope.sendicon = 'fa fa-sign-in-alt';
     $scope.sendicontitle = 'REGISTRACIJA';
     $scope.isSendButtonDisabled = false;
     $scope.signup = function (user, emailConfirm, passwordConfirm, accept) {
@@ -284,7 +287,7 @@ angular.module('app', ['ui.router', 'ngMaterial'])
        function (response) {
            alert(response.data.d);
            $scope.signupok = false;
-           $scope.sendicon = 'fa fa-sign-in';
+           $scope.sendicon = 'fa fa-sign-in-alt';
            $scope.sendicontitle = 'REGISTRACIJA';
            $scope.isSendButtonDisabled = true;
        });
@@ -444,7 +447,7 @@ angular.module('app', ['ui.router', 'ngMaterial'])
                $scope.showAlert = false;
                $scope.showPaymentDetails = false;
                $scope.isSendButtonDisabled = false;
-               $scope.sendicon = 'fa fa-paper-plane-o';
+               $scope.sendicon = 'fa fa-paper-plane';
                $scope.sendicontitle = 'Pošalji';
                alert("GREŠKA! Narudžba nije poslana.");
            } else {
@@ -457,7 +460,7 @@ angular.module('app', ['ui.router', 'ngMaterial'])
            $scope.showAlert = false;
            $scope.showPaymentDetails = false;
            $scope.isSendButtonDisabled = false;
-           $scope.sendicon = 'fa fa-paper-plane-o';
+           $scope.sendicon = 'fa fa-paper-plane';
            $scope.sendicontitle = 'Pošalji';
            alert(response.data.d);
        });
@@ -535,7 +538,7 @@ angular.module('app', ['ui.router', 'ngMaterial'])
 
 .controller('contactCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
     $scope.showAlert = false;
-    $scope.sendicon = 'fa fa-paper-plane-o';
+    $scope.sendicon = 'fa fa-paper-plane';
     $scope.sendicontitle = 'Pošalji';
 
     $scope.d = {
@@ -556,13 +559,13 @@ angular.module('app', ['ui.router', 'ngMaterial'])
         })
        .then(function (response) {
            $scope.showAlert = true;
-           $scope.sendicon = 'fa fa-paper-plane-o';
+           $scope.sendicon = 'fa fa-paper-plane';
            $scope.sendicontitle = 'Pošalji';
            window.location.hash = 'contact';
        },
        function (response) {
            $scope.showAlert = false;
-           $scope.sendicon = 'fa fa-paper-plane-o';
+           $scope.sendicon = 'fa fa-paper-plane';
            $scope.sendicontitle = 'Pošalji';
            alert(response.data.d);
        });
