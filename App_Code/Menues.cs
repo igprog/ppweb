@@ -53,6 +53,13 @@ public class Menues : System.Web.Services.WebService {
         public string unit;
     }
 
+    private class SaveResponse {
+        public NewMenu data = new NewMenu();
+        public string msg;
+        public string msg1;
+        public bool isSuccess; 
+    }
+
     #region WebMethods
 
     #region ClientMenues
@@ -174,11 +181,18 @@ public class Menues : System.Web.Services.WebService {
 
     [WebMethod]
     public string Save(string userId, NewMenu x, Users.NewUser user, MyMeals.NewMyMeals myMeals) {
-        db.CreateDataBase(userId, db.menues);
+        SaveResponse r = new SaveResponse();
+        try {
+            db.CreateDataBase(userId, db.menues);
         if (x.id == null && Check(userId, x) != false) {
-            return "error";
+            r.data = x;
+            r.msg = "there is already a menu with the same name";
+            r.isSuccess = false;
+            return JsonConvert.SerializeObject(r, Formatting.None);
         } else {
-            try {
+                Global G = new Global();
+                x.title = G.RemoveSingleQuotes(x.title);
+                x.note = G.RemoveSingleQuotes(x.note);
                 string sql = null;
                 if (string.IsNullOrEmpty(x.id)) {
                     x.id = Guid.NewGuid().ToString();
@@ -208,11 +222,17 @@ public class Menues : System.Web.Services.WebService {
                         }
                     }
                 }
-                return JsonConvert.SerializeObject(x, Formatting.None);
-            } catch (Exception e) {
-                L.SendErrorLog(e, x.id, userId, "Menues", "Save");
-                return JsonConvert.SerializeObject(e.Message, Formatting.None);
+                r.data = x;
+                r.isSuccess = true;
+                return JsonConvert.SerializeObject(r, Formatting.None);
             }
+        } catch (Exception e) {
+            r.data = x;
+            r.msg = e.Message;
+            r.msg1 = "report a problem";
+            r.isSuccess = false;
+            L.SendErrorLog(e, x.id, userId, "Menues", "Save");
+            return JsonConvert.SerializeObject(r, Formatting.None);
         }
     }
 

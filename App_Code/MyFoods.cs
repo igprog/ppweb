@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Services;
 using System.Configuration;
 using Newtonsoft.Json;
@@ -14,12 +13,18 @@ using Igprog;
 [WebService(Namespace = "http://programprehrane.com/app/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class MyFoods : System.Web.Services.WebService {
+public class MyFoods : WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     Foods f = new Foods();
     Log L = new Log();
     public MyFoods() {
+    }
 
+    private class SaveResponse {
+        public Foods.NewFood data = new Foods.NewFood();
+        public string msg;
+        public string msg1;
+        public bool isSuccess;
     }
 
     public class Data {
@@ -47,7 +52,11 @@ public class MyFoods : System.Web.Services.WebService {
                     connection.Close();
                 }
                 return xx;
-            } catch (Exception e) { return null; }
+            } catch (Exception e) {
+                Log Log = new Log();
+                Log.SendErrorLog(e, null, userId, "MyFoods", "GetMyFoods");
+                return null;
+            }
         }
     }
 
@@ -205,11 +214,15 @@ public class MyFoods : System.Web.Services.WebService {
 
     [WebMethod]
     public string Save(string userId, Foods.NewFood x) {
+        SaveResponse r = new SaveResponse();
         try {
             DataBase db = new DataBase();
             db.CreateDataBase(userId, db.myFoods);
             if (Check(userId, x) != false) {
-                return "there is already a food with the same name";
+                r.data = x;
+                r.msg = "there is already a food with the same name";
+                r.isSuccess = false;
+                return JsonConvert.SerializeObject(r, Formatting.None);
             }
             x.id = CheckId(userId, x);
             string sql = @"BEGIN;
@@ -278,11 +291,17 @@ public class MyFoods : System.Web.Services.WebService {
                     command.Parameters.Add(new SQLiteParameter("vitaminK", x.vitaminK));
                     command.ExecuteNonQuery();
                 }
-            } 
-            return "saved";
+            }
+            r.data = x;
+            r.isSuccess = true;
+            return JsonConvert.SerializeObject(r, Formatting.None);
         } catch (Exception e) {
+            r.data = x;
+            r.msg = e.Message;
+            r.msg1 = "report a problem";
+            r.isSuccess = false;
             L.SendErrorLog(e, x.id, userId, "MyFoods", "Save");
-            return e.Message;
+            return JsonConvert.SerializeObject(r, Formatting.None);
         }
     }
 
@@ -300,13 +319,13 @@ public class MyFoods : System.Web.Services.WebService {
                         command.ExecuteNonQuery();
                     }
                 }
-                return "ok";
+                return JsonConvert.SerializeObject("ok", Formatting.None);
             } else {
-                return "error";
+                return JsonConvert.SerializeObject("error", Formatting.None);
             }
         } catch (Exception e) {
             L.SendErrorLog(e, id, userId, "MyFoods", "Delete");
-            return e.Message;
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
@@ -353,12 +372,10 @@ public class MyFoods : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(string.Format("{0} foods id updated succesfully", count), Formatting.None);
         } catch (Exception e) {
-            return e.Message;
+            L.SendErrorLog(e, null, userId, "MyFoods", "FixMyFoodsId");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
-
-
-
     /*******************************/
 
     #endregion WebMethods
@@ -367,24 +384,23 @@ public class MyFoods : System.Web.Services.WebService {
     private bool Check(string userId, Foods.NewFood x) {
         try {
             bool isExist = false;
-            bool result = false;
             DataBase db = new DataBase();
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase));
-            connection.Open();
-            string sql = string.Format("SELECT EXISTS(SELECT id FROM myfoods WHERE LOWER(food) = '{0}')", x.food.ToLower());
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
-                isExist = reader.GetBoolean(0);
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                string sql = "SELECT EXISTS(SELECT id FROM myfoods WHERE LOWER(food) = @food)";
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.Parameters.Add(new SQLiteParameter("food", x.food.ToLower()));
+                    SQLiteDataReader reader = command.ExecuteReader();
+                    while (reader.Read()) {
+                        isExist = reader.GetBoolean(0);
+                    }
+                }
             }
-            connection.Close();
-            if(isExist == true && string.IsNullOrEmpty(x.id)) {
-                result = true;
-            } else {
-                result = false;
-            }
-            return result;
-        } catch (Exception e) { return false; }
+            return isExist && string.IsNullOrEmpty(x.id) ? true : false;
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.id, userId, "MyFoods", "Check");
+            return false;
+        }
     }
 
     private string GetFoodGroupTitle(string code) {

@@ -54,6 +54,13 @@ public class Recipes : System.Web.Services.WebService {
         public string title;
     }
 
+    private class SaveResponse {
+        public NewRecipe data = new NewRecipe();
+        public string msg;
+        public string msg1;
+        public bool isSuccess;
+    }
+
     static string mealGroup = "mealGroup";  // new column in recipes tbl.
     #endregion Class
 
@@ -145,30 +152,46 @@ public class Recipes : System.Web.Services.WebService {
 
     [WebMethod]
     public string Save(string userId, NewRecipe x) {
+        SaveResponse r = new SaveResponse();
         try {
             db.CreateDataBase(userId, db.recipes);
             db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, mealGroup);  //new column in recipes tbl.
-            string sql = "";
-            if (x.id == null) {
-                x.id = Convert.ToString(Guid.NewGuid());
-            }
-            x.energy = x.data.selectedFoods.Sum(a => a.energy);
-            sql = string.Format(@"BEGIN;
+            if (string.IsNullOrEmpty(x.id) && Check(userId, x)) {
+                r.data = x;
+                r.msg = "there is already a recipe with the same name";
+                r.isSuccess = false;
+                return JsonConvert.SerializeObject(r, Formatting.None);
+            } else {
+                string sql = null;
+                if (x.id == null) {
+                    x.id = Convert.ToString(Guid.NewGuid());
+                }
+                x.energy = x.data.selectedFoods.Sum(a => a.energy);
+                Global G = new Global();
+                x.title = G.RemoveSingleQuotes(x.title);
+                x.description = G.RemoveSingleQuotes(x.description);
+                sql = string.Format(@"BEGIN;
                         INSERT OR REPLACE INTO recipes (id, title, description, energy, mealGroup)
                         VALUES ('{0}', '{1}', '{2}', '{3}', '{4}');
                         COMMIT;", x.id, x.title, x.description, x.energy, x.mealGroup.code);
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
-                connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                    command.ExecuteNonQuery();
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                    connection.Open();
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        command.ExecuteNonQuery();
+                    }
                 }
-                connection.Close();
+                SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
+                r.data = x;
+                r.isSuccess = true;
+                return JsonConvert.SerializeObject(r, Formatting.None);
             }
-            SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
-            return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
+            r.data = x;
+            r.msg = e.Message;
+            r.msg1 = "report a problem";
+            r.isSuccess = false;
             L.SendErrorLog(e, x.id, null, "Recipes", "Save");
-            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+            return JsonConvert.SerializeObject(r, Formatting.None);
         }
     }
 

@@ -40,7 +40,14 @@ public class WeeklyMenus : System.Web.Services.WebService {
         public string diet;
         public double energy;
     }
- 
+
+    private class SaveResponse {
+        public NewWeeklyMenus data = new NewWeeklyMenus();
+        public string msg;
+        public string msg1;
+        public bool isSuccess;
+    }
+
     [WebMethod]
     public string Init(Users.NewUser user, Clients.NewClient client, string lang) {
         NewWeeklyMenus x = new NewWeeklyMenus();
@@ -130,14 +137,21 @@ public class WeeklyMenus : System.Web.Services.WebService {
 
     [WebMethod]
     public string Save(string userId, NewWeeklyMenus x) {
+        SaveResponse r = new SaveResponse();
         try {
             db.CreateDataBase(userId, db.weeklymenus);
             if (string.IsNullOrEmpty(x.id) && Check(userId, x.title)) {
-                return "error";
+                r.data = x;
+                r.msg = "there is already a menu with the same name";
+                r.isSuccess = false;
+                return JsonConvert.SerializeObject(r, Formatting.None);
             } else {
                 if(string.IsNullOrEmpty(x.id)) {
                     x.id = Convert.ToString(Guid.NewGuid());
                 }
+                Global G = new Global();
+                x.title = G.RemoveSingleQuotes(x.title);
+                x.note = G.RemoveSingleQuotes(x.note);
                 string sql = string.Format(@"BEGIN;
                                         INSERT OR REPLACE INTO weeklymenus (id, title, note, dietId, diet, menuList, date, clientId, userId, userGroupId)
                                         VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}');
@@ -147,12 +161,18 @@ public class WeeklyMenus : System.Web.Services.WebService {
                     using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                         command.ExecuteNonQuery();
                     }
-                } 
-                return JsonConvert.SerializeObject(x, Formatting.None);
+                }
+                r.data = x;
+                r.isSuccess = true;
+                return JsonConvert.SerializeObject(r, Formatting.None);
             }
         } catch (Exception e) {
+            r.data = x;
+            r.msg = e.Message;
+            r.msg1 = "report a problem";
+            r.isSuccess = false;
             L.SendErrorLog(e, x.id, userId, "WeeklyMenus", "Save");
-            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+            return JsonConvert.SerializeObject(r, Formatting.None);
         }
     }
 

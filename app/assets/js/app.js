@@ -4331,21 +4331,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 }
             }
             currentMenu.date = functions.dateToString(currentMenu.date);
-            $http({
-                url: $sessionStorage.config.backend + 'Menues.asmx/Save',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, x: currentMenu, user: $scope.d.user, myMeals: myMeals }
-            })
-            .then(function (response) {
-                if (response.data.d != 'error') {
-                    $scope.d.currentMenu = JSON.parse(response.data.d);
+
+            functions.post('Menues', 'Save', { userId: $rootScope.user.userGroupId, x: currentMenu, user: $scope.d.user, myMeals: myMeals }).then(function (d) {
+                if (d.isSuccess) {
+                    $scope.d.currentMenu = d.data;
                     $mdDialog.hide($scope.d.currentMenu);
                 } else {
-                    functions.alert($translate.instant('there is already a menu with the same name'), '');
+                    functions.alert($translate.instant(d.msg), d.msg1 !== null ? $translate.instant(d.msg1) : null);
                 }
-            },
-            function (response) {
-                functions.alert($translate.instant(response.data.d), '');
             });
         }
 
@@ -4370,16 +4363,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 return false;
             }
             currentMenu.diet = d.client.clientData.diet.diet;
-            $http({
-                url: $sessionStorage.config.backend + 'Menues.asmx/SaveAppMenu',
-                method: "POST",
-                data: { x: currentMenu, lang: $rootScope.config.language }
-            })
-            .then(function (response) {
+            functions.post('Menues', 'SaveAppMenu', { x: currentMenu, lang: $rootScope.config.language }).then(function (d) {
                 functions.alert('ok', '');
-            },
-            function (response) {
-                functions.alert($translate.instant(response.data.d), '');
             });
         }
 
@@ -4391,19 +4376,25 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     var getTotals = function (x) {
         if (x === undefined) { return false; }
-        $http({
-            url: $sessionStorage.config.backend + webService + '/GetTotals',
-            method: "POST",
-            data: { selectedFoods: x.data.selectedFoods, meals: x.data.meals }
-        })
-       .then(function (response) {
-           $rootScope.totals = JSON.parse(response.data.d);
-           $rootScope.totals.price.currency = $rootScope.config.currency;
-           displayCharts();
-       },
-       function (response) {
-           alert(response.data.d)
-       });
+        functions.post('Foods', 'GetTotals', { selectedFoods: x.data.selectedFoods, meals: x.data.meals }).then(function (d) {
+            $rootScope.totals = d;
+            $rootScope.totals.price.currency = $rootScope.config.currency;
+            displayCharts();
+        });
+
+       // $http({
+       //     url: $sessionStorage.config.backend + webService + '/GetTotals',
+       //     method: "POST",
+       //     data: { selectedFoods: x.data.selectedFoods, meals: x.data.meals }
+       // })
+       //.then(function (response) {
+       //    $rootScope.totals = JSON.parse(response.data.d);
+       //    $rootScope.totals.price.currency = $rootScope.config.currency;
+       //    displayCharts();
+       //},
+       //function (response) {
+       //    alert(response.data.d)
+       //});
     }
 
     var displayCharts = function () {
@@ -5098,20 +5089,26 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
             $scope.loading = true;
             $scope.appRecipes = false;
-            $http({
-                url: $sessionStorage.config.backend + 'Recipes.asmx/Load',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId }
-            })
-           .then(function (response) {
-               $scope.appRecipes = false;
-               $scope.d = JSON.parse(response.data.d);
-               $scope.loading = false;
-           },
-           function (response) {
-               $scope.loading = false;
-               alert(response.data.d);
-           });
+            functions.post('Recipes', 'Load', { userId: $rootScope.user.userGroupId }).then(function (d) {
+                $scope.appRecipes = false;
+                $scope.d = d;
+                $scope.loading = false;
+            });
+
+           // $http({
+           //     url: $sessionStorage.config.backend + 'Recipes.asmx/Load',
+           //     method: "POST",
+           //     data: { userId: $rootScope.user.userGroupId }
+           // })
+           //.then(function (response) {
+           //    $scope.appRecipes = false;
+           //    $scope.d = JSON.parse(response.data.d);
+           //    $scope.loading = false;
+           //},
+           //function (response) {
+           //    $scope.loading = false;
+           //    alert(response.data.d);
+           //});
         }
         load();
 
@@ -5158,13 +5155,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         var get = function (x, showDescription) {
-            $http({
-                url: $sessionStorage.config.backend + 'Recipes.asmx/Get',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, id: x.id }
-            })
-            .then(function (response) {
-                $scope.recipe = JSON.parse(response.data.d);
+            functions.post('Recipes', 'Get', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
+                $scope.recipe = d;
                 if (showDescription == true) {
                     angular.forEach($rootScope.currentMenu.data.meals, function (value, key) {
                         if (value.code == $rootScope.currentMeal) {
@@ -5173,28 +5165,70 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     });
                 }
                 $mdDialog.hide($scope.recipe);
-            },
-            function (response) {
-                alert(response.data.d)
             });
+
+            //$http({
+            //    url: $sessionStorage.config.backend + 'Recipes.asmx/Get',
+            //    method: "POST",
+            //    data: { userId: $rootScope.user.userGroupId, id: x.id }
+            //})
+            //.then(function (response) {
+            //    $scope.recipe = JSON.parse(response.data.d);
+            //    if (showDescription == true) {
+            //        angular.forEach($rootScope.currentMenu.data.meals, function (value, key) {
+            //            if (value.code == $rootScope.currentMeal) {
+            //                value.description = value.description == '' ? $scope.recipe.title + '.\n' + $scope.recipe.description : value.description + '\n' + $scope.recipe.title + '.\n' + $scope.recipe.description;
+            //            }
+            //        });
+            //    }
+            //    $mdDialog.hide($scope.recipe);
+            //},
+            //function (response) {
+            //    alert(response.data.d)
+            //});
         }
 
         $scope.loadAppRecipes = function () {
             $scope.appRecipes = true;
-            $http({
-                url: $sessionStorage.config.backend + 'Recipes.asmx/LoadAppRecipes',
-                method: "POST",
-                data: { lang: $rootScope.config.language }
-            })
-           .then(function (response) {
-               $scope.d = JSON.parse(response.data.d);
-           },
-           function (response) {
-               alert(response.data.d)
-           });
+            functions.post('Recipes', 'LoadAppRecipes', { lang: $rootScope.config.language }).then(function (d) {
+                $scope.d = d;
+            });
+
+           // $http({
+           //     url: $sessionStorage.config.backend + 'Recipes.asmx/LoadAppRecipes',
+           //     method: "POST",
+           //     data: { lang: $rootScope.config.language }
+           // })
+           //.then(function (response) {
+           //    $scope.d = JSON.parse(response.data.d);
+           //},
+           //function (response) {
+           //    alert(response.data.d)
+           //});
         }
 
         var getAppRecipe = function (x, showDescription) {
+            functions.post('Recipes', 'GetAppRecipe', { id: x.id, lang: $rootScope.config.language, toTranslate: $scope.toTranslate }).then(function (d) {
+                $scope.recipe = d;
+                if (showDescription == true) {
+                    angular.forEach($rootScope.currentMenu.data.meals, function (value, key) {
+                        if (value.code == $rootScope.currentMeal) {
+                            value.description = value.description == '' ? $scope.recipe.description : value.description + '\n' + $scope.recipe.description;
+                        }
+                    });
+                }
+                $mdDialog.hide($scope.recipe);
+
+                //**********TODO - translate recipes*****************
+                //var menu = JSON.parse(response.data.d);
+                //if ($scope.toTranslate == true) {
+                //    translateFoods(menu);
+                //}
+                //$mdDialog.hide(menu);
+                //****************************************************
+            });
+
+            /*
             $http({
                 url: $sessionStorage.config.backend + 'Recipes.asmx/GetAppRecipe',
                 method: "POST",
@@ -5222,6 +5256,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             function (response) {
                 alert(response.data.d)
             });
+            */
+
         }
 
         $scope.confirm = function (x, showDescription) {
@@ -5255,19 +5291,25 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     var getWeeklyMenuTotals = function (x) {
-        $http({
-            url: $sessionStorage.config.backend + 'WeeklyMenus.asmx/GetWeeklyMenusTotals',
-            method: "POST",
-            data: { userId: $sessionStorage.usergroupid, menuList: x }
-        })
-        .then(function (response) {
-            $rootScope.totals = JSON.parse(response.data.d);
+        functions.post('WeeklyMenus', 'GetWeeklyMenusTotals', { userId: $sessionStorage.usergroupid, menuList: x }).then(function (d) {
+            $rootScope.totals = d;
             $rootScope.totals.price.currency = $rootScope.config.currency;
             displayCharts();
-        },
-        function (response) {
-            alert(response.data.d);
         });
+
+        //$http({
+        //    url: $sessionStorage.config.backend + 'WeeklyMenus.asmx/GetWeeklyMenusTotals',
+        //    method: "POST",
+        //    data: { userId: $sessionStorage.usergroupid, menuList: x }
+        //})
+        //.then(function (response) {
+        //    $rootScope.totals = JSON.parse(response.data.d);
+        //    $rootScope.totals.price.currency = $rootScope.config.currency;
+        //    displayCharts();
+        //},
+        //function (response) {
+        //    alert(response.data.d);
+        //});
     }
     $scope.getWeeklyMenuTotals = function (x) {
         return getWeeklyMenuTotals(x);
@@ -5577,17 +5619,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $window.location.href = '/app/#/login';
     }
 
-    var webService = 'MyFoods.asmx';
+    var webService = 'MyFoods';
     $scope.unit = null;
 
     var init = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'Foods.asmx/Init',
-            method: "POST",
-            data: { lang: $rootScope.config.language }
-        })
-        .then(function (response) {
-            var res = JSON.parse(response.data.d);
+        functions.post('Foods', 'Init', { lang: $rootScope.config.language }).then(function (d) {
+            var res = d;
             if ($rootScope.myFood_ !== undefined) {
                 if ($rootScope.myFood_ != null) {
                     $scope.myFood = $rootScope.myFood_;
@@ -5604,10 +5641,35 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 style: 'btn-default',
                 size: 4
             });
-        },
-        function (response) {
-            alert(response.data.d)
         });
+
+        //$http({
+        //    url: $sessionStorage.config.backend + 'Foods.asmx/Init',
+        //    method: "POST",
+        //    data: { lang: $rootScope.config.language }
+        //})
+        //.then(function (response) {
+        //    var res = JSON.parse(response.data.d);
+        //    if ($rootScope.myFood_ !== undefined) {
+        //        if ($rootScope.myFood_ != null) {
+        //            $scope.myFood = $rootScope.myFood_;
+        //            $rootScope.myFood_ = null;
+        //        } else {
+        //            $scope.myFood = res.food;
+        //        }
+        //    } else {
+        //        $scope.myFood = res.food;
+        //    }
+        //    $scope.units = res.units;
+        //    $scope.mainFoodGroups = res.foodGroups;
+        //    $('.selectpicker').selectpicker({
+        //        style: 'btn-default',
+        //        size: 4
+        //    });
+        //},
+        //function (response) {
+        //    alert(response.data.d)
+        //});
     };
     init();
 
@@ -5629,33 +5691,43 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     var remove = function (x) {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Delete',
-            method: "POST",
-            data: { userId: $rootScope.user.userGroupId, id: x.id }
-        })
-     .then(function (response) {
-         $rootScope.loadFoods();
-         init();
-     },
-     function (response) {
-         functions.alert($translate.instant(response.data.d), '');
-     });
+        functions.post(webService, 'Delete', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
+            $rootScope.loadFoods();
+            init();
+        });
+
+     //   $http({
+     //       url: $sessionStorage.config.backend + webService + '/Delete',
+     //       method: "POST",
+     //       data: { userId: $rootScope.user.userGroupId, id: x.id }
+     //   })
+     //.then(function (response) {
+     //    $rootScope.loadFoods();
+     //    init();
+     //},
+     //function (response) {
+     //    functions.alert($translate.instant(response.data.d), '');
+     //});
     }
 
     var loadMyFoods = function () {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Load',
-            method: "POST",
-            data: { userId: $sessionStorage.usergroupid }
-        })
-        .then(function (response) {
-            var data = JSON.parse(response.data.d);
+        functions.post(webService, 'Load', { userId: $sessionStorage.usergroupid }).then(function (d) {
+            var data = d;
             $rootScope.myFoods = data.foods;
-        },
-        function (response) {
-            functions.alert($translate.instant(response.data.d), '');
         });
+
+        //$http({
+        //    url: $sessionStorage.config.backend + webService + '/Load',
+        //    method: "POST",
+        //    data: { userId: $sessionStorage.usergroupid }
+        //})
+        //.then(function (response) {
+        //    var data = JSON.parse(response.data.d);
+        //    $rootScope.myFoods = data.foods;
+        //},
+        //function (response) {
+        //    functions.alert($translate.instant(response.data.d), '');
+        //});
     }
 
     $scope.save = function (x) {
@@ -5683,22 +5755,30 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             x.servings.otherFoodsEnergy = x.energy;
             x.foodGroup.code = 'OF';
         };
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Save',
-            method: "POST",
-            data: { userId: $rootScope.user.userGroupId, x: x }
-        })
-        .then(function (response) {
-            if (response.data.d != 'there is already a food with the same name') {
-                functions.alert($translate.instant(response.data.d), '');
+        functions.post(webService, 'Save', { userId: $rootScope.user.userGroupId, x: x }).then(function (d) {
+            if (d.isSuccess) {
                 $rootScope.loadFoods();
             } else {
-                functions.alert($translate.instant('there is already a food with the same name'), '');
+                functions.alert($translate.instant(d.msg), d.msg1 !== null ? $translate.instant(d.msg1) : null);
             }
-        },
-        function (response) {
-            functions.alert($translate.instant(response.data.d), '');
         });
+
+        //$http({
+        //    url: $sessionStorage.config.backend + webService + '/Save',
+        //    method: "POST",
+        //    data: { userId: $rootScope.user.userGroupId, x: x }
+        //})
+        //.then(function (response) {
+        //    if (response.data.d != 'there is already a food with the same name') {
+        //        functions.alert($translate.instant(response.data.d), '');
+        //        $rootScope.loadFoods();
+        //    } else {
+        //        functions.alert($translate.instant('there is already a food with the same name'), '');
+        //    }
+        //},
+        //function (response) {
+        //    functions.alert($translate.instant(response.data.d), '');
+        //});
 
     };
 
@@ -6004,39 +6084,52 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.addFoodBtn = false;
 
     var init = function () {
-        $http({
-            url: $sessionStorage.config.backend + 'Recipes.asmx/Init',
-            method: "POST",
-            data: ''
-        })
-        .then(function (response) {
-            $scope.d = JSON.parse(response.data.d);
+        functions.post('Recipes', 'Init', {}).then(function (d) {
+            $scope.d = d;
             $scope.currentRecipe = null;
             $rootScope.totals = null;
             recipeFromMenu();
             load();
-        },
-        function (response) {
-            alert(response.data.d)
         });
+
+        //$http({
+        //    url: $sessionStorage.config.backend + 'Recipes.asmx/Init',
+        //    method: "POST",
+        //    data: ''
+        //})
+        //.then(function (response) {
+        //    $scope.d = JSON.parse(response.data.d);
+        //    $scope.currentRecipe = null;
+        //    $rootScope.totals = null;
+        //    recipeFromMenu();
+        //    load();
+        //},
+        //function (response) {
+        //    alert(response.data.d)
+        //});
     };
 
     var load = function () {
         if ($rootScope.user.licenceStatus == 'demo') { return false; }
         $rootScope.loading = true;
-        $http({
-            url: $sessionStorage.config.backend + 'Recipes.asmx/Load',
-            method: "POST",
-            data: { userId: $sessionStorage.usergroupid }
-        })
-        .then(function (response) {
-            $scope.recipes = JSON.parse(response.data.d);
+        functions.post('Recipes', 'Load', { userId: $sessionStorage.usergroupid }).then(function (d) {
+            $scope.recipes = d;
             $rootScope.loading = false;
-        },
-        function (response) {
-            $rootScope.loading = false;
-            alert(response.data.d)
         });
+
+        //$http({
+        //    url: $sessionStorage.config.backend + 'Recipes.asmx/Load',
+        //    method: "POST",
+        //    data: { userId: $sessionStorage.usergroupid }
+        //})
+        //.then(function (response) {
+        //    $scope.recipes = JSON.parse(response.data.d);
+        //    $rootScope.loading = false;
+        //},
+        //function (response) {
+        //    $rootScope.loading = false;
+        //    alert(response.data.d)
+        //});
     };
 
     var recipeFromMenu = function () {
@@ -6102,18 +6195,23 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         if (id == null) {
             return false;
         }
-        $http({
-            url: $sessionStorage.config.backend + 'Recipes.asmx/Get',
-            method: "POST",
-            data: { userId: $sessionStorage.usergroupid, id: id }
-        })
-        .then(function (response) {
-            $scope.d = JSON.parse(response.data.d);
+        functions.post('Recipes', 'Get', { userId: $sessionStorage.usergroupid, id: id }).then(function (d) {
+            $scope.d = d;
             getTotals($scope.d);
-        },
-        function (response) {
-            alert(response.data.d);
         });
+
+        //$http({
+        //    url: $sessionStorage.config.backend + 'Recipes.asmx/Get',
+        //    method: "POST",
+        //    data: { userId: $sessionStorage.usergroupid, id: id }
+        //})
+        //.then(function (response) {
+        //    $scope.d = JSON.parse(response.data.d);
+        //    getTotals($scope.d);
+        //},
+        //function (response) {
+        //    alert(response.data.d);
+        //});
     }
 
     $scope.save = function (recipe) {
@@ -6129,22 +6227,31 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             functions.alert($translate.instant('choose food'), '');
             return false;
         }
-        $http({
-            url: $sessionStorage.config.backend + 'Recipes.asmx/Save',
-            method: "POST",
-            data: { userId: $sessionStorage.usergroupid, x: recipe }
-        })
-        .then(function (response) {
-            if (response.data.d != 'there is already a recipe with the same name') {
-                $scope.d = JSON.parse(response.data.d);
+        functions.post('Recipes', 'Save', { userId: $sessionStorage.usergroupid, x: recipe }).then(function (d) {
+            if (d.isSuccess) {
+                $scope.d = d.data;
                 load();
             } else {
-                functions.alert($translate.instant('there is already a recipe with the same name'), '');
+                functions.alert($translate.instant(d.msg), d.msg1 !== null ? $translate.instant(d.msg1) : null);
             }
-        },
-        function (response) {
-            alert(response.data.d);
         });
+
+        //$http({
+        //    url: $sessionStorage.config.backend + 'Recipes.asmx/Save',
+        //    method: "POST",
+        //    data: { userId: $sessionStorage.usergroupid, x: recipe }
+        //})
+        //.then(function (response) {
+        //    if (response.data.d != 'there is already a recipe with the same name') {
+        //        $scope.d = JSON.parse(response.data.d);
+        //        load();
+        //    } else {
+        //        functions.alert($translate.instant('there is already a recipe with the same name'), '');
+        //    }
+        //},
+        //function (response) {
+        //    alert(response.data.d);
+        //});
     }
     
     $scope.removeFood = function (idx) {
@@ -7327,7 +7434,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var openSaveMenuPopupCtrl = function ($scope, $mdDialog, d, $http, $translate, functions) {
-        var webService = 'WeeklyMenus.asmx';
+        var webService = 'WeeklyMenus';
         $scope.d = d.weeklyMenu;
 
         var save = function (x) {
@@ -7339,22 +7446,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 functions.alert($translate.instant('enter menu title'), '');
                 return false;
             }
-            $http({
-                url: $sessionStorage.config.backend + webService + '/Save',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, x: $scope.d }
-            })
-          .then(function (response) {
-              if (response.data.d != 'error') {
-                  $scope.d = JSON.parse(response.data.d);
-                  $mdDialog.hide($scope.d);
-              } else {
-                  functions.alert($translate.instant('there is already a menu with the same name'), '');
-              }
-          },
-          function (response) {
-              functions.alert($translate.instant(response.data.d), '');
-          });
+
+            functions.post(webService, 'Save', { userId: $rootScope.user.userGroupId, x: $scope.d }).then(function (d) {
+                if (d.isSuccess) {
+                    $scope.d = d.data;
+                    $mdDialog.hide($scope.d);
+                } else {
+                    functions.alert($translate.instant(d.msg), d.msg1 !== null ? $translate.instant(d.msg1) : null);
+                }
+            });
         }
 
         $scope.cancel = function () {
@@ -7372,17 +7472,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         var get = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + webService + '/Get',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, id: x.id, }
-            })
-            .then(function (response) {
-                $scope.d = JSON.parse(response.data.d);
+            functions.post(webService, 'Get', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
+                $scope.d = d;
                 $mdDialog.hide($scope.d);
-            },
-            function (response) {
-                alert(response.data.d)
             });
         }
 

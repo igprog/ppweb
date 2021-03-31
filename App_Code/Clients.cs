@@ -4,9 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 using System.IO;
-using System.Text;
 using System.Data;
-using System.Data.SqlClient;
 using System.Configuration;
 using Newtonsoft.Json;
 using System.Data.SQLite;
@@ -18,7 +16,7 @@ using Igprog;
 [WebService(Namespace = "http://programprehrane.com/app/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class Clients : System.Web.Services.WebService {
+public class Clients : WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     DataBase db = new DataBase();
     Users.CheckUser c = new Users.CheckUser();
@@ -53,7 +51,7 @@ public class Clients : System.Web.Services.WebService {
 
     }
 
-    public class SaveResponse {
+    private class SaveResponse {
         public NewClient data = new NewClient();
         public string message { get; set; }
     }
@@ -97,7 +95,11 @@ public class Clients : System.Web.Services.WebService {
                     } 
                     return x;
                 }
-            } catch (Exception e) { return new NewClient(); }
+            } catch (Exception e) {
+                Log Log = new Log();
+                Log.SendErrorLog(e, clientId, userId, "Clients", "GetClient");
+                return new NewClient();
+            }
         }
 
     }
@@ -129,7 +131,7 @@ public class Clients : System.Web.Services.WebService {
         try {
             return JsonConvert.SerializeObject(GetClients(userId, user, null, null), Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, userId, "Clients", "Load");
+            L.SendErrorLog(e, user.userId, userId, "Clients", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -137,16 +139,18 @@ public class Clients : System.Web.Services.WebService {
     
     [WebMethod]
     public string Save(Users.NewUser user, NewClient x, string lang) {
+        SaveResponse r = new SaveResponse();
         try {
             db.CreateDataBase(user.userGroupId, db.clients);
             db.AddColumn(user.userGroupId, db.GetDataBasePath(user.userGroupId, dataBase), db.clients, "note");  //new column in clients tbl.
-            SaveResponse r = new SaveResponse();
             string sql = null;
             if (x.clientId == null && Check(user.userGroupId, x) == false) {
                 r.data = null;
                 r.message = t.Tran("client is already registered", lang);
                 return JsonConvert.SerializeObject(r, Formatting.None);
             } else {
+                Global G = new Global();
+                x.note = G.RemoveSingleQuotes(x.note);
                 if (x.clientId == null) {
                     //************TODO***************
                     int clientsLimit = MonthlyLimitOfClients(user.userType);
@@ -180,8 +184,10 @@ public class Clients : System.Web.Services.WebService {
                 return JsonConvert.SerializeObject(r, Formatting.None);
             }
         } catch (Exception e) {
+            r.data = null;
+            r.message = e.Message;
             L.SendErrorLog(e, x.clientId, x.userId, "Clients", "Save");
-            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+            return JsonConvert.SerializeObject(r, Formatting.None);
         }
     }
 

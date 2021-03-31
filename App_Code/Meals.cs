@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Services;
 using System.Configuration;
 using Newtonsoft.Json;
 using System.Data.SQLite;
-using Igprog;
 
 /// <summary>
 /// Meals
@@ -14,8 +11,9 @@ using Igprog;
 [WebService(Namespace = "http://programprehrane.com/app")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class Meals : System.Web.Services.WebService {
+public class Meals : WebService {
     string dataBase = ConfigurationManager.AppSettings["AppDataBase"];
+    Log L = new Log();
 
     public Meals() {
     }
@@ -67,6 +65,7 @@ public class Meals : System.Web.Services.WebService {
             } 
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
+            L.SendErrorLog(e, null, null, "Meals", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -85,6 +84,8 @@ public class Meals : System.Web.Services.WebService {
             }
             return title;
         } catch (Exception e) {
+            Log Log = new Log();
+            Log.SendErrorLog(e, code, null, "Meals", "GetMealTitle");
             return null;
         }
     }
