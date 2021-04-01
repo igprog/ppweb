@@ -2,19 +2,19 @@
     <div class="jumbotron text-left">
         <div class="row justify-content-md-center">
             <div class="col-md-8 col-md-offset-2">
-                <a href="#about" style="text-decoration:none" title="program ishrane">
-                    <h1 class="main-text">Program Ishrane</h1>
+                <a ui-sref="about" href="" style="text-decoration:none" title="program ishrane">
+                    <h1 class="main-text">Program Ishrane Veb</h1>
                     <h2 class="lead"><strong>Veb aplikacija za izrada plana ishrane i fizičke aktivnost</strong></h2>
                 </a>
                 <div class="text-left">
                     <a href="../app/" class="btn btn-default m10 main-border" style="width:260px" title="ulaz u aplikaciju"><i class="fa fa-sign-in-alt fa-2x"></i> <span class="lead"> Ulaz za Korisnike</span></a>
-                    <a href="#registration" class="btn btn-default m10 main" style="width:260px" title="postani korisnik"><i class="fa fa-user-plus fa-2x"></i> <span class="lead"> Postani Korisnik</span></a>
+                    <a ui-sref="registration" href="" class="btn btn-default m10 main" style="width:260px" title="postani korisnik"><i class="fa fa-user-plus fa-2x"></i> <span class="lead"> Postani Korisnik</span></a>
                 </div>
             </div>
         </div>
         <div ng-if="config.freetrial" class="row" ng-cloak>
             <div class="col-md-8 col-md-offset-4">
-                <a href="#registration" style="text-decoration:none" title="Plan Ishrane 15-dana besplatno">
+                <a ui-sref="registration" href="" style="text-decoration:none" title="Plan Ishrane 15-dana besplatno">
                     <label class="lead" style="font-weight:bold; color:#e40202; background-color:#fff; text-shadow: 2px 2px 4px #000000;">15 dana besplatno !</label>
                 </a>
             </div>
@@ -67,7 +67,7 @@
         </div>
     </div>
 
-    <div id="about" class="container pt60">
+    <div id="about" class="container pt-5">
         <div class="row">
             <div class="col-sm-6">
                 <h2>O aplikaciji</h2><br>
@@ -83,6 +83,9 @@
                 <iframe name="video" title="youtube video" style="width:100%" height="325" src="https://www.youtube.com/embed/Pz61JmLZ-bg" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
+        <div class="text-center p-5">
+            <img src="../assets/img/ppweb/ppweb_izrada_jelovnika.png" alt="ppweb_izrada_jelovnika.png" class="img-fluid img-thumbnail" />
+        </div>
         <div>
             <p class="text-justify">
                 <a href="../app/" title="program ishrane veb"><strong>Program Ishrane Veb</strong></a> omogućava utvrđivanje stanja uhranjenosti i energetske potrošnje pojedinca te izradu jelovnika utemeljenu na znanstvenim saznanjima na polju nutriconizma.
@@ -93,7 +96,6 @@
                 Nadalje, kad se govori o problemu prekomerne telesne mase, preporučuje se uz promenu prehrambenih navika, u svakodnevicu uključiti i dodatnu fizičku aktivnost.
                 Pa tako <a href="../app/" title="program ishrane veb"><strong>Program ishrane Veb</strong></a> nudi podatke o energetskoj potrošnji za preko 400 telesnih aktivnosti.
             </p>
-            <div ng-include="'./assets/partials/slider.html'"></div>
             <p>Više o karakteristikama i funkcijama aplikacije pogledajte <a href="#pricing" title="cene"><strong>ovde...</strong></a></p>
         </div>
     </div>
@@ -104,11 +106,11 @@
         </div>
         <div class="row slideanim">
             <div class="col-sm-4">
-                <div class="panel panel-default text-center zoom" style="padding:0">
-                    <div class="panel-heading main">
+                <div class="card text-center zoom" style="padding:0">
+                    <div class="card-header main">
                         <h3>START</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <h4><strong><!--550.00 kn-->{{550/config.eur | number:2}} €</strong> / 1 godina</h4>
                         <h5><strong><!--880.00 kn-->{{880/config.eur | number:2}} €</strong> / 2 godine</h5>
                         <hr />
@@ -127,20 +129,20 @@
                             <li class="list-group-item"><s>Šoping lista</s></li>
                         </ul>
                     </div>
-                    <div class="panel-footer">
-                        <div class="p5">
-                            <a href="#details" class="btn btn-default btn-block btn-lg m2" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
+                    <div class="card-footer">
+                        <div class="p-2">
+                            <a ui-sref="pricing" href="" class="btn btn-default btn-block btn-lg m2" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="ribbon"><span>Preporuka</span></div>
-                <div class="panel panel-default text-center zoom" style="padding:0; box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
-                    <div class="panel-heading main">
+                <div class="card text-center zoom" style="padding:0; box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)">
+                    <div class="card-header main">
                         <h3>STANDARD</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <h4><strong><!--950.00 kn-->{{950/config.eur | number:2}} €</strong> / 1 godina</h4>
                         <h5><strong><!--1,520.00 kn-->{{1520/config.eur | number:2}} €</strong> / 2 godine</h5>
                         <hr />
@@ -159,19 +161,19 @@
                             <li class="list-group-item"><s>Šoping lista</s></li>
                         </ul>
                     </div>
-                    <div class="panel-footer">
-                        <div class="p5">
-                            <a href="#details" class="btn btn-default btn-block m2" title="saznja više"><i class="fa fa-info"></i> Saznaj više</a>
+                    <div class="card-footer">
+                        <div class="p-2">
+                            <a ui-sref="pricing" href="" class="btn btn-default btn-block m2" title="saznja više"><i class="fa fa-info"></i> Saznaj više</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm-4">
-                <div class="panel panel-default text-center zoom" style="padding:0">
-                    <div class="panel-heading main">
+                <div class="card text-center zoom" style="padding:0">
+                    <div class="card-header main">
                         <h3>PREMIUM</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <h4><strong>{{premiumPriceOneYear/config.eur | number : 2}} €</strong> / 1 godina</h4>
                         <h5><strong>{{premiumPriceTwoYear/config.eur | number: 2}} €</strong> / 2 godine</h5>
                         <hr />
@@ -195,9 +197,9 @@
                             <li class="list-group-item">Šoping lista</li>
                         </ul>
                     </div>
-                    <div class="panel-footer">
-                        <div class="p5">
-                            <a href="#details" class="btn btn-default btn-block btn-lg m2" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
+                    <div class="card-footer">
+                        <div class="p-2">
+                            <a ui-sref="pricing" href="" class="btn btn-default btn-block btn-lg m2" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
                         </div>
                     </div>
                 </div>
@@ -211,7 +213,7 @@
         <a href="uputstva.html" title="Program Prehrane Web - Uputa ua korištenje"><i class="fa fa-book"></i> Uputa za korištenje</a>
     </div>
 
-    <div id="demo" class="container text-left pt60">
+    <div id="demo" class="container text-left pt-5">
         <h2 class="text-center">Demo verzija</h2>
         <p class="text-justify">
             Unutar demo verzije moguće je vidjeti sučelje aplikacije i isprobati većinu funkcionalnosti. Neke su funkcionalnosti
@@ -219,14 +221,14 @@
         </p>
     </div>
 
-    <div id="registration" class="container text-left pt60">
+    <div id="registration" class="container text-left pt-5">
         <h2 class="text-center">Registracija</h2>
         <div id="webapp" class="col-md-8 col-md-offset-2">
             <div ng-include="'./assets/partials/signup.html'"></div>
         </div>
     </div>
 
-    <div id="order" ng-controller="webAppCtrl" class="container text-left pt60">
+    <div id="order" ng-controller="webAppCtrl" class="container text-left pt-5">
         <h2 class="text-center">NARUDŽBA</h2>
         <div>
             <h3>Postupak narudžbe:</h3>
@@ -242,10 +244,11 @@
                 <li>Aplikacija postaje aktivna nakon primitka Vaše uplate ili nakon što nam pošaljete potvrdu o uplati.</li>
             </ol>
         </div>
-        <div ng-include="'./assets/partials/order.html'" class="col-md-8 col-md-offset-2"></div>
+        <div class="row justify-content-md-center">
+            <div ng-include="'./assets/partials/order.html'" class="col-md-8" ng-controller="orderCtrl"></div>
+        </div>
     </div>
-
-    <div class="container mt20 pt60">
+    <div class="container mt-3 pt-5">
         <hr />
         <div class="row">
             <div class="col-sm-4">

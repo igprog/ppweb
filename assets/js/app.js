@@ -2,7 +2,7 @@
 app.js
 (c) 2018-2021 IG PROG, www.igprog.hr
 */
-angular.module('app', ['ui.router', 'ngMaterial'])
+angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
 
 .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
@@ -59,7 +59,7 @@ angular.module('app', ['ui.router', 'ngMaterial'])
             url: '/povijest', templateUrl: './assets/pages/povijest.html'
         })
         .state('sr', {
-            url: '/sr', templateUrl: './assets/pages/home-sr.html'
+            url: '/sr', templateUrl: './assets/pages/sr/home.html'
         })
 
     $urlRouterProvider.otherwise("/");
