@@ -26,7 +26,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
             url: '/kontakt', templateUrl: './assets/pages/contact.html', controller: 'appCtrl'
         })
         .state('uputa', {
-            url: '/uputa', templateUrl: './assets/pages/uputa.html'
+            url: '/uputa', templateUrl: './assets/pages/uputa.html', controller: 'appCtrl'
         })
         .state('obavijesti', {
             url: '/obavijesti', templateUrl: './assets/pages/obavijesti.html'
@@ -74,7 +74,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
     //-------------------------------------------------
 }])
 
-.controller('appCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+.controller('appCtrl', ['$scope', '$http', '$rootScope', '$anchorScroll', function ($scope, $http, $rootScope, $anchorScroll) {
 
     var getConfig = function () {
         $http.get('./config/config.json')
@@ -166,6 +166,10 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
         $scope.premiumPriceTwoYear = x > 5 ? 2960 + ((x - 5) * 500) : 2960;
         $scope.premiumUsers = x;
         $scope.premiumUsers_ = x;
+    }
+
+    $scope.scrollTo = function (id) {
+        $anchorScroll(id);
     }
 
 }])
@@ -333,7 +337,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
               init();
           });
     };
-    debugger;
+
     if ($rootScope.config == undefined) {
         getConfig();
     } else {
@@ -708,7 +712,19 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
             }
         };
     }
-]);
+])
+.directive('awardDirective', () => {
+    return {
+        restrict: 'E',
+        scope: {
+            shortdesc: '=',
+            longdesc: '=',
+            img: '='
+        },
+        templateUrl: '../assets/partials/directives/award.html'
+    };
+})
+;
 /***** Directive *****/
 
 ;

@@ -1,0 +1,11 @@
+﻿<div class="flip-box card p-2" style="cursor:move">
+    <div class="flip-box-inner">
+        <div class="flip-box-front">
+            <img src="{{img}}" class="img-fluid flip-box-img" alt="{{shortdesc}}">
+        </div>
+        <div class="flip-box-back">
+            <h3 ng-if="shortdesc" class="font-weight-bold"> {{shortdesc}}</h3>
+            <p ng-if="longdesc">{{longdesc}}</p>
+        </div>
+    </div>
+</div>

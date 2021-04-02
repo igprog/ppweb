@@ -4381,20 +4381,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $rootScope.totals.price.currency = $rootScope.config.currency;
             displayCharts();
         });
-
-       // $http({
-       //     url: $sessionStorage.config.backend + webService + '/GetTotals',
-       //     method: "POST",
-       //     data: { selectedFoods: x.data.selectedFoods, meals: x.data.meals }
-       // })
-       //.then(function (response) {
-       //    $rootScope.totals = JSON.parse(response.data.d);
-       //    $rootScope.totals.price.currency = $rootScope.config.currency;
-       //    displayCharts();
-       //},
-       //function (response) {
-       //    alert(response.data.d)
-       //});
     }
 
     var displayCharts = function () {
@@ -5094,21 +5080,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 $scope.d = d;
                 $scope.loading = false;
             });
-
-           // $http({
-           //     url: $sessionStorage.config.backend + 'Recipes.asmx/Load',
-           //     method: "POST",
-           //     data: { userId: $rootScope.user.userGroupId }
-           // })
-           //.then(function (response) {
-           //    $scope.appRecipes = false;
-           //    $scope.d = JSON.parse(response.data.d);
-           //    $scope.loading = false;
-           //},
-           //function (response) {
-           //    $scope.loading = false;
-           //    alert(response.data.d);
-           //});
         }
         load();
 
@@ -5166,26 +5137,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 }
                 $mdDialog.hide($scope.recipe);
             });
-
-            //$http({
-            //    url: $sessionStorage.config.backend + 'Recipes.asmx/Get',
-            //    method: "POST",
-            //    data: { userId: $rootScope.user.userGroupId, id: x.id }
-            //})
-            //.then(function (response) {
-            //    $scope.recipe = JSON.parse(response.data.d);
-            //    if (showDescription == true) {
-            //        angular.forEach($rootScope.currentMenu.data.meals, function (value, key) {
-            //            if (value.code == $rootScope.currentMeal) {
-            //                value.description = value.description == '' ? $scope.recipe.title + '.\n' + $scope.recipe.description : value.description + '\n' + $scope.recipe.title + '.\n' + $scope.recipe.description;
-            //            }
-            //        });
-            //    }
-            //    $mdDialog.hide($scope.recipe);
-            //},
-            //function (response) {
-            //    alert(response.data.d)
-            //});
         }
 
         $scope.loadAppRecipes = function () {
@@ -5193,18 +5144,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             functions.post('Recipes', 'LoadAppRecipes', { lang: $rootScope.config.language }).then(function (d) {
                 $scope.d = d;
             });
-
-           // $http({
-           //     url: $sessionStorage.config.backend + 'Recipes.asmx/LoadAppRecipes',
-           //     method: "POST",
-           //     data: { lang: $rootScope.config.language }
-           // })
-           //.then(function (response) {
-           //    $scope.d = JSON.parse(response.data.d);
-           //},
-           //function (response) {
-           //    alert(response.data.d)
-           //});
         }
 
         var getAppRecipe = function (x, showDescription) {
@@ -5296,20 +5235,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $rootScope.totals.price.currency = $rootScope.config.currency;
             displayCharts();
         });
-
-        //$http({
-        //    url: $sessionStorage.config.backend + 'WeeklyMenus.asmx/GetWeeklyMenusTotals',
-        //    method: "POST",
-        //    data: { userId: $sessionStorage.usergroupid, menuList: x }
-        //})
-        //.then(function (response) {
-        //    $rootScope.totals = JSON.parse(response.data.d);
-        //    $rootScope.totals.price.currency = $rootScope.config.currency;
-        //    displayCharts();
-        //},
-        //function (response) {
-        //    alert(response.data.d);
-        //});
     }
     $scope.getWeeklyMenuTotals = function (x) {
         return getWeeklyMenuTotals(x);
@@ -5642,34 +5567,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 size: 4
             });
         });
-
-        //$http({
-        //    url: $sessionStorage.config.backend + 'Foods.asmx/Init',
-        //    method: "POST",
-        //    data: { lang: $rootScope.config.language }
-        //})
-        //.then(function (response) {
-        //    var res = JSON.parse(response.data.d);
-        //    if ($rootScope.myFood_ !== undefined) {
-        //        if ($rootScope.myFood_ != null) {
-        //            $scope.myFood = $rootScope.myFood_;
-        //            $rootScope.myFood_ = null;
-        //        } else {
-        //            $scope.myFood = res.food;
-        //        }
-        //    } else {
-        //        $scope.myFood = res.food;
-        //    }
-        //    $scope.units = res.units;
-        //    $scope.mainFoodGroups = res.foodGroups;
-        //    $('.selectpicker').selectpicker({
-        //        style: 'btn-default',
-        //        size: 4
-        //    });
-        //},
-        //function (response) {
-        //    alert(response.data.d)
-        //});
     };
     init();
 
@@ -5695,19 +5592,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $rootScope.loadFoods();
             init();
         });
-
-     //   $http({
-     //       url: $sessionStorage.config.backend + webService + '/Delete',
-     //       method: "POST",
-     //       data: { userId: $rootScope.user.userGroupId, id: x.id }
-     //   })
-     //.then(function (response) {
-     //    $rootScope.loadFoods();
-     //    init();
-     //},
-     //function (response) {
-     //    functions.alert($translate.instant(response.data.d), '');
-     //});
     }
 
     var loadMyFoods = function () {
@@ -5715,19 +5599,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             var data = d;
             $rootScope.myFoods = data.foods;
         });
-
-        //$http({
-        //    url: $sessionStorage.config.backend + webService + '/Load',
-        //    method: "POST",
-        //    data: { userId: $sessionStorage.usergroupid }
-        //})
-        //.then(function (response) {
-        //    var data = JSON.parse(response.data.d);
-        //    $rootScope.myFoods = data.foods;
-        //},
-        //function (response) {
-        //    functions.alert($translate.instant(response.data.d), '');
-        //});
     }
 
     $scope.save = function (x) {
@@ -5762,24 +5633,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 functions.alert($translate.instant(d.msg), d.msg1 !== null ? $translate.instant(d.msg1) : null);
             }
         });
-
-        //$http({
-        //    url: $sessionStorage.config.backend + webService + '/Save',
-        //    method: "POST",
-        //    data: { userId: $rootScope.user.userGroupId, x: x }
-        //})
-        //.then(function (response) {
-        //    if (response.data.d != 'there is already a food with the same name') {
-        //        functions.alert($translate.instant(response.data.d), '');
-        //        $rootScope.loadFoods();
-        //    } else {
-        //        functions.alert($translate.instant('there is already a food with the same name'), '');
-        //    }
-        //},
-        //function (response) {
-        //    functions.alert($translate.instant(response.data.d), '');
-        //});
-
     };
 
     var checkIsOtherFood = function (x) {
@@ -6091,22 +5944,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             recipeFromMenu();
             load();
         });
-
-        //$http({
-        //    url: $sessionStorage.config.backend + 'Recipes.asmx/Init',
-        //    method: "POST",
-        //    data: ''
-        //})
-        //.then(function (response) {
-        //    $scope.d = JSON.parse(response.data.d);
-        //    $scope.currentRecipe = null;
-        //    $rootScope.totals = null;
-        //    recipeFromMenu();
-        //    load();
-        //},
-        //function (response) {
-        //    alert(response.data.d)
-        //});
     };
 
     var load = function () {
@@ -6116,20 +5953,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $scope.recipes = d;
             $rootScope.loading = false;
         });
-
-        //$http({
-        //    url: $sessionStorage.config.backend + 'Recipes.asmx/Load',
-        //    method: "POST",
-        //    data: { userId: $sessionStorage.usergroupid }
-        //})
-        //.then(function (response) {
-        //    $scope.recipes = JSON.parse(response.data.d);
-        //    $rootScope.loading = false;
-        //},
-        //function (response) {
-        //    $rootScope.loading = false;
-        //    alert(response.data.d)
-        //});
     };
 
     var recipeFromMenu = function () {
@@ -6199,19 +6022,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $scope.d = d;
             getTotals($scope.d);
         });
-
-        //$http({
-        //    url: $sessionStorage.config.backend + 'Recipes.asmx/Get',
-        //    method: "POST",
-        //    data: { userId: $sessionStorage.usergroupid, id: id }
-        //})
-        //.then(function (response) {
-        //    $scope.d = JSON.parse(response.data.d);
-        //    getTotals($scope.d);
-        //},
-        //function (response) {
-        //    alert(response.data.d);
-        //});
     }
 
     $scope.save = function (recipe) {
@@ -6235,23 +6045,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 functions.alert($translate.instant(d.msg), d.msg1 !== null ? $translate.instant(d.msg1) : null);
             }
         });
-
-        //$http({
-        //    url: $sessionStorage.config.backend + 'Recipes.asmx/Save',
-        //    method: "POST",
-        //    data: { userId: $sessionStorage.usergroupid, x: recipe }
-        //})
-        //.then(function (response) {
-        //    if (response.data.d != 'there is already a recipe with the same name') {
-        //        $scope.d = JSON.parse(response.data.d);
-        //        load();
-        //    } else {
-        //        functions.alert($translate.instant('there is already a recipe with the same name'), '');
-        //    }
-        //},
-        //function (response) {
-        //    alert(response.data.d);
-        //});
     }
     
     $scope.removeFood = function (idx) {

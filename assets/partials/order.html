@@ -4,9 +4,9 @@
             <h3>Narudžbenica</h3>
         </div>
         <ol class="breadcrumb">
-            <li ng-class="user.application=='Program Prehrane Web' && !showUserDetails?'main':''" style="padding:10px; border-radius: 25px"><span class="badge">1</span><span ng-if=""></span> {{user.application=='Program Prehrane Web'?'Prijava':'Verzija'}}</li>
-            <li ng-class="showUserDetails==true&&showAlert==false?'main':''" style="padding:10px; border-radius: 25px"><span class="badge">2</span> Narudžba</li>
-            <li ng-class="showAlert==true?'main':''" style="padding:10px; border-radius: 25px"><span class="badge">3</span> Podaci za uplatu</li>
+            <li ng-class="user.application=='Program Prehrane Web' && !showUserDetails?'main-gradient':''" style="padding:10px; border-radius: 25px"><span class="badge">1</span><span ng-if=""></span> {{user.application=='Program Prehrane Web'?'Prijava':'Verzija'}}</li>
+            <li ng-class="showUserDetails==true&&showAlert==false?'main-gradient':''" style="padding:10px; border-radius: 25px"><span class="badge">2</span> Narudžba</li>
+            <li ng-class="showAlert==true?'main-gradient':''" style="padding:10px; border-radius: 25px"><span class="badge">3</span> Podaci za uplatu</li>
         </ol>
     </div>
     <div ng-if="!showAlert" class="card-body">
@@ -39,7 +39,7 @@
                 <label>Cijena: <strong>{{user.price}} kn</strong></label>
             </div>
             <div class="text-right">
-                <button class="btn btn-primary btn-lg main" ng-click="gotoForm()">Dalje <i class="fa fa-angle-double-right"></i></button>
+                <button class="btn btn-primary btn-lg main-gradient" ng-click="gotoForm()">Dalje <i class="fa fa-angle-double-right"></i></button>
             </div>
         </div>
         <div ng-if="user.application=='Program Prehrane Web' && !showUserDetails">
@@ -56,7 +56,7 @@
                 </md-input-container>
             </div>
             <div class="text-right">
-                <button class="btn btn-default btn-lg main" ng-click="login(user.email, password)">Dalje <i class="fa fa-angle-double-right"></i></button>
+                <button class="btn btn-default btn-lg main-gradient" ng-click="login(user.email, password)">Dalje <i class="fa fa-angle-double-right"></i></button>
             </div>
             <div class="text-left">
                 Zaboravili ste lozinku? <a href="#app" ng-click="forgotPassword(user.email)" title="pošalji lozinku">Pošalji mi lozinku na E-mail</a>
@@ -175,7 +175,7 @@
                     </md-input-container>
                 </div>
                 <div class="text-right">
-                    <button class="btn btn-primary btn-lg main" ng-disabled="isSendButtonDisabled" ng-click="sendOrder(user)">{{sendicontitle}} <span ng-class="sendicon"></span></button>
+                    <button class="btn btn-primary btn-lg main-gradient" ng-disabled="isSendButtonDisabled" ng-click="sendOrder(user)">{{sendicontitle}} <span ng-class="sendicon"></span></button>
                 </div>
             </div>
         </div>
@@ -227,7 +227,7 @@ Iznos: <span ng-if="user.discountCoeff === 0">{{user.priceEur | number:2}}</span
     </div>
 
     <div ng-if="showPaymentDetails" class="text-center">
-        <a href="{{config.appurl}}" title="program prehrane web" target="_blank" class="btn btn-default main btn-lg">
+        <a href="{{config.appurl}}" title="program prehrane web" target="_blank" class="btn btn-primary main-gradient btn-lg">
             <i class="fa fa-sign-in-alt"></i> Pokreni aplikaciju
         </a>
     </div>

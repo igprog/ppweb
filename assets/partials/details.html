@@ -1,7 +1,7 @@
 ﻿<div id="details" class="container pt60">
     <div style="overflow-x:auto;">
         <table class="table table-bordered">
-            <tr class="main">
+            <tr class="main-gradient">
                 <th width="40%"><h3>Karakteristike</h3></th>
                 <th class="text-center"><h3>START</h3></th>
                 <th class="text-center"><h3>STANDARD</h3></th>
@@ -11,7 +11,7 @@
                 <td>
                     Broj korisnika
                     <p class="small">
-                        <em>* Odnosi se na broj korisnika aplikacija koji unutar jednog tima (zajedničke radne organizacije ili ustanove) imaju pristup zajedničkoj bazi podataka.<br />
+                        <em>* Odnosi se na broj korisnika aplikacije koji unutar jednog tima (zajedničke radne organizacije ili ustanove) imaju pristup zajedničkoj bazi podataka.<br />
                         Pravo na dodatne licence imaju samo pravne osobe.
                         </em>
                     </p>
@@ -22,7 +22,7 @@
                     <strong>
                         <select ng-model="premiumUsers_" ng-options="x for x in maxUsers" style="height:30px" ng-change="getPremiumPrice(premiumUsers_)"></select>
                     </strong><br />
-                    <em class="small">* dodatne licenca: 500 kn / god. (škole: 50 kn/god.)</em>
+                    <em class="small">* dodatna licenca: 500 kn / god. (škole: 50 kn/god.)</em>
                 </td>
             </tr>
             <tr>
@@ -69,7 +69,7 @@
                 <td>Kastom obroci
                     <p class="small">
                         <em>
-                            * Korisnici START i STANDARD paketa imaju do 6 predefinirani obroka (doručak, jutarnja užina, ručak, popodnevna užina, večera i obrok pred spavanje)
+                            * Korisnici START i STANDARD paketa imaju do 6 predefiniranih obroka (doručak, jutarnja užina, ručak, popodnevna užina, večera i obrok pred spavanje)
                             dok korisnici PREMIUM paketa mogu koristiti od 9 obroka sa vlastitim nazivima i preporukama.
                         </em>
                     </p>
@@ -281,7 +281,7 @@
                 <td class="text-center"><i class="fa fa-check text-main"></i></td>
                 <td class="text-center"><i class="fa fa-check text-main"></i></td>
             </tr>
-            <tr class="main small">
+            <tr class="main-gradient">
                 <td><label>CIJENA</label></td>
                 <td class="text-center">
                     <label>550.00 kn / 1 godina</label>

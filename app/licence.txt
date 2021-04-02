@@ -20,7 +20,7 @@ KORISNIK nema pravo prijenosa prava iz i u svezi ovog ugovora na treće osobe, k
 Pravo na registraciju dodatnih korisnika
 
 KORISNIK STANDARD i PREMIUM paketa ima pravo registrirati jednog ili više dodatnih korisnika. Dodatne korisnike je dozvoljeno registrirati samo ako se nalaze u sklopu zajedničke radne organizacije (ustanove).
-Nije dozoljeno dijeliti ili prodavati licence drugim osobama. Ukoliko VLASNIK sazna za nedozvoljeno ustupanje licence, ima pravo KORISNIKU blokirati pristup aplikaciji i tražiti naknadu štete sukladno odredbama zakona. 
+Nije dozvoljeno dijeliti ili prodavati licence drugim osobama. Ukoliko VLASNIK sazna za nedozvoljeno ustupanje licence, ima pravo KORISNIKU blokirati pristup aplikaciji i tražiti naknadu štete sukladno odredbama zakona. 
 
 Pravo na podršku
 
