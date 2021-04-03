@@ -192,7 +192,7 @@ public class ClientsData : System.Web.Services.WebService {
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, x.id.ToString(), userId, "ClientsData", "Save");
-            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+            return JsonConvert.SerializeObject(x, Formatting.None);
         }
     }
 
@@ -330,7 +330,7 @@ public class ClientsData : System.Web.Services.WebService {
             }
             return Save(userId, x, 0);
         } catch (Exception e) {
-            return ("Error: " + e.Message);
+            return e.Message;
         }
     }
     #endregion
@@ -356,7 +356,10 @@ public class ClientsData : System.Web.Services.WebService {
             } 
             if (count == 0) { return true; }
             else { return false; }
-        } catch (Exception e) { return false; }
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.id.ToString(), userId, "ClientsData", "Check");
+            return false;
+        }
     }
 
     public Clients.Gender GetGender(int value) {
@@ -415,7 +418,10 @@ public class ClientsData : System.Web.Services.WebService {
                 x = xx.OrderByDescending(a => Convert.ToDateTime(a.date)).FirstOrDefault();
             }
             return x;
-        } catch (Exception e) { return new NewClientData(); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, clientId, userId, "ClientsData", "GetClientData");
+            return new NewClientData();
+        }
     }
 
     private void SaveMyMeals(string userId, string clientId, MyMeals.NewMyMeals myMeals) {
@@ -427,7 +433,9 @@ public class ClientsData : System.Web.Services.WebService {
                 WriteFile(filepath, JsonConvert.SerializeObject(myMeals, Formatting.None));
             }
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            L.SendErrorLog(e, clientId, userId, "ClientsData", "SaveMyMeals");
+        }
     }
 
     protected void CreateFolder(string path) {

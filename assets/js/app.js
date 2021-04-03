@@ -764,7 +764,8 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
             pack: '=',
             discount: '=',
             premiumone: '=',
-            premiumtwo: '='
+            premiumtwo: '=',
+            eur: '='
         },
         templateUrl: '../assets/partials/directives/price.html'
     };

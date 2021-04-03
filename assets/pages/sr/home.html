@@ -111,9 +111,7 @@
                         <h3>START</h3>
                     </div>
                     <div class="card-body">
-                        <h4><strong><!--550.00 kn-->{{550/config.eur | number:2}} €</strong> / 1 godina</h4>
-                        <h5><strong><!--880.00 kn-->{{880/config.eur | number:2}} €</strong> / 2 godine</h5>
-                        <hr />
+                        <price-directive pack="'start'" discount="discount" eur="config.eur"></price-directive>
                         <ul class="list-group">
                             <li class="list-group-item">Broj korisnika: <strong>1</strong></li>
                             <li class="list-group-item">Broj klijenata: <strong>5/mesečno</strong></li>
@@ -124,7 +122,6 @@
                             <li class="list-group-item"><s>Kalkulator masnog tkiva</s></li>
                             <li class="list-group-item"><s>Kastom obroci</s></li>
                             <li class="list-group-item"><s>Kalendar termina</s></li>
-                            <!--<li class="list-group-item"><s>Slanje jelovnika na e-mail klijenta</s></li>-->
                             <li class="list-group-item"><s>Aplikacija za klijente</s></li>
                             <li class="list-group-item"><s>Šoping lista</s></li>
                         </ul>
@@ -143,9 +140,7 @@
                         <h3>STANDARD</h3>
                     </div>
                     <div class="card-body">
-                        <h4><strong><!--950.00 kn-->{{950/config.eur | number:2}} €</strong> / 1 godina</h4>
-                        <h5><strong><!--1,520.00 kn-->{{1520/config.eur | number:2}} €</strong> / 2 godine</h5>
-                        <hr />
+                        <price-directive pack="'standard'" discount="discount" eur="config.eur"></price-directive>
                         <ul class="list-group">
                             <li class="list-group-item">Broj korisnika: <strong>2</strong></li>
                             <li class="list-group-item">Broj klijenata: <strong>20/mesečno</strong></li>
@@ -156,7 +151,6 @@
                             <li class="list-group-item"><s>Kalkulator masnog tkiva</s></li>
                             <li class="list-group-item"><s>Kastom obroci</s></li>
                             <li class="list-group-item">Kalendar termina</li>
-                            <!--<li class="list-group-item">Slanje jelovnika na e-mail klijenta</li>-->
                             <li class="list-group-item">Aplikacija za klijente</li>
                             <li class="list-group-item"><s>Šoping lista</s></li>
                         </ul>
@@ -174,9 +168,7 @@
                         <h3>PREMIUM</h3>
                     </div>
                     <div class="card-body">
-                        <h4><strong>{{premiumPriceOneYear/config.eur | number : 2}} €</strong> / 1 godina</h4>
-                        <h5><strong>{{premiumPriceTwoYear/config.eur | number: 2}} €</strong> / 2 godine</h5>
-                        <hr />
+                        <price-directive pack="'premium'" discount="discount" premiumone="premiumPriceOneYear" premiumtwo="premiumPriceTwoYear" eur="config.eur"></price-directive>
                         <ul class="list-group">
                             <li class="list-group-item">
                                 Broj korisnika:
@@ -192,7 +184,6 @@
                             <li class="list-group-item">Kalkulator masnog tkiva</li>
                             <li class="list-group-item">Kastom obroci</li>
                             <li class="list-group-item">Kalendar termina</li>
-                            <!--<li class="list-group-item">Slanje jelovnika na e-mail klijenta</li>-->
                             <li class="list-group-item">Aplikacija za klijente</li>
                             <li class="list-group-item">Šoping lista</li>
                         </ul>
@@ -207,10 +198,12 @@
         </div>
     </div>
 
-    <div id="details" ng-include="'./assets/partials/details.html'"></div>
+    <div class="container pt-2">
+        <a ui-sref="uputa" href="" title="Program Prehrane Web - Uputstvo za korišćenje"><i class="fa fa-book"></i> Uputstvo za korišćenje</a>
+    </div>
 
-    <div class="container">
-        <a href="uputstva.html" title="Program Prehrane Web - Uputa ua korištenje"><i class="fa fa-book"></i> Uputa za korištenje</a>
+    <div class="container pt-2">
+        <p>Više o karakteristikama aplikacije pogledajte <a ui-sref="price" href="" title="Program Prehrane Web - Karakteristike">ovde</a>.</p>
     </div>
 
     <div id="demo" class="container text-left pt-5">
@@ -223,7 +216,7 @@
 
     <div id="registration" class="container text-left pt-5">
         <h2 class="text-center">Registracija</h2>
-        <div id="webapp" class="col-md-8 col-md-offset-2">
+        <div id="webapp" class="row justify-content-md-center">
             <div ng-include="'./assets/partials/signup.html'"></div>
         </div>
     </div>
@@ -233,7 +226,7 @@
         <div>
             <h3>Postupak narudžbe:</h3>
             <ol>
-                <li>Ukoliko se već niste registrirali, prvo se <a ng-click="scrollTo('registration')" href="" title="registracija">registrirajte</a>.</li>
+                <li>Ukoliko se već niste registrovali, prvo se <a ng-click="scrollTo('registration')" href="" title="registracija">registrirujte</a>.</li>
                 <li>U narudžbenici upišite e-mail i lozinku koju ste odabrali prilikom registracije i kliknite na tipku <kbd>Dalje >></kbd>.</li>
                 <li>
                     Odaberite paket (<em>START, STANDARD ili PREMIUM</em>) i trajanje pretplate (<em>jedna ili dvije godine</em>) i popunite sva obavezna polja
