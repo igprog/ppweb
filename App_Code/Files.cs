@@ -17,13 +17,8 @@ public class Files : WebService {
     }
 
     public class NewSettings {
-        public Discount discount;
+        public Prices.Discount discount;
         public string pp5DownloadEnableCode;
-    }
-    public class Discount {
-        public double perc;
-        public string dateFrom;
-        public string dateTo;
     }
 
     #region WebMethods
@@ -38,7 +33,7 @@ public class Files : WebService {
         if (!string.IsNullOrEmpty(jsonStr)) {
             x = JsonConvert.DeserializeObject<NewSettings>(jsonStr);
         } else {
-            x.discount = new Discount();
+            x.discount = new Prices.Discount();
         }
         return x;
     }

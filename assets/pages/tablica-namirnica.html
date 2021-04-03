@@ -1,7 +1,7 @@
 ﻿<div class="container pt60">
     <h1>Tablica namirnica - Energetske vrijednosti</h1>
     <div ng-cloak>
-        <h2 class="small">Popis namirnica iz Web aplikacije <a href="app" title="Web aplikacija Program Prehrane">Program Prehrane Web</a></h2>
+        <h2 class="small">Popis namirnica iz Web aplikacije <a href="../app" target="_self" title="Web aplikacija Program Prehrane">Program Prehrane Web</a></h2>
         <p class="text-justify">Baza sadrži više od 700 namirnica i pripremljenih jela. U ovoj tablici je prikazana samo energetska vrijednost namirnica. Detaljne informacije o namirnicama (makro i mikronutritivne vrijednosti) su dostupne u <a href="app" title="Web aplikacija Program Prehrane">aplikaciji</a>.</p>
         <hr />
         <div ng-if="loading" class="text-center text-primary">
@@ -43,14 +43,14 @@
                         <td class="text-right">{{x.quantity}}</td>
                         <td class="nowrap">{{x.unit}}</td>
                         <td class="text-right">{{x.energy | number:1}}</td>
-                        <td class="text-center"><a href="app" title="Makro i mikro nutritivne vrijednosti namirnica potražite u web aplikaciji Program Prehrane Web" class="btn btn-default" style="border-radius:45%"><i class="fa fa-info fa-2x"></i></a></td>
+                        <td class="text-center"><a href="../app" target="_self" title="Makro i mikro nutritivne vrijednosti namirnica potražite u web aplikaciji Program Prehrane Web" class="btn btn-default" style="border-radius:45%"><i class="fa fa-info fa-2x"></i></a></td>
                     </tr>
                 </table>
             </div>
             <a ng-if="limit<foods.length" href="" class="btn btn-default" ng-click="showMore(1000)"><i class="fa fa-arrow-down"></i> Prikaži sve namirnice</a>
         </div>
     </div>
-    <a href="../app/" title="Web aplikacija za izradu uravnoteženih jelovnika i plana tjelesne aktivnosti">
+    <a href="../app" target="_self" title="Web aplikacija za izradu uravnoteženih jelovnika i plana tjelesne aktivnosti">
         <div class="mt20 text-center">
             <img src="../assets/img/mockup_600x400.jpg" class="img-thumbnail m10" ale="Web aplikacija Program Prehrane Web" />
             <div>

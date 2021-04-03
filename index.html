@@ -68,6 +68,7 @@ s0.parentNode.insertBefore(s1,s0);
             font-family: 'Montserrat', sans-serif;
         }
     </style>
+    <base href="/">
 </head>
 <body id="home" ng-app="app" ng-controller="appCtrl" data-spy="scroll" data-target=".navbar" data-offset="60" >
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -78,7 +79,7 @@ s0.parentNode.insertBefore(s1,s0);
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><a ui-sref="about" href="" class="nav-link" title="o programu"><i class="fa fa-info"></i> O aplikaciji</a></li>
-                <li class="nav-item"><a ui-sref="pricing" href="" class="nav-link" title="cijena"><i class="fa fa-dollar-sign"></i> Cijene</a></li>
+                <li class="nav-item"><a ui-sref="price" href="" class="nav-link" title="cijena"><i class="fa fa-dollar-sign"></i> Cijene</a></li>
                 <li class="nav-item"><a ui-sref="registration" href="" class="nav-link" title="registracija"><i class="fa fa-user-plus"></i> Registracija</a></li>
                 <li class="nav-item"><a ui-sref="order" href="" class="nav-link" title="narudžba"><i class="fa fa-shopping-cart"></i> Narudžba</a></li>
                 <li class="nav-item"><a ui-sref="contact" href="" class="nav-link" title="kontakt"><i class="fa fa-comment"></i> Kontakt</a></li>
@@ -95,13 +96,13 @@ s0.parentNode.insertBefore(s1,s0);
                         <a ui-sref="tablica-namirnica" href="" class="dropdown-item" title="Tablic namirnica"><i class="fa fa-apple-alt"></i> Tablica namirnica</a>
                         <a ui-sref="program-prehrane-za-skole" href="" class="dropdown-item" title="Program Prehrane za škole"><i class="fa fa-graduation-cap"></i> Program Prehrane za škole</a>
                         <a ui-sref="aplikacija-za-klijente" href="" class="dropdown-item" title="Program Prehrane za škole"><i class="fa fa-user"></i> Aplikacija za klijente</a>
-                        <a href="../app/licence.txt" class="dropdown-item" title="Uvjeti korištenja"><i class="fa fa-file-alt"></i> Uvjeti korištenja</a>
+                        <a href="../app/licence.txt" target="_self" class="dropdown-item" title="Uvjeti korištenja"><i class="fa fa-file-alt"></i> Uvjeti korištenja</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" title="hrvatski" href="#"><i class="fa fa-sign-in-alt"></i> App<span class="caret"></span></a>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" title="hrvatski" href=""><i class="fa fa-sign-in-alt"></i> App<span class="caret"></span></a>
                     <div class="dropdown-menu dropdown-menu-right" style="background-color:#353535">
-                        <a href="../app/" class="dropdown-item" title="aplikacija za nutricioniste"><i class="fa fa-user-md"></i> Aplikacija za nutricioniste</a>
+                        <a href="../app" target="_self" class="dropdown-item" title="aplikacija za nutricioniste"><i class="fa fa-user-md"></i> Aplikacija za nutricioniste</a>
                         <a ui-sref="aplikacija-za-klijente" href="" class="dropdown-item" title="aplikacija za klijente"><i class="fa fa-user"></i> Aplikacija za klijente</a>
                     </div>
                 </li>

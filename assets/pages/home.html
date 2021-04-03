@@ -7,7 +7,7 @@
                     <h2 class="lead font-weight-bold">Web aplikacija za nutricioniste</h2>
                 </a>
                 <div class="text-left">
-                    <a href="../app/" class="btn btn-default m-2 main-border" style="width:260px" title="ulaz u aplikaciju"><i class="fa fa-sign-in-alt fa-2x"></i> <span class="lead"> Ulaz za Korisnike</span></a>
+                    <a href="../app" target="_self" class="btn btn-default m-2 main-border" style="width:260px" title="ulaz u aplikaciju"><i class="fa fa-sign-in-alt fa-2x"></i> <span class="lead"> Ulaz za Korisnike</span></a>
                     <a ui-sref="registration" href="" class="btn btn-default m-2 main-gradient" style="width:260px" title="postani korisnik"><i class="fa fa-user-plus fa-2x"></i> <span class="lead"> Postani Korisnik</span></a>
                 </div>
             </div>
@@ -19,7 +19,6 @@
                 </a>
             </div>
         </div>
-
     </div>
     <div class="container text-center">
         <div class="row p-2">
@@ -77,10 +76,10 @@
             <h2>O aplikaciji</h2><br>
             <p class="text-justify">
                 <iframe name="video" title="youtube video" class="video-frame" height="325" src="https://www.youtube.com/embed/Pz61JmLZ-bg" frameborder="0" allowfullscreen"></iframe>
-                <a href="../app/" title="web aplikacija"><strong>Program Prehrane Web</strong></a> omogućava utvrđivanje stanja uhranjenosti i energetske potrošnje pojedinca te izradu uravnoteženih jelovnika utemeljenu na znanstvenim spoznajama na polju nutriconizma.
+                <a href="../app" target="_self" title="web aplikacija"><strong>Program Prehrane Web</strong></a> omogućava utvrđivanje stanja uhranjenosti i energetske potrošnje pojedinca te izradu uravnoteženih jelovnika utemeljenu na znanstvenim spoznajama na polju nutriconizma.
                 Osmišljavanjem jelovnika korištenjem ove aplikacije, prehrana krajnjih korisnika postaje uravnotežena i raznolika
                 što se može zahvaliti činjenici da se izrada jelovnika bazira na preporučenom broju jediničnih serviranja svih skupina namirnica <em>(piramida prehrane)</em> te njihovih energetskih, makro i mikronutiritivnih vrijednost.
-                S obzirom da web aplikacija <a href="../app/" title="web aplikacija"><strong>Program Prehrane Web</strong></a> sadrži bazu od preko <a ui-sref="tablica-namirnica" href="" class="nodecoration" title="Tablica namirnica">700 namirnica i jela</a> moguće je zadovoljiti zahtjeve većine korisnika po pitanju izbora namirnica.
+                S obzirom da web aplikacija <a href="../app" target="_self" title="web aplikacija"><strong>Program Prehrane Web</strong></a> sadrži bazu od preko <a ui-sref="tablica-namirnica" href="" class="nodecoration" title="Tablica namirnica">700 namirnica i jela</a> moguće je zadovoljiti zahtjeve većine korisnika po pitanju izbora namirnica.
                 Osim toga aplikacija pruža mogućnost unosa vlastitih namirnica i njihovih makro i mikronutritivnih vrijednosti.
                 Nadalje, kad se govori o problemu prekomjerne tjelesne mase, preporuča se uz promjenu prehrambenih navika, u svakodnevicu uključiti i dodatnu tjelesnu aktivnost,
                 pa tako program nudi podatke o energetskoj potrošnji za preko 400 tjelesnih aktivnosti. <br />
@@ -94,7 +93,7 @@
         </div>
         <div>
             <p class="text-justify">
-                <a href="../app/" title="web aplikacija"><strong>Program Prehrane Web</strong></a> je online aplikacija i za razliku od stare <a ui-sref="program-prehrane-5" href="" title="program prehrane 5.0" rel="noopener"><strong>verziju 5.0</strong></a> nije potrebna instalacija na računalo,
+                <a href="../app" target="_self" title="web aplikacija"><strong>Program Prehrane Web</strong></a> je online aplikacija i za razliku od stare <a ui-sref="program-prehrane-5" href="" title="program prehrane 5.0" rel="noopener"><strong>verziju 5.0</strong></a> nije potrebna instalacija na računalo,
                 već je dovoljna samo registracija u sustav, a aplikaciji možete pristupiti sa bilo kojeg računala koji ima pristup internetu neovisno o operativnom sustavu. Još jedna od prednosti u odnosu na <a ui-sref="program-prehrane-5" href="" title="program prehrane 5.0" rel="noopener"><strong>verziju 5.0</strong></a> je u tome
                 što zajedničkoj bazi podataka može pristupiti više korisnika (nutricionista) unutar jednog tima. Svi podaci (podaci o klijentima, jelovnici, vlastite namirnice i recepti se spremaju na server i nema opasnosti od gubitka podataka zbog kvara ili zamjene računala).
                 Dizajn aplikacije je responzivan što znači da se automatski prilagođava rezoluciji monitora bilo kojeg uređaja (računalo, tablet, mobitel). <br />
@@ -105,7 +104,7 @@
 
     </div>
 
-    <div id="pricing" class="container bg-grey pt-5">
+    <div id="price" class="container bg-grey pt-5">
         <div class="text-center">
             <h2>Program Prehrane Web - Paketi</h2>
         </div>
@@ -116,9 +115,7 @@
                         <h3>START</h3>
                     </div>
                     <div class="card-body">
-                        <h4><strong>550.00 kn</strong> / 1 godina</h4>
-                        <h5><strong>880.00 kn</strong> / 2 godine</h5>
-                        <hr />
+                        <price-directive pack="'start'" discount="discount"></price-directive>
                         <ul class="list-group">
                             <li class="list-group-item">Broj korisnika: <strong>1</strong></li>
                             <li class="list-group-item">Broj klijenata: <strong>5/mjesečno</strong></li>
@@ -135,7 +132,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="p-2">
-                            <a ng-click="scrollTo('details')" href="" class="btn btn-default btn-block btn-lg m-1" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
+                            <a ui-sref="price" href="" class="btn btn-default btn-block btn-lg m-1" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
                         </div>
                     </div>
                 </div>
@@ -147,9 +144,7 @@
                         <h3>STANDARD</h3>
                     </div>
                     <div class="card-body">
-                        <h4><strong>950.00 kn</strong> / 1 godina</h4>
-                        <h5><strong>1,520.00 kn</strong> / 2 godine</h5>
-                        <hr />
+                        <price-directive pack="'standard'" discount="discount"></price-directive>
                         <ul class="list-group">
                             <li class="list-group-item">Broj korisnika: <strong>2</strong></li>
                             <li class="list-group-item">Broj klijenata: <strong>20/mjesečno</strong></li>
@@ -166,7 +161,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="p-2">
-                            <a ng-click="scrollTo('details')" href="" class="btn btn-default btn-block btn-lg m-1" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
+                            <a ui-sref="price" href="" class="btn btn-default btn-block btn-lg m-1" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
                         </div>
                     </div>
                 </div>
@@ -177,9 +172,7 @@
                         <h3>PREMIUM</h3>
                     </div>
                     <div class="card-body">
-                        <h4><strong>{{premiumPriceOneYear | number : 2}} kn</strong> / 1 godina</h4>
-                        <h5><strong>{{premiumPriceTwoYear | number: 2}} kn</strong> / 2 godine</h5>
-                        <hr />
+                        <price-directive pack="'premium'" discount="discount" premiumone="premiumPriceOneYear" premiumtwo="premiumPriceTwoYear"></price-directive>
                         <ul class="list-group">
                             <li class="list-group-item">
                                 Broj korisnika:
@@ -201,7 +194,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="p-2">
-                            <a ng-click="scrollTo('details')" href="" class="btn btn-default btn-block btn-lg m-1" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
+                            <a ui-sref="price" href="" class="btn btn-default btn-block btn-lg m-1" title="saznaj više"><i class="fa fa-info"></i> Saznaj više</a>
                         </div>
                     </div>
                 </div>
@@ -209,10 +202,12 @@
         </div>
     </div>
 
-    <div id="details" ng-include="'./assets/partials/details.html'"></div>
-
-    <div class="container">
+    <div class="container pt-2">
         <a ui-sref="uputa" href="" title="Program Prehrane Web - Uputa ua korištenje"><i class="fa fa-book"></i> Uputa za korištenje</a>
+    </div>
+
+    <div class="container pt-2">
+        <p>Više o karakteristikama aplikacije pogledajte <a ui-sref="price" href="" title="Program Prehrane Web - Karakteristike">ovdje</a>.</p>
     </div>
 
     <div id="demo" class="container text-left pt-5">
@@ -230,7 +225,7 @@
         </div>
     </div>
 
-    <div id="order" ng-controller="webAppCtrl" class="container text-left pt-5">
+    <div id="order" class="container text-left pt-5">
         <h2 class="text-center">NARUDŽBA</h2>
         <div>
             <h3>Postupak narudžbe:</h3>

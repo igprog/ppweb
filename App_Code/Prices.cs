@@ -81,6 +81,12 @@ public class Prices : System.Web.Services.WebService {
         public string unit { get; set; }
     }
 
+    public class Discount {
+        public double perc;
+        public string dateFrom;
+        public string dateTo;
+    }
+
     #endregion Classes
 
     #region WebMethods
@@ -190,6 +196,19 @@ public class Prices : System.Web.Services.WebService {
         } catch (Exception e) {
             L.SendErrorLog(e, id, userId, "Prices", "Delete");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
+    }
+
+    [WebMethod]
+    public string GetDiscount() {
+        Files F = new Files();
+        Discount x = new Discount();
+        try {
+            x = F.GetSettingsData().discount;
+            return JsonConvert.SerializeObject(x, Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, null, "Prices", "GetDiscount");
+            return JsonConvert.SerializeObject(x, Formatting.None);
         }
     }
     #endregion WebMethods

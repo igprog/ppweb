@@ -3,9 +3,18 @@
         <table class="table table-bordered">
             <tr class="main-gradient">
                 <th width="40%"><h3>Karakteristike</h3></th>
-                <th class="text-center"><h3>START</h3></th>
-                <th class="text-center"><h3>STANDARD</h3></th>
-                <th class="text-center"><h3>PREMIUM</h3></th>
+                <th width="30%" class="text-center">
+                    <h3 class="font-weight-bold">START</h3>
+                    <price-directive pack="'start'" discount="discount"></price-directive>
+                </th>
+                <th width="30%" class="text-center">
+                    <h3 class="font-weight-bold">STANDARD</h3>
+                    <price-directive pack="'standard'" discount="discount"></price-directive>
+                </th>
+                <th width="30%" class="text-center">
+                    <h3 class="font-weight-bold">PREMIUM</h3>
+                    <price-directive pack="'premium'" discount="discount" premiumone="premiumPriceOneYear" premiumtwo="premiumPriceTwoYear"></price-directive>
+                </th>
             </tr>
             <tr>
                 <td>
@@ -34,7 +43,7 @@
                 <td class="text-center">neograničeno</td>
             </tr>
             <tr>
-                <td><a href="../tablica-namirnica.html" class="nodecoration" title="Tablica namirnica">Broj namirnica</a></td>
+                <td><a ui-sref="tablica-namirnica" href="" class="nodecoration" title="Tablica namirnica">Broj namirnica</a></td>
                 <td class="text-center">660</td>
                 <td class="text-center">724</td>
                 <td class="text-center">724</td>
@@ -140,7 +149,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Izračun <a href="../bmi.html" title="BMI Kalkulator">BMI</a> i energetske potrošnje</td>
+                <td>Izračun <a ui-sref="bmi" href="" title="BMI Kalkulator">BMI</a> i energetske potrošnje</td>
                 <td class="text-center"><i class="fa fa-check text-main"></i></td>
                 <td class="text-center"><i class="fa fa-check text-main"></i></td>
                 <td class="text-center"><i class="fa fa-check text-main"></i></td>
@@ -284,16 +293,13 @@
             <tr class="main-gradient">
                 <td><label>CIJENA</label></td>
                 <td class="text-center">
-                    <label>550.00 kn / 1 godina</label>
-                    <label>880.00 kn / 2 godine</label>
+                    <price-directive pack="'start'" discount="discount"></price-directive>
                 </td>
                 <td class="text-center">
-                    <label>950.00 kn / 1 godina</label>
-                    <label>1,520.00 kn / 2 godine</label>
+                    <price-directive pack="'standard'" discount="discount"></price-directive>
                 </td>
                 <td class="text-center">
-                    <label>{{premiumPriceOneYear | number : 2}} kn / 1 godina</label>
-                    <label>{{premiumPriceTwoYear | number: 2}} kn / 2 godine</label>
+                    <price-directive pack="'premium'" discount="discount" premiumone="premiumPriceOneYear" premiumtwo="premiumPriceTwoYear"></price-directive>
                 </td>
             </tr>
         </table>

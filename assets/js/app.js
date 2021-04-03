@@ -4,7 +4,7 @@ app.js
 */
 angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
 
-.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
 
     $stateProvider
         .state('home', {
@@ -13,8 +13,8 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
         .state('about', {
             url: '/o-programu', templateUrl: './assets/pages/about.html', controller: 'appCtrl'
         })
-        .state('pricing', {
-            url: '/cijene', templateUrl: './assets/pages/pricing.html', controller: 'appCtrl'
+        .state('price', {
+            url: '/cijene', templateUrl: './assets/pages/price.html', controller: 'appCtrl'
         })
         .state('registration', {
             url: '/registracija', templateUrl: './assets/pages/registration.html', controller: 'signupCtrl'
@@ -64,6 +64,14 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
 
     $urlRouterProvider.otherwise("/");
 
+    if (window.history && window.history.pushState) {
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
+        });
+        //$locationProvider.html5Mode(true);
+    }
+
     //--------------disable catche---------------------
     if (!$httpProvider.defaults.headers.get) {
         $httpProvider.defaults.headers.get = {};
@@ -76,10 +84,26 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
 
 .controller('appCtrl', ['$scope', '$http', '$rootScope', '$anchorScroll', function ($scope, $http, $rootScope, $anchorScroll) {
 
+    $scope.discount = null;
+    var getDiscount = function () {
+        $http({
+            url: $rootScope.config.backend + 'Prices.asmx/GetDiscount',
+            method: 'POST',
+            data: {}
+        })
+         .then(function (response) {
+             $scope.discount = JSON.parse(response.data.d);
+         },
+         function (response) {
+             alert(JSON.parse(response.data.d));
+         });
+    }
+
     var getConfig = function () {
         $http.get('./config/config.json')
           .then(function (response) {
               $rootScope.config = response.data;
+              getDiscount();
           });
     };
     getConfig();
@@ -174,20 +198,20 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
 
 }])
 
-.controller('webAppCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
-    $rootScope.application = 'Program Prehrane Web';
-    $rootScope.version = 'STANDARD';
-}])
+//.controller('webAppCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+//    $rootScope.application = 'Program Prehrane Web';
+//    $rootScope.version = 'STANDARD';
+//}])
 
-.controller('pp5Ctrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
-    $rootScope.application = 'Program Prehrane 5.0';
-    $rootScope.version = 'PREMIUM';
+//.controller('pp5Ctrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+//    $rootScope.application = 'Program Prehrane 5.0';
+//    $rootScope.version = 'PREMIUM';
 
-    $scope.gotoForm = function () {
-        $scope.showUserDetails = true;
-    }
+//    $scope.gotoForm = function () {
+//        $scope.showUserDetails = true;
+//    }
 
-}])
+//}])
 
 .controller('signupCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
     $scope.msg = { title: null, css: null, icon: null }
@@ -300,8 +324,8 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
 }])
 
 .controller('orderCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
-    $scope.application = $rootScope.application; // === undefined ? 'Program Prehrane Web' : $rootScope.application;
-    $scope.version = $rootScope.version; // === undefined ? 'PREMIUM' : $rootScope.version;
+    $scope.application = 'Program Prehrane Web'; // $rootScope.application; // === undefined ? 'Program Prehrane Web' : $rootScope.application;
+    $scope.version = 'PREMIUM'; // $rootScope.version; // === undefined ? 'PREMIUM' : $rootScope.version;
     $scope.userType = 1;
     $scope.showAlert = false;
     $scope.sendicon = 'fa fa-angle-double-right';
@@ -338,7 +362,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
           });
     };
 
-    if ($rootScope.config == undefined) {
+    if ($rootScope.config === undefined) {
         getConfig();
     } else {
         init();
@@ -438,8 +462,8 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
         }
         user.maxNumberOfUsers = $scope.premiumUsers;
 
-        $scope.sendicon = 'fa fa-spinner fa-spin';
-        $scope.sendicontitle = 'Šaljem';
+        $scope.sendicon = 'fas fa-spinner fa-spin';
+        $scope.sendicontitle = 'Šaljem... pričekajte trenutak.';
         $scope.isSendButtonDisabled = true;
         $http({
             url: $rootScope.config.backend + 'Orders.asmx/SendOrder',
@@ -451,7 +475,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
                $scope.showAlert = false;
                $scope.showPaymentDetails = false;
                $scope.isSendButtonDisabled = false;
-               $scope.sendicon = 'fa fa-paper-plane';
+               $scope.sendicon = 'fa fa-angle-double-right';
                $scope.sendicontitle = 'Pošalji';
                alert("GREŠKA! Narudžba nije poslana.");
            } else {
@@ -464,7 +488,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
            $scope.showAlert = false;
            $scope.showPaymentDetails = false;
            $scope.isSendButtonDisabled = false;
-           $scope.sendicon = 'fa fa-paper-plane';
+           $scope.sendicon = 'fa fa-angle-double-right';
            $scope.sendicontitle = 'Pošalji';
            alert(response.data.d);
        });
@@ -722,6 +746,27 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
             img: '='
         },
         templateUrl: '../assets/partials/directives/award.html'
+    };
+})
+.directive('discountDirective', () => {
+    return {
+        restrict: 'E',
+        scope: {
+            discount: '='
+        },
+        templateUrl: '../assets/partials/directives/discount.html'
+    };
+})
+.directive('priceDirective', () => {
+    return {
+        restrict: 'E',
+        scope: {
+            pack: '=',
+            discount: '=',
+            premiumone: '=',
+            premiumtwo: '='
+        },
+        templateUrl: '../assets/partials/directives/price.html'
     };
 })
 ;
