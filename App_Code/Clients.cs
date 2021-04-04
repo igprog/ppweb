@@ -61,6 +61,7 @@ public class Clients : WebService {
         public NewClient GetClient(string userId, string clientId) {
             DataBase db = new DataBase();
             string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
+            db.CreateDataBase(userId, db.clients);
             db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
             try {
                 if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(clientId)) {
