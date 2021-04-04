@@ -373,6 +373,7 @@ public class ClientsData : System.Web.Services.WebService {
          try {
             List<NewClientData> xx = new List<NewClientData>();
             NewClientData x = new NewClientData();
+            db.CreateDataBase(userId, db.clientsData);
             db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
             db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.
             string sql = string.Format(@"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId, c.note, cd.bodyFatPerc
@@ -426,14 +427,13 @@ public class ClientsData : System.Web.Services.WebService {
 
     private void SaveMyMeals(string userId, string clientId, MyMeals.NewMyMeals myMeals) {
         try {
-            if (myMeals.data != null) {
+            if (myMeals.data != null && !string.IsNullOrWhiteSpace(userId) && !string.IsNullOrWhiteSpace(clientId)) {
                 string path = string.Format("~/App_Data/users/{0}/clients/{1}", userId, clientId);
                 string filepath = string.Format("{0}/myMeals.json", path);
                 CreateFolder(path);
                 WriteFile(filepath, JsonConvert.SerializeObject(myMeals, Formatting.None));
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             L.SendErrorLog(e, clientId, userId, "ClientsData", "SaveMyMeals");
         }
     }

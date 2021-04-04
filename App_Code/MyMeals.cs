@@ -19,6 +19,7 @@ public class MyMeals : System.Web.Services.WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     DataBase db = new DataBase();
     Translate t = new Translate();
+    Log L = new Log();
 
     public MyMeals() {
     }
@@ -172,29 +173,36 @@ public class MyMeals : System.Web.Services.WebService {
     public string Load(string userId) {
         try {
             return JsonConvert.SerializeObject(LoadMeals(userId), Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            return e.Message;
+        }
     }
 
     [WebMethod]
     public string Get(string userId, string id) {
         try {
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase));
-            connection.Open();
-            string sql = string.Format("SELECT id, title, description, userId, userGroupId FROM meals WHERE id = '{0}'", id);
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
             NewMyMeals x = new NewMyMeals();
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read()) {
-                x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                x.description = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                x.userId = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
-                x.userGroupId = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-                x.data = JsonConvert.DeserializeObject<JsonFileMeals>(GetJsonFile(userId, id));
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                string sql = string.Format("SELECT id, title, description, userId, userGroupId FROM meals WHERE id = '{0}'", id);
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                            x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                            x.description = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+                            x.userId = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
+                            x.userGroupId = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
+                            x.data = JsonConvert.DeserializeObject<JsonFileMeals>(GetJsonFile(userId, id));
+                        }
+                    }
+                }
             }
-            connection.Close();
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, id, userId, "MyMeals", "Get");
+            return e.Message;
+        }
     }
 
     [WebMethod]
@@ -207,17 +215,16 @@ public class MyMeals : System.Web.Services.WebService {
                 if(string.IsNullOrEmpty(x.id)) {
                     x.id = Convert.ToString(Guid.NewGuid());
                 }
-                string sql = "";
-                SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase));
-                connection.Open();
-                SQLiteCommand command = new SQLiteCommand(sql, connection);
-                sql = string.Format(@"BEGIN;
-                    INSERT OR REPLACE INTO meals (id, title, description, userId, userGroupId)
-                    VALUES ('{0}', '{1}', '{2}', '{3}', '{4}');
-                    COMMIT;", x.id, x.title, x.description, x.userId, x.userGroupId);
-                command = new SQLiteCommand(sql, connection);
-                command.ExecuteNonQuery();
-                connection.Close();
+                string sql = string.Format(@"BEGIN;
+                            INSERT OR REPLACE INTO meals (id, title, description, userId, userGroupId)
+                            VALUES ('{0}', '{1}', '{2}', '{3}', '{4}');
+                            COMMIT;", x.id, x.title, x.description, x.userId, x.userGroupId);
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                    connection.Open();
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        command.ExecuteNonQuery();
+                    }
+                }
                /* int idx = 0;
                 foreach (var m in x.data.meals) {
                     m.code = string.Format("MM{0}", idx);
@@ -227,7 +234,10 @@ public class MyMeals : System.Web.Services.WebService {
                 SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
                 return JsonConvert.SerializeObject(x, Formatting.None);
             }
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.id, userId, "MyMeals", "Save");
+            return e.Message;
+        }
     }
 
     [WebMethod]

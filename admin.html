@@ -413,7 +413,7 @@
             </div>
 
             <div ng-if="activeTab==='errorLog'">
-                <div class="mt20">
+                <div class="mt-3">
                     <div ng-if="loading" class="text-center text-primary">
                         <label class="lead text-primary">Učitavanje...</label>
                         <div><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
@@ -428,7 +428,7 @@
                                 </div>
                                 <div class="card-body">
                                     <textarea ng-model="errorLog" rows="30" class="form-control" style="background-color:#3a3a3a; color:#65cdec"></textarea>
-                                    <div class="text-right mt10">
+                                    <div class="text-right mt-2">
                                         <button class="btn btn-outline-primary" ng-click="saveLog('error.log', errorLog)"><i class="fa fa-save"></i> Spremi</button>
                                     </div>
                                 </div>
@@ -454,7 +454,7 @@
                                 </div>
                                 <div class="card-body">
                                     <textarea ng-model="activityLog" rows="30" class="form-control" style="background-color:#3a3a3a; color:#03f144"></textarea>
-                                    <div class="text-right mt10">
+                                    <div class="text-right mt-2">
                                         <button class="btn btn-outline-primary" ng-click="saveLog('activity.log', activityLog)"><i class="fa fa-save"></i> Spremi</button>
                                     </div>
                                 </div>
@@ -472,14 +472,14 @@
                     </div>
                     <div ng-if="!loading">
                         <div class="row p-2 pl-3">
-                            <div class="col-sm-3 p5">
+                            <div class="col-sm-3 p-1">
                                 <select ng-model="ticketType" class="form-control" title="status" ng-change="loadTickets(ticketType, ticketStatus)">
                                     <option value=null ng-selected="ticketType==null?true:false">Svi Ticketi</option>
                                     <option value="0" ng-selected="ticketType==0?true:false">Korisnički Ticketi</option>
                                     <option value="1" ng-selected="ticketType==1?true:false">Moji Ticketi</option>
                                 </select>
                             </div>
-                            <div class="col-sm-3 p5">
+                            <div class="col-sm-3 p-1">
                                 <select ng-model="ticketStatus" class="form-control" title="status" ng-change="loadTickets(ticketType, ticketStatus)">
                                     <option value=null ng-selected="ticketStatus==null?true:false">Svi</option>
                                     <option value="0" ng-selected="ticketStatus==0?true:false">Na čekanju</option>
@@ -488,7 +488,7 @@
                                     <option value="3" ng-selected="ticketStatus==3?true:false">Odbijen</option>
                                 </select>
                             </div>
-                            <div class="col-sm-3 p5 text-right">
+                            <div class="col-sm-3 p-1 text-right">
                                 <button ng-click="addTicket()" class="btn btn-outline-success"><i class="fa fa-plus"></i> Novi Ticket</button>
                             </div>
                         </div>
@@ -552,7 +552,7 @@
                                         <textarea ng-model="x.note" type="text" class="form-control" rows="1" />
                                     </div>
                                     <div class="col-sm-2 text-right">
-                                        <button class="btn btn-outline-success mt20" ng-click="saveTicket(x, false)"><i class="fa fa-save"></i> Spremi</button>
+                                        <button class="btn btn-outline-success mt-2" ng-click="saveTicket(x, false)"><i class="fa fa-save"></i> Spremi</button>
                                     </div>
                                 </div>
                             </div>

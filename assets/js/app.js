@@ -59,7 +59,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
             url: '/povijest', templateUrl: './assets/pages/povijest.html'
         })
         .state('sr', {
-            url: '/sr', templateUrl: './assets/pages/sr/home.html'
+            url: '/sr', templateUrl: './assets/pages/sr/home.html', controller: 'appCtrl'
         })
 
     $urlRouterProvider.otherwise("/");
@@ -69,7 +69,6 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
             enabled: true,
             requireBase: false
         });
-        //$locationProvider.html5Mode(true);
     }
 
     //--------------disable catche---------------------

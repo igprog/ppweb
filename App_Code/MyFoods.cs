@@ -32,6 +32,7 @@ public class MyFoods : WebService {
             try {
                 string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
                 DataBase db = new DataBase();
+                db.CreateDataBase(userId, db.myFoods);
                 List<Foods.NewFood> xx = new List<Foods.NewFood>();
                 string sql = "SELECT f.id, f.food, f.foodGroup FROM myfoods AS f ORDER BY food ASC";
                 using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
