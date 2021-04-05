@@ -4403,7 +4403,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
                 if (angular.isDefined($rootScope.totals.mealsTotal)) {
                     if (key < $rootScope.recommendations.mealsRecommendationEnergy.length) {
-                        $scope.mealsTotals.push($rootScope.totals.mealsTotal.length > 0 && $rootScope.totals.mealsTotal.length < $rootScope.recommendations.mealsRecommendationEnergy.length ? $rootScope.totals.mealsTotal[key].energy.val.toFixed(1) : 0);
+                        $scope.mealsTotals.push($rootScope.totals.mealsTotal.length > 0 && $rootScope.totals.mealsTotal.length <= $rootScope.recommendations.mealsRecommendationEnergy.length ? $rootScope.totals.mealsTotal[key].energy.val.toFixed(1) : 0);
 
                         $scope.nutriMealTotals.carbohydrates.push($rootScope.totals.mealsTotal.length > 0 ? $rootScope.totals.mealsTotal[key].carbohydrates.perc.toFixed(1) : 0);
                         $scope.nutriMealTotals.proteins.push($rootScope.totals.mealsTotal.length > 0 ? $rootScope.totals.mealsTotal[key].proteins.perc.toFixed(1) : 0);
@@ -4516,8 +4516,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     }
               ]
             );
-
-        }  
+        }
         $rootScope.mealsGraphData_menu = mealsGraphData(false);
         $rootScope.mealsGraphData_analysis = mealsGraphData(true);
 

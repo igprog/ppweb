@@ -212,9 +212,12 @@ public class MyMeals : System.Web.Services.WebService {
             if (string.IsNullOrEmpty(x.id) && Check(userId, x.title)) {
                 return "error";
             } else {
-                if(string.IsNullOrEmpty(x.id)) {
+                if (string.IsNullOrEmpty(x.id)) {
                     x.id = Convert.ToString(Guid.NewGuid());
                 }
+                Global G = new Global();
+                x.title = G.RemoveSingleQuotes(x.title);
+                x.description = G.RemoveSingleQuotes(x.description);
                 string sql = string.Format(@"BEGIN;
                             INSERT OR REPLACE INTO meals (id, title, description, userId, userGroupId)
                             VALUES ('{0}', '{1}', '{2}', '{3}', '{4}');

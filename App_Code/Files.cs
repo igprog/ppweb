@@ -19,6 +19,7 @@ public class Files : WebService {
     public class NewSettings {
         public Prices.Discount discount;
         public string pp5DownloadEnableCode;
+        public Log.ErrorLogSettings errorLogSettings;
     }
 
     #region WebMethods

@@ -378,13 +378,13 @@ public class SharingRecipes : System.Web.Services.WebService {
         string prefix = "fa fa-";
         switch (code) {
             case 0:
-                return prefix + "clock-o";
+                return prefix + "hourglass-half";
             case 1:
                 return prefix + "check";
             case 2:
-                return prefix + "exclamation";
+                return prefix + "times";
             default:
-                return prefix + "clock-o";
+                return prefix + "hourglass-half";
         }
     }
 

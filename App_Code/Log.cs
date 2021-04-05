@@ -25,6 +25,12 @@ public class Log : WebService {
         public string method;
         public DateTime time;
         public string msg;
+        public ErrorLogSettings settings;
+    }
+
+    public class ErrorLogSettings {
+        public bool showErorrLog;
+        public bool showStackTrace;
     }
 
     public class NewActivityLog {
@@ -85,34 +91,39 @@ public class Log : WebService {
     #region Methods
     public void SendErrorLog(Exception e, string id, string userId, string service, string method) {
         NewErrorLog x = new NewErrorLog();
-        x.id = id;
-        x.userId = userId;
-        x.service = service;
-        x.method = method;
-        x.time = DateTime.UtcNow;
-        x.msg = e.Message;
+        Files F = new Files();
+        x.settings = F.GetSettingsData().errorLogSettings;
+        if (x.settings.showErorrLog) {
+            x.id = id;
+            x.userId = userId;
+            x.service = service;
+            x.method = method;
+            x.time = DateTime.UtcNow;
+            x.msg = e.Message;
 
-        string err = string.Format(@"## TIME: {0}
+            string err = string.Format(@"## TIME: {0}
 USER_ID: {1}
 SERVICE: {2}\{3}.asmx
 ID: {4}
 MESSAGE: {5}
+{6}
 "
-            , x.time.ToString()
-            , x.userId
-            , x.service
-            , x.method
-            , x.id
-            , x.msg);
+                , x.time.ToString()
+                , x.userId
+                , x.service
+                , x.method
+                , x.id
+                , x.msg
+                , x.settings.showStackTrace ? string.Format("STACK TRACE: {0}", e.StackTrace) : null);
 
-        StringBuilder sb = new StringBuilder();
-        Files F = new Files();
-        string oldErrorLog = F.ReadTempFile(errorLog);
-        if (oldErrorLog != null) {
-            sb.AppendLine(oldErrorLog);
+            StringBuilder sb = new StringBuilder();
+            string oldErrorLog = F.ReadTempFile(errorLog);
+            if (oldErrorLog != null) {
+                sb.AppendLine(oldErrorLog);
+            }
+            sb.AppendLine(err);
+            F.SaveTempFile(errorLog, sb.ToString());
         }
-        sb.AppendLine(err);
-        F.SaveTempFile(errorLog, sb.ToString());
     }
     #endregion Methods
 
