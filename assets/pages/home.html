@@ -70,7 +70,6 @@
             </div>
         </div>
     </div>
-
     <div id="about" class="container py-5">
         <div>
             <h2>O aplikaciji</h2><br>
@@ -99,11 +98,8 @@
                 Dizajn aplikacije je responzivan što znači da se automatski prilagođava rezoluciji monitora bilo kojeg uređaja (računalo, tablet, mobitel). <br />
             </p>
         </div>
-
         <div ng-include="'./assets/partials/awards.html'"></div>
-
     </div>
-
     <div id="price" class="container bg-grey pt-5">
         <div class="text-center">
             <h2>Program Prehrane Web - Paketi</h2>
@@ -201,54 +197,30 @@
             </div>
         </div>
     </div>
-
     <div class="container pt-2">
         <a ui-sref="uputa" href="" title="Program Prehrane Web - Uputa ua korištenje"><i class="fa fa-book"></i> Uputa za korištenje</a>
     </div>
-
     <div class="container pt-2">
         <p>Više o karakteristikama aplikacije pogledajte <a ui-sref="price" href="" title="Program Prehrane Web - Karakteristike">ovdje</a>.</p>
     </div>
-
     <div id="demo" class="container text-left pt-5">
-        <h3 class="text-center">Demo verzija</h3>
+        <h2 class="text-center">Demo verzija</h2>
         <p class="text-justify">
             U demo verziji možete isprobati većinu funkcionalnosti. Neke su funkcionalnosti
             onemogućene ili ograničene kao npr: kod izrade jelovnika maksimalan broj odabranih namirnica je 10, onemogućeno je spremanje podataka (spremanje jelovnika, recepata, namirnica, cijena, detaljne energetske potrošnje i dr.), korištenje kalendara, kreiranje šoping liste, dodavanje novih korisnika itd.
         </p>
     </div>
-
-    <div id="registration" class="container text-left pt-5">
-        <h2 class="text-center">Registracija</h2>
-        <div id="webapp" class="row justify-content-md-center">
-            <div ng-include="'./assets/partials/signup.html'" class="col-md-8" ng-controller="signupCtrl"></div>
-        </div>
+    <div class="pt-5">
+        <ng-include src="'./assets/pages/registration.html'"></ng-include>
     </div>
-
-    <div id="order" class="container text-left pt-5">
-        <h2 class="text-center">NARUDŽBA</h2>
-        <div>
-            <h3>Postupak narudžbe:</h3>
-            <ol>
-                <li>Ukoliko se već niste registrirali, prvo se <a ng-click="scrollTo('registration')" href="" title="registracija">registrirajte</a>.</li>
-                <li>U narudžbenici upišite e-mail i lozinku koju ste odabrali prilikom registracije i kliknite na tipku <kbd>Dalje >></kbd>.</li>
-                <li>
-                    Odaberite paket (<em>START, STANDARD ili PREMIUM</em>) i trajanje pretplate (<em>jedna ili dvije godine</em>) i popunite sva obavezna polja
-                    <p class="small"><em>* ako se račun izdaje na tvrtku odaberite <strong>pravna osoba</strong>.</em></p>
-                </li>
-                <li>Pošaljite narudžbu klikom na <kbd>Dalje >></kbd>.</li>
-                <li>Na Vaš e-mail ćete dobiti podatke za uplatu.</li>
-                <li>Aplikacija postaje aktivna nakon primitka Vaše uplate ili nakon što nam pošaljete potvrdu o uplati.</li>
-            </ol>
-        </div>
-        <div class="row justify-content-md-center">
-            <div ng-include="'./assets/partials/order.html'" class="col-md-8" ng-controller="orderCtrl"></div>
-        </div>
+    <div class="pt-5">
+        <ng-include src="'./assets/pages/order.html'" class="pt-5"></ng-include>
     </div>
-
     <hr class="mt-5" />
-
-    <div ng-include="'./assets/partials/customers.html'"></div>
-
-    <div ng-include="'./assets/partials/info.html'" ng-controller="contactCtrl"></div>
+    <div class="pt-5">
+        <ng-include src="'./assets/partials/customers.html'" ></ng-include>
+    </div>
+    <div class="pt-5">
+        <ng-include src="'./assets/pages/contact.html'"></ng-include>
+    </div>
 </div>

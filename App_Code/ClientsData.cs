@@ -427,11 +427,13 @@ public class ClientsData : System.Web.Services.WebService {
 
     private void SaveMyMeals(string userId, string clientId, MyMeals.NewMyMeals myMeals) {
         try {
-            if (myMeals.data != null && !string.IsNullOrWhiteSpace(userId) && !string.IsNullOrWhiteSpace(clientId)) {
-                string path = string.Format("~/App_Data/users/{0}/clients/{1}", userId, clientId);
-                string filepath = string.Format("{0}/myMeals.json", path);
-                CreateFolder(path);
-                WriteFile(filepath, JsonConvert.SerializeObject(myMeals, Formatting.None));
+            if (myMeals != null) {
+                if (myMeals.data != null && !string.IsNullOrWhiteSpace(userId) && !string.IsNullOrWhiteSpace(clientId)) {
+                    string path = string.Format("~/App_Data/users/{0}/clients/{1}", userId, clientId);
+                    string filepath = string.Format("{0}/myMeals.json", path);
+                    CreateFolder(path);
+                    WriteFile(filepath, JsonConvert.SerializeObject(myMeals, Formatting.None));
+                }
             }
         } catch (Exception e) {
             L.SendErrorLog(

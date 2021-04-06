@@ -1,5 +1,4 @@
-﻿<div id="orderform" class="text-left">
-
+﻿<div id="orderform" class="text-left" ng-controller="orderCtrl" >
     <div ng-if="!showPaymentDetails" class="card">
         <div>
             <div class="text-center py-3">
@@ -61,7 +60,7 @@
                     <button class="btn btn-default btn-lg main-gradient" ng-click="login(user.email, password)">Dalje <i class="fa fa-angle-double-right"></i></button>
                 </div>
                 <div class="text-left">
-                    Zaboravili ste lozinku? <a href="../app" target="_self" ng-click="forgotPassword(user.email)" title="pošalji lozinku">Pošalji mi lozinku na E-mail</a>
+                    Zaboravili ste lozinku? <a href="" ng-click="forgotPassword(user.email)" title="pošalji lozinku">Pošalji mi lozinku na E-mail</a>
                 </div>
                 <div class="text-left">
                     Nemate korisničko ime i lozinku? <a ui-sref="registration" href="" title="registracija">Registrirajte se...</a>

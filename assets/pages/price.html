@@ -1,10 +1,10 @@
 ﻿<div class="container">
-    <div class="text-center">
-        <h3>Cijene</h3>
-    </div>
-    <discount-directive discount="discount"></discount-directive>
-    <div id="details" ng-include="'./assets/partials/details.html'"></div>
-    <div class="text-center py-3">
-        <a ui-sref="order" href="" class="btn btn-primary main-gradient btn-lg" title="Narudžba" ><i class="fa fa-cart-arrow-down"></i> Naruči</a>
+    <h2 class="text-center">Cijene</h2>
+    <div>
+        <discount-directive discount="discount"></discount-directive>
+        <div id="details" ng-include="'./assets/partials/details.html'"></div>
+        <div class="text-center py-3">
+            <a ui-sref="order" href="" class="btn btn-primary main-gradient btn-lg" title="Narudžba"><i class="fa fa-cart-arrow-down"></i> Naruči</a>
+        </div>
     </div>
 </div>
