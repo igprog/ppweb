@@ -3,6 +3,7 @@ using System.Web.Services;
 using System.Text;
 using System.Configuration;
 using Newtonsoft.Json;
+using Igprog;
 
 /// <summary>
 /// ErrorLog
@@ -13,6 +14,7 @@ using Newtonsoft.Json;
 public class Log : WebService {
     public static string errorLog = ConfigurationManager.AppSettings["ErrorLog"];
     public static string activityLog = ConfigurationManager.AppSettings["ActivityLog"];
+    Global G = new Global(); 
 
     public Log(){
     }
@@ -23,7 +25,7 @@ public class Log : WebService {
         public string userId;
         public string service;
         public string method;
-        public DateTime time;
+        public string time;
         public string msg;
         public ErrorLogSettings settings;
     }
@@ -66,23 +68,25 @@ public class Log : WebService {
     [WebMethod]
     public string SaveActivityLog(string userId, string activity, string dateTime) {
         try {
-            NewActivityLog x = new NewActivityLog();
-            x.userId = userId;
-            x.activity = activity;
-            x.time = dateTime;
+            ActivityLog(userId, activity, dateTime);
+            //NewActivityLog x = new NewActivityLog();
+            //x.userId = userId;
+            //x.activity = activity;
+            //x.time = dateTime;
 
-            string log = string.Format(@"## TIME: {0}; ACTIVITY: {1}; USER_ID: {2}", x.time, x.activity, x.userId);
+            //string log = string.Format(@"## TIME: {0}; ACTIVITY: {1}; USER_ID: {2}", x.time, x.activity, x.userId);
 
-            StringBuilder sb = new StringBuilder();
-            Files F = new Files();
-            string oldLog = F.ReadTempFile(activityLog);
-            if (oldLog != null) {
-                sb.AppendLine(oldLog);
-            }
-            sb.AppendLine(log);
-            F.SaveTempFile(activityLog, sb.ToString());
+            //StringBuilder sb = new StringBuilder();
+            //Files F = new Files();
+            //string oldLog = F.ReadTempFile(activityLog);
+            //if (oldLog != null) {
+            //    sb.AppendLine(oldLog);
+            //}
+            //sb.AppendLine(log);
+            //F.SaveTempFile(activityLog, sb.ToString());
             return JsonConvert.SerializeObject("ok", Formatting.Indented);
         } catch (Exception e) {
+            SendErrorLog(e, dateTime, userId, "Log", "SaveActivityLog");
             return JsonConvert.SerializeObject(e.Message, Formatting.Indented);
         }
     }
@@ -98,7 +102,7 @@ public class Log : WebService {
             x.userId = userId;
             x.service = service;
             x.method = method;
-            x.time = DateTime.UtcNow;
+            x.time = G.NowLocal();
             x.msg = e.Message;
 
             string err = string.Format(@"## TIME: {0}
@@ -123,6 +127,28 @@ MESSAGE: {5}
             }
             sb.AppendLine(err);
             F.SaveTempFile(errorLog, sb.ToString());
+        }
+    }
+
+    public void ActivityLog(string userId, string activity, string dateTime) {
+        try {
+            NewActivityLog x = new NewActivityLog();
+            x.userId = userId;
+            x.activity = activity;
+            x.time = string.IsNullOrWhiteSpace(dateTime) ? G.NowLocal() : dateTime;
+
+            string log = string.Format(@"## TIME: {0}; ACTIVITY: {1}; USER_ID: {2}", x.time, x.activity, x.userId);
+
+            StringBuilder sb = new StringBuilder();
+            Files F = new Files();
+            string oldLog = F.ReadTempFile(activityLog);
+            if (oldLog != null) {
+                sb.AppendLine(oldLog);
+            }
+            sb.AppendLine(log);
+            F.SaveTempFile(activityLog, sb.ToString());
+        } catch (Exception e) {
+            SendErrorLog(e, dateTime, userId, "Log", "ActivityLog");
         }
     }
     #endregion Methods

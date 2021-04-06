@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -10,6 +11,7 @@ using System.Web;
 /// </summary>
 namespace Igprog {
     public class Global {
+        private static int serverTimeDiff = Convert.ToInt32(ConfigurationManager.AppSettings["ServerTimeDiff"]);
 
         public Global() {
         }
@@ -58,6 +60,10 @@ namespace Igprog {
             string month_ = month < 10 ? string.Format("0{0}", month) : month.ToString();
             return string.Format("{0}-{1}-{2}", year, month_, day_);
         }
+
+        public string NowLocal() {
+            return DateTime.Now.AddHours(serverTimeDiff).ToString();
+        }
         #endregion Date
 
         #region ImageCompress
@@ -85,7 +91,7 @@ namespace Igprog {
                 }
 
                 bool encoderFound = false;
-                System.Drawing.Imaging.ImageCodecInfo encoder = null;
+                ImageCodecInfo encoder = null;
 
                 if (fileName.ToLower().EndsWith(".jpg") || fileName.ToLower().EndsWith(".jpeg")) {
                     encoderFound = true;
@@ -110,9 +116,9 @@ namespace Igprog {
                     EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, compression);
                     myEncoderParameters.Param[0] = myEncoderParameter;
                     string path = HttpContext.Current.Server.MapPath(string.Format("~/upload/"));
-                    bitmap.Save(System.IO.Path.Combine(destinationFolder, fileName), encoder, myEncoderParameters);
+                    bitmap.Save(Path.Combine(destinationFolder, fileName), encoder, myEncoderParameters);
                 } else {
-                    bitmap.Save(System.IO.Path.Combine(destinationFolder, fileName));
+                    bitmap.Save(Path.Combine(destinationFolder, fileName));
                 }
             }
         }

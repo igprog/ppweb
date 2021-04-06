@@ -899,7 +899,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('loginCtrl', ['$scope', '$http', '$localStorage', '$sessionStorage', '$window', '$rootScope', 'functions', '$translate', '$mdDialog', '$state', function ($scope, $http, $localStorage, $sessionStorage, $window, $rootScope, functions, $translate, $mdDialog, $state) {
-    var webService = 'Users.asmx';
+    var webService = 'Users';
 
     $scope.login = function (u, p) {
         $scope.errorMesage = null;
@@ -909,36 +909,48 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return false;
         }
         $rootScope.loading = true;
-        $http({
-            url: $rootScope.config.backend + webService + '/Login',
-            method: "POST",
-            data: { userName: u, password: p }
-        })
-        .then(function (response) {
-            if (JSON.parse(response.data.d).userId != null) {
-                loginResponse(response);
+        functions.post(webService, 'Login', { userName: u, password: p }).then(function (d) {
+            if (d.userId != null) {
+                //loginResponse(response);
+                loginResponse(d);
             } else {
                 $rootScope.loading = false;
                 $scope.errorLogin = true;
                 $scope.errorMesage = $translate.instant('wrong user name or password');
                 //$state.go('signup');  //<< Only for first registration
             }
-        },
-        function (response) {
-            $scope.errorLogin = true;
-            $scope.errorMesage = $translate.instant('user was not found');
         });
+
+        //$http({
+        //    url: $rootScope.config.backend + webService + '/Login',
+        //    method: "POST",
+        //    data: { userName: u, password: p }
+        //})
+        //.then(function (response) {
+        //    if (JSON.parse(response.data.d).userId != null) {
+        //        loginResponse(response);
+        //    } else {
+        //        $rootScope.loading = false;
+        //        $scope.errorLogin = true;
+        //        $scope.errorMesage = $translate.instant('wrong user name or password');
+        //        //$state.go('signup');  //<< Only for first registration
+        //    }
+        //},
+        //function (response) {
+        //    $scope.errorLogin = true;
+        //    $scope.errorMesage = $translate.instant('user was not found');
+        //});
     }
 
-    var loginResponse = function (response) {
-        $rootScope.user = JSON.parse(response.data.d);
+    var loginResponse = function (d) {
+        $rootScope.user = d; // JSON.parse(response.data.d);
         if ($rootScope.user.userId !== $rootScope.user.userGroupId && $rootScope.user.isActive === false) {
             $rootScope.loading = false;
             $scope.errorLogin = true;
             $scope.errorMesage = $translate.instant('your account is not active') + '. ' + $translate.instant('please contact your administrator');
             return false;
         }
-        $rootScope.loginUser = JSON.parse(response.data.d);
+        $rootScope.loginUser = d; // JSON.parse(response.data.d);
         $sessionStorage.loginuser = $rootScope.loginUser;
         $sessionStorage.userid = $rootScope.user.userId;
         $sessionStorage.usergroupid = $rootScope.user.userGroupId;
@@ -977,15 +989,17 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         /***** activity.log *****/
-        activityLog($rootScope.user.userId, 'LOGIN', new Date().toLocaleString());
+        // activityLog($rootScope.user.userId, 'LOGIN', new Date().toLocaleString());
     }
 
+    /*
     var activityLog = function (userId, activity, dateTime) {
         if ($rootScope.config.showactivitylog) {
             functions.post('Log', 'SaveActivityLog', { userId: userId, activity: activity, dateTime: dateTime }).then(function (d) {
             });
         }
     }
+    */
 
     /***** Login As *****/
     $scope.admin = {
@@ -1000,26 +1014,37 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.loginAs = function (uid) {
+
         if (!functions.isNullOrEmpty(uid)) {
-            $http({
-                url: $rootScope.config.backend + webService + '/Get',
-                method: "POST",
-                data: { userId: uid }
-            })
-            .then(function (response) {
-                if (JSON.parse(response.data.d).userId !== null) {
-                    loginResponse(response);
+            functions.post(webService, 'Get', { userId: uid }).then(function (d) {
+                if (d.userId !== null) {
+                    loginResponse(d);
                     $rootScope.config.debug = true;
                 } else {
                     $rootScope.loading = false;
                     $scope.errorLogin = true;
                     $scope.errorMesage = $translate.instant('user was not found');
                 }
-            },
-            function (response) {
-                $scope.errorLogin = true;
-                $scope.errorMesage = $translate.instant('user was not found');
             });
+            //$http({
+            //    url: $rootScope.config.backend + webService + '/Get',
+            //    method: "POST",
+            //    data: { userId: uid }
+            //})
+            //.then(function (response) {
+            //    if (JSON.parse(response.data.d).userId !== null) {
+            //        loginResponse(response);
+            //        $rootScope.config.debug = true;
+            //    } else {
+            //        $rootScope.loading = false;
+            //        $scope.errorLogin = true;
+            //        $scope.errorMesage = $translate.instant('user was not found');
+            //    }
+            //},
+            //function (response) {
+            //    $scope.errorLogin = true;
+            //    $scope.errorMesage = $translate.instant('user was not found');
+            //});
         }
     }
     /***** Admin Login *****/
@@ -1049,18 +1074,23 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
          }
 
          var forgotPassword = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + webService + '/ForgotPassword',
-                method: "POST",
-                data: { email: x, lang: $rootScope.config.language }
-            })
-           .then(function (response) {
-               $mdDialog.hide();
-               functions.alert(JSON.parse(response.data.d), '');
-           },
-           function (response) {
-               functions.alert(response.data.d, '');
-           });
+             functions.post(webService, 'ForgotPassword', { email: x, lang: $rootScope.config.language }).then(function (d) {
+                 $mdDialog.hide();
+                 debugger;
+                 functions.alert(d, '');
+             });
+           // $http({
+           //     url: $sessionStorage.config.backend + webService + '/ForgotPassword',
+           //     method: "POST",
+           //     data: { email: x, lang: $rootScope.config.language }
+           // })
+           //.then(function (response) {
+           //    $mdDialog.hide();
+           //    functions.alert(JSON.parse(response.data.d), '');
+           //},
+           //function (response) {
+           //    functions.alert(response.data.d, '');
+           //});
          }
 
          $scope.hide = function () {
@@ -1083,17 +1113,20 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.accept = false;
 
     var init = function () {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Init',
-            method: "POST",
-            data: ""
-        })
-        .then(function (response) {
-            $scope.newUser = JSON.parse(response.data.d);
-        },
-        function (response) {
-            alert(response.data.d)
+        functions.post('Users', 'Init', {}).then(function (d) {
+            $scope.newUser = d;
         });
+        //$http({
+        //    url: $sessionStorage.config.backend + webService + '/Init',
+        //    method: "POST",
+        //    data: ""
+        //})
+        //.then(function (response) {
+        //    $scope.newUser = JSON.parse(response.data.d);
+        //},
+        //function (response) {
+        //    alert(response.data.d)
+        //});
     }
     init();
 

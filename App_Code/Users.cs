@@ -229,6 +229,7 @@ public class Users : System.Web.Services.WebService {
                 connection.Close();
             }
             x.datasum = GetDataSum(x.userGroupId, x.userId, x.userType, x.adminType);
+            L.ActivityLog(x.userId, "LOGIN", null);
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, userName, "Users", "Login");

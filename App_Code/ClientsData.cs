@@ -434,7 +434,14 @@ public class ClientsData : System.Web.Services.WebService {
                 WriteFile(filepath, JsonConvert.SerializeObject(myMeals, Formatting.None));
             }
         } catch (Exception e) {
-            L.SendErrorLog(e, clientId, userId, "ClientsData", "SaveMyMeals");
+            L.SendErrorLog(
+                e,
+                string.Format(@"CLIENT_ID: {0}
+MY_MEALS: {1}
+E: {2}
+", clientId, JsonConvert.SerializeObject(myMeals, Formatting.None), JsonConvert.SerializeObject(e, Formatting.None))
+                , userId
+                , "ClientsData", "SaveMyMeals");
         }
     }
 
