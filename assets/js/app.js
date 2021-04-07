@@ -9,57 +9,129 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
     $stateProvider
         .state('home', {
             url: '/', templateUrl: './assets/pages/home.html', controller: 'appCtrl'
+            , data: {
+                pageTitle: 'Web Aplikacija',
+                pageDescription: 'Izradite plan prehrane i program tjelesne aktivnosti pomoću web aplikacije. Program Prehrane Web omogućava utvrđivanje stanja uhranjenosti i energetske potrošnje pojedinca te izradu uravnoteženih jelovnika utemeljenu na znanstvenim spoznajama na polju nutriconizma.'
+            }
         })
         .state('about', {
-            url: '/o-programu', templateUrl: './assets/pages/about.html', controller: 'appCtrl'
+            url: '/o-programu', templateUrl: './assets/pages/about.html', controller: 'appCtrl',
+            data: {
+                pageTitle: 'O Aplikaciji',
+                pageDescription: 'Osmišljavanjem jelovnika korištenjem ove aplikacije, prehrana krajnjih korisnika postaje uravnotežena i raznolika što se može zahvaliti činjenici da se izrada jelovnika bazira na preporučenom broju jediničnih serviranja svih skupina namirnica.'
+            }
         })
         .state('price', {
-            url: '/cijene', templateUrl: './assets/pages/price.html', controller: 'appCtrl'
+            url: '/cijene', templateUrl: './assets/pages/price.html', controller: 'appCtrl',
+            data: {
+                pageTitle: 'Cijene',
+                pageDescription: 'Cijene paketa Start, Premium, Standard'
+            }
         })
         .state('registration', {
-            url: '/registracija', templateUrl: './assets/pages/registration.html', controller: 'signupCtrl'
+            url: '/registracija', templateUrl: './assets/pages/registration.html', controller: 'signupCtrl',
+            data: {
+                pageTitle: 'Registracija',
+                pageDescription: 'Registracija korisničkog računa'
+            }
         })
         .state('order', {
-            url: '/narudzba', templateUrl: './assets/pages/order.html', controller: 'orderCtrl'
+            url: '/narudzba', templateUrl: './assets/pages/order.html', controller: 'orderCtrl',
+            data: {
+                pageTitle: 'Narudzba',
+                pageDescription: 'Narudžba licence za korištenje web aplikacije Program Prehrane Web'
+            }
         })
         .state('contact', {
             url: '/kontakt', templateUrl: './assets/pages/contact.html', controller: 'appCtrl'
+            , data: {
+                pageTitle: 'Kontakt',
+                pageDescription: 'Tehnička podrška i informacije o web aplikaciji Program Prehrne Web'
+            }
         })
         .state('uputa', {
-            url: '/uputa', templateUrl: './assets/pages/uputa.html', controller: 'appCtrl'
+            url: '/uputa', templateUrl: './assets/pages/uputa.html', controller: 'appCtrl',
+            data: {
+                pageTitle: 'Uputa',
+                pageDescription: 'Uputa za korištenje web aplikacije Program Prehrane Web'
+            }
         })
         .state('obavijesti', {
-            url: '/obavijesti', templateUrl: './assets/pages/obavijesti.html'
+            url: '/obavijesti', templateUrl: './assets/pages/obavijesti.html',
+            data: {
+                pageTitle: 'Obavijesti',
+                pageDescription: 'Obavijesti o nadogradnjama aplikacije Program Prehrnae Web'
+            }
         })
         .state('cesto-postavljana-pitanja', {
-            url: '/cesto-postavljana-pitanja', templateUrl: './assets/pages/cesto-postavljana-pitanja.html', controller: 'loginCtrl'
+            url: '/cesto-postavljana-pitanja', templateUrl: './assets/pages/cesto-postavljana-pitanja.html', controller: 'loginCtrl',
+            data: {
+                pageTitle: 'Cesto postavljana pitanja',
+                pageDescription: 'Ćesto postavljana pitanja korisnika aplikacije Program Prehrane Web'
+            }
         })
         .state('bmi', {
             url: '/bmi', templateUrl: './assets/pages/bmi.html', controller: 'bmiCtrl'
+            , data: {
+                pageTitle: 'BMI',
+                pageDescription: 'BMI Kalkulator. Kalkulator indeksa tjelesne mase'
+            }
         })
         .state('aplikacija-za-klijente', {
-            url: '/aplikacija-za-klijente', templateUrl: './assets/pages/aplikacija-za-klijente.html'
+            url: '/aplikacija-za-klijente', templateUrl: './assets/pages/aplikacija-za-klijente.html',
+            data: {
+                pageTitle: 'Aplikacija za klijente',
+                pageDescription: 'Program Prehrane Klijent. Modul za klijente'
+            }
         })
         .state('izrada-uravnotezenog-jelovnika', {
-            url: '/izrada-uravnotezenog-jelovnika', templateUrl: './assets/pages/izrada-uravnotezenog-jelovnika.html'
+            url: '/izrada-uravnotezenog-jelovnika', templateUrl: './assets/pages/izrada-uravnotezenog-jelovnika.html',
+            data: {
+                pageTitle: 'Izrada uravnotezenog jelovnika',
+                pageDescription: ''
+            }
         })
         .state('plan-prehrane', {
-            url: '/plan-prehrane', templateUrl: './assets/pages/plan-prehrane.html'
+            url: '/plan-prehrane', templateUrl: './assets/pages/plan-prehrane.html',
+            data: {
+                pageTitle: 'Plan prehrane',
+                pageDescription: ''
+            }
         })
         .state('tablica-namirnica', {
-            url: '/tablica-namirnica', templateUrl: './assets/pages/tablica-namirnica.html', controller: 'foodCtrl'
+            url: '/tablica-namirnica', templateUrl: './assets/pages/tablica-namirnica.html', controller: 'foodCtrl',
+            data: {
+                pageTitle: 'Tablica namirnica',
+                pageDescription: ''
+            }
         })
         .state('program-prehrane-za-skole', {
-            url: '/program-prehrane-za-skole', templateUrl: './assets/pages/program-prehrane-za-skole.html'
+            url: '/program-prehrane-za-skole', templateUrl: './assets/pages/program-prehrane-za-skole.html',
+            data: {
+                pageTitle: 'Program Prehrane za Škole',
+                pageDescription: 'Primjena web aplikacije za izradu jelovnika u Obrazovnim ustanovama'
+            }
         })
         .state('program-prehrane-5', {
-            url: '/program-prehrane-5', templateUrl: './assets/pages/program-prehrane-5.html', controller: 'appCtrl'
+            url: '/program-prehrane-5', templateUrl: './assets/pages/program-prehrane-5.html', controller: 'appCtrl',
+            data: {
+                pageTitle: '5.0',
+                pageDescription: 'Računalni program za izradu jelovnika Program Prehrane 5.0'
+            }
         })
         .state('povijest', {
-            url: '/povijest', templateUrl: './assets/pages/povijest.html'
+            url: '/povijest', templateUrl: './assets/pages/povijest.html',
+            data: {
+                pageTitle: 'Povijest',
+                pageDescription: 'Program Prehrane je nastao je iz potrebe za izradom alata koji će nutricionistima i zdravstvenim djelatnicima ali i svim pojedincima koji vode računa o zdravoj i uravnoteženoj prehrani omogućiti brzu i jednostavnu izradu plana prehrane i programa tjelesne aktivnosti'
+            }
         })
         .state('sr', {
-            url: '/sr', templateUrl: './assets/pages/sr/home.html', controller: 'appCtrl'
+            url: '/sr', templateUrl: './assets/pages/sr/home.html', controller: 'appCtrl',
+            data: {
+                pageTitle: 'Plan Ishrane',
+                pageDescription: 'Prijevod aplikacije na srpski jezik'
+            }
         })
 
     $urlRouterProvider.otherwise("/");
@@ -81,6 +153,11 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
     //-------------------------------------------------
 }])
 
+.run(['$rootScope', '$state',
+    function ($rootScope, $state) {
+        $rootScope.$state = $state;
+}])
+
 .controller('appCtrl', ['$scope', '$http', '$rootScope', '$anchorScroll', function ($scope, $http, $rootScope, $anchorScroll) {
 
     $scope.discount = null;
@@ -98,10 +175,24 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
          });
     }
 
+    var reloadPage = () => {
+        if (typeof (Storage) !== 'undefined') {
+            if (localStorage.version) {
+                if (localStorage.version !== $scope.config.version) {
+                    localStorage.version = $scope.config.version;
+                    window.location.reload(true);
+                }
+            } else {
+                localStorage.version = $scope.config.version;
+            }
+        }
+    }
+
     var getConfig = function () {
         $http.get('./config/config.json')
           .then(function (response) {
               $rootScope.config = response.data;
+              reloadPage();
               getDiscount();
           });
     };

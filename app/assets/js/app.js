@@ -920,26 +920,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 //$state.go('signup');  //<< Only for first registration
             }
         });
-
-        //$http({
-        //    url: $rootScope.config.backend + webService + '/Login',
-        //    method: "POST",
-        //    data: { userName: u, password: p }
-        //})
-        //.then(function (response) {
-        //    if (JSON.parse(response.data.d).userId != null) {
-        //        loginResponse(response);
-        //    } else {
-        //        $rootScope.loading = false;
-        //        $scope.errorLogin = true;
-        //        $scope.errorMesage = $translate.instant('wrong user name or password');
-        //        //$state.go('signup');  //<< Only for first registration
-        //    }
-        //},
-        //function (response) {
-        //    $scope.errorLogin = true;
-        //    $scope.errorMesage = $translate.instant('user was not found');
-        //});
     }
 
     var loginResponse = function (d) {
@@ -1026,25 +1006,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     $scope.errorMesage = $translate.instant('user was not found');
                 }
             });
-            //$http({
-            //    url: $rootScope.config.backend + webService + '/Get',
-            //    method: "POST",
-            //    data: { userId: uid }
-            //})
-            //.then(function (response) {
-            //    if (JSON.parse(response.data.d).userId !== null) {
-            //        loginResponse(response);
-            //        $rootScope.config.debug = true;
-            //    } else {
-            //        $rootScope.loading = false;
-            //        $scope.errorLogin = true;
-            //        $scope.errorMesage = $translate.instant('user was not found');
-            //    }
-            //},
-            //function (response) {
-            //    $scope.errorLogin = true;
-            //    $scope.errorMesage = $translate.instant('user was not found');
-            //});
         }
     }
     /***** Admin Login *****/
@@ -1076,21 +1037,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
          var forgotPassword = function (x) {
              functions.post(webService, 'ForgotPassword', { email: x, lang: $rootScope.config.language }).then(function (d) {
                  $mdDialog.hide();
-                 debugger;
                  functions.alert(d, '');
              });
-           // $http({
-           //     url: $sessionStorage.config.backend + webService + '/ForgotPassword',
-           //     method: "POST",
-           //     data: { email: x, lang: $rootScope.config.language }
-           // })
-           //.then(function (response) {
-           //    $mdDialog.hide();
-           //    functions.alert(JSON.parse(response.data.d), '');
-           //},
-           //function (response) {
-           //    functions.alert(response.data.d, '');
-           //});
          }
 
          $scope.hide = function () {
@@ -3389,15 +3337,25 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     var defineMealsType = function () {
         if ($rootScope.currentMenu !== undefined) {
-            if ($rootScope.currentMenu.id != null) {
+            if ($rootScope.currentMenu.id !== null) {
+                if ($rootScope.currentMenu.data === null) {
+                    $rootScope.mealsTpl = 'standardMeals';
+                    return;
+                }
+                if ($rootScope.currentMenu.data.meals === null) {
+                    $rootScope.mealsTpl = 'standardMeals';
+                    return;
+                }
                 if ($rootScope.currentMenu.data.meals.length > 0) {
                     if ($rootScope.currentMenu.data.meals[0].code == 'B') {
                         $rootScope.mealsTpl = 'standardMeals';
                     } else {
                         $rootScope.mealsTpl = 'myMeals';
                     }
-                    return false;
-                } 
+                    return;
+                } else {
+                    $rootScope.mealsTpl = 'standardMeals';
+                }
             }
         }
         if ($rootScope.clientData.myMeals !== undefined && $rootScope.clientData.myMeals != null) {

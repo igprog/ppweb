@@ -44,26 +44,26 @@ public class Meals : WebService {
     [WebMethod]
     public string Load() {
         try {
-            List<NewMeal> xx = new List<NewMeal>();
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))){
-                connection.Open();
-                string sql = @"SELECT code, title FROM codeBook WHERE codeGroup = 'MEALS' ORDER BY codeOrder ASC";
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                    using (SQLiteDataReader reader = command.ExecuteReader()) {
-                        while (reader.Read()) {
-                            NewMeal x = new NewMeal();
-                            x.code = reader.GetValue(0) == DBNull.Value ? "B" : reader.GetString(0);
-                            x.title = reader.GetValue(1) == DBNull.Value ? GetMealTitle("B", connection) : reader.GetString(1);
-                            x.description = "";
-                            x.isSelected = true;
-                            x.isDisabled = x.code == "B" || x.code == "L" || x.code == "D" ? true : false;
-                            xx.Add(x);
-                        }
-                    }
+            //List<NewMeal> xx = new List<NewMeal>();
+            //using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))){
+            //    connection.Open();
+            //    string sql = @"SELECT code, title FROM codeBook WHERE codeGroup = 'MEALS' ORDER BY codeOrder ASC";
+            //    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+            //        using (SQLiteDataReader reader = command.ExecuteReader()) {
+            //            while (reader.Read()) {
+            //                NewMeal x = new NewMeal();
+            //                x.code = reader.GetValue(0) == DBNull.Value ? "B" : reader.GetString(0);
+            //                x.title = reader.GetValue(1) == DBNull.Value ? GetMealTitle("B", connection) : reader.GetString(1);
+            //                x.description = "";
+            //                x.isSelected = true;
+            //                x.isDisabled = x.code == "B" || x.code == "L" || x.code == "D" ? true : false;
+            //                xx.Add(x);
+            //            }
+            //        }
                         
-                }
-            } 
-            return JsonConvert.SerializeObject(xx, Formatting.None);
+            //    }
+            //} 
+            return JsonConvert.SerializeObject(LoadData(), Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, null, "Meals", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
@@ -88,6 +88,28 @@ public class Meals : WebService {
             Log.SendErrorLog(e, code, null, "Meals", "GetMealTitle");
             return null;
         }
+    }
+
+    public List<NewMeal> LoadData() {
+        List<NewMeal> xx = new List<NewMeal>();
+        using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+            connection.Open();
+            string sql = @"SELECT code, title FROM codeBook WHERE codeGroup = 'MEALS' ORDER BY codeOrder ASC";
+            using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                using (SQLiteDataReader reader = command.ExecuteReader()) {
+                    while (reader.Read()) {
+                        NewMeal x = new NewMeal();
+                        x.code = reader.GetValue(0) == DBNull.Value ? "B" : reader.GetString(0);
+                        x.title = reader.GetValue(1) == DBNull.Value ? GetMealTitle("B", connection) : reader.GetString(1);
+                        x.description = "";
+                        x.isSelected = true;
+                        x.isDisabled = x.code == "B" || x.code == "L" || x.code == "D" ? true : false;
+                        xx.Add(x);
+                    }
+                }
+            }
+        }
+        return xx;
     }
 
 }

@@ -887,22 +887,24 @@ public class Foods : System.Web.Services.WebService {
     private List<MealsRecommendationEnergy> GetMealsRecommendations(List<Meals.NewMeal> meals, int energy, List<MealsRecommendationEnergy> myMealsEnergyPerc) {
         List<MealsRecommendationEnergy> xx = new List<MealsRecommendationEnergy>();
         int idx = 0;
-        foreach (var obj in meals) {
-            MealsRecommendationEnergy x = new MealsRecommendationEnergy();
-            x.meal.code = obj.code;
-            if(myMealsEnergyPerc != null) {
-                if (idx < myMealsEnergyPerc.Count) {
-                    x.meal.energyMinPercentage = myMealsEnergyPerc[idx].meal.energyMinPercentage;
-                    x.meal.energyMaxPercentage = myMealsEnergyPerc[idx].meal.energyMaxPercentage;
+        if (meals != null) {
+            foreach (var obj in meals) {
+                MealsRecommendationEnergy x = new MealsRecommendationEnergy();
+                x.meal.code = obj.code;
+                if (myMealsEnergyPerc != null) {
+                    if (idx < myMealsEnergyPerc.Count) {
+                        x.meal.energyMinPercentage = myMealsEnergyPerc[idx].meal.energyMinPercentage;
+                        x.meal.energyMaxPercentage = myMealsEnergyPerc[idx].meal.energyMaxPercentage;
+                    }
+                } else {
+                    x.meal.energyMinPercentage = GetMealRecommendationPercentage(meals, idx).min;
+                    x.meal.energyMaxPercentage = GetMealRecommendationPercentage(meals, idx).max;
                 }
-            } else {
-                x.meal.energyMinPercentage = GetMealRecommendationPercentage(meals, idx).min;
-                x.meal.energyMaxPercentage = GetMealRecommendationPercentage(meals, idx).max;
+                x.meal.energyMin = Convert.ToInt32(x.meal.energyMinPercentage * 0.01 * energy);
+                x.meal.energyMax = Convert.ToInt32(x.meal.energyMaxPercentage * 0.01 * energy);
+                xx.Add(x);
+                idx++;
             }
-            x.meal.energyMin = Convert.ToInt32(x.meal.energyMinPercentage * 0.01 * energy);
-            x.meal.energyMax = Convert.ToInt32(x.meal.energyMaxPercentage * 0.01 * energy);
-            xx.Add(x);
-            idx++;
         }
         return xx;
     }

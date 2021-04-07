@@ -69,21 +69,6 @@ public class Log : WebService {
     public string SaveActivityLog(string userId, string activity, string dateTime) {
         try {
             ActivityLog(userId, activity, dateTime);
-            //NewActivityLog x = new NewActivityLog();
-            //x.userId = userId;
-            //x.activity = activity;
-            //x.time = dateTime;
-
-            //string log = string.Format(@"## TIME: {0}; ACTIVITY: {1}; USER_ID: {2}", x.time, x.activity, x.userId);
-
-            //StringBuilder sb = new StringBuilder();
-            //Files F = new Files();
-            //string oldLog = F.ReadTempFile(activityLog);
-            //if (oldLog != null) {
-            //    sb.AppendLine(oldLog);
-            //}
-            //sb.AppendLine(log);
-            //F.SaveTempFile(activityLog, sb.ToString());
             return JsonConvert.SerializeObject("ok", Formatting.Indented);
         } catch (Exception e) {
             SendErrorLog(e, dateTime, userId, "Log", "SaveActivityLog");
