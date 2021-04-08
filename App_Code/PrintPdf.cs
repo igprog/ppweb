@@ -1500,6 +1500,7 @@ public class PrintPdf : WebService {
 
             return JsonConvert.SerializeObject(fileName, Formatting.None);
         } catch(Exception e) {
+            L.SendErrorLog(e, client.clientId, userId, "PrintPdf", "ClientPdf");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -1564,6 +1565,7 @@ public class PrintPdf : WebService {
 
             return JsonConvert.SerializeObject(fileName, Formatting.None);
         } catch(Exception e) {
+            L.SendErrorLog(e, client.clientId, userId, "PrintPdf", "ClientLogPdf");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -1667,6 +1669,7 @@ public class PrintPdf : WebService {
 
             return JsonConvert.SerializeObject(fileName, Formatting.None);
         } catch(Exception e) {
+            L.SendErrorLog(e, client.clientId, userId, "PrintPdf", "CalculationPdf");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -1733,6 +1736,7 @@ public class PrintPdf : WebService {
 
             return JsonConvert.SerializeObject(fileName, Formatting.None);
         } catch(Exception e) {
+            L.SendErrorLog(e, JsonConvert.SerializeObject(shoppingList, Formatting.None), userId, "PrintPdf", "ShoppingList");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -1793,6 +1797,7 @@ public class PrintPdf : WebService {
 
             return JsonConvert.SerializeObject(fileName, Formatting.None);
         } catch(Exception e) {
+            L.SendErrorLog(e, JsonConvert.SerializeObject(shoppingList, Formatting.None), userId, "PrintPdf", "WeeklyMenuShoppingList");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -1924,6 +1929,7 @@ public class PrintPdf : WebService {
 
             return JsonConvert.SerializeObject(fileName, Formatting.None);
         } catch(Exception e) {
+            L.SendErrorLog(e, recipe.id, userId, "PrintPdf", "RecipePdf");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -2352,12 +2358,12 @@ public class PrintPdf : WebService {
                 rowHeight = rowHeight - 15;
             }
 
-            string mealTitle = "";
-            foreach(string m in menuList) {
+            string mealTitle = null;
+             foreach(string m in menuList) {
                 if(m != null) {
                     Menues.NewMenu wm = me.WeeklyMenu(userId, m);
                     if (wm.data.meals != null) {
-                        if(wm.data.meals.Count > weeklyMealIdx) {
+                        if(wm.data.meals.Count > weeklyMealIdx && wm.data.meals[weeklyMealIdx].isSelected) {
                             mealTitle = wm.data.meals[weeklyMealIdx].title;
                             break;
                         }
@@ -2365,48 +2371,50 @@ public class PrintPdf : WebService {
                 }
             }
 
-            table.AddCell(new PdfPCell(new Phrase(mealTitle.ToUpper(), GetFont(true))) { Padding = 2, MinimumHeight = 30, PaddingTop = 15, BorderColor = Color.LIGHT_GRAY, FixedHeight = rowHeight, HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, BackgroundColor = bg_light_blue });
+            if (!string.IsNullOrEmpty(mealTitle)) {
+                table.AddCell(new PdfPCell(new Phrase(mealTitle.ToUpper(), GetFont(true))) { Padding = 2, MinimumHeight = 30, PaddingTop = 15, BorderColor = Color.LIGHT_GRAY, FixedHeight = rowHeight, HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, BackgroundColor = bg_light_blue });
 
-            for (i = 0; i < menuList.Count; i++) {
-                Menues.NewMenu weeklyMenu = !string.IsNullOrEmpty(menuList[i]) ? me.WeeklyMenu(userId, menuList[i]): new Menues.NewMenu();
-                string currMeal = !string.IsNullOrEmpty(menuList[i]) ? weeklyMenu.data.meals[weeklyMealIdx].code : "";
-                p = new Phrase();
+                for (i = 0; i < menuList.Count; i++) {
+                    Menues.NewMenu weeklyMenu = !string.IsNullOrEmpty(menuList[i]) ? me.WeeklyMenu(userId, menuList[i]): new Menues.NewMenu();
+                    string currMeal = !string.IsNullOrEmpty(menuList[i]) ? weeklyMenu.data.meals[weeklyMealIdx].code : "";
+                    p = new Phrase();
                 
-                if (!string.IsNullOrEmpty(weeklyMenu.id)) {
-                    meal = weeklyMenu.data.selectedFoods.Where(a => a.meal.code == currMeal).ToList();
-                    string description = weeklyMenu.data.meals.Find(a => a.code == currMeal).description;
-                    List<Foods.NewFood> meal_ = food.MultipleConsumers(meal, settings.consumers);
-                    if (!string.IsNullOrWhiteSpace(description)) {
-                        StringBuilder sb = new StringBuilder();
-                        p.Add(new Chunk(AppendMealDescription(sb, description, settings, false, false).ToString(), GetFont(10)));
-                        p.Add(new Chunk("\n\n", GetFont()));
-                    }
-                    if (settings.showFoods) {
-                        foreach (Foods.NewFood f in meal_) {
-                            p.Add(new Chunk(string.Format(@"- {0}", f.food), GetFont()));
-                            p.Add(new Chunk(string.Format(@"{0}{1}{2}"
-                                    , settings.showQty ? string.Format(", {0}", sl.SmartQty(f.id, f.quantity, f.unit, f.mass, sl.LoadFoodQty(), lang)) : ""
-                                    , settings.showMass ? string.Format(", {0}", sl.SmartMass(f.mass, lang)) : ""
-                                    , settings.showServ && !string.IsNullOrEmpty(getServingDescription(f.servings, lang)) ? string.Format(", ({0})", getServingDescription(f.servings, lang)) : ""), font_qty));
-                            p.Add(new Chunk("\n", GetFont()));
+                    if (!string.IsNullOrEmpty(weeklyMenu.id)) {
+                        meal = weeklyMenu.data.selectedFoods.Where(a => a.meal.code == currMeal).ToList();
+                        string description = weeklyMenu.data.meals.Find(a => a.code == currMeal).description;
+                        List<Foods.NewFood> meal_ = food.MultipleConsumers(meal, settings.consumers);
+                        if (!string.IsNullOrWhiteSpace(description)) {
+                            StringBuilder sb = new StringBuilder();
+                            p.Add(new Chunk(AppendMealDescription(sb, description, settings, false, false).ToString(), GetFont(10)));
+                            p.Add(new Chunk("\n\n", GetFont()));
                         }
+                        if (settings.showFoods) {
+                            foreach (Foods.NewFood f in meal_) {
+                                p.Add(new Chunk(string.Format(@"- {0}", f.food), GetFont()));
+                                p.Add(new Chunk(string.Format(@"{0}{1}{2}"
+                                        , settings.showQty ? string.Format(", {0}", sl.SmartQty(f.id, f.quantity, f.unit, f.mass, sl.LoadFoodQty(), lang)) : ""
+                                        , settings.showMass ? string.Format(", {0}", sl.SmartMass(f.mass, lang)) : ""
+                                        , settings.showServ && !string.IsNullOrEmpty(getServingDescription(f.servings, lang)) ? string.Format(", ({0})", getServingDescription(f.servings, lang)) : ""), font_qty));
+                                p.Add(new Chunk("\n", GetFont()));
+                            }
+                        }
+                        //************ Totals ***************
+                        weeklyMenuTotal = new Foods.Totals();
+                        Foods foods = new Foods();
+                        weeklyMenuTotal.energy = weeklyMenu.energy;
+                        weeklyMenuTotal.carbohydrates = Math.Round(weeklyMenu.data.selectedFoods.Sum(a => a.carbohydrates), 1);
+                        weeklyMenuTotal.carbohydratesPercentage = Math.Round(foods.GetCarbohydratesPercentage(weeklyMenu.data.selectedFoods, weeklyMenuTotal.carbohydrates), 1);
+                        weeklyMenuTotal.proteins = Math.Round(weeklyMenu.data.selectedFoods.Sum(a => a.proteins), 1);
+                        weeklyMenuTotal.proteinsPercentage = Math.Round(foods.GetProteinsPercentage(weeklyMenu.data.selectedFoods, weeklyMenuTotal.proteins), 1);
+                        weeklyMenuTotal.fats = Math.Round(weeklyMenu.data.selectedFoods.Sum(a => a.fats), 1);
+                        weeklyMenuTotal.fatsPercentage = Math.Round(foods.GetFatsPercentage(weeklyMenu.data.selectedFoods, weeklyMenuTotal.fats), 1);
+                        weeklyMenuTotalList.Add(weeklyMenuTotal);
+                        //************************************
+                    } else {
+                        p.Add(new Chunk("", GetFont()));
                     }
-                    //************ Totals ***************
-                    weeklyMenuTotal = new Foods.Totals();
-                    Foods foods = new Foods();
-                    weeklyMenuTotal.energy = weeklyMenu.energy;
-                    weeklyMenuTotal.carbohydrates = Math.Round(weeklyMenu.data.selectedFoods.Sum(a => a.carbohydrates), 1);
-                    weeklyMenuTotal.carbohydratesPercentage = Math.Round(foods.GetCarbohydratesPercentage(weeklyMenu.data.selectedFoods, weeklyMenuTotal.carbohydrates), 1);
-                    weeklyMenuTotal.proteins = Math.Round(weeklyMenu.data.selectedFoods.Sum(a => a.proteins), 1);
-                    weeklyMenuTotal.proteinsPercentage = Math.Round(foods.GetProteinsPercentage(weeklyMenu.data.selectedFoods, weeklyMenuTotal.proteins), 1);
-                    weeklyMenuTotal.fats = Math.Round(weeklyMenu.data.selectedFoods.Sum(a => a.fats), 1);
-                    weeklyMenuTotal.fatsPercentage = Math.Round(foods.GetFatsPercentage(weeklyMenu.data.selectedFoods, weeklyMenuTotal.fats), 1);
-                    weeklyMenuTotalList.Add(weeklyMenuTotal);
-                    //************************************
-                } else {
-                    p.Add(new Chunk("", GetFont()));
+                    table.AddCell(new PdfPCell(p) { MinimumHeight = 30, PaddingTop = 5, PaddingRight = 2, PaddingBottom = 5, PaddingLeft = 2, BorderColor = Color.LIGHT_GRAY });
                 }
-                table.AddCell(new PdfPCell(p) { MinimumHeight = 30, PaddingTop = 5, PaddingRight = 2, PaddingBottom = 5, PaddingLeft = 2, BorderColor = Color.LIGHT_GRAY });
             }
             weeklyMealIdx += 1;
         } catch (Exception e) {}
