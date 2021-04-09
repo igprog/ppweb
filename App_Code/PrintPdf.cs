@@ -1743,66 +1743,64 @@ public class PrintPdf : WebService {
         }
     }
 
-    [WebMethod]
-    public string WeeklyMenuShoppingList(string userId, object shoppingList, int consumers, string lang, PrintMenuSettings settings, string headerInfo) {
-        try {
-            var doc = new Document();
-            string path = Server.MapPath(string.Format("~/upload/users/{0}/pdf/", userId));
-            DeleteFolder(path);
-            CreateFolder(path);
-            string fileName = Guid.NewGuid().ToString();
-            string filePath = Path.Combine(path, string.Format("{0}.pdf", fileName));
-            PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
+    //[WebMethod]
+    //public string WeeklyMenuShoppingList(string userId, object shoppingList, int consumers, string lang, PrintMenuSettings settings, string headerInfo) {
+    //    try {
+    //        var doc = new Document();
+    //        string path = Server.MapPath(string.Format("~/upload/users/{0}/pdf/", userId));
+    //        DeleteFolder(path);
+    //        CreateFolder(path);
+    //        string fileName = Guid.NewGuid().ToString();
+    //        string filePath = Path.Combine(path, string.Format("{0}.pdf", fileName));
+    //        PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
 
-            doc.Open();
+    //        doc.Open();
 
-            AppendHeader(doc, userId, headerInfo);
+    //        AppendHeader(doc, userId, headerInfo);
 
-           // doc.Add(new Paragraph(currentMenu.title, GetFont(12)));
-            //doc.Add(new Paragraph(currentMenu.note, GetFont(8)));
-            if(consumers > 1) {
-                doc.Add(new Paragraph(t.Tran("number of consumers", lang) + ": " + consumers, GetFont(8)));
-            }
+    //        if(consumers > 1) {
+    //            doc.Add(new Paragraph(t.Tran("number of consumers", lang) + ": " + consumers, GetFont(8)));
+    //        }
 
-            doc.Add(new Paragraph(t.Tran("shopping list", lang).ToUpper(), GetFont(12)));
+    //        doc.Add(new Paragraph(t.Tran("shopping list", lang).ToUpper(), GetFont(12)));
 
-            PdfPTable table = new PdfPTable(4);
-            table.WidthPercentage = 100f;
-            table.SetWidths(new float[] { 3f, 2f, 1f, 1f });
-            table.AddCell(new PdfPCell(new Phrase(t.Tran("food", lang).ToUpper(), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
-            table.AddCell(new PdfPCell(new Phrase((settings.showQty ? t.Tran("quantity", lang).ToUpper() : ""), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
-            table.AddCell(new PdfPCell(new Phrase((settings.showMass ? t.Tran("mass", lang).ToUpper() : ""), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
-            table.AddCell(new PdfPCell(new Phrase((settings.showPrice ? t.Tran("price", lang).ToUpper() : ""), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
+    //        PdfPTable table = new PdfPTable(4);
+    //        table.WidthPercentage = 100f;
+    //        table.SetWidths(new float[] { 3f, 2f, 1f, 1f });
+    //        table.AddCell(new PdfPCell(new Phrase(t.Tran("food", lang).ToUpper(), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
+    //        table.AddCell(new PdfPCell(new Phrase((settings.showQty ? t.Tran("quantity", lang).ToUpper() : ""), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
+    //        table.AddCell(new PdfPCell(new Phrase((settings.showMass ? t.Tran("mass", lang).ToUpper() : ""), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
+    //        table.AddCell(new PdfPCell(new Phrase((settings.showPrice ? t.Tran("price", lang).ToUpper() : ""), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
 
 
-            ShoppingList sl = new ShoppingList();
-            ShoppingList.NewShoppingList groupedFoods = sl.Deserialize(shoppingList);
-            foreach (var f in groupedFoods.foods) {
-                table.AddCell(new PdfPCell(new Phrase(f.food, GetFont())) { Border = 0 });
-                table.AddCell(new PdfPCell(new Phrase((settings.showQty ? sl.SmartQty(f.id, f.qty, f.unit, f.mass, sl.LoadFoodQty(), lang) : ""), GetFont())) { Border = 0 });
-                table.AddCell(new PdfPCell(new Phrase((settings.showMass ? sl.SmartMass(f.mass, lang) : ""), GetFont())) { Border = 0, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
-                table.AddCell(new PdfPCell(new Phrase((settings.showPrice ? f.price.ToString() + " " + (string.IsNullOrEmpty(f.currency) ? "" : f.currency.ToUpper()) : ""), GetFont())) { Border = 0, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
-            }
+    //        ShoppingList sl = new ShoppingList();
+    //        ShoppingList.NewShoppingList groupedFoods = sl.Deserialize(shoppingList);
+    //        foreach (var f in groupedFoods.foods) {
+    //            table.AddCell(new PdfPCell(new Phrase(f.food, GetFont())) { Border = 0 });
+    //            table.AddCell(new PdfPCell(new Phrase((settings.showQty ? sl.SmartQty(f.id, f.qty, f.unit, f.mass, sl.LoadFoodQty(), lang) : ""), GetFont())) { Border = 0 });
+    //            table.AddCell(new PdfPCell(new Phrase((settings.showMass ? sl.SmartMass(f.mass, lang) : ""), GetFont())) { Border = 0, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
+    //            table.AddCell(new PdfPCell(new Phrase((settings.showPrice ? f.price.ToString() + " " + (string.IsNullOrEmpty(f.currency) ? "" : f.currency.ToUpper()) : ""), GetFont())) { Border = 0, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
+    //        }
 
-            doc.Add(table);
-            doc.Add(new Chunk(line));
+    //        doc.Add(table);
+    //        doc.Add(new Chunk(line));
 
-            if (settings.showPrice) {
-                doc.Add(new Paragraph(string.Format(@"{0}: {1} {2}"
-                            , t.Tran("total price", lang).ToUpper()
-                            , groupedFoods.total.price
-                            , (string.IsNullOrEmpty(groupedFoods.total.currency) ? "" : groupedFoods.total.currency.ToUpper()))
-                            , GetFont(12)));
-            }
+    //        if (settings.showPrice) {
+    //            doc.Add(new Paragraph(string.Format(@"{0}: {1} {2}"
+    //                        , t.Tran("total price", lang).ToUpper()
+    //                        , groupedFoods.total.price
+    //                        , (string.IsNullOrEmpty(groupedFoods.total.currency) ? "" : groupedFoods.total.currency.ToUpper()))
+    //                        , GetFont(12)));
+    //        }
             
-            doc.Close();
+    //        doc.Close();
 
-            return JsonConvert.SerializeObject(fileName, Formatting.None);
-        } catch(Exception e) {
-            L.SendErrorLog(e, JsonConvert.SerializeObject(shoppingList, Formatting.None), userId, "PrintPdf", "WeeklyMenuShoppingList");
-            return JsonConvert.SerializeObject(e.Message, Formatting.None);
-        }
-    }
+    //        return JsonConvert.SerializeObject(fileName, Formatting.None);
+    //    } catch(Exception e) {
+    //        L.SendErrorLog(e, JsonConvert.SerializeObject(shoppingList, Formatting.None), userId, "PrintPdf", "WeeklyMenuShoppingList");
+    //        return JsonConvert.SerializeObject(e.Message, Formatting.None);
+    //    }
+    //}
 
     [WebMethod]
     public string RecipePdf(string userId, Recipes.NewRecipe recipe, Foods.Totals totals, string lang, PrintMenuSettings settings) {

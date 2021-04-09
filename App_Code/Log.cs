@@ -92,7 +92,7 @@ public class Log : WebService {
 
             string err = string.Format(@"## TIME: {0}
 USER_ID: {1}
-SERVICE: {2}\{3}.asmx
+SERVICE: {2}.asmx\{3}
 ID: {4}
 MESSAGE: {5}
 {6}

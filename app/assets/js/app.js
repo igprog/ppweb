@@ -5423,6 +5423,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.consumers = 1;
         $scope.pdfLink == null;
         $scope.creatingPdf = false;
+        $scope.d = null;
 
         var createShoppingList = function (x, c) {
             functions.post('ShoppingList', 'Create', { x: x, consumers: c, lang: $rootScope.config.language }).then(function (d) {
@@ -5446,6 +5447,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         $scope.printShoppingListPdf = function (sl, s) {
+            if ($scope.d === null) return;
             $scope.creatingPdf = true;
             s.headerInfo = $rootScope.user.headerInfo;
             if (angular.isDefined($scope.currentMenu)) {
@@ -7351,15 +7353,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         $scope.printShoppingListPdf = function (sl, s) {
+            if (sl === null) return;
             $scope.creatingPdf = true;
             s.headerInfo = $rootScope.user.headerInfo;
-            if (angular.isDefined(sl)) {
-                functions.post('PrintPdf', 'ShoppingList', { userId: $sessionStorage.usergroupid, shoppingList: sl, title: $scope.currentMenu.title, note: $scope.currentMenu.note, lang: $rootScope.config.language, settings: s }).then(function (d) {
-                    var fileName = d;
-                    $scope.creatingPdf = false;
-                    $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
-                });
-            }
+            functions.post('PrintPdf', 'ShoppingList', { userId: $sessionStorage.usergroupid, shoppingList: sl, title: $scope.currentMenu.title, note: $scope.currentMenu.note, lang: $rootScope.config.language, settings: s }).then(function (d) {
+                var fileName = d;
+                $scope.creatingPdf = false;
+                $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
+            });
         }
 
         $scope.hidePdfLink = function () {
