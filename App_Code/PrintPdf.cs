@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Configuration;
 using Igprog;
+using System.Data.SQLite;
 
 /// <summary>
 /// PrintPdf
@@ -246,7 +247,7 @@ public class PrintPdf : WebService {
         
         AppendHeader(doc, userId, settings.headerInfo);
 
-        AppendMenuInfo(doc, currentMenu.title, currentMenu.note, currentMenu.client, settings, lang);
+        AppendMenuInfo(doc, userId, currentMenu.title, currentMenu.note, currentMenu.client, settings, lang);
 
         menuTitle = currentMenu.title;
         menuDate = settings.showDate && !string.IsNullOrWhiteSpace(settings.date) ? string.Format("{0}: {1}", t.Tran("creation date", lang), settings.date) : null;
@@ -435,7 +436,7 @@ public class PrintPdf : WebService {
 
             AppendHeader(doc, userId, settings.headerInfo);
 
-            AppendMenuInfo(doc, weeklyMenu.title, weeklyMenu.note, weeklyMenu.client, settings, lang);
+            AppendMenuInfo(doc, userId, weeklyMenu.title, weeklyMenu.note, weeklyMenu.client, settings, lang);
 
             PdfPTable table = new PdfPTable(1);
             table.WidthPercentage = 100f;
@@ -551,6 +552,7 @@ public class PrintPdf : WebService {
                 if (!string.IsNullOrEmpty(m)) {
                     if (idx > 0 && idx < weeklyMenu.menuList.Count()) {
                         doc.NewPage();
+                        rowCount = 0;
                     }
                     idx++;
                     var currentMenu = M.GetMenu(userId, m);
@@ -2256,7 +2258,7 @@ public class PrintPdf : WebService {
         doc.Add(new Chunk(line));
     }
 
-    private void AppendMenuInfo(Document doc, string title, string note, Clients.NewClient client, PrintMenuSettings settings, string lang) {
+    private void AppendMenuInfo(Document doc, string userId, string title, string note, Clients.NewClient client, PrintMenuSettings settings, string lang) {
         Font font_gray = FontFactory.GetFont(HttpContext.Current.Server.MapPath("~/app/assets/fonts/ARIALUNI.TTF"), BaseFont.IDENTITY_H, false, 9, Font.NORMAL);
         font_gray.Color = Color.GRAY;
         PdfPTable table = new PdfPTable(2);
@@ -2285,7 +2287,7 @@ public class PrintPdf : WebService {
         table.AddCell(new PdfPCell(new Phrase(sb.ToString(), GetFont(10))) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15 });
 
         if (settings.showClientData) {
-            table.AddCell(new PdfPCell(new Phrase(ClientData(client, lang), font_gray)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
+            table.AddCell(new PdfPCell(new Phrase(ClientData(userId, client, lang), font_gray)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
             rowCount = rowCount + 3;
         }
         doc.Add(table);
@@ -2498,7 +2500,14 @@ public class PrintPdf : WebService {
         rowCount = rowCount + 3;
     }
 
-    private string ClientData(Clients.NewClient client, string lang) {
+    private string ClientData(string userId, Clients.NewClient client, string lang) {
+        if (client.clientData.id == null) {
+            ClientsData CD = new ClientsData();
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                client.clientData = CD.GetClientData(userId, client.clientId, connection);
+            }
+        }
         StringBuilder sb = new StringBuilder();
         sb.AppendLine(string.Format("{0}: {1} {2}", t.Tran("client", lang), client.firstName, client.lastName));
         sb.AppendLine(string.Format("{0}, {1} {2} {3}"
