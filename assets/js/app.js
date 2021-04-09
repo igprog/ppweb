@@ -8,17 +8,16 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
 
     $stateProvider
         .state('home', {
-            url: '/', templateUrl: './assets/pages/home.html', controller: 'appCtrl'
-            , data: {
+            url: '/', templateUrl: './assets/pages/home.html', controller: 'appCtrl', data: {
                 pageTitle: 'Web Aplikacija',
-                pageDescription: 'Izradite plan prehrane i program tjelesne aktivnosti pomoću web aplikacije. Program Prehrane Web omogućava utvrđivanje stanja uhranjenosti i energetske potrošnje pojedinca te izradu uravnoteženih jelovnika utemeljenu na znanstvenim spoznajama na polju nutriconizma.'
+                pageDescription: ''
             }
         })
         .state('about', {
             url: '/o-programu', templateUrl: './assets/pages/about.html', controller: 'appCtrl',
             data: {
                 pageTitle: 'O Aplikaciji',
-                pageDescription: 'Osmišljavanjem jelovnika korištenjem ove aplikacije, prehrana krajnjih korisnika postaje uravnotežena i raznolika što se može zahvaliti činjenici da se izrada jelovnika bazira na preporučenom broju jediničnih serviranja svih skupina namirnica.'
+                pageDescription: 'Aplikacija Program Prehrane Web je alata koji nutricionistima pomaže u izradi jelovnika i praćenju klijenata.'
             }
         })
         .state('price', {
