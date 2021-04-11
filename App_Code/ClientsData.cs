@@ -373,6 +373,7 @@ public class ClientsData : System.Web.Services.WebService {
          try {
             List<NewClientData> xx = new List<NewClientData>();
             NewClientData x = new NewClientData();
+            db.CreateDataBase(userId, db.clients);
             db.CreateDataBase(userId, db.clientsData);
             db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
             db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.

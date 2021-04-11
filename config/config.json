@@ -5,7 +5,7 @@
   "appurl": "/app/",
   "apk": "http://app.appsgeyser.com/5983009/ProgramPrehrane",
   "domain": "programprehrane.com",
-  "debug": true,
+  "debug": false,
   "eur": 7.4,
   "iban": "HR84 2340 0091 1603 4249 6",
   "swift": "PBZGHR2X",

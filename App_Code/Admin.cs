@@ -14,6 +14,7 @@ public class Admin : WebService {
     string supervisorPassword = ConfigurationManager.AppSettings["SupervisorPassword"];
     string supervisorUserName1 = ConfigurationManager.AppSettings["SupervisorUserName1"];
     string supervisorPassword1 = ConfigurationManager.AppSettings["SupervisorPassword1"];
+    string adminCode = ConfigurationManager.AppSettings["AdminCode"];
     public Admin() {
     }
 
@@ -46,6 +47,15 @@ public class Admin : WebService {
             }
         }
         catch (Exception e) {
+            return JsonConvert.SerializeObject(false, Formatting.None);
+        }
+    }
+
+    [WebMethod]
+    public string CheckAdminCode(string code) {
+        try {
+            return JsonConvert.SerializeObject(code == adminCode, Formatting.None);
+        } catch (Exception e) {
             return JsonConvert.SerializeObject(false, Formatting.None);
         }
     }

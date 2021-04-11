@@ -94,21 +94,32 @@
             </div>
             <div ng-if="activeTab==='users'">
                 <div class="row p-1">
-                    <div class="col-sm-3">
-                        <form>
+                    <div class="col-lg-3">
+                        <form id="serchFrm">
                             <span class="p5">Pretraži:</span>
                             <div class="input-group">
                                 <input ng-model="searchQuery" type="text" class="form-control" placeholder="Ime, E-mail, ID...">
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="submit" ng-click="search(searchQuery, showActive, limit, isDesc)">
+                                    <button class="btn btn-outline-secondary" form="serchFrm" type="submit" ng-click="search(searchQuery, showActive, limit, isDesc)">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <div class="col-sm-1">
+                    <div class="col-lg-1">
                         <span>Limit: <input ng-model="limit" class="form-control" /></span>
+                    </div>
+                    <div class="col-lg-2">
+                        <span class="p5">Admin Code:</span>
+                        <div class="input-group">
+                            <input ng-model="adminCode" type="password" class="form-control">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" form="adminCodeFrm" type="submit" ng-click="checkAdminCode(adminCode)">
+                                    <i class="fa fa-check"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="checkbox p-1">
@@ -192,7 +203,7 @@
                             </td>
                             <td><input ng-disabled="!showDetails||x.userType<2||x.userId!=x.userGroupId" ng-model="x.maxNumberOfUsers" type="number" class="form-control" /></td>
                             <td>{{x.subusers + 1}}</td>
-                            <td><button ng-disabled="!showDetails" ng-click="update(x)" class="btn btn-success"><i class="fa fa-save"></i> Spremi</button></td>
+                            <td><button ng-disabled="!showDetails" ng-click="update(x)" class="btn btn-success" title="Spremi"><i class="fa fa-save"></i></button></td>
                             <td>
                                 <div ng-if="x.maxNumberOfUsers>5&&showDetails&&x.userType==2&&x.userId==x.userGroupId" class="input-group">
                                     <input ng-model="prefix" type="text" class="form-control" placeholder="Prefiks..." style="min-width:100px">
@@ -203,7 +214,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td ng-if="config.debug"><button ng-disabled="!showDetails" ng-click="remove(x)" class="btn btn-danger"><i class="fa fa-trash-alt"></i> Briši</button></td>
+                            <td ng-if="config.debug"><button ng-disabled="!showDetails" ng-click="remove(x)" class="btn btn-danger" title="Briši"><i class="fa fa-trash-alt"></i></button></td>
                         </tr>
                     </table>
                 </div>
@@ -675,7 +686,7 @@
                         <th></th>
                     </tr>
                     <tr ng-repeat="x in orders">
-                        <td><button class="btn btn-outline-success" ng-click="createInvoice(x, 'invoices')"><i class="fa fa-file-invoice"></i> Račun</button></td>
+                        <td><button class="btn btn-outline-success" ng-click="createInvoice(x, 'invoices')" title="Račun"><i class="fa fa-file-invoice"></i></button></td>
                         <td>{{orders.length - $index}}</td>
                         <td>{{x.orderNumber}}</td>
                         <td style="white-space: nowrap">{{x.orderDate}}</td>
@@ -694,7 +705,7 @@
                         <td>{{x.price}}</td>
                         <td>{{x.additionalService}}</td>
                         <td>{{x.note}}</td>
-                        <td><button ng-click="remove(x)" class="btn btn-outline-danger"><i class="fa fa-trash-alt"></i> Briši</button></td>
+                        <td><button ng-click="remove(x)" class="btn btn-outline-danger" title="Briši"><i class="fa fa-trash-alt"></i></button></td>
                     </tr>
                 </table>
             </div>

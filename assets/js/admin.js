@@ -15,54 +15,40 @@ angular.module('app', [])
     //*******************************************************
 }])
 
-.controller('adminCtrl', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+.controller('adminCtrl', ['$scope', '$http', '$rootScope', 'functions', function ($scope, $http, $rootScope, functions) {
 
-    var getConfig = function () {
+    var getConfig = () => {
         $http.get('./config/config.json')
-          .then(function (response) {
+          .then((response) => {
               $rootScope.config = response.data;
           });
     };
     getConfig();
 
     $scope.islogin = false;
-    var d = new Date();
-    $scope.year = d.getFullYear();
+    $scope.year = new Date().getFullYear();
 
-    $scope.toggleTpl = function (x) {
+    $scope.toggleTpl = (x) => {
         $rootScope.tpl = x;
     };
     $scope.toggleTpl('login');
 
-    init = function () {
+    init = () => {
         $scope.user = {
-            username: '',
-            password: ''
+            username: null,
+            password: null
         }
     }
     init();
 
-    $scope.login = function (u) {
-        $http({
-            url: $rootScope.config.backend + 'Admin.asmx/Login',
-            method: 'POST',
-            data: {username: u.username, password: u.password }
-        })
-         .then(function (response) {
-             $scope.islogin = JSON.parse(response.data.d);
-             if ($scope.islogin == true) {
-                 $scope.toggleTpl('programPrehraneWeb');
-             } else {
-                 alert('error login');
-             }
-         },
-         function (response) {
-             $scope.islogin = false;
-             alert(response.data.d);
-         });
+    $scope.login = (u) => {
+        functions.post('Admin', 'Login', { username: u.username, password: u.password }).then((d) => {
+            $scope.islogin = d;
+            $scope.islogin === true ? $scope.toggleTpl('programPrehraneWeb') : alert('error login');
+        });
     }
 
-    $scope.logout = function () {
+    $scope.logout = () => {
         $scope.islogin = false;
         $scope.toggleTpl('login');
         init();
@@ -90,6 +76,7 @@ angular.module('app', [])
     $scope.searchQuery = '';
     $scope.isDesc = true;
     $scope.activeTab = 'users';
+    $scope.adminCode = null;
 
     function setYears() {
         $scope.years = [];
@@ -349,6 +336,12 @@ angular.module('app', [])
         }
     }
     /***** Tickets *****/
+
+    $scope.checkAdminCode = (x) => {
+        functions.post('Admin', 'CheckAdminCode', { code: x }).then((d) => {
+            $rootScope.config.debug = d;
+        });
+    }
 
 }])
 
