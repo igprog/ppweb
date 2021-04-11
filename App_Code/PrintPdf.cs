@@ -112,7 +112,7 @@ public class PrintPdf : WebService {
         x.showAuthor = true;
         x.printStyle = 0;
         x.showImg = false;
-        x.descPosition = (int) DescPosition.bottom;
+        x.descPosition = (int) DescPosition.top;
         x.weeklyMenuType = (int) WeeklyMenuType.daily;
         x.rowsPerPage = rowsPerPage;
         x.consumers = 1;
@@ -142,7 +142,7 @@ public class PrintPdf : WebService {
         x.showAuthor = true;
         x.printStyle = 0;
         x.showImg = false;
-        x.descPosition = (int)DescPosition.bottom;
+        x.descPosition = (int)DescPosition.top;
         x.weeklyMenuType = (int)WeeklyMenuType.daily;
         x.rowsPerPage = rowsPerPage;
         x.consumers = 1;
@@ -172,7 +172,7 @@ public class PrintPdf : WebService {
         x.showAuthor = true;
         x.printStyle = 0;
         x.showImg = true;
-        x.descPosition = (int)DescPosition.bottom;
+        x.descPosition = (int)DescPosition.top;
         x.consumers = 1;
         x.date = null;
         x.author = null;
@@ -200,7 +200,7 @@ public class PrintPdf : WebService {
         x.showAuthor = true;
         x.printStyle = 0;
         x.showImg = true;
-        x.descPosition = (int)DescPosition.bottom;
+        x.descPosition = (int)DescPosition.top;
         x.consumers = 1;
         x.date = null;
         x.author = null;
@@ -1983,7 +1983,26 @@ public class PrintPdf : WebService {
                         doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
                     }
                     if (settings.showFoods) {
+                        string currMealTitle = null;
                         foreach (Foods.NewFood food in meal) {
+
+                            // TODO: /**** More recipes in one meal *****/
+                            if (food.id.Split(';').Length == 2) {
+                                foreach (var dd in currentMenu.splitMealDesc.Where(a => a.code == meal[0].meal.code)) {
+                                    foreach (var d in dd.dishDesc) {
+                                        if (d.id == food.id.Split(';')[1]) {
+                                            string title = currMealTitle != d.title ? d.title : null;
+                                            currMealTitle = d.title;
+                                            if (!string.IsNullOrWhiteSpace(title)) {
+                                                doc.Add(new Paragraph(title, GetFont(9, Font.BOLD)));
+                                                rowCount = rowCount + 1;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            /**** More recipes in one meal *****/
+
                             AppendFoodsTbl(doc, food, settings, lang);
                         }
                     }

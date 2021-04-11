@@ -4101,6 +4101,28 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
         }
 
+        /**** More recipes in one meal *****/
+        var currMealTitle = null;
+        $scope.getCurrDishTitle = function (id, x, splitMealDesc) {
+            currMealDesc = $scope.getCurrMealDesc(x, splitMealDesc);
+            var t = null;
+            if (currMealDesc.length > 1) {
+                angular.forEach(currMealDesc, function (value, key) {
+                    if (id.split(';').length === 2) {
+                        if (value.id === id.split(';')[1]) {
+                            t = value.title;
+                        }
+                    }
+                });
+                var title = currMealTitle !== t ? t : null;
+                currMealTitle = angular.copy(t);
+                return title;
+            } else {
+                return null;
+            }
+        }
+        /**** More recipes in one meal *****/
+
     };
   
     $scope.get = function () {
