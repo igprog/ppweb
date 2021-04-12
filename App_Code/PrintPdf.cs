@@ -1953,7 +1953,9 @@ public class PrintPdf : WebService {
             if (Directory.Exists(path)) {
                 Directory.Delete(path, true);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            L.SendErrorLog(e, path, null, "PrintPdf", "DeleteFolder");
+        }
     }
 
     private void AppendMeal(Document doc, List<Foods.NewFood> meal, Menues.NewMenu currentMenu, string lang, Foods.Totals totals, PrintMenuSettings settings) {
@@ -1986,7 +1988,7 @@ public class PrintPdf : WebService {
                         string currMealTitle = null;
                         foreach (Foods.NewFood food in meal) {
 
-                            // TODO: /**** More recipes in one meal *****/
+                            /**** More recipes in one meal *****/
                             if (food.id.Split(';').Length == 2) {
                                 foreach (var dd in currentMenu.splitMealDesc.Where(a => a.code == meal[0].meal.code)) {
                                     foreach (var d in dd.dishDesc) {
@@ -1994,8 +1996,11 @@ public class PrintPdf : WebService {
                                             string title = currMealTitle != d.title ? d.title : null;
                                             currMealTitle = d.title;
                                             if (!string.IsNullOrWhiteSpace(title)) {
-                                                doc.Add(new Paragraph(title, GetFont(9, Font.BOLD)));
-                                                rowCount = rowCount + 1;
+                                                PdfPTable table = new PdfPTable(1);
+                                                table.WidthPercentage = 100f;
+                                                table.AddCell(new PdfPCell(new Phrase(title, GetFont(9, Font.BOLD))) { Border = PdfPCell.NO_BORDER, PaddingBottom = 2, PaddingTop = 5 });
+                                                doc.Add(table);
+                                                rowCount = rowCount + 2;
                                             }
                                         }
                                     }

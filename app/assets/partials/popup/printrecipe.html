@@ -84,7 +84,6 @@
                                 <div class="row">
                                     <div ng-if="settings.showImg&&recipe.recipeImg" class="col-xl-5 pt-3">
                                         <img class="rounded" src="../upload/users/{{userId}}/recipes/{{recipe.id}}/recipeimg/{{recipe.recipeImg}}" alt="{{recipe.recipeImg}}" style="width:100%">
-                                        <!--<img class="rounded" src="../upload/users/{{userId}}/recipes/{{recipe.id}}/recipeimg/{{recipe.recipeImg}}" alt="{{recipe.recipeImg}}" style="height:15rem;width:15rem">-->
                                     </div>
                                     <div class="col-xl-7 pt-3">
                                         <h4>{{recipe.title}}</h4>
@@ -94,11 +93,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--<img ng-if="settings.showImg&&recipe.recipeImg" class="rounded" src="../upload/users/{{userId}}/recipes/{{recipe.id}}/recipeimg/{{recipe.recipeImg}}" alt="{{recipe.recipeImg}}" style="height:15rem;width:15rem">
-                                <div ng-if="settings.showDescription" class="mt-3">
-                                    <label class="text-uppercase font-weight-bold">{{'description' | translate}}:</label>
-                                    <p>{{recipe.description}}</p>
-                                </div>-->
                                 <hr />
                                 <p ng-if="settings.consumers > 1">{{'number of consumers' | translate}}: <strong>{{settings.consumers}}</strong></p>
                                 <div ng-if="settings.showFoods" class="mt-2">

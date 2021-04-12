@@ -142,61 +142,59 @@
                         </div>
                     </div>
                     <div class="col-lg-9">
-                        <fieldset class="fieldset-border">
-                            <legend class="fieldset-border text-capitalize">{{'menu' | translate}}</legend>
-                            <div id="menu_container">
-                                <div class="row">
-                                    <div class="col-lg-5">
-                                        <div>
-                                            <p class="lead">{{currentMenu.title}}</p>
-                                            <p>{{currentMenu.note}}</p>
-                                        </div>
-                                        <p ng-if="settings.consumers > 1">{{'number of consumers' | translate}}: <strong>{{settings.consumers}}</strong></p>
-                                    </div>
-                                    <div class="col-lg-7 text-right">
-                                        <div ng-if="settings.showClientData">
-                                            <p>{{'client' | translate}}: {{currentMenu.client.firstName}} {{currentMenu.client.lastName}}</p>
-                                            <p>
-                                                {{'height' | translate}}: {{currentMenu.client.clientData.height}} cm, {{'weight' | translate}}: {{currentMenu.client.clientData.weight}} kg
-                                                <span ng-if="currentMenu.client.clientData.waist>0">, {{'waist' | translate}}: {{currentMenu.client.clientData.waist}} cm</span><span ng-if="clientData.hip>0">, {{'hip' | translate}}: {{clientData.hip}} cm</span>
-                                            </p>
-                                            <p>{{'diet' | translate}}: {{currentMenu.client.clientData.diet.diet | translate}}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr />
-                                <ng-include src="settings.printStyle==0?'menu':'menu_old'"></ng-include>
-
-                                <div ng-if="totals.price.value>0 && settings.showPrice">
-                                    <hr />
-                                    <em class="text-primary"><span class="text-capitalize">{{'price' | translate}}</span>: <span>{{totals.price.value | number:2}}</span> <span class="text-uppercase">{{config.currency}}</span></em>
-                                </div>
-
-                                <div ng-if="currentMenu.client.clientData.activities.length > 0 && settings.showActivities">
-                                    <hr />
-                                    <label class="text-uppercase">{{'additional activity' | translate}}:</label>
-                                    <ul ng-repeat="x in currentMenu.client.clientData.activities">
-                                        <li>{{x.activity}} - {{x.duration}} {{'min' | translate}}, {{x.energy | number:0}} {{'kcal' | translate}}</li>
-                                    </ul>
-                                </div>
-
-                                <div ng-if="settings.showAuthor||settings.showDate">
-                                    <hr />
+                        <div id="menu_container">
+                            <div class="card shadow">
+                                <div class="card-header">
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <div ng-if="settings.showDate">
-                                                <label>{{'creation date' | translate}}</label>: {{settings.date}}
+                                        <div class="col-lg-5">
+                                            <div>
+                                                <p class="lead font-weight-bold">{{currentMenu.title}}</p>
+                                                <p>{{currentMenu.note}}</p>
+                                            </div>
+                                            <p ng-if="settings.consumers > 1">{{'number of consumers' | translate}}: <strong>{{settings.consumers}}</strong></p>
+                                        </div>
+                                        <div class="col-lg-7 text-right">
+                                            <div ng-if="settings.showClientData">
+                                                <div>{{'client' | translate}}: {{currentMenu.client.firstName}} {{currentMenu.client.lastName}}</div>
+                                                <div>
+                                                    {{'height' | translate}}: {{currentMenu.client.clientData.height}} cm, {{'weight' | translate}}: {{currentMenu.client.clientData.weight}} kg
+                                                    <span ng-if="currentMenu.client.clientData.waist>0">, {{'waist' | translate}}: {{currentMenu.client.clientData.waist}} cm</span><span ng-if="clientData.hip>0">, {{'hip' | translate}}: {{clientData.hip}} cm</span>
+                                                </div>
+                                                <div>{{'diet' | translate}}: {{currentMenu.client.clientData.diet.diet | translate}}</div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div ng-if="settings.showAuthor" class="text-right">
-                                                <label>{{'author of the menu' | translate}}</label>: {{settings.author}}
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ng-include src="settings.printStyle==0?'menu':'menu_old'"></ng-include>
+                                </div>
+                                <div class="card-footer">
+                                    <div ng-if="totals.price.value>0 && settings.showPrice">
+                                        <em class="text-primary"><span class="text-capitalize">{{'price' | translate}}</span>: <span>{{totals.price.value | number:2}}</span> <span class="text-uppercase">{{config.currency}}</span></em>
+                                    </div>
+                                    <div ng-if="currentMenu.client.clientData.activities.length > 0 && settings.showActivities">
+                                        <label class="text-uppercase">{{'additional activity' | translate}}:</label>
+                                        <ul ng-repeat="x in currentMenu.client.clientData.activities">
+                                            <li>{{x.activity}} - {{x.duration}} {{'min' | translate}}, {{x.energy | number:0}} {{'kcal' | translate}}</li>
+                                        </ul>
+                                    </div>
+                                    <div ng-if="settings.showAuthor||settings.showDate">
+                                        <div class="row small pt-3">
+                                            <div class="col-sm-6">
+                                                <div ng-if="settings.showDate">
+                                                    <label>{{'creation date' | translate}}</label>: {{settings.date}}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div ng-if="settings.showAuthor" class="text-right">
+                                                    <label>{{'author of the menu' | translate}}</label>: {{settings.author}}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </fieldset>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -207,8 +205,8 @@
 <script type="text/ng-template" id="menu">
     <div>
         <div ng-if="x.isSelected==1" ng-repeat="x in currentMenu.data.meals track by $index" class="m-2">
-            <label class="text-uppercase mt-2">{{getMealTitle(x)}}</label>
-
+            <label class="text-uppercase lead font-weight-bold mt-2">{{getMealTitle(x)}}</label>
+            <hr class="m-0" />
             <div class="mt-1">
                 <div ng-repeat="y in getCurrMealDesc(x, currentMenu.splitMealDesc) track by $index">
                     <div ng-if="settings.showTitle" class="font-weight-bold pt-1">{{y.title}}</div>
@@ -220,12 +218,9 @@
 
             <!--Desktop-->
             <div ng-if="settings.showFoods" class="table-responsive mt-1 mb-1 d-none d-sm-block">
-                <table class="table table-borderless table-sm">
+                <table class="table table-borderless table-sm mb-0">
                     <tr ng-if="settings.showMealsTotal">
-                        <th class="border-bottom"></th>
-                        <th class="border-bottom"></th>
-                        <th class="border-bottom"></th>
-                        <th class="border-bottom"></th>
+                        <th colspan="4"></th>
                         <th class="text-right col-width border-bottom">{{'energy' | translate}}<br /><em class="small">({{'kcal' | translate}})</em></th>
                         <th class="text-right col-width border-bottom">{{'carbs' | translate}}.<br /><em class="small">({{'g' | translate}})</em></th>
                         <th class="text-right col-width border-bottom">{{'prot' | translate}}.<br /><em class="small">({{'g' | translate}})</em></th>
@@ -306,7 +301,7 @@
 
         <!--Desktop-->
         <div ng-if="settings.showTotals" class="table-responsive mt-2 d-none d-sm-block">
-            <table class="table table-borderless table-sm">
+            <table class="table table-borderless table-sm mb-0">
                 <tr ng-if="!settings.showMealsTotal">
                     <th></th>
                     <th></th>
@@ -317,12 +312,12 @@
                     <th class="text-right col-width">{{'prot' | translate}}.<br /><em>({{'g' | translate}})</em></th>
                     <th class="text-right col-width">{{'fats' | translate}}<br /><em>({{'g' | translate}})</em></th>
                 </tr>
-                <tr class="border-top small">
+                <tr class="small">
                     <th class="text-right" colspan="4"><label><span>{{'total nutritional values' | translate}}</span><span ng-if="settings.consumers > 1"> ({{'per consumer' | translate}})</span>:</label></th>
-                    <th class="text-right bg-gray col-width">{{totals.energy | number:1}}<br /><em></em></th>
-                    <th class="text-right bg-gray col-width">{{totals.carbohydrates | number:1}}<br /><em class="small text-nowrap">({{totals.carbohydratesPercentage | number:1}} %)</em></th>
-                    <th class="text-right bg-gray col-width">{{totals.proteins | number:1}}<br /><em class="small text-nowrap">({{totals.proteinsPercentage | number:1}} %)</em></th>
-                    <th class="text-right bg-gray col-width">{{totals.fats | number:1}}<br /><em class="small text-nowrap">({{totals.fatsPercentage | number:1}} %)</em></th>
+                    <th class="text-right bg-gray border-top col-width">{{totals.energy | number:1}}<br /><em></em></th>
+                    <th class="text-right bg-gray border-top col-width">{{totals.carbohydrates | number:1}}<br /><em class="small text-nowrap">({{totals.carbohydratesPercentage | number:1}} %)</em></th>
+                    <th class="text-right bg-gray border-top col-width">{{totals.proteins | number:1}}<br /><em class="small text-nowrap">({{totals.proteinsPercentage | number:1}} %)</em></th>
+                    <th class="text-right bg-gray border-top col-width">{{totals.fats | number:1}}<br /><em class="small text-nowrap">({{totals.fatsPercentage | number:1}} %)</em></th>
                 </tr>
             </table>
         </div>
@@ -331,7 +326,7 @@
         <!--Mobile-->
         <div ng-if="settings.showTotals" class="mt-2 d-block d-sm-none">
             <hr />
-            <table class="table table-borderless table-sm">
+            <table class="table table-borderless table-sm mb-0">
                 <tr>
                     <th></th>
                     <th></th>
