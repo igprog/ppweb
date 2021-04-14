@@ -12,6 +12,7 @@
   "clientapp_apk": "https://files.appsgeyser.com/Program%20Prehrane%20Klijent_8297899.apk",
   "webpage": "www.programprehrane.com",
   "webpageurl": "../",
+  "pricepageurl": "../cijene",
   "author": "Igor Gašparović",
   "copyright": "IG PROG",
   "email": "info@programprehrane.com",

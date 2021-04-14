@@ -1,5 +1,5 @@
 ﻿<div id="orderform" class="text-left" ng-controller="orderCtrl" >
-    <div ng-if="!showPaymentDetails" class="card">
+    <div ng-if="!showPaymentDetails" class="card shadow">
         <div>
             <div class="text-center py-3">
                 <h3>Narudžbenica</h3>
@@ -183,16 +183,21 @@
         </div>
     </div>
 
-    <div ng-if="showAlert" class="alert alert-success main-border mt-3">
-        <strong>Narudžba je uspješno poslana!</strong>
-        <p>Vaš korisnički račun će biti aktivan unutar 24 sata od primitka uplate ili nakon što nam pošaljete potvrdu o uplati na email: <strong><a href="mailto:{{config.email}}" title="email" class="text-dark">{{config.email}}</a></strong></p>
-        <hr />
-        <div class="mt-1">
-            <p>Ponuda je poslana na Vaš email.</p>
+    <div ng-if="showAlert" class="card shadow mt-3">
+        <div class="card-body">
+            <div class="alert alert-success main-border">
+                <strong>Narudžba je uspješno poslana!</strong>
+                <p>Vaš korisnički račun će biti aktivan unutar 24 sata od primitka uplate ili nakon što nam pošaljete potvrdu o uplati na email: <strong><a href="mailto:{{config.email}}" title="email" class="text-dark">{{config.email}}</a></strong></p>
+                <hr />
+                <div class="mt-1">
+                    <p>Ponuda je poslana na Vaš email.</p>
+                </div>
+            </div>
         </div>
     </div>
+    
 
-    <div ng-if="showPaymentDetails" class="card text-left">
+    <div ng-if="showPaymentDetails" class="card shadow text-left mt-3">
         <div class="card-header">
             <b>Podaci za uplatu:</b>
         </div>

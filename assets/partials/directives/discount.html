@@ -1,9 +1,8 @@
-﻿<div class="text-center m-3">
-    <div ng-if="discount.perc>0" class="card shadow main-gradient text-white m-2">
+﻿<div class="text-center m-2">
+    <div ng-if="discount.perc>0&&discount.title" class="card shadow main-gradient text-white m-2">
         <div class="card-body">
-            <span>Popust</span>
-            <h3 class="font-weight-bold">- {{discount.perc}} %</h3>
-            <p class="small">Na sve pakete od {{discount.dateFrom}} do {{discount.dateTo}}</p>
+            <h3 class="font-weight-bold">{{discount.title}}</h3>
+            <p>{{discount.desc}}</p>
         </div>
     </div>
 </div>

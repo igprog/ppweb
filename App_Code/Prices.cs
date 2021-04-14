@@ -85,6 +85,8 @@ public class Prices : System.Web.Services.WebService {
         public double perc;
         public string dateFrom;
         public string dateTo;
+        public string title;
+        public string desc;
     }
 
     #endregion Classes

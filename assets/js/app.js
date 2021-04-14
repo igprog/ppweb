@@ -125,6 +125,13 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
                 pageDescription: 'Program Prehrane je nastao je iz potrebe za izradom alata koji će nutricionistima i zdravstvenim djelatnicima ali i svim pojedincima koji vode računa o zdravoj i uravnoteženoj prehrani omogućiti brzu i jednostavnu izradu plana prehrane i programa tjelesne aktivnosti.'
             }
         })
+        .state('placanje-paypal', {
+            url: '/placanje-paypal', templateUrl: './assets/pages/paypal.html', controller: 'appCtrl',
+            data: {
+                pageTitle: ' | Plaćanje - PayPal',
+                pageDescription: 'Plaćanje putem Pay-Pal-a.'
+            }
+        })
         .state('sr', {
             url: '/sr', templateUrl: './assets/pages/sr/home.html', controller: 'appCtrl',
             data: {

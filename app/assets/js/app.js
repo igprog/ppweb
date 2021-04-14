@@ -179,15 +179,16 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
               }
               if ($sessionStorage.islogin == true) { $rootScope.loadData(); }
               if (angular.isUndefined($rootScope.myCalculation)) { $rootScope.initMyCalculation() };
-              if (localStorage.version) {
-                  if (localStorage.version != $rootScope.config.version) {
+
+              if (localStorage.ppwversion) {
+                  if (localStorage.ppwversion !== $rootScope.config.version) {
                       $timeout(function () {
                           openNotificationPopup();
                       }, 600);
                   }
               } else {
                   $timeout(function () {
-                      openNotificationPopup();
+                       openNotificationPopup();
                   }, 600);
               }
           });
@@ -521,7 +522,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         if (typeof (Storage) !== "undefined") {
-            localStorage.version = $scope.config.version;
+            localStorage.ppwversion = $scope.config.version;
         }
 
         $scope.hide = function () {
@@ -1064,17 +1065,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         functions.post('Users', 'Init', {}).then(function (d) {
             $scope.newUser = d;
         });
-        //$http({
-        //    url: $sessionStorage.config.backend + webService + '/Init',
-        //    method: "POST",
-        //    data: ""
-        //})
-        //.then(function (response) {
-        //    $scope.newUser = JSON.parse(response.data.d);
-        //},
-        //function (response) {
-        //    alert(response.data.d)
-        //});
     }
     init();
 
@@ -1130,7 +1120,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     if ($rootScope.user === undefined) {
         $window.location.href = '/app/#/login';
     }
-    var webService = 'Scheduler.asmx';
+    var webService = 'Scheduler';
     $scope.id = '#myScheduler';
     $scope.room = 0;
     $scope.uid = $rootScope.user.userId;
@@ -1181,38 +1171,21 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var getUsers = function () {
-        $http({
-            url: $sessionStorage.config.backend +'Users.asmx/GetUsersByUserGroup',
-            method: 'POST',
-            data: { userGroupId: $rootScope.user.userGroupId }
-        })
-      .then(function (response) {
-          $scope.users = JSON.parse(response.data.d);
-          $scope.getSchedulerEvents($rootScope.user.userId);
-      },
-      function (response) {
-          functions.alert($translate.instant(response.data.d));
-      });
+        functions.post('Users', 'GetUsersByUserGroup', { userGroupId: $rootScope.user.userGroupId }).then(function (d) {
+            $scope.users = d;
+            $scope.getSchedulerEvents($rootScope.user.userId);
+        });
     };
 
     $scope.getSchedulerEvents = function (uid) {
         $scope.loading = true;
-        $http({
-            url: $sessionStorage.config.backend + webService + '/GetSchedulerEvents',
-            method: 'POST',
-            data: { user: $rootScope.user, room: $scope.room, uid: uid }
-        })
-       .then(function (response) {
-           $rootScope.events = JSON.parse(response.data.d);
-           $timeout(function () {
-               $scope.loading = false;
-               showScheduler();
-           }, 200);
-       },
-       function (response) {
-           $scope.loading = false;
-           functions.alert($translate.instant(response.data.d));
-       });
+        functions.post(webService, 'GetSchedulerEvents', { user: $rootScope.user, room: $scope.room, uid: uid }).then(function (d) {
+            $rootScope.events = d;
+            $timeout(function () {
+                $scope.loading = false;
+                showScheduler();
+            }, 200);
+        });
     };
     getUsers();
 
@@ -1257,17 +1230,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             functions.demoAlert('this function is available only in standard and premium package');
             return false;
         }
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Save',
-            method: "POST",
-            data: { userGroupId: $rootScope.user.userGroupId, userId: $rootScope.user.userId, x: x }
-        })
-        .then(function (response) {
+        functions.post(webService, 'Save', { userGroupId: $rootScope.user.userGroupId, userId: $rootScope.user.userId, x: x }).then(function (d) {
             getAppointmentsCountByUserId();
             $rootScope.getActiveEvents();
-        },
-        function (response) {
-            functions.alert($translate.instant(response.data.d));
         });
     }
 
@@ -1283,17 +1248,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var remove = function (x) {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Delete',
-            method: "POST",
-            data: { userGroupId: $rootScope.user.userGroupId, userId: $rootScope.user.userId, x: x }
-        })
-        .then(function (response) {
+        functions.post(webService, 'Delete', { userGroupId: $rootScope.user.userGroupId, userId: $rootScope.user.userId, x: x }).then(function (d) {
             getAppointmentsCountByUserId();
             $rootScope.getActiveEvents();
-        },
-        function (response) {
-            functions.alert($translate.instant(response.data));
         });
     }
 
@@ -1302,31 +1259,17 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     var getAppointmentsCountByUserId = function () {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/GetAppointmentsCountByUserId',
-            method: 'POST',
-            data: { userGroupId: $rootScope.user.userGroupId, userId: $rootScope.user.userId },
-        }).then(function (response) {
-            $rootScope.user.datasum.scheduler = JSON.parse(response.data.d);
-        },
-       function (response) {
-           functions.alert($translate.instant(response.data.d));
-       });
+        functions.post(webService, 'GetAppointmentsCountByUserId', { userGroupId: $rootScope.user.userGroupId, userId: $rootScope.user.userId }).then(function (d) {
+            $rootScope.user.datasum.scheduler = d;
+        });
     }
 
     var removeAllEvents = function () {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/RemoveAllEvents',
-            method: 'POST',
-            data: { userGroupId: $rootScope.user.userGroupId },
-        }).then(function (response) {
+        functions.post(webService, 'RemoveAllEvents', { userGroupId: $rootScope.user.userGroupId }).then(function (d) {
             $scope.uid = null;
             getAppointmentsCountByUserId();
             $rootScope.getActiveEvents();
-        },
-       function (response) {
-           functions.alert($translate.instant(response.data.d));
-       });
+        });
     }
 
     $scope.removeAllEvents = function () {

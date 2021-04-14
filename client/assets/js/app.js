@@ -89,7 +89,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
 
     var saveVersion = function () {
         if (typeof (Storage) !== "undefined") {
-            localStorage.version = $scope.config.version;
+            localStorage.ppcversion = $scope.config.version;
         }
         window.location.reload(true);
     }
@@ -207,8 +207,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'chart.js', 'ngSto
               loadPals();
               $scope.loadMenues();
               $state.go('dashboard');
-              if (localStorage.version) {
-                  if (localStorage.version != $scope.config.version) {
+              if (localStorage.ppcversion) {
+                  if (localStorage.ppcversion != $scope.config.version) {
                       saveVersion();
                   }
               } else {

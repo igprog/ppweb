@@ -19,6 +19,7 @@ using Igprog;
 public class Scheduler : System.Web.Services.WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     DataBase db = new DataBase();
+    Log L = new Log();
 
     public Scheduler() {
     }
@@ -70,10 +71,12 @@ public class Scheduler : System.Web.Services.WebService {
                         }
                     }
                 }  
-                connection.Close();
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userGroupId, userId, "Scheduler", "Load");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -94,10 +97,12 @@ public class Scheduler : System.Web.Services.WebService {
                     command.Parameters.Add(new SQLiteParameter("userId", x.userId));
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
-            } 
-            return ("saved");
-        } catch (Exception e) { return e.Message; }
+            }
+            return JsonConvert.SerializeObject("saved", Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.id.ToString(), userId, "Scheduler", "Save");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -110,10 +115,12 @@ public class Scheduler : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
             }
-            return ("deleted");
-        } catch (Exception e) { return e.Message; }
+            return JsonConvert.SerializeObject("deleted", Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.id.ToString(), userId, "Scheduler", "Delete");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -141,10 +148,12 @@ public class Scheduler : System.Web.Services.WebService {
                         }
                     }  
                 }
-                connection.Close();
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, user.rowid.ToString(), uid, "Scheduler", "GetSchedulerEvents");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -172,7 +181,10 @@ public class Scheduler : System.Web.Services.WebService {
                 connection.Close();
             }
             return JsonConvert.SerializeObject(cs, Formatting.None);
-        } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, userGroupId, userId, "Scheduler", "GetAppointmentsCountByUserId");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -185,10 +197,12 @@ public class Scheduler : System.Web.Services.WebService {
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
             }
-            return ("deleted");
-        } catch (Exception e) { return e.Message; }
+            return JsonConvert.SerializeObject("ok", Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userGroupId, "Scheduler", "RemoveAllEvents");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -215,12 +229,14 @@ public class Scheduler : System.Web.Services.WebService {
                                 xx.Add(x);
                             }
                         }
-                        connection.Close();
                     }
                 }
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return JsonConvert.SerializeObject(e.Message, Formatting.None); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, now, user.userId, "Scheduler", "GetActiveEvents");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
     #endregion WebMethods
 
