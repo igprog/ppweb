@@ -22,9 +22,9 @@ namespace Igprog {
         }
 
         #region Date
-        public int DateDiff(DateTime date1, DateTime date2) {
+        public int DateDiff(DateTime date1, DateTime date2, bool abs) {
             try {
-                return Convert.ToInt32(Math.Abs((date2 - date1).TotalDays));
+                return Convert.ToInt32(abs ? Math.Abs((date2 - date1).TotalDays) : (date2 - date1).TotalDays);
             } catch (Exception e) {
                 return 0;
             }
@@ -34,7 +34,7 @@ namespace Igprog {
             try {
                 DateTime date1_ = Convert.ToDateTime(date1);
                 DateTime date2_ = Convert.ToDateTime(date2);
-                return DateDiff(date1_, date2_);
+                return DateDiff(date1_, date2_, true);
             } catch (Exception e) {
                 return 0;
             }
@@ -42,7 +42,7 @@ namespace Igprog {
 
         public int DateDiff(string date) {
             try {
-                return DateDiff(Convert.ToDateTime(date), DateTime.UtcNow);
+                return DateDiff(Convert.ToDateTime(date), DateTime.UtcNow, true);
             } catch (Exception e) {
                 return 0;
             }

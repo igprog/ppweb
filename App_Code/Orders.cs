@@ -81,8 +81,8 @@ public class Orders : WebService {
         x.eInvoice = false;
         x.maxNumberOfUsers = 1;
         x.isForeign = false;
-        Files F = new Files();
-        x.discountCoeff = F.GetSettingsData().discount.perc / 100.0;
+        Prices P = new Prices();
+        x.discountCoeff = P.GetDiscountData().perc / 100.0;
         x.priceWithDiscount = 0.0;
         x.priceWithDiscountEur = 0.0;
         return JsonConvert.SerializeObject(x, Formatting.None);

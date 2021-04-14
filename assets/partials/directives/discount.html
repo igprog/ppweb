@@ -1,5 +1,5 @@
-﻿<div class="text-center m-2">
-    <div ng-if="discount.perc>0&&discount.title" class="card shadow main-gradient text-white m-2">
+﻿<div ng-if="discount" class="text-center">
+    <div ng-show="show(discount)" class="card shadow main-gradient text-white my-4">
         <div class="card-body">
             <h3 class="font-weight-bold">{{discount.title}}</h3>
             <p>{{discount.desc}}</p>

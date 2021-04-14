@@ -203,10 +203,9 @@ public class Prices : System.Web.Services.WebService {
 
     [WebMethod]
     public string GetDiscount() {
-        Files F = new Files();
         Discount x = new Discount();
         try {
-            x = F.GetSettingsData().discount;
+            x = GetDiscountData();
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, null, "Prices", "GetDiscount");
@@ -255,6 +254,17 @@ public class Prices : System.Web.Services.WebService {
             L.SendErrorLog(e, x.id, userId, "Prices", "Check");
             return false;
         }
+    }
+
+    public Discount GetDiscountData() {
+        Files F = new Files();
+        Discount x = new Discount();
+        x = F.GetSettingsData().discount;
+        Global G = new Global();
+        if (G.DateDiff(Convert.ToDateTime(G.NowLocal()), Convert.ToDateTime(x.dateTo), false) < 0) {
+            x = new Discount();
+        }
+        return x;
     }
     #endregion Methods
 
