@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
 public class Files : WebService {
+    Log L = new Log();
     public Files() {
     }
 
@@ -196,9 +197,13 @@ public class Files : WebService {
     }
 
     public void DeleteUserFolder(string userId) {
-        string path = Server.MapPath(string.Format("~/App_Data/users/{0}/", userId));
-        if (Directory.Exists(path)) {
-            Directory.Delete(path, true);
+        try {
+            string path = Server.MapPath(string.Format("~/App_Data/users/{0}/", userId));
+            if (Directory.Exists(path)) {
+                Directory.Delete(path, true);
+            }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "Files", "DeleteUserFolder");
         }
     }
 

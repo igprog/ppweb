@@ -388,7 +388,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
             return false;
         }
         $scope.signupok = false;
-        $scope.sendicon = 'fa fa-spinner fa-spin';
+        $scope.sendicon = 'fas fa-spinner fa-spin';
         $scope.sendicontitle = 'Pričekajte trenutak...';
         $scope.isSendButtonDisabled = true;
         $http({
@@ -397,12 +397,12 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
             data: { x: user, lang: $rootScope.config.language }
         })
        .then(function (response) {
-           if (response.data.d == 'the email address you have entered is already registered') {
+           if (JSON.parse(response.data.d) === 'the email address you have entered is already registered') {
                $scope.msg.title = 'E-mail adresa koju ste upisali je već registrirana';
                validationFormDanger();
                init();
            }
-           if (response.data.d == 'registration completed successfully') {
+           if (JSON.parse(response.data.d) === 'registration completed successfully') {
                $scope.msg.title = 'Registracija upješno završena';
                validationFormSuccess();
                window.location.hash = 'registration';

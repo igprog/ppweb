@@ -175,10 +175,10 @@
                     </a>
                     <div id="useraccount" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a ng-if="loginUser.adminType<2" ui-sref="user" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-user"></i><span class="pl-2">{{'my profile' | translate}}</span></a>
-                            <a ng-if="loginUser.adminType===0" ui-sref="users" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-users"></i><span class="pl-2">{{'users' | translate}}</span></a>
-                            <a ng-if="loginUser.adminType===0" ui-sref="newuser" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-user-plus"></i><span class="pl-2">{{'new user' | translate}}</span></a>
-                            <a ui-sref="order" ui-sref-active="active" href="#" class="collapse-item"><i class="fa fa-cart-arrow-down"></i><span class="pl-2">{{user.licenceStatus!=='demo'?('renew subscription' | translate):('activate full version' | translate)}}</span></a>
+                            <a ng-if="loginUser.adminType<2" ui-sref="user" ui-sref-active="active" href="" class="collapse-item"><i class="fa fa-user"></i><span class="pl-2">{{'my profile' | translate}}</span></a>
+                            <a ng-if="loginUser.adminType===0" ui-sref="users" ui-sref-active="active" href="" class="collapse-item"><i class="fa fa-users"></i><span class="pl-2">{{'users' | translate}}</span></a>
+                            <a ng-if="loginUser.adminType===0" ui-sref="newuser" ui-sref-active="active" href="" class="collapse-item"><i class="fa fa-user-plus"></i><span class="pl-2">{{'new user' | translate}}</span></a>
+                            <a ui-sref="order" ui-sref-active="active" href="" class="collapse-item"><i class="fa fa-cart-arrow-down"></i><span class="pl-2">{{user.licenceStatus!=='demo'?('renew subscription' | translate):('activate full version' | translate)}}</span></a>
                             <a href="" data-toggle="modal" data-target="#logoutModal" class="collapse-item"><i class="fa fa-sign-out-alt"></i><span class="pl-2">{{'logout' | translate}}</span></a>
                         </div>
                     </div>
@@ -301,11 +301,11 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     {{'my profile' | translate}}
                                 </a>
-                                <a ng-if="user.adminType<2" ng-hide="user.licenceStatus==='expired'" ng-click="toggleTpl('users')" class="dropdown-item" href="">
+                                <a ng-if="loginUser.adminType===0" ng-hide="user.licenceStatus==='expired'" ng-click="toggleTpl('users')" class="dropdown-item" href="">
                                     <i class="fas fa-users fa-sm fa-fw mr-2 text-gray-400"></i>
                                     {{'users' | translate}}
                                 </a>
-                                <a ng-if="user.adminType<2" ng-hide="user.licenceStatus==='expired'" ng-click="toggleTpl('newuser')" class="dropdown-item" href="">
+                                <a ng-if="loginUser.adminType===0" ng-hide="user.licenceStatus==='expired'" ng-click="toggleTpl('newuser')" class="dropdown-item" href="">
                                     <i class="fas fa-user-plus fa-sm fa-fw mr-2 text-gray-400"></i>
                                     {{'new user' | translate}}
                                 </a>

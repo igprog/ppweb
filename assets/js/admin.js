@@ -594,7 +594,7 @@ angular.module('app', [])
     }
 
     $scope.removeInvoice = function (x, year, search) {
-        if (confirm("Briši rčun br." + x.number + ", Iznos: " + x.total + "?")) {
+        if (confirm("Briši račun br." + x.number + ", Iznos: " + x.total + "?")) {
             $http({
                 url: $rootScope.config.backend + 'Invoice.asmx/Delete',
                 method: 'POST',

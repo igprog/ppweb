@@ -13,7 +13,7 @@ using Igprog;
 [WebService(Namespace = "http://programprehrane.com/app")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class WeeklyMenus : System.Web.Services.WebService {
+public class WeeklyMenus : WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     DataBase db = new DataBase();
     Translate t = new Translate();
@@ -300,7 +300,7 @@ public class WeeklyMenus : System.Web.Services.WebService {
             
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, userId, "WeeklyMenus", "GetWeeklyMenusTotals");
+            L.SendErrorLog(e, menuList.ToString(), userId, "WeeklyMenus", "GetWeeklyMenusTotals");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }

@@ -1290,7 +1290,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $window.location.href = '/app/#/login';
     }
 
-    var webService = 'Users.asmx';
+    var webService = 'Users';
 
     $scope.adminTypes = [
        {
@@ -1308,33 +1308,17 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     ];
 
     var init = function () {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Init',
-            method: "POST",
-            data: ""
-        })
-        .then(function (response) {
-            $scope.newUser = JSON.parse(response.data.d);
+        functions.post(webService, 'Init', {}).then(function (d) {
+            $scope.newUser = d;
             $scope.newUser.adminType = 1;
             load();
-        },
-        function (response) {
-            functions.alert($translate.instant(response.data.d));
         });
     }
 
     var load = function () {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/GetUsersByUserGroup',
-            method: 'POST',
-            data: { userGroupId: $sessionStorage.usergroupid }
-        })
-      .then(function (response) {
-          $scope.users = JSON.parse(response.data.d);
-      },
-      function (response) {
-          functions.alert($translate.instant(response.data.d));
-      });
+        functions.post(webService, 'GetUsersByUserGroup', { userGroupId: $sessionStorage.usergroupid }).then(function (d) {
+            $scope.users = d;
+        });
     };
 
     init();
@@ -1390,62 +1374,30 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return false;
         }
         $scope.creatingNewUser = true;
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Signup',
-            method: "POST",
-            data: { x: $scope.newUser, lang: $rootScope.config.language }
-        })
-        .then(function (response) {
+        functions.post(webService, 'Signup', { x: $scope.newUser, lang: $rootScope.config.language }).then(function (d) {
             load();
             $scope.creatingNewUser = false;
-            functions.alert($translate.instant(response.data.d));
-        },
-        function (response) {
-            $scope.creatingNewUser = false;
-            functions.alert($translate.instant(response.data.d));
+            functions.alert($translate.instant(d));
         });
     }
 
     $scope.update = function (user) {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Update',
-            method: 'POST',
-            data: { x: user }
-        })
-       .then(function (response) {
-           functions.alert($translate.instant('saved'), '');
-       },
-       function (response) {
-           functions.alert($translate.instant(response.data.d));
-       });
+        functions.post(webService, 'Update', { x: user }).then(function (d) {
+            functions.alert($translate.instant(d));
+        });
     }
 
     $scope.showUser = function (x) {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Get',
-            method: 'POST',
-            data: { userId: x }
-        }).then(function (response) {
-            $rootScope.user = JSON.parse(response.data.d);
+        functions.post(webService, 'Get', { userId: x }).then(function (d) {
+            $rootScope.user = d;
             $state.go('user');
-
-        },
-       function (response) {
-           functions.alert($translate.instant(response.data.d));
-       });
+        });
     };
 
     $scope.updateUser = function (user) {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Update',
-            method: 'POST',
-            data: { x: user }
-        }).then(function (response) {
-            functions.alert($translate.instant(response.data.d));
-        },
-       function (response) {
-           functions.alert($translate.instant(response.data.d));
-       });
+        functions.post(webService, 'Update', { x: user }).then(function (d) {
+            functions.alert($translate.instant(d));
+        });
     }
 
     $scope.remove = function (x) {
@@ -1462,16 +1414,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     var remove = function (user) {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Delete',
-            method: 'POST',
-            data: { x: user }
-        }).then(function (response) {
+        functions.post(webService, 'Delete', { x: user }).then(function (d) {
             load();
-        },
-       function (response) {
-           functions.alert($translate.instant(response.data.d));
-       });
+        });
     }
 
     $scope.showpass = false;
@@ -1555,18 +1500,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.sending = false;
     $scope.sendDeleteAccountLink = function (user) {
         $scope.sending = true;
-        $http({
-            url: $sessionStorage.config.backend + webService + '/SendDeleteAccountLink',
-            method: 'POST',
-            data: { x: user, lang: $rootScope.config.language }
-        }).then(function (response) {
+        functions.post(webService, 'SendDeleteAccountLink', { x: user, lang: $rootScope.config.language }).then(function (d) {
             $scope.sending = false;
-            functions.alert($translate.instant(response.data.d));
-        },
-       function (response) {
-           $scope.sending = false;
-           functions.alert($translate.instant(response.data.d));
-       });
+            functions.alert($translate.instant(d));
+        });
     }
 
 
@@ -7475,7 +7412,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('resetPasswordCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', 'functions', '$translate', '$translatePartialLoader', function ($scope, $http, $sessionStorage, $window, $rootScope, functions, $translate, $translatePartialLoader) {
-    var webService = 'Users.asmx';
+    var webService = 'Users';
     var config = null;
     var lang = null;
     var uid = null;
@@ -7493,16 +7430,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             uid = queryString[0].substring(5);
             $http.get('./config/config.json').then(function (response) {
                 config = response.data;
-                $http({
-                    url: config.backend + webService + '/Get',
-                    method: "POST",
-                    data: { userId: uid }
-                })
-                .then(function (response) {
-                    $scope.user = JSON.parse(response.data.d);
-                },
-                function (response) {
-                    functions.alert(response.data.d, '');
+                functions.post(webService, 'Get', { userId: uid }).then(function (d) {
+                    $scope.user = d;
                 });
             });
         }
@@ -7524,17 +7453,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             functions.alert($translate.instant('passwords are not the same'), '');
             return false;
         }
-        $http({
-            url: config.backend + webService + '/ResetPassword',
-            method: "POST",
-            data: { uid: uid, newPasword: x.password }
-        })
-        .then(function (response) {
-            functions.alert($translate.instant(response.data.d), '');
-            $scope.resp = response.data.d;
-        },
-        function (response) {
-            functions.alert(response.data.d, '');
+        functions.post(webService, 'ResetPassword', { uid: uid, newPasword: x.password }).then(function (d) {
+            functions.alert($translate.instant(d), '');
+            $scope.resp = d;
         });
     }
 

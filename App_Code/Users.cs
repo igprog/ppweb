@@ -6,7 +6,6 @@ using System.Web.Services;
 using System.IO;
 using System.Text;
 using System.Data;
-using System.Data.SqlClient;
 using System.Configuration;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
@@ -16,7 +15,7 @@ using Igprog;
 [WebService(Namespace = "http://programprehrane.com/app/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class Users : System.Web.Services.WebService {
+public class Users : WebService {
     string dataBase = ConfigurationManager.AppSettings["UsersDataBase"];
     string userDataBase = ConfigurationManager.AppSettings["UserDataBase"];
     string webDataBase = ConfigurationManager.AppSettings["WebDataBase"];
@@ -242,7 +241,7 @@ public class Users : System.Web.Services.WebService {
         string path = HttpContext.Current.Server.MapPath("~/App_Data/" + dataBase);
         db.CreateGlobalDataBase(path, db.users);
         if (Check(x) != false) {
-            return "the email address you have entered is already registered";
+            return JsonConvert.SerializeObject("the email address you have entered is already registered", Formatting.None);
         }
         else {
             try {
@@ -281,12 +280,12 @@ public class Users : System.Web.Services.WebService {
                     }
                 }
                 if (x.email.Contains("@")) {
-                    SendMail(x, lang);
+                     SendMail(x, lang);
                 }
-                return "registration completed successfully";
+                return JsonConvert.SerializeObject("registration completed successfully", Formatting.None);
             } catch (Exception e) {
                 L.SendErrorLog(e, x.userId, x.email, "Users", "Signup");
-                return e.Message;
+                return JsonConvert.SerializeObject(e.Message, Formatting.None);
             }
         }
     }
@@ -606,7 +605,6 @@ public class Users : System.Web.Services.WebService {
                         } 
                     }
                 }
-                connection.Close();
             }   
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
@@ -618,19 +616,23 @@ public class Users : System.Web.Services.WebService {
     [WebMethod]
     public string Delete(NewUser x) {
         try {
+            if (!string.IsNullOrEmpty(x.userId) && !string.IsNullOrEmpty(x.userGroupId)) {
+                return JsonConvert.SerializeObject("error", Formatting.None);
+            }
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
                 connection.Open();
                 string sql = string.Format("DELETE FROM users WHERE userId = '{0}'", x.userId);
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();
                 }
+                connection.Close();
             }
             SharingRecipes SR = new SharingRecipes();
             SR.DeleteSharedRecipeByUserId(x.userId);
-            return "ok";
+            return JsonConvert.SerializeObject("ok", Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, x.userId, "Users", "Delete");
-            return e.Message;
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
@@ -645,6 +647,7 @@ public class Users : System.Web.Services.WebService {
                     using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                         command.ExecuteNonQuery();
                     }
+                    connection.Close();
                 }
                 SharingRecipes SR = new SharingRecipes();
                 SR.DeleteSharedRecipeByUserId(x.userGroupId);
@@ -730,10 +733,10 @@ public class Users : System.Web.Services.WebService {
                     }
                 }
             }
-            return "saved";
+            return JsonConvert.SerializeObject("saved", Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, uid, "Users", "ResetPassword");
-            return e.Message;
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
