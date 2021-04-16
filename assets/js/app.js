@@ -319,15 +319,15 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
             method: 'POST',
             data: ''
         })
-     .then(function (response) {
-         $scope.user = JSON.parse(response.data.d);
-         $scope.passwordConfirm = null;
-         $scope.emailConfirm = null;
-         $scope.accept = false;
-     },
-     function (response) {
-         alert(response.data.d);
-     });
+        .then(function (response) {
+            $scope.user = JSON.parse(response.data.d);
+            $scope.passwordConfirm = null;
+            $scope.emailConfirm = null;
+            $scope.accept = false;
+        },
+        function (response) {
+            alert(response.data.d);
+        });
     }
 
     var getConfig = function () {
@@ -406,6 +406,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
                $scope.msg.title = 'Registracija upješno završena';
                validationFormSuccess();
                window.location.hash = 'registration';
+               sendSignupMail(user, $rootScope.config.language);
            }
        },
        function (response) {
@@ -415,6 +416,19 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
            $scope.sendicontitle = 'REGISTRACIJA';
            $scope.isSendButtonDisabled = true;
        });
+    }
+
+    var sendSignupMail = function (newUser, lang) {
+        debugger;
+        $http({
+            url: $rootScope.config.backend + 'Users.asmx/SendSignupMail',
+            method: 'POST',
+            data: { x: newUser, lang: lang }
+        })
+        .then(function (response) {
+        },
+        function (response) {
+        });
     }
 
 }])

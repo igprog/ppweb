@@ -279,9 +279,11 @@ public class Users : WebService {
                         }
                     }
                 }
+                /*  // Removed call to frontend
                 if (x.email.Contains("@")) {
                      SendMail(x, lang);
                 }
+                */
                 return JsonConvert.SerializeObject("registration completed successfully", Formatting.None);
             } catch (Exception e) {
                 L.SendErrorLog(e, x.userId, x.email, "Users", "Signup");
@@ -895,6 +897,17 @@ public class Users : WebService {
             return JsonConvert.SerializeObject(response, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, x.userId, "Users", "SendDeleteAccountLink");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
+    }
+
+    [WebMethod]
+    public string SendSignupMail(NewUser x, string lang) {
+        try {
+            SendMail(x, lang);
+            return JsonConvert.SerializeObject("ok", Formatting.None);
+        } catch(Exception e) {
+            L.SendErrorLog(e, x.rowid.ToString(), x.userId, "Users", "SendSignupMail");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }

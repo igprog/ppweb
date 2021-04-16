@@ -3,7 +3,6 @@ style.css
 (c) 2020-2021 IG PROG, www.igprog.hr
 */
 
-
 md-dialog {
     min-width: 40%;
     max-height: 80%;
@@ -264,6 +263,10 @@ th {
 
 .slider {
   opacity: 0.7;
+}
+
+md-input-container > label {
+    color: #696969;
 }
 
 @media (max-width: 767px) {

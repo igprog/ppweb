@@ -264,8 +264,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         });
     };
 
-    $scope.activeEvents = null;
     $rootScope.getActiveEvents = function () {
+        $scope.activeEvents = [];
         if ($rootScope.user.userType == 0) { return false; }
         var now = new Date().getTime();
         functions.post('Scheduler', 'GetActiveEvents', { user: $rootScope.user, now: now }).then(function (d) {
@@ -1054,7 +1054,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('signupCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', 'functions', '$translate', '$state', function ($scope, $http, $sessionStorage, $window, $rootScope, functions, $translate, $state) {
-    var webService = 'Users.asmx';
+    var webService = 'Users';
     $scope.showAlert = false;
     $scope.passwordConfirm = '';
     $scope.emailConfirm = '';
@@ -1062,7 +1062,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.accept = false;
 
     var init = function () {
-        functions.post('Users', 'Init', {}).then(function (d) {
+        functions.post(webService, 'Init', {}).then(function (d) {
             $scope.newUser = d;
         });
     }
@@ -1092,25 +1092,40 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return false;
         }
         $scope.signingUp = true;
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Signup',
-            method: "POST",
-            data: { x: $scope.newUser, lang: $rootScope.config.language }
-        })
-        .then(function (response) {
+        functions.post(webService, 'Signup', { x: $scope.newUser, lang: $rootScope.config.language }).then(function (d) {
             $scope.signingUp = false;
-            if (response.data.d == 'registration completed successfully') {
-                $scope.alertMessage = response.data.d;
+            if (d === 'registration completed successfully') {
+                $scope.alertMessage = d;
                 $scope.showAlert = true;
+                sendSignupMail($scope.newUser, $rootScope.config.language);
             } else {
-                functions.alert($translate.instant(response.data.d), '');
+                functions.alert($translate.instant(d), '');
             }
-        },
-        function (response) {
-            $scope.showAlert = false;
-            $scope.signupdisabled = false;
-            $scope.signingUp = false;
-            functions.alert($translate.instant(response.data.d), '');
+        });
+        //$http({
+        //    url: $sessionStorage.config.backend + webService + '/Signup',
+        //    method: "POST",
+        //    data: { x: $scope.newUser, lang: $rootScope.config.language }
+        //})
+        //.then(function (response) {
+        //    $scope.signingUp = false;
+        //    if (response.data.d == 'registration completed successfully') {
+        //        $scope.alertMessage = response.data.d;
+        //        $scope.showAlert = true;
+        //    } else {
+        //        functions.alert($translate.instant(response.data.d), '');
+        //    }
+        //},
+        //function (response) {
+        //    $scope.showAlert = false;
+        //    $scope.signupdisabled = false;
+        //    $scope.signingUp = false;
+        //    functions.alert($translate.instant(response.data.d), '');
+        //});
+    }
+
+    var sendSignupMail = function (newUser, lang) {
+        functions.post(webService, 'SendSignupMail', { x: newUser, lang: lang }).then(function (d) {
         });
     }
 
@@ -1378,6 +1393,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             load();
             $scope.creatingNewUser = false;
             functions.alert($translate.instant(d));
+            sendSignupMail($scope.newUser, $rootScope.config.language);
+        });
+    }
+
+    var sendSignupMail = function (newUser, lang) {
+        functions.post(webService, 'SendSignupMail', { x: newUser, lang: lang }).then(function (d) {
         });
     }
 
@@ -1503,9 +1524,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         functions.post(webService, 'SendDeleteAccountLink', { x: user, lang: $rootScope.config.language }).then(function (d) {
             $scope.sending = false;
             functions.alert($translate.instant(d));
+            $window.location.href = '../';
         });
     }
-
 
 }])
 
@@ -7463,7 +7484,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('deleteAccountCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', 'functions', '$translate', '$translatePartialLoader', function ($scope, $http, $sessionStorage, $window, $rootScope, functions, $translate, $translatePartialLoader) {
-    var webService = 'Users.asmx';
+    var webService = 'Users';
     var config = null;
     var lang = null;
     $scope.uid = null;
@@ -7497,7 +7518,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.login = function (d) {
-        functions.post('Users', 'Login', { userName: d.userName, password: d.password }).then(function (d) {
+        functions.post(webService, 'Login', { userName: d.userName, password: d.password }).then(function (d) {
             var user = d;
             if (user.userId !== null) {
                 if (user.userId !== $scope.uid) {
@@ -7520,7 +7541,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         if (user.userId !== user.userGroupId) {
             functions.alert($translate.instant('you do not have permission to delete this account'), '');
         } else {
-            functions.post('Users', 'DeleteAllUserGroup', { x: user }).then(function (d) {
+            functions.post(webService, 'DeleteAllUserGroup', { x: user }).then(function (d) {
                 $scope.response = d;
             });
         }
