@@ -142,14 +142,16 @@ public class ClientsData : System.Web.Services.WebService {
 
     [WebMethod]
     public string Save(string userId, NewClientData x, int userType) {
+        string sql = null;
         try {
             db.CreateDataBase(userId, db.clientsData);
             db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
             db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.
+            Global G = new Global();
+            x.clientNote = G.RemoveSingleQuotes(x.clientNote);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
-                string sql = "";
-                if (Check(userId, x) != false) {
+                if (Check(userId, x)) {
                     sql = string.Format(@"INSERT INTO clientsdata (clientId, height, weight, waist, hip, pal, goal, activities, diet, meals, date, userId, bodyFatPerc)
                             VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}');
                             UPDATE clients SET note = '{13}' WHERE clientId = '{0}';"
@@ -165,7 +167,7 @@ public class ClientsData : System.Web.Services.WebService {
                     sql = string.Format(@"UPDATE clientsdata SET  
                             height = '{0}', weight = '{1}', waist = '{2}', hip = '{3}', pal = '{4}', goal = '{5}', activities = '{6}', diet = '{7}', meals = '{8}', date = '{9}', bodyFatPerc = '{10}' 
                             WHERE clientId = '{11}' AND ((strftime('%d', date) = '{12}' AND strftime('%m', date) = '{13}' AND strftime('%Y', date) = '{14}') OR date = '{9}');
-                            UPDATE clients SET note = '{15}' WHERE clientId = '{10}';"
+                            UPDATE clients SET note = '{15}' WHERE clientId = '{11}';"
                             , x.height, x.weight, x.waist, x.hip, x.pal.value, x.goal.code
                             , JsonConvert.SerializeObject(x.activities, Formatting.None)
                             , JsonConvert.SerializeObject(x.diet, Formatting.None)
@@ -191,7 +193,7 @@ public class ClientsData : System.Web.Services.WebService {
             }
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, x.id.ToString(), userId, "ClientsData", "Save");
+            L.SendErrorLog(e, sql, userId, "ClientsData", "Save");
             return JsonConvert.SerializeObject(x, Formatting.None);
         }
     }

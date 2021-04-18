@@ -1,9 +1,7 @@
 Sitemap: https://www.programprehrane.com/sitemap.xml
 User-agent: *
-Disallow: /error.html
 Disallow: /admin.html
 Disallow: /instal.html
-Disallow: /index1.html
 Disallow: /app/eula.html
 Disallow: /app/resetpassword.html
 Disallow: /app/deleteuseraccount.html

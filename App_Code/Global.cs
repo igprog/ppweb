@@ -187,7 +187,7 @@ namespace Igprog {
         #endregion ImageCompress
 
         public string RemoveSingleQuotes(string x) {
-            return !string.IsNullOrWhiteSpace(x) ? x.Contains("'") ? x.Replace("'", "") : x : x;
+            return !string.IsNullOrWhiteSpace(x) ? x.Contains("'") ? x.Replace("'", " ") : x : x;
         }
     }
 }

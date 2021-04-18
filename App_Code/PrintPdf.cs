@@ -1964,7 +1964,7 @@ public class PrintPdf : WebService {
                 if (currentMenu.data.meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
                     string mealtitle = string.Format(@"{0}:", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, currentMenu.data.meals), lang)).ToUpper();
                     doc.Add(new Paragraph(mealtitle, GetFont(true)));
-                    rowCount = rowCount + 1;
+                    rowCount = rowCount + 2;
                     string description = currentMenu.data.meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
                     if (!string.IsNullOrWhiteSpace(description)) {
                         StringBuilder sb = new StringBuilder();
@@ -2302,16 +2302,19 @@ public class PrintPdf : WebService {
             sb.AppendLine(string.Format("{0}: {1}", t.Tran("number of consumers", lang), settings.consumers));
         }
 
-        if (!string.IsNullOrEmpty(title) || !string.IsNullOrEmpty(note) || settings.consumers > 1) {
+        if (!string.IsNullOrEmpty(title) || !string.IsNullOrEmpty(note) || settings.consumers > 1 || settings.showClientData) {
             rowCount = rowCount + 3;
         }
 
         table.AddCell(new PdfPCell(new Phrase(sb.ToString(), GetFont(10))) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15 });
 
+        string clientData = null;
         if (settings.showClientData) {
-            table.AddCell(new PdfPCell(new Phrase(ClientData(userId, client, lang), font_gray)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
-            rowCount = rowCount + 3;
+            clientData = ClientData(userId, client, lang);
         }
+
+        table.AddCell(new PdfPCell(new Phrase(clientData, font_gray)) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, HorizontalAlignment = PdfPCell.ALIGN_RIGHT });
+
         doc.Add(table);
     }
 
