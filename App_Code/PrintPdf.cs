@@ -264,10 +264,14 @@ public class PrintPdf : WebService {
         List<string> orderedMeals = GetOrderedMeals(meals);
         StringBuilder sb = new StringBuilder();
 
-        int i = 1;
+        int i = 0;
         int currPage = 1;
         menuPage = string.Format("{0}: {1}", t.Tran("page", lang), currPage);
         bool firstPage = true;
+
+        Menues M = new Menues();
+        currentMenu.data.meals = M.CombineTitleDesc(currentMenu);
+
         foreach (string m in orderedMeals) {
             List<Foods.NewFood> meal = currentMenu.data.selectedFoods.Where(a => a.meal.code == m).ToList();
             sb = new StringBuilder();
@@ -275,6 +279,16 @@ public class PrintPdf : WebService {
                 sb.AppendLine(string.Format(@"
                                         "));
             }
+
+            // ***** TODO: if (availableSpace(settings.rowsPerPage, nextMeal) && !firstPage) 
+            //int availableSpaceTest = AvailableSpace(currentMenu.data.selectedFoods, orderedMeals, i, settings.rowsPerPage, rowCount);
+            //if (orderedMeals.Count() > i) {
+            //    List<Foods.NewFood> nextMeal = currentMenu.data.selectedFoods.Where(a => a.meal.code == orderedMeals[i]).ToList();
+            //    int availableSpaceTest1 = AppendMeal_(doc, nextMeal, currentMenu, lang, totals, settings, false);
+            //}
+            // TODO: CheckNextMealRows: AppendMeal_(doc, meal, currentMenu, lang, totals, settings, false);
+            // *****
+
             if (rowCount >= settings.rowsPerPage && !firstPage) {
                 doc.NewPage();
                 sb.AppendLine(string.Format(@"
@@ -314,6 +328,19 @@ public class PrintPdf : WebService {
         }
         
         return doc;
+    }
+
+    private int AvailableSpace(List<Foods.NewFood> selectedFoods, List<string> orderedMeals, int i, int rowsPerPage, int rowCount) {
+        int x = 0;
+        if (orderedMeals.Count() >= i) {
+            List<Foods.NewFood> meal = selectedFoods.Where(a => a.meal.code == orderedMeals[i]).ToList();
+            int nextMeal = meal.Count();
+            int nextMealCount = rowCount + nextMeal;
+            if (rowsPerPage > nextMealCount) {
+                x = rowsPerPage - rowCount + nextMealCount;
+            }
+        }
+        return x;
     }
 
     public string MenuPdf_old(string userId, Menues.NewMenu currentMenu, Foods.Totals totals, string lang, PrintMenuSettings settings) {
@@ -2034,6 +2061,97 @@ public class PrintPdf : WebService {
                 }
             }
         }
+    }
+
+    // TODO
+    private int AppendMeal_(Document doc, List<Foods.NewFood> meal, Menues.NewMenu currentMenu, string lang, Foods.Totals totals, PrintMenuSettings settings, bool append) {
+        int countRow = 0;
+        if (meal.Count > 0) {
+            if (currentMenu.data.meals.Find(a => a.code == meal[0].meal.code) != null) {
+                if (currentMenu.data.meals.Find(a => a.code == meal[0].meal.code).isSelected == true) {
+                    string mealtitle = string.Format(@"{0}:", t.Tran(GetMealTitle(meal[0].meal.code, meal[0].meal.title, currentMenu.data.meals), lang)).ToUpper();
+                    if (append) {
+                        doc.Add(new Paragraph(mealtitle, GetFont(true)));
+                    }
+                    countRow = countRow + 2;
+                    string description = currentMenu.data.meals.Where(a => a.code == meal[0].meal.code).FirstOrDefault().description;
+                    if (!string.IsNullOrWhiteSpace(description)) {
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var dd in currentMenu.splitMealDesc.Where(a => a.code == meal[0].meal.code)) {
+                            foreach (var d in dd.dishDesc) {
+                                if (!string.IsNullOrWhiteSpace(d.title)) {
+                                    sb.AppendLine(d.title);
+                                }
+                                if (settings.descPosition == (int)DescPosition.top && !string.IsNullOrWhiteSpace(d.desc) && settings.showDescription) {
+                                    sb.AppendLine(d.desc);
+                                }
+                            }
+                        }
+                        sb.AppendLine();
+
+                        countRow = AddRowCountDependingOfDescriptionLength(countRow, sb);
+                        if (append) {
+                            doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
+                        }
+                    }
+                    if (settings.showFoods) {
+                        string currMealTitle = null;
+                        foreach (Foods.NewFood food in meal) {
+
+                            /**** More recipes in one meal *****/
+                            if (food.id.Split(';').Length == 2) {
+                                foreach (var dd in currentMenu.splitMealDesc.Where(a => a.code == meal[0].meal.code)) {
+                                    foreach (var d in dd.dishDesc) {
+                                        if (d.id == food.id.Split(';')[1]) {
+                                            string title = currMealTitle != d.title ? d.title : null;
+                                            currMealTitle = d.title;
+                                            if (!string.IsNullOrWhiteSpace(title)) {
+                                                PdfPTable table = new PdfPTable(1);
+                                                table.WidthPercentage = 100f;
+                                                table.AddCell(new PdfPCell(new Phrase(title, GetFont(9, Font.BOLD))) { Border = PdfPCell.NO_BORDER, PaddingBottom = 2, PaddingTop = 5 });
+                                                if (append) {
+                                                    doc.Add(table);
+                                                }
+                                                countRow = countRow + 2;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            /**** More recipes in one meal *****/
+                            if (append) {
+                                AppendFoodsTbl(doc, food, settings, lang);
+                                countRow = countRow + 1;
+                            }
+                        }
+                    }
+                    if (settings.showMealsTotal) {
+                        if (totals != null && append) {
+                            AppendMealTotalTbl(doc, totals.mealsTotal, meal[0].meal.code, settings, lang);
+                            countRow = countRow + 1;
+                        }
+                    }
+                    if (settings.descPosition == (int)DescPosition.bottom && !string.IsNullOrWhiteSpace(description) && settings.showDescription) {
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var dd in currentMenu.splitMealDesc.Where(a => a.code == meal[0].meal.code)) {
+                            foreach (var d in dd.dishDesc) {
+                                if (settings.descPosition == (int)DescPosition.bottom) {
+                                    if (!string.IsNullOrWhiteSpace(d.desc)) {
+                                        sb.AppendLine(d.desc);
+                                    }
+                                }
+                            }
+                        }
+                        sb.AppendLine();
+                        countRow = AddRowCountDependingOfDescriptionLength(countRow, sb);
+                        if (append) {
+                            doc.Add(new Paragraph(sb.ToString(), GetFont(9, Font.ITALIC)));
+                        }
+                    }
+                }
+            }
+        }
+        return countRow;
     }
 
     private string AppendMeal_old(List<Foods.NewFood> meal, Menues.NewMenu currentMenu, string lang, Foods.Totals totals, PrintMenuSettings settings) {

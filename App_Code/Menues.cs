@@ -588,7 +588,7 @@ public class Menues : System.Web.Services.WebService {
     }
 
 
-    private List<Meals.NewMeal> CombineTitleDesc(NewMenu menu) {
+    public List<Meals.NewMeal> CombineTitleDesc(NewMenu menu) {
         try {
             foreach (var meal in menu.data.meals) {
                 var dishDesc = menu.splitMealDesc.Find(a => a.code == meal.code).dishDesc;
@@ -612,7 +612,7 @@ public class Menues : System.Web.Services.WebService {
             }
             return menu.data.meals;
         } catch (Exception e) {
-            L.SendErrorLog(e, menu.id, null, "Menues", "CombineTitleDesc");
+            L.SendErrorLog(e, JsonConvert.SerializeObject(menu, Formatting.None), null, "Menues", "CombineTitleDesc");
             return menu.data.meals;
         }
         
