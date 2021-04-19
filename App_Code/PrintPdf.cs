@@ -330,6 +330,7 @@ public class PrintPdf : WebService {
         return doc;
     }
 
+    // TODO:
     private int AvailableSpace(List<Foods.NewFood> selectedFoods, List<string> orderedMeals, int i, int rowsPerPage, int rowCount) {
         int x = 0;
         if (orderedMeals.Count() >= i) {

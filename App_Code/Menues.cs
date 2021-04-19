@@ -591,7 +591,12 @@ public class Menues : System.Web.Services.WebService {
     public List<Meals.NewMeal> CombineTitleDesc(NewMenu menu) {
         try {
             foreach (var meal in menu.data.meals) {
-                var dishDesc = menu.splitMealDesc.Find(a => a.code == meal.code).dishDesc;
+                //var dishDesc = menu.splitMealDesc.Find(a => a.code == meal.code).dishDesc;
+                var dishDesc_ = menu.splitMealDesc.Where(a => a.code == meal.code).FirstOrDefault();
+                List<Meals.DishDesc> dishDesc = null;
+                if (dishDesc_ != null) {
+                    dishDesc = dishDesc_.dishDesc;
+                }
                 StringBuilder sb = new StringBuilder();
                 int idx = 0;
                 if (dishDesc != null) {
