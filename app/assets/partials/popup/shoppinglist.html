@@ -1,4 +1,4 @@
-﻿<md-dialog flex>
+﻿<md-dialog aria-label="ShoppingList dialog" flex>
     <form ng-cloak>
         <md-toolbar class="bg-main">
             <div class="md-toolbar-tools">
@@ -41,37 +41,41 @@
                             </md-checkbox>
                         </fieldset>
                     </div>
-                    <div class="col-sm-9">
-                        <fieldset class="fieldset-border">
-                            <legend class="fieldset-border text-capitalize">{{'shopping list' | translate}}</legend>
-                            <div id="shoppinglist_container">
-                                <strong ng-if="settings.showTitle">{{currentMenu.title}}</strong>
-                                <p ng-if="settings.showDescription">{{currentMenu.note}}</p>
-                                <p ng-if="settings.consumers > 1">{{'number of consumers' | translate}}: <strong>{{settings.consumers}}</strong></p>
-                                <div clss="table-responsive">
-                                    <table class="table table-sm table-borderless">
-                                        <tr class="text-capitalize border-bottom">
-                                            <th>{{'food' | translate}}</th>
-                                            <th ng-if="settings.showQty">{{'quantity' | translate}}</th>
-                                            <th ng-if="settings.showMass" class="text-right">{{'mass' | translate}}</th>
-                                            <th ng-if="settings.showPrice" class="text-right">{{'price' | translate}}</th>
-                                        </tr>
-                                        <tr ng-repeat="x in d.foods">
-                                            <td>{{x.food}}</td>
-                                            <td ng-if="settings.showQty">{{x.smartQty}}</td>
-                                            <td ng-if="settings.showMass" class="text-right">{{x.smartMass}}</td>
-                                            <td ng-if="settings.showPrice" class="text-right">{{x.price}} <span class="text-uppercase">{{x.currency}}</span></td>
-                                        </tr>
-                                        <tr class="border-top">
-                                            <td></td>
-                                            <td ng-if="settings.showQty"></td>
-                                            <td ng-if="settings.showMass"></td>
-                                            <td ng-if="settings.showPrice" class="text-capitalize text-right"><strong>{{'total price' | translate}}: {{d.total.price}} <span class="text-uppercase">{{d.total.currency}}</span></strong></td>
-                                        </tr>
-                                    </table>
+                    <div class="col-sm-9 mt-2">
+                        <div id="shoppinglist_container">
+                            <div class="card shadow">
+                                <div class="card-header">
+                                    <p class="lead font-weight-bold">{{'shopping list' | translate}}</p>
+                                    <strong ng-if="settings.showTitle">{{currentMenu.title}}</strong>
+                                    <p ng-if="settings.showDescription">{{currentMenu.note}}</p>
+                                    <p ng-if="settings.consumers > 1">{{'number of consumers' | translate}}: <strong>{{settings.consumers}}</strong></p>
+                                </div>
+                                <div class="card-body">
+                                    <div clss="table-responsive">
+                                        <table class="table table-sm table-borderless">
+                                            <tr class="text-capitalize border-bottom">
+                                                <th>{{'food' | translate}}</th>
+                                                <th ng-if="settings.showQty">{{'quantity' | translate}}</th>
+                                                <th ng-if="settings.showMass" class="text-right">{{'mass' | translate}}</th>
+                                                <th ng-if="settings.showPrice" class="text-right">{{'price' | translate}}</th>
+                                            </tr>
+                                            <tr ng-repeat="x in d.foods">
+                                                <td>{{x.food}}</td>
+                                                <td ng-if="settings.showQty">{{x.smartQty}}</td>
+                                                <td ng-if="settings.showMass" class="text-right">{{x.smartMass}}</td>
+                                                <td ng-if="settings.showPrice" class="text-right">{{x.price}} <span class="text-uppercase">{{x.currency}}</span></td>
+                                            </tr>
+                                            <tr class="border-top">
+                                                <td></td>
+                                                <td ng-if="settings.showQty"></td>
+                                                <td ng-if="settings.showMass"></td>
+                                                <td ng-if="settings.showPrice" class="text-capitalize text-right"><strong>{{'total price' | translate}}: {{d.total.price}} <span class="text-uppercase">{{d.total.currency}}</span></strong></td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </fieldset>
+                        </div>
                     </div>
                 </div>
             </div>

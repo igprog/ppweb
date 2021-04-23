@@ -3648,7 +3648,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         })
        .then(function (response) {
            $rootScope.recommendations = JSON.parse(response.data.d);
-           displayCharts();
+           $timeout(function () {
+               displayCharts();
+           }, 500);
        },
        function (response) {
            if (response.data.d === undefined) {
@@ -4076,54 +4078,72 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.appMenues = false;
         $scope.toTranslate = false;
         $scope.toLanguage = '';
-        $scope.limit = 20;
         $scope.searchValue = null;
         $scope.clientId = null;
         var limit = $rootScope.config.showmenuslimit;
         $scope.limit = limit;
         var offset = 0;
+        $scope.d = [];
+        var isLoadMore = false;
 
         $scope.toggle = function (type) {
             if (type == 'myMenus') {
                 $scope.d = [];
                 limit = $rootScope.config.showmenuslimit;
                 offset = 0;
-                load(null, null);
+                load(null, null, null);
             } else if (type == 'appMenus') {
                 loadAppMenues();
             }
         }
 
-        $scope.loadMore = function (search, clientId) {
+        $scope.loadMore = function (search, clientId, userId) {
+            isLoadMore = true;
             offset += $rootScope.config.showmenuslimit;
-            load(search, clientId);
+            load(search, clientId, userId);
         }
 
-        $scope.d = [];
-        var load = function (search, clientId) {
+        var load = function (search, clientId, userId) {
             $scope.loading = true;
             $scope.appMenues = false;
-            functions.post('Menues', 'Load', { userId: $rootScope.user.userGroupId, limit: limit, offset: offset, search: search, clientId: clientId }).then(function (d) {
+            if (!isLoadMore) {
+                $scope.d = [];
+            }
+            functions.post('Menues', 'Load', { userGroupId: $rootScope.user.userGroupId, limit: limit, offset: offset, search: search, clientId: clientId, userId: userId }).then(function (d) {
                 angular.forEach(d, function (x, key) {
                     x.date = new Date(x.date);
                 });
-                $scope.d = $scope.d.concat(d);
+                if ($scope.d !== null && isLoadMore) {
+                    $scope.d = $scope.d.concat(d);
+                } else {
+                    $scope.d = d;
+                }
                 $scope.loading = false;
             });
         }
-        load(null, null);
+        load(null, null, null);
 
-        $scope.load = function (search, type, clientId) {
+        $scope.currUserId = null;
+        $scope.load = function (search, type, clientId, userId) {
+            $scope.currUserId = userId;
             $scope.d = [];
             offset = 0;
             if (type == 0) {
                 $scope.clientId = null;
-                load(search, null);
+                load(search, null, userId);
             } else {
                 $scope.clientId = clientId;
-                load(search, clientId);
+                load(search, clientId, userId);
             }
         }
+
+        var getUsersByUserGroup = function () {
+            functions.post('Users', 'GetUsersByUserGroup', { userGroupId: $rootScope.user.userGroupId }).then(function (d) {
+                $scope.users = d;
+                $scope.users.unshift({ userId: null, firstName: $translate.instant('all users'), lastName: null });
+            });
+        };
+        getUsersByUserGroup();
 
         $scope.remove = function (x) {
             var confirm = $mdDialog.confirm()
@@ -4314,7 +4334,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         if ($rootScope.currentMenu === undefined) { return; }
         angular.forEach($rootScope.currentMenu.data.meals, function (value, key) {
             if (value.isSelected == true && angular.isDefined($rootScope.totals)) {
-
+                if ($rootScope.totals === null) return;
                 if (angular.isDefined($rootScope.totals.mealsTotal)) {
                     if (key < $rootScope.recommendations.mealsRecommendationEnergy.length) {
                         $scope.mealsTotals.push($rootScope.totals.mealsTotal.length > 0 && $rootScope.totals.mealsTotal.length <= $rootScope.recommendations.mealsRecommendationEnergy.length ? $rootScope.totals.mealsTotal[key].energy.val.toFixed(1) : 0);
@@ -4612,6 +4632,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var totalEnergyChart = function () {
+        if ($rootScope.totals === null) return;
         var recommended = parseInt($rootScope.recommendations.energy);
         var id = 'energyChart';
         var value = $rootScope.totals.energy.toFixed(0);
@@ -6844,13 +6865,13 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.appMenues = false;
         $scope.toTranslate = false;
         $scope.toLanguage = '';
-        $scope.limit = 20;
         $scope.searchValue = null;
         $scope.hideNav = true;
         var limit = $rootScope.config.showmenuslimit;
         $scope.limit = limit;
         var offset = 0;
         $scope.d = [];
+        var isLoadMore = false;
 
         $scope.toggle = function (type) {
             if (type == 'myMenus') {
@@ -6863,45 +6884,54 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
         }
 
-        $scope.loadMore = function (search, clientId) {
+        $scope.loadMore = function (search, clientId, userId) {
+            isLoadMore = true;
             offset += $rootScope.config.showmenuslimit;
-            load(search, clientId);
+            load(search, clientId, userId);
         }
 
-        var load = function (search, clientId) {
+        $scope.d = [];
+        var load = function (search, clientId, userId) {
             $scope.loading = true;
             $scope.appMenues = false;
-            $http({
-                url: $sessionStorage.config.backend + 'Menues.asmx/Load',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, limit: limit, offset: offset, search: search, clientId: clientId }
-            })
-           .then(function (response) {
-               var d = JSON.parse(response.data.d);
-               angular.forEach(d, function (x, key) {
-                   x.date = new Date(x.date);
-               });
-               $scope.d = $scope.d.concat(d);
-               $scope.loading = false;
-           },
-           function (response) {
-               $scope.loading = false;
-               alert(response.data.d);
-           });
+            if (!isLoadMore) {
+                $scope.d = [];
+            }
+            functions.post('Menues', 'Load', { userGroupId: $rootScope.user.userGroupId, limit: limit, offset: offset, search: search, clientId: clientId, userId: userId }).then(function (d) {
+                angular.forEach(d, function (x, key) {
+                    x.date = new Date(x.date);
+                });
+                if ($scope.d !== null && isLoadMore) {
+                    $scope.d = $scope.d.concat(d);
+                } else {
+                    $scope.d = d;
+                }
+                $scope.loading = false;
+            });
         }
-        load(null, null);
+        load(null, null, null);
 
-        $scope.load = function (search, type, clientId) {
+        $scope.currUserId = null;
+        $scope.load = function (search, type, clientId, userId) {
+            $scope.currUserId = userId;
             $scope.d = [];
             offset = 0;
             if (type == 0) {
                 $scope.clientId = null;
-                load(search, null);
+                load(search, null, userId);
             } else {
                 $scope.clientId = clientId;
-                load(search, clientId);
+                load(search, clientId, userId);
             }
         }
+
+        var getUsersByUserGroup = function () {
+            functions.post('Users', 'GetUsersByUserGroup', { userGroupId: $rootScope.user.userGroupId }).then(function (d) {
+                $scope.users = d;
+                $scope.users.unshift({ userId: null, firstName: $translate.instant('all users'), lastName: null });
+            });
+        };
+        getUsersByUserGroup();
 
         $scope.remove = function (x) {
             var confirm = $mdDialog.confirm()
@@ -6917,17 +6947,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         var remove = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + 'Menues.asmx/Delete',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, id: x.id }
-            })
-          .then(function (response) {
-              $scope.d = JSON.parse(response.data.d);
-          },
-          function (response) {
-              alert(response.data.d)
-          });
+            functions.post('Menues', 'Delete', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
+                $scope.d = d;
+            });
         }
 
         $scope.cancel = function () {
@@ -6935,50 +6957,24 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         var get = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + 'Menues.asmx/Get',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, id: x.id, }
-            })
-            .then(function (response) {
-                var menu = JSON.parse(response.data.d);
-                $mdDialog.hide(menu);
-            },
-            function (response) {
-                alert(response.data.d)
+            functions.post('Menues', 'Get', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
+                $mdDialog.hide(d);
             });
         }
 
         var loadAppMenues = function () {
             $scope.appMenues = true;
-            $http({
-                url: $sessionStorage.config.backend + 'Menues.asmx/LoadAppMenues',
-                method: "POST",
-                data: { lang: $rootScope.config.language }
-            })
-           .then(function (response) {
-               $scope.d = JSON.parse(response.data.d);
-           },
-           function (response) {
-               alert(response.data.d)
-           });
+            functions.post('Menues', 'LoadAppMenues', { lang: $rootScope.config.language }).then(function (d) {
+                $scope.d = d;
+            });
         }
 
         var getAppMenu = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + 'Menues.asmx/GetAppMenu',
-                method: "POST",
-                data: { id: x.id, lang: $rootScope.config.language, toTranslate: $scope.toTranslate }
-            })
-            .then(function (response) {
-                var menu = JSON.parse(response.data.d);
-                if ($scope.toTranslate == true) {
-                    translateFoods(menu);
+            functions.post('Menues', 'GetAppMenu', { id: x.id, lang: $rootScope.config.language, toTranslate: $scope.toTranslate }).then(function (d) {
+                if ($scope.toTranslate) {
+                    translateFoods(d);
                 }
-                $mdDialog.hide(menu);
-            },
-            function (response) {
-                alert(response.data.d)
+                $mdDialog.hide(d);
             });
         }
 
@@ -7058,24 +7054,90 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         var webService = 'WeeklyMenus';
         $scope.clientData = d.clientData;
         $scope.type = 0;
-        $scope.limit = 20;
+        $scope.searchValue = null;
+        $scope.clientId = null;
+        var limit = $rootScope.config.showmenuslimit;
+        $scope.limit = limit;
+        var offset = 0;
+        $scope.d = [];
+        var isLoadMore = false;
 
-        $scope.loadMore = function () {
-            $scope.limit += 20;
+        $scope.loadMore = function (search, clientId, userId) {
+            isLoadMore = true;
+            offset += $rootScope.config.showmenuslimit;
+            load(search, clientId, userId);
         }
 
-        var load = function () {
+        //$scope.loadMore = function () {
+        //    $scope.limit += limit;
+        //}
+
+        //var load = function () {
+        //    $scope.loading = true;
+        //    functions.post(webService, 'Load', { userId: $rootScope.user.userGroupId, lang: $rootScope.config.language }).then(function (d) {
+        //        $scope.d = d;
+        //        $scope.loading = false;
+        //    });
+        //}
+        //load();
+        var load = function (search, clientId, userId) {
+            debugger;
             $scope.loading = true;
-            functions.post(webService, 'Load', { userId: $rootScope.user.userGroupId, lang: $rootScope.config.language }).then(function (d) {
-                $scope.d = d;
+            $scope.appMenues = false;
+            if (!isLoadMore) {
+                $scope.d = [];
+            }
+            functions.post(webService, 'Load', { userGroupId: $rootScope.user.userGroupId, limit: limit, offset: offset, search: search, clientId: clientId, userId: userId, lang: $rootScope.config.language }).then(function (d) {
+                angular.forEach(d, function (x, key) {
+                    x.date = new Date(x.date);
+                });
+                if ($scope.d !== null && isLoadMore) {
+                    $scope.d = $scope.d.concat(d);
+                } else {
+                    $scope.d = d;
+                }
                 $scope.loading = false;
             });
         }
-        load();
+        load(null, null, null);
 
-        $scope.load = function () {
-            load();
+        $scope.currUserId = null;
+        $scope.load = function (search, type, clientId, userId) {
+            $scope.currUserId = userId;
+            $scope.d = [];
+            offset = 0;
+            if (type == 0) {
+                $scope.clientId = null;
+                load(search, null, userId);
+            } else {
+                $scope.clientId = clientId;
+                load(search, clientId, userId);
+            }
         }
+
+        var getUsersByUserGroup = function () {
+            functions.post('Users', 'GetUsersByUserGroup', { userGroupId: $rootScope.user.userGroupId }).then(function (d) {
+                $scope.users = d;
+                $scope.users.unshift({ userId: null, firstName: $translate.instant('all users'), lastName: null });
+            });
+        };
+        getUsersByUserGroup();
+
+        //$scope.load = function () {
+        //    load();
+        //}
+        //$scope.load = function (search, type, clientId, userId) {
+        //    $scope.currUserId = userId;
+        //    $scope.d = [];
+        //    offset = 0;
+        //    if (type == 0) {
+        //        $scope.clientId = null;
+        //        load(search, null, userId);
+        //    } else {
+        //        $scope.clientId = clientId;
+        //        load(search, clientId, userId);
+        //    }
+        //}
 
         $scope.remove = function (x) {
             if (emptyMenuList) return false;

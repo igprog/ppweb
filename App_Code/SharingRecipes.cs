@@ -290,7 +290,7 @@ public class SharingRecipes : System.Web.Services.WebService {
         x.sharingData.views = reader.GetValue(12) == DBNull.Value ? 0 : reader.GetInt32(12);
         x.sharingData.lang = reader.GetValue(13) == DBNull.Value ? null : reader.GetString(13);
         Users U = new Users();
-        x.sharingData.recipeOwner.firstName = U.GetUserFirstName(x.sharingData.recipeOwner.userId);
+        x.sharingData.recipeOwner.firstName = U.GetUserFullName(x.sharingData.recipeOwner.userId, false);
         x.isShared = false;
         return x;
     }

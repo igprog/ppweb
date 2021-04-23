@@ -2047,6 +2047,7 @@
   "dashboard": "Dashboard",
   "model": "Model",
   "reference number": "Poziv na broj",
-  "price with discount": "Cijena sa popustom"
+  "price with discount": "Cijena sa popustom",
+  "created by": "Izradio"
 
 }

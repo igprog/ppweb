@@ -1813,27 +1813,27 @@ public class Foods : System.Web.Services.WebService {
         ParameterRecommendation x = new ParameterRecommendation();
         if(client.age >= 1 && client.age < 4) {
             x.mda = null;
-            x.ui = 60;
+            x.ui = null;
             x.rda = 30;
         }
         if (client.age >= 4 && client.age < 9) {
             x.mda = null;
-            x.ui = 80;
+            x.ui = null;
             x.rda = 55;
         }
         if (client.age >= 9 && client.age < 14) {
             x.mda = null;
-            x.ui = 100;
+            x.ui = null;
             x.rda = 60;
         }
         if(client.age >= 14 && client.age < 19) {
             x.mda = null;
-            x.ui = 100;
+            x.ui = null;
             x.rda = 75;
         }
         if(client.age >= 19) {
             x.mda = null;
-            x.ui = 100;
+            x.ui = null;
             if (client.gender.value == 0) {
                 x.rda = 120;
             } else {

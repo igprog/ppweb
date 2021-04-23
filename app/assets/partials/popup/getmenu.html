@@ -1,4 +1,4 @@
-﻿<md-dialog flex class="fixed-height">
+﻿<md-dialog aria-label="Menu dialog" flex class="fixed-height">
     <md-toolbar class="bg-main">
         <div class="md-toolbar-tools">
             <h2>{{'menus' | translate}}</h2>
@@ -19,21 +19,31 @@
                 <div class="mt-4">
                     <div ng-if="appMenues==false">
                         <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-md-4">
                                 <form>
                                     <div class="input-group">
                                         <input ng-model="searchValue" class="form-control search" type="text" placeholder="{{'search' | translate}}..." />
                                         <span class="input-group-append">
-                                            <button class="btn btn-outline-primary" type="submit" ng-click="load(searchValue, type, clientData.clientId)"><i class="fa fa-search" aria-hidden="true"></i>&#8203;</button>
+                                            <button class="btn btn-outline-primary" type="submit" ng-click="load(searchValue, type, clientData.clientId, currUserId)"><i class="fa fa-search" aria-hidden="true"></i>&#8203;</button>
                                         </span>
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-sm-4 p-2 ml-2">
-                                <md-radio-group ng-show="appMenues==false" ng-model="type" layout="row" ng-click="load(searchValue, type, clientData.clientId)">
+                            <div class="col-md-4 p-2">
+                                <md-radio-group ng-show="appMenues==false" ng-model="type" layout="row" ng-click="load(searchValue, type, clientData.clientId, currUserId)">
                                     <md-radio-button value="0" class="md-primary">{{'all menus' | translate}}</md-radio-button>
                                     <md-radio-button value="1" class="md-primary">{{'client menus' | translate}}</md-radio-button>
                                 </md-radio-group>
+                            </div>
+                            <div class="col-md-4 p-2">
+                                <md-input-container class="md-block m-0" flex-gt-xs>
+                                    <label>{{'created by' | translate}}</label>
+                                    <md-select ng-model="currUserId">
+                                        <md-option ng-selected="x.userId==currUserId" ng-value="x.userId" ng-repeat="x in users track by $index" ng-click="load(searchValue, type, clientData.clientId, x.userId)">
+                                            <md-checkbox ng-checked="x.userId==currUserId" class="md-primary text-capitalize" aria-label="mealgroup">{{x.firstName}} {{x.lastName}}</md-checkbox>
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
                             </div>
                         </div>
                         <div class="card border-left-main shadow mt-3" ng-repeat="x in d">
@@ -50,15 +60,15 @@
                                                     </div>
                                                 </div>
                                                 <div class="small">
-                                                    <p class="">{{x.note.length > 80 ? x.note.substring(0, 77) + '...' : x.note}}</p>
+                                                    <p>{{x.note.length > 80 ? x.note.substring(0, 77) + '...' : x.note}}</p>
                                                     <em class="text-muted">{{x.diet | translate}}</em>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col">
-                                            <em class="small text-muted" title="{{'date' | translate}}">{{x.date | date:'dd.MM.yyyy'}}</em>
+                                        <div class="col text-muted">
+                                            <em class="small" title="{{'date' | translate}}"><span ng-if="x.author" title="{{'created by' | translate}}">{{'created by' | translate}}: {{x.author}} / </span>{{x.date | date:'dd.MM.yyyy'}}</em>
                                         </div>
                                         <div class="text-right mr-2">
                                             <p title="{{'energy' | translate}}"><i class="fa fa-fire"></i> {{x.energy | number:0}} {{'kcal' | translate}}</p>
@@ -68,7 +78,7 @@
                             </div>
                         </div>
                         <div class="text-right mr-4 mt-2">
-                            <a ng-if="d.length>=limit" href="" class="btn btn-outline-primary" ng-click="loadMore(searchValue, clientId)"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</a>
+                            <a ng-if="d.length>=limit" href="" class="btn btn-outline-primary" ng-click="loadMore(searchValue, clientId, currUserId)"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</a>
                         </div>
                     </div>
                     <div ng-if="appMenues==true" class="table-responsive" style="height:70vh">

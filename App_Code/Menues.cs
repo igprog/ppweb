@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Services;
 using System.Configuration;
 using Newtonsoft.Json;
@@ -16,7 +15,7 @@ using Igprog;
 [WebService(Namespace = "http://programprehrane.com/app/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class Menues : System.Web.Services.WebService {
+public class Menues : WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     string appDataBase = ConfigurationManager.AppSettings["AppDataBase"];
     DataBase db = new DataBase();
@@ -39,6 +38,7 @@ public class Menues : System.Web.Services.WebService {
 
         public Data data = new Data();
         public List<Meals.MealSplitDesc> splitMealDesc = new List<Meals.MealSplitDesc>();
+        public string author;
     }
 
     public class Data {
@@ -85,26 +85,29 @@ public class Menues : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string Load(string userId, int limit, int offset, string search, string clientId) {
+    public string Load(string userGroupId, int limit, int offset, string search, string clientId, string userId) {
         try {
-            db.CreateDataBase(userId, db.menues);
+            db.CreateDataBase(userGroupId, db.menues);
             List<NewMenu> xx = new List<NewMenu>();
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+            string whereSql = null;
+            if (!string.IsNullOrWhiteSpace(search) && string.IsNullOrEmpty(clientId)) {
+                whereSql = string.Format("WHERE (UPPER(title) LIKE '%{0}%' OR UPPER(note) LIKE '%{0}%' OR energy LIKE '{0}%')", search.ToUpper());
+            } else if (!string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
+                whereSql = string.Format("WHERE clientId = '{1}' AND (UPPER(title) LIKE '%{0}%' OR UPPER(note) LIKE '%{0}%' OR energy LIKE '{0}%')", search.ToUpper(), clientId);
+            } else if (string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
+                whereSql = string.Format("WHERE clientId = '{0}'", clientId);
+            } else {
+                whereSql = null;
+            }
+            if (!string.IsNullOrEmpty(userId)) {
+                whereSql = string.Format("{0} userId = '{1}'", string.IsNullOrEmpty(whereSql) ? "WHERE" : string.Format("{0} AND", whereSql), userId);
+            }
+
+            string sql = string.Format(@"SELECT id, title, diet, date, note, userId, clientId, userGroupId, energy FROM menues {0}
+                                            ORDER BY rowid DESC LIMIT {1} OFFSET {2} ", whereSql, limit, offset);
+
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userGroupId, dataBase))) {
                 connection.Open();
-                string whereSql = null;
-                if (!string.IsNullOrWhiteSpace(search) && string.IsNullOrEmpty(clientId)) {
-                    whereSql = string.Format("WHERE UPPER(title) LIKE '%{0}%' OR UPPER(note) LIKE '%{0}%' OR energy LIKE '{0}%'", search.ToUpper());
-                } else if (!string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
-                    whereSql = string.Format("WHERE clientId = '{1}' AND (UPPER(title) LIKE '%{0}%' OR UPPER(note) LIKE '%{0}%' OR energy LIKE '{0}%')", search.ToUpper(), clientId);
-                } else if (string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
-                    whereSql = string.Format("WHERE clientId = '{0}'", clientId);
-                } else {
-                    whereSql = null;
-                }
-
-                string sql = string.Format(@"SELECT id, title, diet, date, note, userId, clientId, userGroupId, energy FROM menues {0}
-                                            ORDER BY rowid DESC LIMIT {1} OFFSET {2} ", whereSql , limit , offset);
-
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     Clients.Client client = new Clients.Client();
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
@@ -117,7 +120,7 @@ public class Menues : System.Web.Services.WebService {
                             x.note = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
                             x.userId = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5);
                             if (!string.IsNullOrEmpty(clientId)) {
-                                x.client = client.GetClient(userId, clientId);
+                                x.client = client.GetClient(userGroupId, clientId);
                             } else {
                                 x.client = (reader.GetValue(6) == DBNull.Value || reader.GetValue(7) == DBNull.Value) ? new Clients.NewClient() : client.GetClient(reader.GetString(7), reader.GetString(6));
                             }
@@ -128,12 +131,83 @@ public class Menues : System.Web.Services.WebService {
                     }
                 }
             }
+
+            if (xx.Count > 0) {
+                foreach (var m in xx) {
+                    if (!string.IsNullOrEmpty(m.userId)) {
+                        Users U = new Users();
+                        m.author = U.GetUserFullName(m.userId, true);
+                    }
+                }
+            }
+
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, userId, "Menus", "Load");
-            return (e.Message);
+            L.SendErrorLog(e, null, userGroupId, "Menus", "Load");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
+
+    //[WebMethod]
+    //public string Load(string userId, int limit, int offset, string search, string clientId) {
+    //    try {
+    //        db.CreateDataBase(userId, db.menues);
+    //        List<NewMenu> xx = new List<NewMenu>();
+    //        using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+    //            connection.Open();
+    //            string whereSql = null;
+    //            if (!string.IsNullOrWhiteSpace(search) && string.IsNullOrEmpty(clientId)) {
+    //                whereSql = string.Format("WHERE UPPER(title) LIKE '%{0}%' OR UPPER(note) LIKE '%{0}%' OR energy LIKE '{0}%'", search.ToUpper());
+    //            } else if (!string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
+    //                whereSql = string.Format("WHERE clientId = '{1}' AND (UPPER(title) LIKE '%{0}%' OR UPPER(note) LIKE '%{0}%' OR energy LIKE '{0}%')", search.ToUpper(), clientId);
+    //            } else if (string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
+    //                whereSql = string.Format("WHERE clientId = '{0}'", clientId);
+    //            } else {
+    //                whereSql = null;
+    //            }
+
+    //            string sql = string.Format(@"SELECT id, title, diet, date, note, userId, clientId, userGroupId, energy FROM menues {0}
+    //                                        ORDER BY rowid DESC LIMIT {1} OFFSET {2} ", whereSql , limit , offset);
+
+    //            using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+    //                Clients.Client client = new Clients.Client();
+    //                using (SQLiteDataReader reader = command.ExecuteReader()) {
+    //                    while (reader.Read()) {
+    //                        NewMenu x = new NewMenu();
+    //                        x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+    //                        x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+    //                        x.diet = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+    //                        x.date = reader.GetValue(3) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(3);
+    //                        x.note = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
+    //                        x.userId = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5);
+    //                        if (!string.IsNullOrEmpty(clientId)) {
+    //                            x.client = client.GetClient(userId, clientId);
+    //                        } else {
+    //                            x.client = (reader.GetValue(6) == DBNull.Value || reader.GetValue(7) == DBNull.Value) ? new Clients.NewClient() : client.GetClient(reader.GetString(7), reader.GetString(6));
+    //                        }
+    //                        x.userGroupId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
+    //                        x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
+    //                        xx.Add(x);
+    //                    }
+    //                }
+    //            }
+    //        }
+
+    //        if (xx.Count > 0) {
+    //            foreach (var m in xx) {
+    //                if (!string.IsNullOrEmpty(m.userId)) {
+    //                    Users U = new Users();
+    //                    m.author = U.GetUserFullName(m.userId, true);
+    //                }
+    //            }
+    //        }
+
+    //        return JsonConvert.SerializeObject(xx, Formatting.None);
+    //    } catch (Exception e) {
+    //        L.SendErrorLog(e, null, userId, "Menus", "Load");
+    //        return JsonConvert.SerializeObject(e.Message, Formatting.None);
+    //    }
+    //}
 
     [WebMethod]
     public string LoadClientMenues(string userId, string clientId) {
@@ -166,7 +240,10 @@ public class Menues : System.Web.Services.WebService {
                 }
             } 
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "Menus", "LoadClientMenues");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]

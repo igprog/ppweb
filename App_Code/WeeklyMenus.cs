@@ -33,6 +33,7 @@ public class WeeklyMenus : WebService {
         public Clients.NewClient client;
         public string userId;
         public string userGroupId;
+        public string author;
     }
 
     public class MenuDes {
@@ -67,21 +68,34 @@ public class WeeklyMenus : WebService {
     }
 
     [WebMethod]
-    public string Load(string userId, string lang) {
-        try {
-            return JsonConvert.SerializeObject(LoadWeeklyMenus(userId, null, lang), Formatting.None);
-        } catch (Exception e) {
+    public string Load(string userGroupId, int limit, int offset, string search, string clientId, string userId, string lang) {
+        try
+        {
+            return JsonConvert.SerializeObject(LoadWeeklyMenus(userGroupId, limit, offset, search, clientId, userId, lang), Formatting.None);
+        }
+        catch (Exception e)
+        {
             L.SendErrorLog(e, null, userId, "WeeklyMenus", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
 
+    //[WebMethod]
+    //public string Load(string userId, string lang) {
+    //    try {
+    //        return JsonConvert.SerializeObject(LoadWeeklyMenus(userId, null, lang), Formatting.None);
+    //    } catch (Exception e) {
+    //        L.SendErrorLog(e, null, userId, "WeeklyMenus", "Load");
+    //        return JsonConvert.SerializeObject(e.Message, Formatting.None);
+    //    }
+    //}
+
     [WebMethod]
     public string LoadClientMenus(string userId, string clientId, string lang) {
         try {
-            return JsonConvert.SerializeObject(LoadWeeklyMenus(userId, clientId, lang), Formatting.None);
+            return JsonConvert.SerializeObject(LoadWeeklyMenus(userId, 20, 0, null, clientId, null, lang), Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, null, userId, "WeeklyMenus", "Load");
+            L.SendErrorLog(e, null, userId, "WeeklyMenus", "LoadClientMenus");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
@@ -315,7 +329,7 @@ public class WeeklyMenus : WebService {
                     command.ExecuteNonQuery();
                 }
             } 
-            List<NewWeeklyMenus> xx = LoadWeeklyMenus(userId, null, lang);
+            List<NewWeeklyMenus> xx = LoadWeeklyMenus(userId, 20, 0, null, null, null, lang);
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, id, userId, "WeeklyMenus", "Delete");
@@ -323,16 +337,30 @@ public class WeeklyMenus : WebService {
         }
     }
 
-     public List<NewWeeklyMenus> LoadWeeklyMenus(string userId, string clientId, string lang) {
-        db.CreateDataBase(userId, db.weeklymenus);
+    public List<NewWeeklyMenus> LoadWeeklyMenus(string userGroupId, int limit, int offset, string search, string clientId, string userId, string lang) {
+        db.CreateDataBase(userGroupId, db.weeklymenus);
         List<NewWeeklyMenus> xx = new List<NewWeeklyMenus>();
-        using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
-            connection.Open();
+        string whereSql = null;
+            if (!string.IsNullOrWhiteSpace(search) && string.IsNullOrEmpty(clientId)) {
+                whereSql = string.Format("WHERE (UPPER(w.title) LIKE '%{0}%' OR UPPER(w.note) LIKE '%{0}%')", search.ToUpper());
+            } else if (!string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
+                whereSql = string.Format("WHERE w.clientId = '{1}' AND (UPPER(w.title) LIKE '%{0}%' OR UPPER(w.note) LIKE '%{0}%' OR w.energy LIKE '{0}%')", search.ToUpper(), clientId);
+            } else if (string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
+                whereSql = string.Format("WHERE w.clientId = '{0}'", clientId);
+            } else {
+                whereSql = null;
+            }
+            if (!string.IsNullOrEmpty(userId)) {
+                whereSql = string.Format("{0} w.userId = '{1}'", string.IsNullOrEmpty(whereSql) ? "WHERE" : string.Format("{0} AND", whereSql), userId);
+            }
+
             string sql = string.Format(@"SELECT w.id, w.title, w.note, w.dietId, w.diet, w.menuList, w.date, w.clientId, c.firstName, c.lastName, w.userId, w.userGroupId FROM weeklymenus w
-                        LEFT OUTER JOIN clients c ON w.clientId = c.clientId
-                        {0}
-                        GROUP BY w.id
-                        ORDER BY w.rowid DESC", !string.IsNullOrEmpty(clientId) ? string.Format("WHERE w.clientId = '{0}'", clientId) : "");
+                                        LEFT OUTER JOIN clients c ON w.clientId = c.clientId
+                                        {0}
+                                        GROUP BY w.id
+                                        ORDER BY w.rowid DESC LIMIT {1} OFFSET {2} ", whereSql, limit, offset);
+        using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userGroupId, dataBase))) {
+            connection.Open();
             using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                 using (SQLiteDataReader reader = command.ExecuteReader()) {
                     while (reader.Read()) {
@@ -341,8 +369,37 @@ public class WeeklyMenus : WebService {
                 }
             }
         }
+        if (xx.Count > 0) {
+            foreach (var m in xx) {
+                if (!string.IsNullOrEmpty(m.userId)) {
+                    Users U = new Users();
+                    m.author = U.GetUserFullName(m.userId, true);
+                }
+            }
+        }
         return xx;
     }
+
+    // public List<NewWeeklyMenus> LoadWeeklyMenus(string userId, string clientId, string lang) {
+    //    db.CreateDataBase(userId, db.weeklymenus);
+    //    List<NewWeeklyMenus> xx = new List<NewWeeklyMenus>();
+    //    using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+    //        connection.Open();
+    //        string sql = string.Format(@"SELECT w.id, w.title, w.note, w.dietId, w.diet, w.menuList, w.date, w.clientId, c.firstName, c.lastName, w.userId, w.userGroupId FROM weeklymenus w
+    //                    LEFT OUTER JOIN clients c ON w.clientId = c.clientId
+    //                    {0}
+    //                    GROUP BY w.id
+    //                    ORDER BY w.rowid DESC", !string.IsNullOrEmpty(clientId) ? string.Format("WHERE w.clientId = '{0}'", clientId) : "");
+    //        using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+    //            using (SQLiteDataReader reader = command.ExecuteReader()) {
+    //                while (reader.Read()) {
+    //                    xx.Add(WeeklyMenuData(reader, lang));
+    //                }
+    //            }
+    //        }
+    //    }
+    //    return xx;
+    //}
 
     private NewWeeklyMenus WeeklyMenuData(SQLiteDataReader reader, string lang) {
         NewWeeklyMenus x = new NewWeeklyMenus();

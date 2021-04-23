@@ -1,4 +1,4 @@
-﻿<md-dialog flex class="fixed-height">
+﻿<md-dialog aria-label="SearchWeeklyMenu dialog" flex class="fixed-height">
     <form ng-cloak>
         <md-toolbar class="bg-main">
             <div class="md-toolbar-tools">
@@ -12,22 +12,62 @@
                 <loading-directive value="loading"></loading-directive>
                 <div ng-show="!loading" class="md-dialog-content">
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-md-4">
                             <div class="input-group">
                                 <input ng-model="searchValue" class="form-control search" type="text" placeholder="{{'search' | translate}}..." />
                                 <span class="input-group-append">
-                                    <button class="btn btn-outline-primary"><i class="fa fa-search" aria-hidden="true"></i>&#8203;</button>
+                                    <button class="btn btn-outline-primary" ng-click="load(searchValue, type, clientData.clientId, currUserId)"><i class="fa fa-search" aria-hidden="true"></i>&#8203;</button>
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-4 p-2 ml-2">
-                            <md-radio-group ng-model="type" layout="row">
+                        <div class="col-md-4 p-2">
+                            <md-radio-group ng-model="type" layout="row" ng-click="load(searchValue, type, clientData.clientId, currUserId)">
                                 <md-radio-button value="0" class="md-primary">{{'all menus' | translate}}</md-radio-button>
                                 <md-radio-button value="1" class="md-primary">{{'client menus' | translate}}</md-radio-button>
                             </md-radio-group>
                         </div>
+                        <div class="col-md-4 p-2">
+                            <md-input-container class="md-block m-0" flex-gt-xs>
+                                <label>{{'created by' | translate}}</label>
+                                <md-select ng-model="currUserId">
+                                    <md-option ng-selected="x.userId==currUserId" ng-value="x.userId" ng-repeat="x in users track by $index" ng-click="load(searchValue, type, clientData.clientId, x.userId)">
+                                        <md-checkbox ng-checked="x.userId==currUserId" class="md-primary text-capitalize" aria-label="mealgroup">{{x.firstName}} {{x.lastName}}</md-checkbox>
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
                     </div>
-                    <div class="table-responsive" style="height:70vh">
+                    <div class="card border-left-main shadow mt-3" ng-repeat="x in d">
+                        <div class="card-body">
+                            <a href="" ng-click="remove(x)" class="close" title="{{'delete' | translate}}">&times;</a>
+                            <div class="pointer" ng-click="confirm(x)">
+                                <div class="row no-gutters align-items-center py-2">
+                                    <div class="col mr-2">
+                                        <div class="h5 mb-0 text-gray-800">
+                                            <div class="row">
+                                                <div class="col-sm-8 h5 font-weight-bold text-main mb-1"><i class="fa fa-concierge-bell"></i> {{x.title}}</div>
+                                                <div class="col-sm-4 small">
+                                                    <em>{{x.client.firstName}} {{x.client.lastName}}</em>
+                                                </div>
+                                            </div>
+                                            <div class="small">
+                                                <p>{{x.note.length > 80 ? x.note.substring(0, 77) + '...' : x.note}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col text-muted">
+                                        <em class="small" title="{{'date' | translate}}"><span ng-if="x.author" title="{{'created by' | translate}}">{{'created by' | translate}}: {{x.author}} / </span>{{x.date | date:'dd.MM.yyyy'}}</em>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right mr-4 mt-2">
+                        <a ng-if="d.length>=limit" href="" class="btn btn-outline-primary" ng-click="loadMore(searchValue, clientData.clientId, currUserId)"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</a>
+                    </div>
+                    <!--<div class="table-responsive" style="height:70vh">
                         <table class="table table-hover table-borderless">
                             <tr class="border-bottom">
                                 <th class="text-capitalize">{{'title' | translate}}</th>
@@ -38,7 +78,7 @@
                                 <th></th>
                             </tr>
                             <tr ng-if="type==1?x.client.clientId==clientData.clientId:1==1" ng-repeat="x in d | filter:searchValue | limitTo:limit">
-                                <td class="nowrap" ng-click="confirm(x)">{{x.title}}</td>
+                                <td class="nowrap" ng-click="confirm(x)">{{x.title}}<br />{{x.userId}}</td>
                                 <td ng-click="confirm(x)">{{x.diet.diet}}</td>
                                 <td ng-click="confirm(x)">{{x.date | date:'dd.MM.yyyy'}}</td>
                                 <td class="nowrap" ng-click="confirm(x)">{{x.note.length > 40 ? x.note.substring(0, 37) + '...' : x.note}}</td>
@@ -46,7 +86,7 @@
                                 <td ng-click="remove(x)"><button class="btn btn-outline-danger btn-circle"><i class="fa fa-trash-alt"></i></button></td>
                             </tr>
                         </table>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </md-dialog-content>

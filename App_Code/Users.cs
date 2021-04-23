@@ -1352,24 +1352,28 @@ public class Users : WebService {
         }
     }
 
-    public string GetUserFirstName(string userId) {
+    public string GetUserFullName(string userId, bool showFullName) {
         try {
-            string x = null;
+            string firstName = null;
+            string lastName = null;
             string dataBase = ConfigurationManager.AppSettings["UsersDataBase"];
             string path = Server.MapPath("~/App_Data/" + dataBase);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + path)) {
-                string sql = string.Format("SELECT firstName FROM users WHERE userId = '{0}'", userId);
+                string sql = string.Format("SELECT firstName, lastName FROM users WHERE userId = '{0}'", userId);
                 connection.Open();
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
-                            x = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
+                            firstName = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
+                            lastName = reader.GetValue(1) == DBNull.Value ? null : reader.GetString(1);
                         }
                     }
                 }
             }
-            return x;
-        } catch (Exception e) { return e.Message; }
+            return showFullName ? string.Format("{0} {1}", firstName, lastName) : firstName;
+        } catch (Exception e) {
+            return e.Message;
+        }
     }
 
     public string GetUserGroupId(string userId) {

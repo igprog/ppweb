@@ -2044,6 +2044,7 @@
   "dashboard": "Дасхбоард",
   "model": "Модел",
   "reference number": "Позив на број",
-  "price with discount": "Цена са попустом"
+  "price with discount": "Цена са попустом",
+  "created by": "Израдио"
 
 }
