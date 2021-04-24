@@ -150,42 +150,46 @@ public class WeeklyMenus : WebService {
     }
 
     [WebMethod]
-    public string Save(string userId, NewWeeklyMenus x) {
+    public string Save(Users.NewUser user, NewWeeklyMenus x) {
         SaveResponse r = new SaveResponse();
         try {
-            db.CreateDataBase(userId, db.weeklymenus);
-            if (string.IsNullOrEmpty(x.id) && Check(userId, x.title)) {
+            db.CreateDataBase(user.userGroupId, db.weeklymenus);
+            if (string.IsNullOrEmpty(x.id) && Check(user.userGroupId, x.title)) {
                 r.data = x;
                 r.msg = "there is already a menu with the same name";
                 r.isSuccess = false;
                 return JsonConvert.SerializeObject(r, Formatting.None);
-            } else {
-                if(string.IsNullOrEmpty(x.id)) {
-                    x.id = Convert.ToString(Guid.NewGuid());
-                }
-                Global G = new Global();
-                x.title = G.RemoveSingleQuotes(x.title);
-                x.note = G.RemoveSingleQuotes(x.note);
-                string sql = string.Format(@"BEGIN;
-                                        INSERT OR REPLACE INTO weeklymenus (id, title, note, dietId, diet, menuList, date, clientId, userId, userGroupId)
-                                        VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}');
-                                        COMMIT;", x.id, x.title, x.note, x.diet.id, x.diet.diet, string.Join(",", x.menuList), x.date, x.client.clientId, x.userId, x.userGroupId);
-                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
-                    connection.Open();
-                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                        command.ExecuteNonQuery();
-                    }
-                }
-                r.data = x;
-                r.isSuccess = true;
+            }
+            Global G = new Global();
+            if (!G.CheckUserPermission(user, x.userId)) {
+                r.isSuccess = false;
+                r.msg = "you can only save menus that you have created yourself";
                 return JsonConvert.SerializeObject(r, Formatting.None);
             }
+            if(string.IsNullOrEmpty(x.id)) {
+                x.id = Convert.ToString(Guid.NewGuid());
+            }
+            x.title = G.RemoveSingleQuotes(x.title);
+            x.note = G.RemoveSingleQuotes(x.note);
+            string sql = string.Format(@"BEGIN;
+                                    INSERT OR REPLACE INTO weeklymenus (id, title, note, dietId, diet, menuList, date, clientId, userId, userGroupId)
+                                    VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}');
+                                    COMMIT;", x.id, x.title, x.note, x.diet.id, x.diet.diet, string.Join(",", x.menuList), x.date, x.client.clientId, x.userId, x.userGroupId);
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(user.userGroupId, dataBase))) {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.ExecuteNonQuery();
+                }
+            }
+            r.data = x;
+            r.isSuccess = true;
+            return JsonConvert.SerializeObject(r, Formatting.None);
         } catch (Exception e) {
             r.data = x;
             r.msg = e.Message;
             r.msg1 = "report a problem";
             r.isSuccess = false;
-            L.SendErrorLog(e, x.id, userId, "WeeklyMenus", "Save");
+            L.SendErrorLog(e, x.id, user.userId, "WeeklyMenus", "Save");
             return JsonConvert.SerializeObject(r, Formatting.None);
         }
     }
@@ -320,20 +324,37 @@ public class WeeklyMenus : WebService {
     }
 
     [WebMethod]
-    public string Delete(string userId, string id, string lang) {
+    public string Delete(Users.NewUser user, NewWeeklyMenus menu, string lang) {
+        var x = new Global.Response();
         try {
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
-                connection.Open();
-                string sql = string.Format("DELETE FROM weeklymenus WHERE id = '{0}'", id);
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                    command.ExecuteNonQuery();
+            if (!string.IsNullOrEmpty(user.userGroupId) && !string.IsNullOrEmpty(menu.id)) {
+                Global G = new Global();
+                if (!G.CheckUserPermission(user, menu.userId)) {
+                    x.isSuccess = false;
+                    x.msg = "you can only delete menus that you have created yourself";
+                    return JsonConvert.SerializeObject(x, Formatting.None);
                 }
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(user.userGroupId, dataBase))) {
+                    connection.Open();
+                    string sql = string.Format("DELETE FROM weeklymenus WHERE id = '{0}'", menu.id);
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        command.ExecuteNonQuery();
+                    }
+                }
+                // List<NewWeeklyMenus> xx = LoadWeeklyMenus(user.userGroupId, 20, 0, null, null, null, lang);
+                x.isSuccess = true;
+                x.msg = null;
+                return JsonConvert.SerializeObject(x, Formatting.None);
+            } else {
+                x.isSuccess = false;
+                x.msg = "error";
+                return JsonConvert.SerializeObject(x, Formatting.None);
             } 
-            List<NewWeeklyMenus> xx = LoadWeeklyMenus(userId, 20, 0, null, null, null, lang);
-            return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
-            L.SendErrorLog(e, id, userId, "WeeklyMenus", "Delete");
-            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+            x.isSuccess = false;
+            x.msg = e.Message;
+            L.SendErrorLog(e, menu.id, user.userId, "WeeklyMenus", "Delete");
+            return JsonConvert.SerializeObject(x, Formatting.None);
         }
     }
 

@@ -2039,6 +2039,8 @@
   "model": "Model",
   "reference number": "Reference number",
   "price with discount": "Price with discount",
-  "created by": "Created by"
+  "created by": "Created by",
+  "you can only delete menus that you have created yourself": "You can delete only menus that you have created yourself",
+  "you can only save menus that you have created yourself": "You can only save menus that you have created yourself"
 
 }

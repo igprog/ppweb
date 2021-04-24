@@ -189,5 +189,9 @@ namespace Igprog {
         public string RemoveSingleQuotes(string x) {
             return !string.IsNullOrWhiteSpace(x) ? x.Contains("'") ? x.Replace("'", " ") : x : x;
         }
+
+        public bool CheckUserPermission(Users.NewUser user, string authorId) {
+            return (user.userId == user.userGroupId && user.adminType == 0) || (authorId == user.userId);
+        }
     }
 }

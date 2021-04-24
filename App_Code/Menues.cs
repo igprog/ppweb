@@ -261,48 +261,53 @@ public class Menues : WebService {
         SaveResponse r = new SaveResponse();
         try {
             db.CreateDataBase(userId, db.menues);
-        if (x.id == null && Check(userId, x) != false) {
-            r.data = x;
-            r.msg = "there is already a menu with the same name";
-            r.isSuccess = false;
-            return JsonConvert.SerializeObject(r, Formatting.None);
-        } else {
-                Global G = new Global();
-                x.title = G.RemoveSingleQuotes(x.title);
-                x.note = G.RemoveSingleQuotes(x.note);
-                string sql = null;
-                if (string.IsNullOrEmpty(x.id)) {
-                    x.id = Guid.NewGuid().ToString();
-                    sql = string.Format(@"BEGIN;
-                    INSERT INTO menues (id, title, diet, date, note, userId, clientId, userGroupId, energy)
-                    VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}');
-                    COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy);
-                } else {
-                    sql = string.Format(@"BEGIN;
-                    UPDATE menues SET
-                    title = '{1}', diet = '{2}', date = '{3}', note = '{4}', userId = '{5}', clientId = '{6}', userGroupId = '{7}', energy = '{8}'
-                    WHERE id = '{0}';
-                    COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy);
-                }
-                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
-                    connection.Open();
-                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                        command.ExecuteNonQuery();
-                    }
-                }
-                x.data.meals = CombineTitleDesc(x);    
-                SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
-                if(myMeals != null) {
-                    if(myMeals.data != null) {
-                        if(myMeals.data.meals.Count > 2) {
-                            SaveMyMealsJsonToFile(userId, x.id, JsonConvert.SerializeObject(myMeals, Formatting.None));
-                        }
-                    }
-                }
+            if (x.id == null && Check(userId, x) != false) {
                 r.data = x;
-                r.isSuccess = true;
+                r.msg = "there is already a menu with the same name";
+                r.isSuccess = false;
                 return JsonConvert.SerializeObject(r, Formatting.None);
             }
+            Global G = new Global();
+            if (!G.CheckUserPermission(user, x.userId)) {
+                r.data = x;
+                r.msg = "you can only save menus that you have created yourself";
+                r.isSuccess = false;
+                return JsonConvert.SerializeObject(r, Formatting.None);
+            }
+            x.title = G.RemoveSingleQuotes(x.title);
+            x.note = G.RemoveSingleQuotes(x.note);
+            string sql = null;
+            if (string.IsNullOrEmpty(x.id)) {
+                x.id = Guid.NewGuid().ToString();
+                sql = string.Format(@"BEGIN;
+                INSERT INTO menues (id, title, diet, date, note, userId, clientId, userGroupId, energy)
+                VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}');
+                COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy);
+            } else {
+                sql = string.Format(@"BEGIN;
+                UPDATE menues SET
+                title = '{1}', diet = '{2}', date = '{3}', note = '{4}', userId = '{5}', clientId = '{6}', userGroupId = '{7}', energy = '{8}'
+                WHERE id = '{0}';
+                COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy);
+            }
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.ExecuteNonQuery();
+                }
+            }
+            x.data.meals = CombineTitleDesc(x);
+            SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
+            if (myMeals != null) {
+                if (myMeals.data != null) {
+                    if (myMeals.data.meals.Count > 2) {
+                        SaveMyMealsJsonToFile(userId, x.id, JsonConvert.SerializeObject(myMeals, Formatting.None));
+                    }
+                }
+            }
+            r.data = x;
+            r.isSuccess = true;
+            return JsonConvert.SerializeObject(r, Formatting.None);
         } catch (Exception e) {
             r.data = x;
             r.msg = e.Message;
@@ -314,24 +319,37 @@ public class Menues : WebService {
     }
 
     [WebMethod]
-    public string Delete(string userId, string id) {
+    public string Delete(Users.NewUser user, NewMenu menu) {
+        var x = new Global.Response();
         try {
-            if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(id)) {
-                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+            if (!string.IsNullOrEmpty(user.userGroupId) && !string.IsNullOrEmpty(menu.id)) {
+                Global G = new Global();
+                if (!G.CheckUserPermission(user, menu.userId)) {
+                    x.isSuccess = false;
+                    x.msg = "you can only delete menus that you have created yourself";
+                    return JsonConvert.SerializeObject(x, Formatting.None);
+                }
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(user.userGroupId, dataBase))) {
                     connection.Open();
-                    string sql = string.Format("delete from menues where id = '{0}'", id);
+                    string sql = string.Format("delete from menues where id = '{0}'", menu.id);
                     using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                         command.ExecuteNonQuery();
                     }
                 }
-                DeleteJson(userId, id);
-                return "OK";
+                DeleteJson(user.userGroupId, menu.id);
+                x.isSuccess = true;
+                x.msg = null;
+                return JsonConvert.SerializeObject(x, Formatting.None);
             } else {
-                return "error";
+                x.isSuccess = false;
+                x.msg = "error";
+                return JsonConvert.SerializeObject(x, Formatting.None);
             }
         } catch (Exception e) {
-            L.SendErrorLog(e, id, userId, "Menues", "Delete");
-            return e.Message;
+            x.isSuccess = false;
+            x.msg = e.Message;
+            L.SendErrorLog(e, menu.id, user.userId, "Menues", "Delete");
+            return JsonConvert.SerializeObject(x, Formatting.None);
         }
     }
     #endregion ClientMenues
@@ -664,7 +682,6 @@ public class Menues : WebService {
         return xx;
     }
 
-
     public List<Meals.NewMeal> CombineTitleDesc(NewMenu menu) {
         try {
             foreach (var meal in menu.data.meals) {
@@ -697,7 +714,6 @@ public class Menues : WebService {
             L.SendErrorLog(e, JsonConvert.SerializeObject(menu, Formatting.None), null, "Menues", "CombineTitleDesc");
             return menu.data.meals;
         }
-        
     }
     #endregion
 

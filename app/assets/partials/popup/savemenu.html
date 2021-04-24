@@ -10,13 +10,13 @@
         <md-dialog-content>
             <div class="md-dialog-content mt-2">
                 <div>
-                    <md-input-container style="margin:2px">
+                    <md-input-container class="m-1">
                         <label class="text-capitalize">{{'menu title' | translate}}</label>
                         <input id="txtMenuTitle" ng-model="d.currentMenu.title" type="text" maxlength="50" ng-required="true">
                     </md-input-container>
                 </div>
                 <div>
-                    <md-input-container class="md-block" style="margin:2px" flex-gt-sm>
+                    <md-input-container class="md-block m-1" flex-gt-sm>
                         <label class="text-capitalize">{{'note' | translate}}...</label>
                         <input ng-model="d.currentMenu.note" type="text" maxlength="200">
                     </md-input-container>

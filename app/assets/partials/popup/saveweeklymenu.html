@@ -10,20 +10,20 @@
         <md-dialog-content>
             <div class="md-dialog-content">
                 <div>
-                    <md-input-container style="margin:2px">
+                    <md-input-container class="m-1">
                         <label class="text-capitalize">{{'menu title' | translate}}</label>
                         <input id="txtMenuTitle" ng-model="d.title" type="text" maxlength="50" ng-required="true">
                     </md-input-container>
                 </div>
                 <div>
-                    <md-input-container class="md-block" style="margin:2px" flex-gt-sm>
+                    <md-input-container class="md-block m-1" flex-gt-sm>
                         <label class="text-capitalize">{{'note' | translate}}...</label>
                         <input ng-model="d.note" type="text" maxlength="200">
                     </md-input-container>
                 </div>
                 <div class="row pull-right text-capitalize">
-                    <a ng-hide="d.userId != d.user.userId && d.user.adminType > 0" href="" class="btn btn-primary m10" ng-click="confirm(d, false)"><i class="fa fa-floppy-o"></i> <span>{{'save' | translate}}</span></a>
-                    <a href="" class="btn btn-primary m10" ng-click="confirm(d, true)"><i class="fa fa-plus"></i> <span>{{'save as new' | translate}}</span></a>
+                    <a ng-hide="user.userId != d.userId && user.adminType > 0" href="" class="btn btn-outline-primary m-2" ng-click="confirm(d, false)"><i class="fa fa-floppy-o"></i> <span>{{'save' | translate}}</span></a>
+                    <a href="" class="btn btn-outline-primary m-2" ng-click="confirm(d, true)"><i class="fa fa-plus"></i> <span>{{'save as new' | translate}}</span></a>
                 </div>
             </div>
         </md-dialog-content>
