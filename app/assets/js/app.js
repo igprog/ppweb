@@ -1102,26 +1102,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 functions.alert($translate.instant(d), '');
             }
         });
-        //$http({
-        //    url: $sessionStorage.config.backend + webService + '/Signup',
-        //    method: "POST",
-        //    data: { x: $scope.newUser, lang: $rootScope.config.language }
-        //})
-        //.then(function (response) {
-        //    $scope.signingUp = false;
-        //    if (response.data.d == 'registration completed successfully') {
-        //        $scope.alertMessage = response.data.d;
-        //        $scope.showAlert = true;
-        //    } else {
-        //        functions.alert($translate.instant(response.data.d), '');
-        //    }
-        //},
-        //function (response) {
-        //    $scope.showAlert = false;
-        //    $scope.signupdisabled = false;
-        //    $scope.signingUp = false;
-        //    functions.alert($translate.instant(response.data.d), '');
-        //});
     }
 
     var sendSignupMail = function (newUser, lang) {
@@ -4085,6 +4065,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         var offset = 0;
         $scope.d = [];
         var isLoadMore = false;
+        $scope.user = $rootScope.user;
 
         $scope.toggle = function (type) {
             if (type == 'myMenus') {
@@ -6833,6 +6814,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         var offset = 0;
         $scope.d = [];
         var isLoadMore = false;
+        $scope.user = $rootScope.user;
 
         $scope.toggle = function (type) {
             if (type == 'myMenus') {
@@ -7024,6 +7006,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         var offset = 0;
         $scope.d = [];
         var isLoadMore = false;
+        $scope.user = $rootScope.user;
 
         $scope.loadMore = function (search, clientId, userId) {
             isLoadMore = true;

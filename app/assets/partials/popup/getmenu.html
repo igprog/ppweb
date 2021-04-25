@@ -35,7 +35,7 @@
                                     <md-radio-button value="1" class="md-primary">{{'client menus' | translate}}</md-radio-button>
                                 </md-radio-group>
                             </div>
-                            <div class="col-md-4 p-2">
+                            <div ng-if="user.userType>0" class="col-md-4 p-2">
                                 <md-input-container class="md-block m-0" flex-gt-xs>
                                     <label>{{'created by' | translate}}</label>
                                     <md-select ng-model="currUserId">
@@ -68,7 +68,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col text-muted">
-                                            <em class="small" title="{{'date' | translate}}"><span ng-if="x.author" title="{{'created by' | translate}}">{{'created by' | translate}}: {{x.author}} / </span>{{x.date | date:'dd.MM.yyyy'}}</em>
+                                            <em class="small"><span ng-if="x.author&&user.userType>0" title="{{'created by' | translate}}">{{'created by' | translate}}: {{x.author}} / </span><span title="{{'date' | translate}}">{{x.date | date:'dd.MM.yyyy'}}</span></em>
                                         </div>
                                         <div class="text-right mr-2">
                                             <p title="{{'energy' | translate}}"><i class="fa fa-fire"></i> {{x.energy | number:0}} {{'kcal' | translate}}</p>
