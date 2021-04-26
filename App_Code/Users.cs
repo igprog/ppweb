@@ -618,7 +618,7 @@ public class Users : WebService {
     [WebMethod]
     public string Delete(NewUser x) {
         try {
-            if (!string.IsNullOrEmpty(x.userId) && !string.IsNullOrEmpty(x.userGroupId)) {
+            if (string.IsNullOrEmpty(x.userId) && string.IsNullOrEmpty(x.userGroupId)) {
                 return JsonConvert.SerializeObject("error", Formatting.None);
             }
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
@@ -1009,7 +1009,7 @@ public class Users : WebService {
 <p>{9}</p>
 <hr/>
 <br />
-{10}.
+{10}
 <br />
 <br />
 {11}"
@@ -1023,7 +1023,7 @@ public class Users : WebService {
 , t.Tran("app access link", lang)
 , string.Format("<a href='{0}/app'>{0}/app</a>", GetWebPage(lang))
 , string.Format(@"<i>* {0}</i>", t.Tran("for a better experience in using the application, please use some of the modern browsers such as google chrome, mozilla firefox, microsoft edge etc.", lang))
-, t.Tran("if you need any additional information, please do not hesitate to contact us", lang)
+, x.adminType == 0 ? string.Format("{0}.", t.Tran("if you need any additional information, please do not hesitate to contact us", lang)) : null
 , string.Format(@"<p>{0}</p>", t.Tran("best regards", lang)));
 
         mail.SendMail(x.email, messageSubject, messageBody, lang, null, false);
