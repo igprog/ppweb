@@ -140,7 +140,7 @@
                                         <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].fats.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].fats.perc| number:1}} %)</em></span></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="11">
+                                        <td colspan="12">
                                             <div ng-if="currentMenu.data.selectedFoods.length>0" class="pt-2">
                                                 <md-checkbox ng-model="config.showfoodgroupscolors" class="md-primary">
                                                     {{'color food groups' | translate}}
@@ -149,121 +149,19 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td colspan="12">
+                                            <ng-include src="'mealMicronutrientsTpl'"></ng-include>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <!--<div class="pt-3">
-                            <div ng-repeat="x in currentMenu.splitMealDesc">
-                                <div ng-if="x.code===currentMeal">
-                                    <md-input-container class="md-block mb-0" flex-gt-sm ng-repeat="dd in x.dishDesc">
-                                        <label>{{'meal preparation' | translate}} <em ng-if="dd.title">({{dd.title.length > 35 ? dd.title.substring(0, 33) + '...' : dd.title}})</em></label>
-                                        <textarea ng-model="dd.desc" rows="3" class="area" type="text"></textarea>
-                                    </md-input-container>
-                                </div>
-                            </div>
-                        </div>-->
+                        
                         <div ng-if="totals.price.value>0" class="text-right m-2">
                             <em class="text-primary"><span class="text-capitalize">{{'price' | translate}}</span>: <span>{{totals.price.value | number:2}}</span> <span class="text-uppercase">{{totals.price.currency}}</span></em>
                         </div>
                     </div>
-                    <!--<div ng-show="!loading" class="pt-1" style="min-height:50vh">
-                        <div class="table-responsive">
-                            <table class="table table-sm table-borderless">
-                                <tbody class="small">
-                                    <tr>
-                                        <th colspan="8" class="align-bottom">
-                                            <div ng-init="sectionIndex = $index" ng-repeat="x in currentMenu.splitMealDesc track by $index">
-                                                <div ng-if="x.code===currentMeal">
-                                                    <md-input-container class="md-block mb-0" flex-gt-sm ng-repeat="dd in x.dishDesc track by $index">
-                                                        <label>{{'meal title' | translate}}</label>
-                                                        <input ng-model="dd.title" type="text">
-                                                        <div ng-hide="dd.id===null||dd.id===''">
-                                                            <a href="" class="small text-danger" title="{{'remove recipe' | translate}}" ng-click="removeDish(currentMenu, sectionIndex, $index, dd.id, x.code)"><i class="fa fa-times"></i> {{'remove recipe' | translate}}</a>
-                                                        </div>
-                                                        <div class="small mb-2">
-                                                            <a ng-if="dd.title.length>0" href="" ng-click="addNewDishTitle(sectionIndex)" title="{{'add new dish title' | translate}}"><i class="fa fa-plus"></i></a>
-                                                            <a ng-if="x.dishDesc.length>1" href="" ng-click="removeNewDishTitle(sectionIndex, $index)" title="{{'remove dish title' | translate}}"><i class="fa fa-minus"></i></a>
-                                                        </div>
-                                                    </md-input-container>
-                                                </div>
-                                            </div>
-                                        </th>
-                                        <th class="text-right border-bottom align-bottom">{{'energy' | translate}}<br /> <span class="small text-nowrap">(<em>{{'kcal' | translate}}</em>)</span></th>
-                                        <th class="text-right border-bottom align-bottom">{{'carbs' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
-                                        <th class="text-right border-bottom align-bottom">{{'prot' | translate}}.<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
-                                        <th class="text-right border-bottom align-bottom">{{'fats' | translate}}<br /> <span class="small text-nowrap">(<em>{{'g' | translate}}</em>)</span></th>
-                                    </tr>
-                                    <tr ng-if="currentMenu.data.selectedFoods.length>0" ng-repeat="x in currentMenu.data.selectedFoods | filter:filterMeal track by $index" ng-class="getFoodGroupClass(x.foodGroup.code)" title="{{x.foodGroup.title}}">
-                                        <td colspan="2">
-                                            <div class="btn-group">
-                                                <button ng-click="removeFood(x, currentMenu.data.selectedFoods.indexOf(x))" class="btn btn-outline-danger btn-circle btn-sm" title="{{'delete' | translate}}"><i class="fa fa-times"></i></button>
-                                                <button class="btn btn-outline-primary btn-circle btn-sm" ng-click="openFoodPopup(x, currentMenu.data.selectedFoods.indexOf(x))" title="{{'edit' | translate}}"><i class="fa fa-pencil-alt"></i></button>
-                                            </div>
-                                        </td>
-                                        <td class="pointer">
-                                            <div>
-                                                <button class="btn btn-outline-primary btn-sm pl-1 pr-1 pt-0 pb-0" ng-click="moveUp(currentMenu.data.selectedFoods.indexOf(x))" title="{{'move up' | translate}}"><i class="fa fa-angle-up"></i></button>
-                                            </div>
-                                            <div>
-                                                <button class="btn btn-outline-primary btn-sm pl-1 pr-1 pt-0 pb-0" ng-click="moveDown(currentMenu.data.selectedFoods.indexOf(x))" title="{{'move down' | translate}}"><i class="fa fa-angle-down"></i></button>
-                                            </div>
-                                        </td>
-                                        <td class="pointer" style="width:400px" ng-click="openFoodPopup(x, currentMenu.data.selectedFoods.indexOf(x))" ><span>{{x.food}}</span></td>
-                                        <td class="text-right" style="min-width:100px">
-                                            <input type="text" ng-model="x.quantity" class="form-control" ng-change="changeQuantity(x, 'quantity', currentMenu.data.selectedFoods.indexOf(x))" allow-only-numbers>
-                                        </td>
-                                        <td style="min-width:100px">{{x.unit}}</td>
-                                        <td class="text-right" style="min-width:100px">
-                                            <input type="text" ng-model="x.mass" class="form-control" ng-change="changeQuantity(x, 'mass', currentMenu.data.selectedFoods.indexOf(x))" allow-only-numbers>
-                                        </td>
-                                        <td style="width:10px">{{'g' | translate}}</td>
-                                        <td class="text-right nowrap" style="width:150px">{{x.energy}}</td>
-                                        <td class="text-right nowrap" style="width:150px">{{x.carbohydrates}}</td>
-                                        <td class="text-right nowrap" style="width:150px">{{x.proteins}}</td>
-                                        <td class="text-right nowrap" style="width:150px">{{x.fats}}</td>
-                                    </tr>
-                                    <tr ng-if="x.code===currentMeal" ng-repeat="x in currentMenu.data.meals" >
-                                        <td class="align-top">
-                                            <button ng-if="isVisibleClearMealBtn(currentMenu.data.selectedFoods, x.code)" ng-click="clearMeal(currentMenu, x.code)" class="btn btn-outline-danger btn-block mt-1" style="min-height:38px" title="{{'clear all foods from the meal' | translate}}"><i class="fa fa-times"></i></button>
-                                        </td>
-                                        <td colspan="7">
-                                            <div class="text-capitalize">
-                                                <button ng-disabled="addFoodBtn" class="btn btn-primary mt-1" ng-click="openFoodPopup(null,null)"><i ng-class="addFoodBtnIcon"></i> {{'add food' | translate}}</button>
-                                                <button class="btn btn-outline-primary mt-1 ml-2" ng-click="openRecipePopup()"><i class="fa fa-concierge-bell"></i> {{'add recipe' | translate}}</button>
-                                            </div>
-                                        </td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].energy.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].energy.perc| number:1}} %)</em></span></td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].carbohydrates.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].carbohydrates.perc| number:1}} %)</em></span></td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].proteins.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].proteins.perc| number:1}} %)</em></span></td>
-                                        <td ng-if="currentMenu.data.selectedFoods.length>0" class="text-right border-top align-top"><span class="font-weight-bold">{{totals.mealsTotal[$index].fats.val | number:1}}</span> <br /><span class="small text-nowrap"><em>({{totals.mealsTotal[$index].fats.perc| number:1}} %)</em></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="11">
-                                            <div ng-if="currentMenu.data.selectedFoods.length>0" class="pt-2">
-                                                <md-checkbox ng-model="config.showfoodgroupscolors" class="md-primary">
-                                                    {{'color food groups' | translate}}
-                                                </md-checkbox>
-                                                <i class="fa fa-info-circle text-info" style="cursor:pointer" ng-click="openColorGroupsInfoPopup()"></i>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="pt-3">
-                            <div ng-repeat="x in currentMenu.splitMealDesc">
-                                <div ng-if="x.code===currentMeal">
-                                    <md-input-container class="md-block mb-0" flex-gt-sm ng-repeat="dd in x.dishDesc">
-                                        <label>{{'meal preparation' | translate}} <em ng-if="dd.title">({{dd.title.length > 35 ? dd.title.substring(0, 33) + '...' : dd.title}})</em></label>
-                                        <textarea ng-model="dd.desc" rows="3" class="area" type="text"></textarea>
-                                    </md-input-container>
-                                </div>
-                            </div>
-                        </div>
-                        <div ng-if="totals.price.value>0" class="text-right m-2">
-                            <em class="text-primary"><span class="text-capitalize">{{'price' | translate}}</span>: <span>{{totals.price.value | number:2}}</span> <span class="text-uppercase">{{totals.price.currency}}</span></em>
-                        </div>
-                    </div>-->
                 </div>
             </div>
         </div>
@@ -539,6 +437,375 @@
     </div>
 </script>
 
+<script type="text/ng-template" id="mealMicronutrientsTpl">
+    <div ng-if="currentMenu.data.selectedFoods.length>0">
+        <a href="" ng-click="toggleMealMicronutrients(showMealMicronutrients)"><i class="fab fa-nutritionix"></i> {{'micronutrients' | translate}} - <span class="text-uppercase">{{currMealTitle}}</span> <i class="fa fa-{{showMealMicronutrients==true?'sort-down':'caret-right'}}"></i></a>
+        <div ng-if="showMealMicronutrients" class="table-responsive mt-2 shadow">
+            <table class="table table-bordered table-sm text-center">
+                <tr class="text-center border-bottom">
+                    <td style="width:40%"></td>
+                    <td>{{'unit' | translate}}</td>
+                    <td>{{'choosen' | translate}}</td>
+                    <td>{{'containing in menu' | translate}}</td>
+                    <td><span class="text-uppercase">{{'mda' | translate}}</span><br /><em class="small">{{'minimum dietary allowance' | translate}}</em></td>
+                    <td><span class="text-uppercase">{{'ul' | translate}}</span><br /><em class="small">{{'upper intake level' | translate}}</em></td>
+                    <td><span class="text-uppercase">{{'rda' | translate}}</span><br /><em class="small">{{'recommended dietary allowance' | translate}}</em></td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'starch' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold "><span ng-if="currMealTotal.starch.val">{{currMealTotal.starch.val}}</span></td>
+                    <td><span ng-if="currMealTotal.starch.perc">{{currMealTotal.starch.perc}} %</span></td>
+                    <td>{{recommendations.starch.mda}}</td>
+                    <td>{{recommendations.starch.ui}}</td>
+                    <td>{{recommendations.starch.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'total sugar' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold"><span ng-if="totals.totalSugar.val">{{currMealTotal.totalSugar.val}}</span></td>
+                    <td><span ng-if="totals.totalSugar.perc">{{currMealTotal.totalSugar.perc}} %</span></td>
+                    <td>{{recommendations.totalSugar.mda}}</td>
+                    <td>{{recommendations.totalSugar.ui}}</td>
+                    <td>{{recommendations.totalSugar.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'glucose' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold"><span ng-if="currMealTotal.glucose.val">{{currMealTotal.glucose.val}}</span></td>
+                    <td><span ng-if="currMealTotal.glucose.perc">{{currMealTotal.glucose.perc}} %</span></td>
+                    <td>{{recommendations.glucose.mda}}</td>
+                    <td>{{recommendations.glucose.ui}}</td>
+                    <td>{{recommendations.glucose.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'fructose' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold"><span ng-if="currMealTotal.fructose.val">{{currMealTotal.fructose.val}}</span></td>
+                    <td><span ng-if="currMealTotal.fructose.perc">{{currMealTotal.fructose.perc}} %</span></td>
+                    <td>{{recommendations.fructose.mda}}</td>
+                    <td>{{recommendations.fructose.ui}}</td>
+                    <td>{{recommendations.fructose.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'saccharose' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold"><span ng-if="currMealTotal.saccharose.val">{{currMealTotal.saccharose.val}}</span></td>
+                    <td><span ng-if="currMealTotal.saccharose.perc">{{currMealTotal.saccharose.perc}} %</span></td>
+                    <td>{{recommendations.saccharose.mda}}</td>
+                    <td>{{recommendations.saccharose.ui}}</td>
+                    <td>{{recommendations.saccharose.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'maltose' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold"><span ng-if="currMealTotal.maltose.val">{{currMealTotal.maltose.val}}</span></td>
+                    <td><span ng-if="currMealTotal.maltose.perc">{{currMealTotal.maltose.perc}} %</span></td>
+                    <td>{{recommendations.maltose.mda}}</td>
+                    <td>{{recommendations.maltose.ui}}</td>
+                    <td>{{recommendations.maltose.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'lactose' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold"><span ng-if="currMealTotal.lactose.val">{{currMealTotal.lactose.val}}</span></td>
+                    <td><span ng-if="currMealTotal.lactose.perc">{{currMealTotal.lactose.perc}} %</span></td>
+                    <td>{{recommendations.lactose.mda}}</td>
+                    <td>{{recommendations.lactose.ui}}</td>
+                    <td>{{recommendations.lactose.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'fibers' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.fibers, recommendations.fibers)}}"><span ng-if="currMealTotal.fibers.val"></span>{{currMealTotal.fibers.val}}</td>
+                    <td><span ng-if="currMealTotal.fibers.perc">{{currMealTotal.fibers.perc}} %</span></td>
+                    <td>{{recommendations.fibers.mda}}</td>
+                    <td>{{recommendations.fibers.ui}}</td>
+                    <td>{{recommendations.fibers.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'saturated fats' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.saturatedFats, recommendations.saturatedFats)}}"><span ng-if="currMealTotal.saturatedFats.val"></span>{{currMealTotal.saturatedFats.val}}</td>
+                    <td><span ng-if="currMealTotal.saturatedFats.perc">{{currMealTotal.saturatedFats.perc}} %</span></td>
+                    <td>{{recommendations.saturatedFats.mda}}</td>
+                    <td>{{recommendations.saturatedFats.ui}}</td>
+                    <td>{{recommendations.saturatedFats.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'monounsaturated fats' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.monounsaturatedFats, recommendations.monounsaturatedFats)}}"><span ng-if="currMealTotal.monounsaturatedFats.val">{{currMealTotal.monounsaturatedFats.val}}</span></td>
+                    <td><span ng-if="currMealTotal.monounsaturatedFats.perc">{{currMealTotal.monounsaturatedFats.perc}} %</span></td>
+                    <td>{{recommendations.monounsaturatedFats.mda}}</td>
+                    <td>{{recommendations.monounsaturatedFats.ui}}</td>
+                    <td>{{recommendations.monounsaturatedFats.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'polyunsaturated fats' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.polyunsaturatedFats, recommendations.polyunsaturatedFats)}}"><span ng-if="currMealTotal.polyunsaturatedFats.val">{{currMealTotal.polyunsaturatedFats.val}}</span></td>
+                    <td><span ng-if="currMealTotal.polyunsaturatedFats.perc">{{currMealTotal.polyunsaturatedFats.perc}} %</span></td>
+                    <td>{{recommendations.polyunsaturatedFats.mda}}</td>
+                    <td>{{recommendations.polyunsaturatedFats.ui}}</td>
+                    <td>{{recommendations.polyunsaturatedFats.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'trifluoroacetic acid' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.trifluoroaceticAcid, recommendations.trifluoroaceticAcid)}}"><span ng-if="currMealTotal.trifluoroaceticAcid.val">{{currMealTotal.trifluoroaceticAcid.val}}</span></td>
+                    <td><span ng-if="currMealTotal.trifluoroaceticAcid.perc">{{currMealTotal.trifluoroaceticAcid.perc}} %</span></td>
+                    <td>{{recommendations.trifluoroaceticAcid.mda}}</td>
+                    <td>{{recommendations.trifluoroaceticAcid.ui}}</td>
+                    <td>{{recommendations.trifluoroaceticAcid.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'cholesterol' | translate}}</td>
+                    <td>{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.cholesterol, recommendations.cholesterol)}}"><span ng-if="currMealTotal.cholesterol.val">{{currMealTotal.cholesterol.val}}</span></td>
+                    <td><span ng-if="currMealTotal.cholesterol.perc">{{currMealTotal.cholesterol.perc}} %</span></td>
+                    <td>{{recommendations.cholesterol.mda}}</td>
+                    <td>{{recommendations.cholesterol.ui}}</td>
+                    <td>{{recommendations.cholesterol.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'sodium' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.sodium, recommendations.sodium)}}"><span ng-if="currMealTotal.sodium.val">{{currMealTotal.sodium.val}}</span></td>
+                    <td><span ng-if="currMealTotal.sodium.perc">{{currMealTotal.sodium.perc}} %</span></td>
+                    <td>{{recommendations.sodium.mda}}</td>
+                    <td>{{recommendations.sodium.ui}}</td>
+                    <td>{{recommendations.sodium.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'potassium' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.potassium, recommendations.potassium)}}"><span ng-if="currMealTotal.potassium.val">{{currMealTotal.potassium.val}}</span></td>
+                    <td><span ng-if="currMealTotal.potassium.perc">{{currMealTotal.potassium.perc}} %</span></td>
+                    <td>{{recommendations.potassium.mda}}</td>
+                    <td>{{recommendations.potassium.ui}}</td>
+                    <td>{{recommendations.potassium.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'calcium' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.calcium, recommendations.calcium)}}"><span ng-if="currMealTotal.calcium.val">{{currMealTotal.calcium.val}}</span></td>
+                    <td><span ng-if="currMealTotal.calcium.perc">{{currMealTotal.calcium.perc}} %</span></td>
+                    <td>{{recommendations.calcium.mda}}</td>
+                    <td>{{recommendations.calcium.ui}}</td>
+                    <td>{{recommendations.calcium.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'magnesium' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.magnesium, recommendations.magnesium)}}"><span ng-if="currMealTotal.magnesium.val">{{currMealTotal.magnesium.val}}</span></td>
+                    <td><span ng-if="currMealTotal.magnesium.perc">{{currMealTotal.magnesium.perc}} %</span></td>
+                    <td>{{recommendations.magnesium.mda}}</td>
+                    <td>{{recommendations.magnesium.ui}}</td>
+                    <td>{{recommendations.magnesium.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'phosphorus' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.phosphorus, recommendations.phosphorus)}}"><span ng-if="currMealTotal.phosphorus.val">{{currMealTotal.phosphorus.val}}</span></td>
+                    <td><span ng-if="currMealTotal.phosphorus.perc">{{currMealTotal.phosphorus.perc}} %</span></td>
+                    <td>{{recommendations.phosphorus.mda}}</td>
+                    <td>{{recommendations.phosphorus.ui}}</td>
+                    <td>{{recommendations.phosphorus.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'iron' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.iron, recommendations.iron)}}"><span ng-if="currMealTotal.iron.val">{{currMealTotal.iron.val}}</span></td>
+                    <td><span ng-if="currMealTotal.iron.perc">{{currMealTotal.iron.perc}} %</span></td>
+                    <td>{{recommendations.iron.mda}}</td>
+                    <td>{{recommendations.iron.ui}}</td>
+                    <td>{{recommendations.iron.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'copper' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.copper, recommendations.copper)}}"><span ng-if="currMealTotal.copper.val">{{currMealTotal.copper.val}}</span></td>
+                    <td><span ng-if="currMealTotal.copper.perc">{{currMealTotal.copper.perc}} %</span></td>
+                    <td>{{recommendations.copper.mda}}</td>
+                    <td>{{recommendations.copper.ui}}</td>
+                    <td>{{recommendations.copper.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'zinc' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.zinc, recommendations.zinc)}}"><span ng-if="currMealTotal.zinc.val">{{currMealTotal.zinc.val}}</span></td>
+                    <td><span ng-if="currMealTotal.zinc.perc">{{currMealTotal.zinc.perc}} %</span></td>
+                    <td>{{recommendations.zinc.mda}}</td>
+                    <td>{{recommendations.zinc.ui}}</td>
+                    <td>{{recommendations.zinc.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'chlorine' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.chlorine, recommendations.chlorine)}}"><span ng-if="currMealTotal.chlorine.val">{{currMealTotal.chlorine.val}}</span></td>
+                    <td><span ng-if="currMealTotal.chlorine.perc">{{currMealTotal.chlorine.perc}} %</span></td>
+                    <td>{{recommendations.chlorine.mda}}</td>
+                    <td>{{recommendations.chlorine.ui}}</td>
+                    <td>{{recommendations.chlorine.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'manganese' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.manganese, recommendations.manganese)}}"><span ng-if="currMealTotal.manganese.val">{{currMealTotal.manganese.val}}</span></td>
+                    <td><span ng-if="currMealTotal.manganese.perc">{{currMealTotal.manganese.perc}} %</span></td>
+                    <td>{{recommendations.manganese.mda}}</td>
+                    <td>{{recommendations.manganese.ui}}</td>
+                    <td>{{recommendations.manganese.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'selenium' | translate}}</td>
+                    <td>&#956;{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.selenium, recommendations.selenium)}}"><span ng-if="currMealTotal.selenium.val">{{currMealTotal.selenium.val}}</span></td>
+                    <td><span ng-if="currMealTotal.selenium.perc">{{currMealTotal.selenium.perc}} %</span></td>
+                    <td>{{recommendations.selenium.mda}}</td>
+                    <td>{{recommendations.selenium.ui}}</td>
+                    <td>{{recommendations.selenium.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'iodine' | translate}}</td>
+                    <td>&#956;{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.iodine, recommendations.iodine)}}"><span ng-if="currMealTotal.iodine.val">{{currMealTotal.iodine.val}}</span></td>
+                    <td><span ng-if="currMealTotal.iodine.perc">{{currMealTotal.iodine.perc}} %</span></td>
+                    <td>{{recommendations.iodine.mda}}</td>
+                    <td>{{recommendations.iodine.ui}}</td>
+                    <td>{{recommendations.iodine.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'retinol' | translate}}</td>
+                    <td>&#956;{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.retinol, recommendations.retinol)}}"><span ng-if="currMealTotal.retinol.val">{{currMealTotal.retinol.val}}</span></td>
+                    <td><span ng-if="currMealTotal.retinol.perc">{{currMealTotal.retinol.perc}} %</span></td>
+                    <td>{{recommendations.retinol.mda}}</td>
+                    <td>{{recommendations.retinol.ui}}</td>
+                    <td>{{recommendations.retinol.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'carotene' | translate}}</td>
+                    <td>&#956;{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.carotene, recommendations.carotene)}}"><span ng-if="currMealTotal.carotene.val">{{currMealTotal.carotene.val}}</span></td>
+                    <td><span ng-if="currMealTotal.carotene.perc">{{currMealTotal.carotene.perc}} %</span></td>
+                    <td>{{recommendations.carotene.mda}}</td>
+                    <td>{{recommendations.carotene.ui}}</td>
+                    <td>{{recommendations.carotene.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'vitamin D' | translate}}</td>
+                    <td>&#956;{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.vitaminD, recommendations.vitaminD)}}"><span ng-if="currMealTotal.vitaminD.val">{{currMealTotal.vitaminD.val}}</span></td>
+                    <td><span ng-if="currMealTotal.vitaminD.perc">{{currMealTotal.vitaminD.perc}} %</span></td>
+                    <td>{{recommendations.vitaminD.mda}}</td>
+                    <td>{{recommendations.vitaminD.ui}}</td>
+                    <td>{{recommendations.vitaminD.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'vitamin E' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.vitaminE, recommendations.vitaminE)}}"><span ng-if="currMealTotal.vitaminE.val">{{currMealTotal.vitaminE.val}}</span></td>
+                    <td><span ng-if="currMealTotal.vitaminE.perc">{{currMealTotal.vitaminE.perc}} %</span></td>
+                    <td>{{recommendations.vitaminE.mda}}</td>
+                    <td>{{recommendations.vitaminE.ui}}</td>
+                    <td>{{recommendations.vitaminE.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'vitamin B1' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.vitaminB1, recommendations.vitaminB1)}}"><span ng-if="currMealTotal.vitaminB1.val">{{currMealTotal.vitaminB1.val}}</span></td>
+                    <td><span ng-if="currMealTotal.vitaminB1.perc">{{currMealTotal.vitaminB1.perc}} %</span></td>
+                    <td>{{recommendations.vitaminB1.mda}}</td>
+                    <td>{{recommendations.vitaminB1.ui}}</td>
+                    <td>{{recommendations.vitaminB1.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'vitamin B2' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.vitaminB2, recommendations.vitaminB2)}}"><span ng-if="currMealTotal.vitaminB2.val">{{currMealTotal.vitaminB2.val}}</span></td>
+                    <td><span ng-if="currMealTotal.vitaminB2.perc">{{currMealTotal.vitaminB2.perc}} %</span></td>
+                    <td>{{recommendations.vitaminB2.mda}}</td>
+                    <td>{{recommendations.vitaminB2.ui}}</td>
+                    <td>{{recommendations.vitaminB2.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'vitamin B3' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.vitaminB3, recommendations.vitaminB3)}}"><span ng-if="currMealTotal.vitaminB3.val">{{currMealTotal.vitaminB3.val}}</span></td>
+                    <td><span ng-if="currMealTotal.vitaminB3.perc">{{currMealTotal.vitaminB3.perc}} %</span></td>
+                    <td>{{recommendations.vitaminB3.mda}}</td>
+                    <td>{{recommendations.vitaminB3.ui}}</td>
+                    <td>{{recommendations.vitaminB3.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'vitamin B6' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.vitaminB6, recommendations.vitaminB6)}}"><span ng-if="currMealTotal.vitaminB6.val">{{currMealTotal.vitaminB6.val}}</span></td>
+                    <td><span ng-if="currMealTotal.vitaminB6.perc">{{currMealTotal.vitaminB6.perc}} %</span></td>
+                    <td>{{recommendations.vitaminB6.mda}}</td>
+                    <td>{{recommendations.vitaminB6.ui}}</td>
+                    <td>{{recommendations.vitaminB6.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'vitamin B12' | translate}}</td>
+                    <td>&#956;{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.vitaminB12, recommendations.vitaminB12)}}"><span ng-if="currMealTotal.vitaminB12.val">{{currMealTotal.vitaminB12.val}}</span></td>
+                    <td><span ng-if="currMealTotal.vitaminB12.perc">{{currMealTotal.vitaminB12.perc}} %</span></td>
+                    <td>{{recommendations.vitaminB12.mda}}</td>
+                    <td>{{recommendations.vitaminB12.ui}}</td>
+                    <td>{{recommendations.vitaminB12.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'folate' | translate}}</td>
+                    <td>&#956;{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.folate, recommendations.folate)}}"><span ng-if="currMealTotal.folate.val">{{currMealTotal.folate.val}}</span></td>
+                    <td><span ng-if="currMealTotal.folate.perc">{{currMealTotal.folate.perc}} %</span></td>
+                    <td>{{recommendations.folate.mda}}</td>
+                    <td>{{recommendations.folate.ui}}</td>
+                    <td>{{recommendations.folate.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'pantothenic acid' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.pantothenicAcid, recommendations.pantothenicAcid)}}"><span ng-if="currMealTotal.pantothenicAcid.val">{{currMealTotal.pantothenicAcid.val}}</span></td>
+                    <td><span ng-if="currMealTotal.pantothenicAcid.perc">{{currMealTotal.pantothenicAcid.perc}} %</span></td>
+                    <td>{{recommendations.pantothenicAcid.mda}}</td>
+                    <td>{{recommendations.pantothenicAcid.ui}}</td>
+                    <td>{{recommendations.pantothenicAcid.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'biotin' | translate}}</td>
+                    <td>&#956;{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.biotin, recommendations.biotin)}}"><span ng-if="currMealTotal.biotin.val">{{currMealTotal.biotin.val}}</span></td>
+                    <td><span ng-if="currMealTotal.biotin.perc">{{currMealTotal.biotin.perc}} %</span></td>
+                    <td>{{recommendations.biotin.mda}}</td>
+                    <td>{{recommendations.biotin.ui}}</td>
+                    <td>{{recommendations.biotin.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'vitamin C' | translate}}</td>
+                    <td>{{'mg' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.vitaminC, recommendations.vitaminC)}}"><span ng-if="currMealTotal.vitaminC.val">{{currMealTotal.vitaminC.val}}</span></td>
+                    <td><span ng-if="currMealTotal.vitaminC.perc">{{currMealTotal.vitaminC.perc}} %</span></td>
+                    <td>{{recommendations.vitaminC.mda}}</td>
+                    <td>{{recommendations.vitaminC.ui}}</td>
+                    <td>{{recommendations.vitaminC.rda}}</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td class="text-left">{{'vitamin K' | translate}}</td>
+                    <td>&#956;{{'g' | translate}}</td>
+                    <td class="font-weight-bold" style="{{mealParameterStyle(currMealTotal.vitaminK, recommendations.vitaminK)}}"><span ng-if="currMealTotal.vitaminK.val">{{currMealTotal.vitaminK.val}}</span></td>
+                    <td><span ng-if="currMealTotal.vitaminK.perc">{{currMealTotal.vitaminK.perc}} %</span></td>
+                    <td>{{recommendations.vitaminK.mda}}</td>
+                    <td>{{recommendations.vitaminK.ui}}</td>
+                    <td>{{recommendations.vitaminK.rda}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</script>
 
 
 

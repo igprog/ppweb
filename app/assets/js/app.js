@@ -433,15 +433,20 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $rootScope.mainMessage = null;
     }
 
+    $scope.currMealTitle = null;
     $rootScope.getMealTitle = function (x) {
-        if (x.code == 'B') { return $translate.instant('breakfast'); }
-        else if (x.code == 'MS') { return $translate.instant('morning snack'); }
-        else if (x.code == 'L') { return $translate.instant('lunch'); }
-        else if (x.code == 'AS') { return $translate.instant('afternoon snack'); }
-        else if (x.code == 'D') { return $translate.instant('dinner'); }
-        else if (x.code == 'MBS') { return $translate.instant('meal before sleep'); }
-        else return x.title;
+        var title = null;
+        if (x.code === 'B') { title = $translate.instant('breakfast'); }
+        else if (x.code === 'MS') { title = $translate.instant('morning snack'); }
+        else if (x.code === 'L') { title = $translate.instant('lunch'); }
+        else if (x.code === 'AS') { title = $translate.instant('afternoon snack'); }
+        else if (x.code === 'D') { title = $translate.instant('dinner'); }
+        else if (x.code === 'MBS') { title = $translate.instant('meal before sleep'); }
+        else title = x.title;
+        $scope.currMealTitle = $rootScope.currentMenu.data.meals.find(a => a.code === $rootScope.currentMeal).title;
+        return title;
     }
+
 
     $scope.changeUnitSystem = function (x) {
         $rootScope.unitSystem = x;
@@ -3726,6 +3731,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     $scope.toggleMeals = function (x) {
         $rootScope.currentMeal = x;
+        getCurrMealTotal(x);
     };
 
     if ($rootScope.mealsAreChanged) {
@@ -4290,14 +4296,21 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
     };
 
+    var getCurrMealTotal = function (meal) {
+        $scope.currMealTotal = $rootScope.totals.mealsTotal.find(a => a.code === meal);
+    }
+
     var getTotals = function (x) {
         if (x === undefined) { return false; }
         functions.post('Foods', 'GetTotals', { selectedFoods: x.data.selectedFoods, meals: x.data.meals }).then(function (d) {
             $rootScope.totals = d;
             $rootScope.totals.price.currency = $rootScope.config.currency;
             displayCharts();
+            getCurrMealTotal($rootScope.currentMeal);
         });
     }
+
+
 
     var displayCharts = function () {
         if ($rootScope.recommendations === undefined || $rootScope.totals === undefined) { return false; }
@@ -4909,20 +4922,23 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.filterMeal = function (x) {
-        if (x.meal.code == $rootScope.currentMeal) {
-            return true;
-        } else {
-            return false;
-        }
+        return x.meal.code === $rootScope.currentMeal;
     }
 
     $scope.parameterStyle = function (total, r) {
-        if (!angular.isDefined(total) || !angular.isDefined(r)) { return false; }
-        if (r.mda != null) {
-            if (total < r.mda) { return 'background-color:#9bc1ff; color:white' }
+        if (!angular.isDefined(total) || !angular.isDefined(r)) { return; }
+        if (r.mda !== null && total < r.mda) {
+             return 'background-color:#9bc1ff; color:white';
         }
-        if (r.ui != null) {
-            if (total > r.ui) { return 'background-color:#f94040; color:white' }
+        if (r.ui != null && total > r.ui) {
+            return 'background-color:#f94040; color:white';
+        }
+    }
+
+    $scope.mealParameterStyle = function (total, r) {
+        if (!angular.isDefined(total.val) || !angular.isDefined(r)) { return; }
+        if (r.ui !== null && total.val > r.ui) {
+            return 'background-color:#f94040; color:white';
         }
     }
 
@@ -5422,6 +5438,16 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     $scope.isVisibleClearMealBtn = function (selectedFoods, meal) {
         return selectedFoods.length > 1 ? selectedFoods.filter(a => a.meal.code === meal).length > 1 : false;
+    }
+
+    // TODO: meal micronutrients
+    $scope.showMealMicronutrients = false;
+    $scope.toggleMealMicronutrients = function (show) {
+        if ($rootScope.user.userType < 1) {
+            functions.demoAlert('this function is available only in standard and premium package');
+            return;
+        }
+        $scope.showMealMicronutrients = !show;
     }
 
 }])
