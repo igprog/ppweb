@@ -143,7 +143,7 @@
                                         <td colspan="12">
                                             <div ng-if="currentMenu.data.selectedFoods.length>0" class="pt-2">
                                                 <md-checkbox ng-model="config.showfoodgroupscolors" class="md-primary">
-                                                    {{'color food groups' | translate}}
+                                                    <i class="fa fa-palette"></i> {{'color food groups' | translate}}
                                                 </md-checkbox>
                                                 <i class="fa fa-info-circle text-info" style="cursor:pointer" ng-click="openColorGroupsInfoPopup()"></i>
                                             </div>
@@ -463,8 +463,8 @@
                 <tr class="border-bottom">
                     <td class="text-left">{{'total sugar' | translate}}</td>
                     <td>{{'g' | translate}}</td>
-                    <td class="font-weight-bold"><span ng-if="totals.totalSugar.val">{{currMealTotal.totalSugar.val}}</span></td>
-                    <td><span ng-if="totals.totalSugar.perc">{{currMealTotal.totalSugar.perc}} %</span></td>
+                    <td class="font-weight-bold"><span ng-if="currMealTotal.totalSugar.val">{{currMealTotal.totalSugar.val}}</span></td>
+                    <td><span ng-if="currMealTotal.totalSugar.perc">{{currMealTotal.totalSugar.perc}} %</span></td>
                     <td>{{recommendations.totalSugar.mda}}</td>
                     <td>{{recommendations.totalSugar.ui}}</td>
                     <td>{{recommendations.totalSugar.rda}}</td>

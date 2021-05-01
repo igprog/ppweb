@@ -3617,6 +3617,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var getRecommendations = function (clientData) {
+        if ($rootScope.calculation === undefined) return;
         var energyPerc = null;
         if (clientData.myMeals !== undefined && clientData.myMeals != null) {
             if (clientData.myMeals.data != null) {
@@ -5440,11 +5441,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         return selectedFoods.length > 1 ? selectedFoods.filter(a => a.meal.code === meal).length > 1 : false;
     }
 
-    // TODO: meal micronutrients
     $scope.showMealMicronutrients = false;
     $scope.toggleMealMicronutrients = function (show) {
-        if ($rootScope.user.userType < 1) {
-            functions.demoAlert('this function is available only in standard and premium package');
+        if ($rootScope.user.userType < 2 || $rootScope.user.licenceStatus == 'demo') {
+            functions.demoAlert('this function is available only in premium package');
             return;
         }
         $scope.showMealMicronutrients = !show;

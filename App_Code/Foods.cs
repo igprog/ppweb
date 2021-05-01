@@ -907,99 +907,185 @@ public class Foods : System.Web.Services.WebService {
     }
 
     public List<MealsTotal> GetMealsTotal(List<NewFood> selectedFoods, List<Meals.NewMeal> meals) {
-      List<MealsTotal> xx = new List<MealsTotal>();
+        List<MealsTotal> xx = new List<MealsTotal>();
+        double val = 0;
         foreach (var obj in meals) {
             MealsTotal x = new MealsTotal();
             x.code = obj.code;
             x.title = obj.title;
-            x.energy.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.energy));
-            x.energy.perc = SmartRound(x.energy.val > 0 ? (x.energy.val / selectedFoods.Sum(a => a.energy)) * 100 : 0);
-            x.carbohydrates.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.carbohydrates));
-            x.carbohydrates.perc = SmartRound(x.carbohydrates.val > 0 ? (x.carbohydrates.val / selectedFoods.Sum(a => a.carbohydrates)) * 100 : 0);
-            x.proteins.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.proteins));
-            x.proteins.perc = SmartRound(x.proteins.val > 0 ? (x.proteins.val / selectedFoods.Sum(a => a.proteins)) * 100 : 0);
-            x.fats.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.fats));
-            x.fats.perc = SmartRound(x.fats.val > 0 ? (x.fats.val / selectedFoods.Sum(a => a.fats)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.energy);
+            x.energy.val = SmartRound(val);
+            x.energy.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.energy)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.carbohydrates);
+            x.carbohydrates.val = SmartRound(val);
+            x.carbohydrates.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.carbohydrates)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.proteins);
+            x.proteins.val = SmartRound(val);
+            x.proteins.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.proteins)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.fats);
+            x.fats.val = SmartRound(val);
+            x.fats.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.fats)) * 100 : 0);
 
             //***** micronutrients *****
-            x.starch.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.starch));
-            x.starch.perc = SmartRound(x.starch.val > 0 ? (x.starch.val / selectedFoods.Sum(a => a.starch)) * 100 : 0);
-            x.totalSugar.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.totalSugar));
-            x.totalSugar.perc = SmartRound(x.totalSugar.val > 0 ? (x.totalSugar.val / selectedFoods.Sum(a => a.totalSugar)) * 100 : 0);
-            x.glucose.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.glucose));
-            x.glucose.perc = SmartRound(x.glucose.val > 0 ? (x.glucose.val / selectedFoods.Sum(a => a.glucose)) * 100 : 0);
-            x.fructose.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.fructose));
-            x.fructose.perc = SmartRound(x.fructose.val > 0 ? (x.fructose.val / selectedFoods.Sum(a => a.fructose)) * 100 : 0);
-            x.saccharose.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.saccharose));
-            x.saccharose.perc = SmartRound(x.saccharose.val > 0 ? (x.saccharose.val / selectedFoods.Sum(a => a.saccharose)) * 100 : 0);
-            x.maltose.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.maltose));
-            x.maltose.perc = SmartRound(x.maltose.val > 0 ? (x.maltose.val / selectedFoods.Sum(a => a.maltose)) * 100 : 0);
-            x.lactose.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.lactose));
-            x.lactose.perc = SmartRound(x.lactose.val > 0 ? (x.lactose.val / selectedFoods.Sum(a => a.lactose)) * 100 : 0);
-            x.fibers.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.fibers));
-            x.fibers.perc = SmartRound(x.fibers.val > 0 ? (x.fibers.val / selectedFoods.Sum(a => a.fibers)) * 100 : 0);
-            x.saturatedFats.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.saturatedFats));
-            x.saturatedFats.perc = SmartRound(x.saturatedFats.val > 0 ? (x.saturatedFats.val / selectedFoods.Sum(a => a.saturatedFats)) * 100 : 0);
-            x.monounsaturatedFats.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.monounsaturatedFats));
-            x.monounsaturatedFats.perc = SmartRound(x.monounsaturatedFats.val > 0 ? (x.monounsaturatedFats.val / selectedFoods.Sum(a => a.monounsaturatedFats)) * 100 : 0);
-            x.polyunsaturatedFats.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.polyunsaturatedFats));
-            x.polyunsaturatedFats.perc = SmartRound(x.polyunsaturatedFats.val > 0 ? (x.polyunsaturatedFats.val / selectedFoods.Sum(a => a.polyunsaturatedFats)) * 100 : 0);
-            x.trifluoroaceticAcid.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.trifluoroaceticAcid));
-            x.trifluoroaceticAcid.perc = SmartRound(x.trifluoroaceticAcid.val > 0 ? (x.trifluoroaceticAcid.val / selectedFoods.Sum(a => a.trifluoroaceticAcid)) * 100 : 0);
-            x.cholesterol.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.cholesterol));
-            x.cholesterol.perc = SmartRound(x.cholesterol.val > 0 ? (x.cholesterol.val / selectedFoods.Sum(a => a.cholesterol)) * 100 : 0);
-            x.sodium.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.sodium));
-            x.sodium.perc = SmartRound(x.sodium.val > 0 ? (x.sodium.val / selectedFoods.Sum(a => a.sodium)) * 100 : 0);
-            x.potassium.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.potassium));
-            x.potassium.perc = SmartRound(x.potassium.val > 0 ? (x.potassium.val / selectedFoods.Sum(a => a.potassium)) * 100 : 0);
-            x.calcium.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.calcium));
-            x.calcium.perc = SmartRound(x.calcium.val > 0 ? (x.calcium.val / selectedFoods.Sum(a => a.calcium)) * 100 : 0);
-            x.magnesium.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.magnesium));
-            x.magnesium.perc = SmartRound(x.magnesium.val > 0 ? (x.magnesium.val / selectedFoods.Sum(a => a.magnesium)) * 100 : 0);
-            x.phosphorus.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.phosphorus));
-            x.phosphorus.perc = SmartRound(x.phosphorus.val > 0 ? (x.phosphorus.val / selectedFoods.Sum(a => a.phosphorus)) * 100 : 0);
-            x.iron.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.iron));
-            x.iron.perc = SmartRound(x.iron.val > 0 ? (x.iron.val / selectedFoods.Sum(a => a.iron)) * 100 : 0);
-            x.copper.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.copper));
-            x.copper.perc = SmartRound(x.copper.val > 0 ? (x.copper.val / selectedFoods.Sum(a => a.copper)) * 100 : 0);
-            x.zinc.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.zinc));
-            x.zinc.perc = SmartRound(x.zinc.val > 0 ? (x.zinc.val / selectedFoods.Sum(a => a.zinc)) * 100 : 0);
-            x.chlorine.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.chlorine));
-            x.chlorine.perc = SmartRound(x.chlorine.val > 0 ? (x.chlorine.val / selectedFoods.Sum(a => a.chlorine)) * 100 : 0);
-            x.manganese.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.manganese));
-            x.manganese.perc = SmartRound(x.manganese.val > 0 ? (x.manganese.val / selectedFoods.Sum(a => a.manganese)) * 100 : 0);
-            x.selenium.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.selenium));
-            x.selenium.perc = SmartRound(x.selenium.val > 0 ? (x.selenium.val / selectedFoods.Sum(a => a.selenium)) * 100 : 0);
-            x.iodine.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.iodine));
-            x.iodine.perc = SmartRound(x.iodine.val > 0 ? (x.iodine.val / selectedFoods.Sum(a => a.iodine)) * 100 : 0);
-            x.retinol.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.retinol));
-            x.retinol.perc = SmartRound(x.retinol.val > 0 ? (x.retinol.val / selectedFoods.Sum(a => a.retinol)) * 100 : 0);
-            x.carotene.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.carotene));
-            x.carotene.perc = SmartRound(x.carotene.val > 0 ? (x.carotene.val / selectedFoods.Sum(a => a.carotene)) * 100 : 0);
-            x.vitaminD.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminD));
-            x.vitaminD.perc = SmartRound(x.vitaminD.val > 0 ? (x.vitaminD.val / selectedFoods.Sum(a => a.vitaminD)) * 100 : 0);
-            x.vitaminE.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminE));
-            x.vitaminE.perc = SmartRound(x.vitaminE.val > 0 ? (x.vitaminE.val / selectedFoods.Sum(a => a.vitaminE)) * 100 : 0);
-            x.vitaminB1.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminB1));
-            x.vitaminB1.perc = SmartRound(x.vitaminB1.val > 0 ? (x.vitaminB1.val / selectedFoods.Sum(a => a.vitaminB1)) * 100 : 0);
-            x.vitaminB2.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminB2));
-            x.vitaminB2.perc = SmartRound(x.vitaminB2.val > 0 ? (x.vitaminB2.val / selectedFoods.Sum(a => a.vitaminB2)) * 100 : 0);
-            x.vitaminB3.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminB3));
-            x.vitaminB3.perc = SmartRound(x.vitaminB3.val > 0 ? (x.vitaminB3.val / selectedFoods.Sum(a => a.vitaminB3)) * 100 : 0);
-            x.vitaminB6.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminB6));
-            x.vitaminB6.perc = SmartRound(x.vitaminB6.val > 0 ? (x.vitaminB6.val / selectedFoods.Sum(a => a.vitaminB6)) * 100 : 0);
-            x.vitaminB12.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminB12));
-            x.vitaminB12.perc = SmartRound(x.vitaminB12.val > 0 ? (x.vitaminB12.val / selectedFoods.Sum(a => a.vitaminB12)) * 100 : 0);
-            x.folate.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.folate));
-            x.folate.perc = SmartRound(x.folate.val > 0 ? (x.folate.val / selectedFoods.Sum(a => a.folate)) * 100 : 0);
-            x.pantothenicAcid.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.pantothenicAcid));
-            x.pantothenicAcid.perc = SmartRound(x.pantothenicAcid.val > 0 ? (x.pantothenicAcid.val / selectedFoods.Sum(a => a.pantothenicAcid)) * 100 : 0);
-            x.biotin.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.biotin));
-            x.biotin.perc = SmartRound(x.biotin.val > 0 ? (x.biotin.val / selectedFoods.Sum(a => a.biotin)) * 100 : 0);
-            x.vitaminC.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminC));
-            x.vitaminC.perc = SmartRound(x.vitaminC.val > 0 ? (x.vitaminC.val / selectedFoods.Sum(a => a.vitaminC)) * 100 : 0);
-            x.vitaminK.val = SmartRound(selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminK));
-            x.vitaminK.perc = SmartRound(x.vitaminK.val > 0 ? (x.vitaminK.val / selectedFoods.Sum(a => a.vitaminK)) * 100 : 0);
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.starch);
+            x.starch.val = SmartRound(val);
+            x.starch.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.starch)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.totalSugar);
+            x.totalSugar.val = SmartRound(val);
+            x.totalSugar.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.totalSugar)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.glucose);
+            x.glucose.val = SmartRound(val);
+            x.glucose.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.glucose)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.fructose);
+            x.fructose.val = SmartRound(val);
+            x.fructose.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.fructose)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.saccharose);
+            x.saccharose.val = SmartRound(val);
+            x.saccharose.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.saccharose)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.maltose);
+            x.maltose.val = SmartRound(val);
+            x.maltose.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.maltose)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.lactose);
+            x.lactose.val = SmartRound(val);
+            x.lactose.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.lactose)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.fibers);
+            x.fibers.val = SmartRound(val);
+            x.fibers.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.fibers)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.saturatedFats);
+            x.saturatedFats.val = SmartRound(val);
+            x.saturatedFats.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.saturatedFats)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.monounsaturatedFats);
+            x.monounsaturatedFats.val = SmartRound(val);
+            x.monounsaturatedFats.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.monounsaturatedFats)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.polyunsaturatedFats);
+            x.polyunsaturatedFats.val = SmartRound(val);
+            x.polyunsaturatedFats.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.polyunsaturatedFats)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.trifluoroaceticAcid);
+            x.trifluoroaceticAcid.val = SmartRound(val);
+            x.trifluoroaceticAcid.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.trifluoroaceticAcid)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.cholesterol);
+            x.cholesterol.val = SmartRound(val);
+            x.cholesterol.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.cholesterol)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.sodium);
+            x.sodium.val = SmartRound(val);
+            x.sodium.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.sodium)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.potassium);
+            x.potassium.val = SmartRound(val);
+            x.potassium.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.potassium)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.calcium);
+            x.calcium.val = SmartRound(val);
+            x.calcium.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.calcium)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.magnesium);
+            x.magnesium.val = SmartRound(val);
+            x.magnesium.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.magnesium)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.phosphorus);
+            x.phosphorus.val = SmartRound(val);
+            x.phosphorus.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.phosphorus)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.iron);
+            x.iron.val = SmartRound(val);
+            x.iron.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.iron)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.copper);
+            x.copper.val = SmartRound(val);
+            x.copper.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.copper)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.zinc);
+            x.zinc.val = SmartRound(val);
+            x.zinc.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.zinc)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.chlorine);
+            x.chlorine.val = SmartRound(val);
+            x.chlorine.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.chlorine)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.manganese);
+            x.manganese.val = SmartRound(val);
+            x.manganese.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.manganese)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.selenium);
+            x.selenium.val = SmartRound(val);
+            x.selenium.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.selenium)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.iodine);
+            x.iodine.val = SmartRound(val);
+            x.iodine.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.iodine)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.retinol);
+            x.retinol.val = SmartRound(val);
+            x.retinol.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.retinol)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.carotene);
+            x.carotene.val = SmartRound(val);
+            x.carotene.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.carotene)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminD);
+            x.vitaminD.val = SmartRound(val);
+            x.vitaminD.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.vitaminD)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminE);
+            x.vitaminE.val = SmartRound(val);
+            x.vitaminE.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.vitaminE)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminB1);
+            x.vitaminB1.val = SmartRound(val);
+            x.vitaminB1.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.vitaminB1)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminB2);
+            x.vitaminB2.val = SmartRound(val);
+            x.vitaminB2.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.vitaminB2)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminB3);
+            x.vitaminB3.val = SmartRound(val);
+            x.vitaminB3.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.vitaminB3)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminB6);
+            x.vitaminB6.val = SmartRound(val);
+            x.vitaminB6.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.vitaminB6)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminB12);
+            x.vitaminB12.val = SmartRound(val);
+            x.vitaminB12.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.vitaminB12)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.folate);
+            x.folate.val = SmartRound(val);
+            x.folate.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.folate)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.pantothenicAcid);
+            x.pantothenicAcid.val = SmartRound(val);
+            x.pantothenicAcid.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.pantothenicAcid)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.biotin);
+            x.biotin.val = SmartRound(val);
+            x.biotin.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.biotin)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminC);
+            x.vitaminC.val = SmartRound(val);
+            x.vitaminC.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.vitaminC)) * 100 : 0);
+
+            val = selectedFoods.Where(a => a.meal.code == obj.code).Sum(a => a.vitaminK);
+            x.vitaminK.val = SmartRound(val);
+            x.vitaminK.perc = SmartRound(val > 0 ? (val / selectedFoods.Sum(a => a.vitaminK)) * 100 : 0);
             //***** micronutrients *****
 
             xx.Add(x);

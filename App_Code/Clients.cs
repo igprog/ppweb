@@ -233,6 +233,8 @@ public class Clients : WebService {
     [WebMethod]
     public string Delete(string userId, string clientId, Users.NewUser user) {
         try {
+            db.CreateDataBase(userId, db.clients);
+            db.CreateDataBase(userId, db.clientsData);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 string sql = string.Format(@"DELETE FROM clients WHERE clientId = '{0}';
