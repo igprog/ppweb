@@ -28,11 +28,17 @@ angular.module('functions', [])
             }, function () {
             });
         },
-        checkPermission: function (user, packages) {
-            var note = packages === 'premium'
-                ? 'this function is available only in premium package'
-                : 'this function is available only in standard and premium package';
-            if (user.userType < 2 || user.licenceStatus === 'demo') {
+        checkPermission: function (user, license) {
+            var note = null;
+            var userType = 2;
+            if (license === 'premium') {
+                note = 'this function is available only in premium package';
+                userType = 2;
+            } else if (license === 'standard&premium') {
+                note = 'this function is available only in standard and premium package';
+                userType = 1;
+            }
+            if (user.userType < userType || user.licenceStatus === 'demo') {
                 this.checkPermissionAlert(note, 'send order');
                 return false;
             } else {

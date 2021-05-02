@@ -1081,7 +1081,7 @@ public class PrintPdf : WebService {
                 }
             }
 
-            doc.Add(new Chunk(line));
+            // doc.Add(new Chunk(line));
 
             doc.Close();
 

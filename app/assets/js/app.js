@@ -1249,10 +1249,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         });
     }
 
-    $scope.toggleTpl = function (x) {
-        $rootScope.currTpl = './assets/partials/' + x + '.html';
-    };
-
     var getAppointmentsCountByUserId = function () {
         functions.post(webService, 'GetAppointmentsCountByUserId', { userGroupId: $rootScope.user.userGroupId, userId: $rootScope.user.userId }).then(function (d) {
             $rootScope.user.datasum.scheduler = d;
@@ -3168,7 +3164,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.toggleMealsTpl = function (x) {
         $rootScope.mealsTpl = x;
         $rootScope.mealsAreChanged = true;
-        if (x === 'myMeals') {
+        if (x === 'myMeals' && $rootScope.myMeals !== undefined) {
             $rootScope.clientData.meals = $rootScope.myMeals.data.meals;
         }
     }
@@ -6584,14 +6580,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         window.location.hash = 'registration';
     }
 
-    $scope.backToApp = function () {
-        if ($rootScope.user.licenceStatus == 'expired') {
-            $rootScope.currTpl = './assets/partials/login.html';
-        } else {
-            $rootScope.currTpl = './assets/partials/dashboard.html';
-        }
-    }
-
 }])
 
 .controller('weeklyMenuCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate) {
@@ -7289,14 +7277,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $scope.sendingMail = false;
             functions.alert($translate.instant(response.data.d), '');
         });
-    }
-
-    $scope.toggleCurrTpl = function (x) {
-        $rootScope.currTpl = './assets/partials/' + x + '.html';
-    };
-
-    $scope.backToApp = function () {
-        $rootScope.currTpl = './assets/partials/dashboard.html';
     }
 
 }])
