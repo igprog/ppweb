@@ -74,7 +74,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $urlRouterProvider.otherwise("/");
 
     $translateProvider.useLoader('$translatePartialLoader', {
-         urlTemplate: './assets/json/translations/{lang}/{part}.json'
+        urlTemplate: './assets/json/translations/{lang}/{part}.json'
     });
     $translateProvider.preferredLanguage('en');
     $translatePartialLoaderProvider.addPart('main');
@@ -91,22 +91,22 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 }])
 
-.config(function($mdDateLocaleProvider) {
-        $mdDateLocaleProvider.formatDate = function(date) {
-            return moment(date).format("DD.MM.YYYY");
-        }
+.config(function ($mdDateLocaleProvider) {
+    $mdDateLocaleProvider.formatDate = function (date) {
+        return moment(date).format("DD.MM.YYYY");
+    }
 })
 
-.run(function($window, $rootScope) {
+.run(function ($window, $rootScope) {
     $rootScope.online = navigator.onLine;
 
     $window.addEventListener("offline", function () {
-        $rootScope.$apply(function() {
+        $rootScope.$apply(function () {
             $rootScope.online = false;
         });
     }, false);
     $window.addEventListener("online", function () {
-        $rootScope.$apply(function() {
+        $rootScope.$apply(function () {
             $rootScope.online = true;
         });
     }, false);
@@ -124,7 +124,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.today = new Date();
     $rootScope.unitSystem = 1;
 
-    if ((navigator.userAgent.indexOf("MSIE") !== -1 ) || (!!document.documentMode === true )) {
+    if ((navigator.userAgent.indexOf("MSIE") !== -1) || (!!document.documentMode === true)) {
         $rootScope.browserMsg = {
             title: 'you are currently using internet explorer. some functionality may not work properly',
             description: 'for a better experience in using the application, please use some of the modern browsers such as google chrome, mozilla firefox, microsoft edge etc.'
@@ -188,7 +188,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                   }
               } else {
                   $timeout(function () {
-                       openNotificationPopup();
+                      openNotificationPopup();
                   }, 600);
               }
           });
@@ -321,7 +321,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
         return true;
     }
-    
+
     $scope.toggleNewTpl = function (x) {
         if ($rootScope.clientData !== undefined) {
             if ($rootScope.clientData.length === 0 && x === 'clientsdata') {
@@ -443,7 +443,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         else if (x.code === 'D') { title = $translate.instant('dinner'); }
         else if (x.code === 'MBS') { title = $translate.instant('meal before sleep'); }
         else title = x.title;
-        $scope.currMealTitle = $rootScope.currentMenu.data.meals.find(a => a.code === $rootScope.currentMeal).title;
+        if ($rootScope.currentMenu !== undefined) {
+            $scope.currMealTitle = $rootScope.currentMenu.data.meals.find(a => a.code === $rootScope.currentMeal).title;
+        }
         return title;
     }
 
@@ -466,10 +468,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $rootScope.clientData.weight = (x.weight * 0.45349237).toFixed(1);
         $rootScope.clientData.waist = (x.waist * 2.54).toFixed(1);
         $rootScope.clientData.hip = (x.hip * 2.54).toFixed(1);
-      /*  Cm.Text = Format(Feet * 30.48 + Inches * 2.54, "0")   'visina cm
-        Kg.Text = Format(Pounds * 0.45349237, "0")   'masa kg
-        Waist_cm.Text = Format(Waist_inches * 2.54, "0")  'opseg struka cm
-        Hip_cm.Text = Format(Hip_inches * 2.54, "0")  'opseg bokova cm */
+        /*  Cm.Text = Format(Feet * 30.48 + Inches * 2.54, "0")   'visina cm
+          Kg.Text = Format(Pounds * 0.45349237, "0")   'masa kg
+          Waist_cm.Text = Format(Waist_inches * 2.54, "0")  'opseg struka cm
+          Hip_cm.Text = Format(Hip_inches * 2.54, "0")  'opseg bokova cm */
     }
 
     $rootScope.convertToStandardSystem = function () {
@@ -549,7 +551,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
     }
     //socialSharePopup();
-    
+
     var openSocialSharePopup = function () {
         $mdDialog.show({
             controller: socialSharePoupCtrl,
@@ -832,7 +834,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             if (functions.isNullOrEmpty(x.mass) || x.mass == 0) {
                 $scope.massAlert = $translate.instant('mass is required');
                 return;
-            } 
+            }
             var data = { food: x, initFood: initFood }
             $mdDialog.hide(data);
         }
@@ -845,7 +847,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
 
-        
+
         $scope.change = function (x, type) {
             if (type === 'quantity' && $scope.food.quantity + x > 0) {
                 $scope.food.quantity = Number($scope.food.quantity) + Number(x);
@@ -917,7 +919,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $rootScope.loading = true;
         functions.post(webService, 'Login', { userName: u, password: p }).then(function (d) {
             if (d.userId != null) {
-                //loginResponse(response);
                 loginResponse(d);
             } else {
                 $rootScope.loading = false;
@@ -929,14 +930,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var loginResponse = function (d) {
-        $rootScope.user = d; // JSON.parse(response.data.d);
+        $rootScope.user = d;
         if ($rootScope.user.userId !== $rootScope.user.userGroupId && $rootScope.user.isActive === false) {
             $rootScope.loading = false;
             $scope.errorLogin = true;
             $scope.errorMesage = $translate.instant('your account is not active') + '. ' + $translate.instant('please contact your administrator');
             return false;
         }
-        $rootScope.loginUser = d; // JSON.parse(response.data.d);
+        $rootScope.loginUser = d;
         $sessionStorage.loginuser = $rootScope.loginUser;
         $sessionStorage.userid = $rootScope.user.userId;
         $sessionStorage.usergroupid = $rootScope.user.userGroupId;
@@ -1016,45 +1017,45 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
     /***** Admin Login *****/
 
-     $scope.signup = function () {
-         $state.go('signup');
-     }
+    $scope.signup = function () {
+        $state.go('signup');
+    }
 
-     $scope.forgotPasswordPopup = function () {
-         $mdDialog.show({
-             controller: $scope.forgotPasswordPopupCtrl,
-             templateUrl: 'assets/partials/popup/forgotpassword.html',
-             parent: angular.element(document.body),
-             targetEvent: '',
-             clickOutsideToClose: true,
-             fullscreen: $scope.customFullscreen,
-             d: ''
-         })
-         .then(function (response) {
-         }, function () {
-         });
-     };
+    $scope.forgotPasswordPopup = function () {
+        $mdDialog.show({
+            controller: $scope.forgotPasswordPopupCtrl,
+            templateUrl: 'assets/partials/popup/forgotpassword.html',
+            parent: angular.element(document.body),
+            targetEvent: '',
+            clickOutsideToClose: true,
+            fullscreen: $scope.customFullscreen,
+            d: ''
+        })
+        .then(function (response) {
+        }, function () {
+        });
+    };
 
-     $scope.forgotPasswordPopupCtrl = function ($scope, $mdDialog, $http, $translate) {
-         $scope.confirm = function (x) {
-             forgotPassword(x);
-         }
+    $scope.forgotPasswordPopupCtrl = function ($scope, $mdDialog, $http, $translate) {
+        $scope.confirm = function (x) {
+            forgotPassword(x);
+        }
 
-         var forgotPassword = function (x) {
-             functions.post(webService, 'ForgotPassword', { email: x, lang: $rootScope.config.language }).then(function (d) {
-                 $mdDialog.hide();
-                 functions.alert(d, '');
-             });
-         }
+        var forgotPassword = function (x) {
+            functions.post(webService, 'ForgotPassword', { email: x, lang: $rootScope.config.language }).then(function (d) {
+                $mdDialog.hide();
+                functions.alert(d, '');
+            });
+        }
 
-         $scope.hide = function () {
-             $mdDialog.hide();
-         };
+        $scope.hide = function () {
+            $mdDialog.hide();
+        };
 
-         $scope.cancel = function () {
-             $mdDialog.cancel();
-         };
-     }
+        $scope.cancel = function () {
+            $mdDialog.cancel();
+        };
+    }
 
 }])
 
@@ -1217,19 +1218,13 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         remove(eventObj_old);
 
         $timeout(function () {
-             save(eventObj);
+            save(eventObj);
         }, 500);
     }
 
     var save = function (x) {
-        if ($rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('the saving function is disabled in demo version');
-            return false;
-        }
-        if ($rootScope.user.userType < 1) {
-            functions.demoAlert('this function is available only in standard and premium package');
-            return false;
-        }
+        if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
+        if (!functions.checkPermission($rootScope.user, 'standard&premium')) return;
         functions.post(webService, 'Save', { userGroupId: $rootScope.user.userGroupId, userId: $rootScope.user.userId, x: x }).then(function (d) {
             getAppointmentsCountByUserId();
             $rootScope.getActiveEvents();
@@ -1340,14 +1335,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.signup = function () {
-        if ($rootScope.user.licenceStatus === 'demo') {
-            functions.demoAlert('this function is not available in demo version');
-            return false;
-        }
+        if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
 
         if ($scope.users.length >= $rootScope.user.maxNumberOfUsers) {
             functions.alert($translate.instant('max number of users is') + ' ' + $rootScope.user.maxNumberOfUsers, '');
-            return false;
+            return;
         }
 
         if (!angular.isDefined($rootScope.user)) { $rootScope.user = $scope.newUser; }
@@ -1521,7 +1513,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $window.location.href = '/app/#/login';
     }
     var getUser = function () {
-        if ($rootScope.user === null) { return false;}
+        if ($rootScope.user === null) { return false; }
         $http({
             url: $sessionStorage.config.backend + 'Users.asmx/Get',
             method: 'POST',
@@ -1534,16 +1526,16 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
            functions.alert($translate.instant(response.data.d));
        });
     }
-	getUser();
+    getUser();
 
-	var showHelpAlert = function () {
-	    $timeout(function () {
-	        if ($rootScope.currTpl == './assets/partials/dashboard.html') {
-	            $http({
-	                url: $sessionStorage.config.backend + 'Clients.asmx/Load',
-	                method: 'POST',
-	                data: { userId: $sessionStorage.usergroupid, user: $rootScope.user }
-	            })
+    var showHelpAlert = function () {
+        $timeout(function () {
+            if ($rootScope.currTpl == './assets/partials/dashboard.html') {
+                $http({
+                    url: $sessionStorage.config.backend + 'Clients.asmx/Load',
+                    method: 'POST',
+                    data: { userId: $sessionStorage.usergroupid, user: $rootScope.user }
+                })
             .then(function (response) {
                 var clients = JSON.parse(response.data.d);
                 if (clients.length == 0) {
@@ -1551,46 +1543,46 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     $sessionStorage.showHelpAlert = true;
                 }
             }, function (response) { });
-	        }
-	    }, 8000);
-	}
-	if ($rootScope.user !== null) {
-	    if ($rootScope.user.licenceStatus == 'demo' && $rootScope.config.language == 'hr' && $sessionStorage.showHelpAlert === undefined) {
-	        showHelpAlert();
-	    }
-	} else {
+            }
+        }, 8000);
+    }
+    if ($rootScope.user !== null) {
+        if ($rootScope.user.licenceStatus == 'demo' && $rootScope.config.language == 'hr' && $sessionStorage.showHelpAlert === undefined) {
+            showHelpAlert();
+        }
+    } else {
         $state.go('login');
-	}
+    }
 
     /***** Internet speed test *****/
-	$scope.loadingSpeedTest = false;
-	var connectionChart = function () {
-	    $scope.loadingSpeedTest = true;
-	    google.charts.load('current', { 'packages': ['gauge'] });
-	    $timeout(function () {
-	        var id = 'connectionChart';
-	        var value = $rootScope.connection.downlink;
-	        var unit = 'Mbps';
-	        var options = {
-	            title: 'Mbps',
-	            min: 0,
-	            max: 10,
-	            greenFrom: 1.35,
-	            greenTo: 10,
-	            yellowFrom: 1,
-	            yellowTo: 1.35,
-	            redFrom: 0,
-	            redTo: 1,
-	            minorTicks: 0.1
-	        };
-	        google.charts.setOnLoadCallback(charts.guageChart(id, value, unit, options));
-	        $scope.loadingSpeedTest = false;
-	    }, 1500);
-	}
+    $scope.loadingSpeedTest = false;
+    var connectionChart = function () {
+        $scope.loadingSpeedTest = true;
+        google.charts.load('current', { 'packages': ['gauge'] });
+        $timeout(function () {
+            var id = 'connectionChart';
+            var value = $rootScope.connection.downlink;
+            var unit = 'Mbps';
+            var options = {
+                title: 'Mbps',
+                min: 0,
+                max: 10,
+                greenFrom: 1.35,
+                greenTo: 10,
+                yellowFrom: 1,
+                yellowTo: 1.35,
+                redFrom: 0,
+                redTo: 1,
+                minorTicks: 0.1
+            };
+            google.charts.setOnLoadCallback(charts.guageChart(id, value, unit, options));
+            $scope.loadingSpeedTest = false;
+        }, 1500);
+    }
 
-	$scope.testInternetSpeed = function() {
-	    connectionChart();
-	}
+    $scope.testInternetSpeed = function () {
+        connectionChart();
+    }
     /***** Internet speed test *****/
 
 }])
@@ -1616,7 +1608,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $http({
             url: $sessionStorage.config.backend + 'ClientsData.asmx/Init',
             method: "POST",
-            data: {client:x}
+            data: { client: x }
         })
         .then(function (response) {
             $rootScope.clientData = JSON.parse(response.data.d);
@@ -1643,7 +1635,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             functions.alert($translate.instant(response.data.d), '');
         });
     }
-  
+
     var getClients = function () {
         if ($sessionStorage.usergroupid === undefined) { return false; }
         $rootScope.loading = true;
@@ -1721,7 +1713,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.firstNameRequiredMsq = null;
 
         $scope.save = function (x) {
-            if (x.firstName == '' || x.firstName == null ) {
+            if (x.firstName == '' || x.firstName == null) {
                 $scope.firstNameRequiredMsq = 'first name is required';
                 return false;
             } else {
@@ -2198,7 +2190,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 }
             });
         }
-        
+
         $scope.clientLogGraphData = charts.createGraph(
             [$translate.instant("measured value"), $translate.instant("lower limit"), $translate.instant("upper limit"), $translate.instant("goal")],
             [
@@ -2238,7 +2230,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         switch (scope) {
             case 'height':
                 return $rootScope.clientData.height = $rootScope.clientData.height * 1 + x;
-                    break;
+                break;
             case 'weight':
                 return $rootScope.clientData.weight = $rootScope.clientData.weight * 1 + x;
                 break;
@@ -2248,9 +2240,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             case 'hip':
                 return $rootScope.clientData.hip = $rootScope.clientData.hip * 1 + x;
                 break;
-                default:
-                    return '';
-            }
+            default:
+                return '';
+        }
     }
 
     $scope.pdfLink = null;
@@ -2369,10 +2361,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         init();
 
         $scope.calculate = function (x) {
-            if (userType < 2) {
-                functions.demoAlert('this function is available only in premium package');
-                return false;
-            }
+            if (!functions.checkPermission(d, 'premium')) return;
             $http({
                 url: $sessionStorage.config.backend + webService + '/CaliperCalculate',
                 method: "POST",
@@ -2384,10 +2373,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         $scope.confirm = function (x) {
-            if (userType < 2) {
-                functions.demoAlert('this function is available only in premium package');
-                return false;
-            }
+            if (!functions.checkPermission(d, 'premium')) return;
             $http({
                 url: $sessionStorage.config.backend + webService + '/Save',
                 method: "POST",
@@ -2467,7 +2453,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 $rootScope.clientData.dailyActivities = response;
             }
         }, function () {
-      });
+        });
     };
 
     $scope.detailExpenditurePopupCtrl = function ($scope, $mdDialog, d, $http) {
@@ -2577,10 +2563,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         $scope.save = function (x) {
-            if ($rootScope.user.licenceStatus === 'demo') {
-                functions.demoAlert('this function is not available in demo version');
-                return false;
-            }
+            if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
             $http({
                 url: $sessionStorage.config.backend + 'DetailEnergyExpenditure.asmx/Save',
                 method: "POST",
@@ -2813,7 +2796,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     energy = $rootScope.appCalculation.recommendedEnergyIntake - 300;
                     activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
                 }
-                $rootScope.goalWeightValue =  Math.round(angular.copy($rootScope.clientData.weight));
+                $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
                 break;
             case "G3":  // povecanje tjelesne mase
                 if ($rootScope.appCalculation.goal.code == "G1") {
@@ -2904,10 +2887,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.saveMyCalculation = function (x) {
-        if ($rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('the saving function is disabled in demo version');
-            return false;
-        }
+        if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
         var myCalculation = angular.copy($rootScope.calculation);
         myCalculation.recommendedEnergyIntake = x.recommendedEnergyIntake;
         myCalculation.recommendedEnergyExpenditure = x.recommendedEnergyExpenditure;
@@ -2921,7 +2901,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         },
         function (response) {
             functions.alert($translate.instant(response.data.d), '');
-        }); 
+        });
     }
 
     var getCalculation = function () {
@@ -2963,18 +2943,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
     $scope.bmrIsDisabled = false;
     $scope.setBmrEquation = function (x) {
-        if ($rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('this function is not available in demo version');
-            return false;
-        }
-        if ($rootScope.user.userType < 1 && $scope.bmrIsDisabled) {
-            functions.demoAlert('this function is available only in standard and premium package');
-            return false;
-        }
-        if ($rootScope.user.userType == 1 && $scope.bmrIsDisabled) {
-            functions.demoAlert('this function is available only in premium package');
-            return false;
-        }
+        if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
+        if (!functions.checkPermission($rootScope.user, 'standard&premium')) return;
+        if (!functions.checkPermission($rootScope.user, 'premium')) return;
         if (x === 'KMA' && $rootScope.clientData.bodyFat.bodyFatPerc == 0) {
             functions.alert($translate.instant('body fat is required'), '');
             $state.go('clientsdata');
@@ -3073,28 +3044,19 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
         $scope.confirm = function (x) {
             energy = ($scope.duration * ($scope.d.factorKcal * $rootScope.clientData.weight)) / 60;
-           $rootScope.clientData.activities.push({
-               'id': x.id,
-               'activity': x.activity,
-               'duration': $scope.duration,
-               'energy': energy
-           });
-           $mdDialog.hide(energy);
+            $rootScope.clientData.activities.push({
+                'id': x.id,
+                'activity': x.activity,
+                'duration': $scope.duration,
+                'energy': energy
+            });
+            $mdDialog.hide(energy);
         }
     };
 
     $scope.removeActivity = function (x, idx) {
-        var confirm = $mdDialog.confirm()
-            .title($translate.instant('delete choosen activity'))
-            .textContent(x.title)
-            .targetEvent(x)
-            .ok($translate.instant('yes'))
-            .cancel($translate.instant('no'));
-        $mdDialog.show(confirm).then(function () {
-            $rootScope.clientData.activities.splice(idx, 1);
-            getEnergyLeft();
-        }, function () {
-        });
+        $rootScope.clientData.activities.splice(idx, 1);
+        getEnergyLeft();
     }
 
 }])
@@ -3104,23 +3066,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $window.location.href = '/app/#/login';
     }
     $rootScope.selectedNavItem = $state.current.name;
-
-    var webService = 'Diets.asmx';
+    var webService = 'Diets';
 
     if ($rootScope.diets == undefined) { $rootScope.loadDiets(); };
-   
+
     var get = function (x) {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Get',
-            method: "POST",
-            data: { id: x }
-        })
-        .then(function (response) {
-            var diet = JSON.parse(response.data.d);
+        functions.post(webService, 'Get', { id: x }).then(function (d) {
+            var diet = d;
             $rootScope.clientData.diet = diet;
-        },
-        function (response) {
-            alert(response.data.d)
         });
     };
 
@@ -3190,8 +3143,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
     if ($rootScope.clientData === undefined) {
         $state.go('clientsdata');
-    } else {
-        if ($rootScope.clientData.diet.id == null) { init(); }
+    } else if ($rootScope.clientData.diet.id === null) {
+        init();
     }
 
     $scope.select = function (x) {
@@ -3211,7 +3164,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $rootScope.selectedNavItem = 'clientsdata';
         return false;
     }
-    var webService = 'Meals.asmx';
 
     $scope.toggleMealsTpl = function (x) {
         $rootScope.mealsTpl = x;
@@ -3263,29 +3215,21 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 }])
 
 .controller('standardMealsCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate) {
-    var webService = 'Meals.asmx';
+    var webService = 'Meals';
     $rootScope.isMyMeals = false;
 
     var load = function () {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Load',
-            method: "POST",
-            data: ''
-        })
-        .then(function (response) {
-            $rootScope.clientData.meals = JSON.parse(response.data.d);
+        functions.post(webService, 'Load', {}).then(function (d) {
+            $rootScope.clientData.meals = d;
             // TODO translate meals on server side
             angular.forEach($rootScope.clientData.meals, function (value, key) {
                 $rootScope.clientData.meals[key].title = $translate.instant($rootScope.clientData.meals[key].title);
             })
-        },
-        function (response) {
-            alert(response.data.d)
         });
     };
-    if ($rootScope.clientData.meals.length == 0) {
+    if ($rootScope.clientData.meals.length === 0) {
         load();
-    } else if ($rootScope.clientData.meals[0].code != 'B') {
+    } else if ($rootScope.clientData.meals[0].code !== 'B') {
         load();
     }
 
@@ -3296,21 +3240,13 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $window.location.href = '/app/#/login';
     }
 
-    var webService = 'MyMeals.asmx';
+    var webService = 'MyMeals';
     var init = function () {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Init',
-            method: "POST",
-            data: { user: $rootScope.user }
-        })
-        .then(function (response) {
-            $rootScope.myMeals = JSON.parse(response.data.d);
+        functions.post(webService, 'Init', { user: $rootScope.user }).then(function (d) {
+            $rootScope.myMeals = d;
             $rootScope.clientData.myMeals = angular.copy($rootScope.myMeals);
             $rootScope.clientData.meals = $rootScope.clientData.myMeals.data.meals;
             $rootScope.isMyMeals = true;
-        },
-        function (response) {
-            alert(response.data.d)
         });
     }
 
@@ -3327,7 +3263,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 }
             } else {
                 init();
-            } 
+            }
         } else {
             init();
         }
@@ -3335,49 +3271,33 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     var initMyMeals = function () {
         if (!angular.isDefined($rootScope.myMeals)) {
-            $http({
-                url: $sessionStorage.config.backend + webService + '/Init',
-                method: "POST",
-                data: { user: $rootScope.user }
-            })
-            .then(function (response) {
-                $rootScope.myMeals = JSON.parse(response.data.d);
+            functions.post(webService, 'Init', { user: $rootScope.user }).then(function (d) {
+                $rootScope.myMeals = d;
                 getClientMeals();
                 $rootScope.isMyMeals = true;
-            },
-            function (response) {
-                alert(response.data.d)
             });
         } else {
             getClientMeals();
         }
-        
+
     }
     initMyMeals();
 
     $scope.new = function () {
-        if ($rootScope.user.userType < 2) { return false; }
+        if ($rootScope.user.userType < 2) { return }
         init();
     }
-    
+
     $scope.getTemplate = function () {
-        if ($rootScope.user.userType < 2) { return false; }
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Template',
-            method: "POST",
-            data: { user: $rootScope.user, lang: $rootScope.config.language }
-        })
-        .then(function (response) {
-            $rootScope.myMeals = JSON.parse(response.data.d);
+        if ($rootScope.user.userType < 2) { return }
+        functions.post(webService, 'Template', { user: $rootScope.user, lang: $rootScope.config.language }).then(function (d) {
+            $rootScope.myMeals = d;
             if ($rootScope.user.userType > 2) {
                 $rootScope.clientData.myMeals = angular.copy($rootScope.myMeals);
                 $rootScope.clientData.meals = $rootScope.clientData.myMeals.data.meals;
             }
             $rootScope.isMyMeals = true;
             $rootScope.mealsAreChanged = true;
-        },
-        function (response) {
-            alert(response.data.d)
         });
     }
 
@@ -3393,7 +3313,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     $rootScope.clientData.myMeals = angular.copy($rootScope.myMeals);
                 }
             }
-        } 
+        }
     }
 
     $scope.add = function () {
@@ -3443,23 +3363,20 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.save = function () {
-        if ($rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('the saving function is disabled in demo version');
-            return false;
-        }
+        if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
         if ($rootScope.user.userType < 2) {
-            return false;
+            return;
         }
         if ($rootScope.myMeals.data.meals.length < 3) {
             functions.alert($translate.instant('choose at least 3 meals'), '');
-            return false;
+            return;
         }
         if (functions.isNullOrEmpty($rootScope.myMeals.title)) {
             functions.alert($translate.instant('title is required'), '');
-            return false;
+            return;
         }
         $http({
-            url: $sessionStorage.config.backend + webService + '/Save',
+            url: $sessionStorage.config.backend + 'MyMeals.asmx/Save',
             method: "POST",
             data: { userId: $sessionStorage.usergroupid, x: $rootScope.myMeals }
         })
@@ -3494,17 +3411,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     remove = function (id) {
-        $http({
-            url: $sessionStorage.config.backend + webService + '/Delete',
-            method: "POST",
-            data: { userId: $sessionStorage.usergroupid, id: id }
-        })
-        .then(function (response) {
-            $scope.mealsList = JSON.parse(response.data.d);
+        functions.post(webService, 'Delete', { userId: $sessionStorage.usergroupid, id: id }).then(function (d) {
+            $scope.mealsList = d;
             init();
-        },
-        function (response) {
-            functions.alert($translate.instant(response.data.d), '');
         });
     }
 
@@ -3514,7 +3423,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     var openMyMealsPopup = function () {
         if ($rootScope.user.userType < 2) {
-            return false;
+            return;
         }
         $mdDialog.show({
             controller: getMyMealsPopupCtrl,
@@ -3541,19 +3450,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
         var load = function () {
             $scope.loading = true;
-            $http({
-                url: $sessionStorage.config.backend + 'MyMeals.asmx/Load',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId }
-            })
-           .then(function (response) {
-               $scope.d = JSON.parse(response.data.d);
-               $scope.loading = false;
-           },
-           function (response) {
-               $scope.loading = false;
-               alert(response.data.d);
-           });
+            functions.post(webService, 'Load', { userId: $rootScope.user.userGroupId }).then(function (d) {
+                $scope.d = d;
+                $scope.loading = false;
+            });
         }
         load();
 
@@ -3562,17 +3462,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         var get = function (x) {
-            $http({
-                url: $sessionStorage.config.backend + 'MyMeals.asmx/Get',
-                method: "POST",
-                data: { userId: $rootScope.user.userGroupId, id: x.id }
-            })
-            .then(function (response) {
-                $scope.meals = JSON.parse(response.data.d);
+            functions.post(webService, 'Get', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
+                $scope.meals = d;
                 $mdDialog.hide($scope.meals);
-            },
-            function (response) {
-                alert(response.data.d)
             });
         }
 
@@ -3630,7 +3522,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $http({
             url: $sessionStorage.config.backend + webService + '/GetRecommendations',
             method: "POST",
-            data: { client: clientData, recommendedEnergyIntake: $rootScope.calculation.recommendedEnergyIntake,  myRecommendedEnergyIntake: $rootScope.myCalculation.recommendedEnergyIntake, myMealsEnergyPerc: energyPerc }
+            data: { client: clientData, recommendedEnergyIntake: $rootScope.calculation.recommendedEnergyIntake, myRecommendedEnergyIntake: $rootScope.myCalculation.recommendedEnergyIntake, myMealsEnergyPerc: energyPerc }
         })
        .then(function (response) {
            $rootScope.recommendations = JSON.parse(response.data.d);
@@ -3662,7 +3554,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             alert(response.data.d)
         });
     };
-    
+
     var initMenuDetails = function () {
         $http({
             url: $sessionStorage.config.backend + 'Menues.asmx/Init',
@@ -3688,7 +3580,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 $rootScope.currentMenu.splitMealDesc.push({
                     code: value.code,
                     title: value.title,
-                    dishDesc: [{title: null, desc: null, id: null}],
+                    dishDesc: [{ title: null, desc: null, id: null }],
                     isSelected: value.isSelected,
                     isDisabled: value.isDisabled
                 });
@@ -3712,7 +3604,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     $scope.addNewDishTitle = function (idx) {
-        $rootScope.currentMenu.splitMealDesc[idx].dishDesc.push({title: null, desc: null, id: null});
+        $rootScope.currentMenu.splitMealDesc[idx].dishDesc.push({ title: null, desc: null, id: null });
     }
 
     $scope.removeNewDishTitle = function (idx, idx1) {
@@ -3723,7 +3615,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         if (currentMenu.splitMealDesc[idx].dishDesc.length > 1) {
             $scope.removeNewDishTitle(idx, idx1);
         } else if (currentMenu.splitMealDesc[idx].dishDesc.length === 1 && idx1 === 0) {
-            currentMenu.splitMealDesc[idx].dishDesc[0] = {title: null, desc: null, id: null};
+            currentMenu.splitMealDesc[idx].dishDesc[0] = { title: null, desc: null, id: null };
         }
         $rootScope.currentMenu.data.selectedFoods = currentMenu.data.selectedFoods.filter(a => a.id.split(';')[1] !== id);
         $rootScope.currentMenu.data.selectedInitFoods = currentMenu.data.selectedInitFoods.filter(a => a.id.split(';')[1] !== id);
@@ -3802,8 +3694,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.openFoodPopup = function (x, idx) {
         $scope.addFoodBtn = true;
         $scope.addFoodBtnIcon = 'fa fa-spinner fa-spin';
-        if ($rootScope.user.licenceStatus == 'demo' && $rootScope.currentMenu.data.selectedFoods.length > 9) {
-            functions.demoAlert('in demo version maximum number of choosen foods is 10');
+        if ($rootScope.user.licenceStatus === 'demo' && $rootScope.currentMenu.data.selectedFoods.length > 9) {
+            if (!functions.checkPermissionAlert('in demo version maximum number of choosen foods is 10', 'activate full version')) return;
             $scope.addFoodBtnIcon = 'fa fa-plus';
             $scope.addFoodBtn = false;
             return false;
@@ -3813,7 +3705,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             templateUrl: 'assets/partials/popup/food.html',
             parent: angular.element(document.body),
             clickOutsideToClose: true,
-            d: { foods: $rootScope.foods, myFoods: $rootScope.myFoods, foodGroups: $rootScope.foodGroups, food: x, idx: idx, config:$rootScope.config }
+            d: { foods: $rootScope.foods, myFoods: $rootScope.myFoods, foodGroups: $rootScope.foodGroups, food: x, idx: idx, config: $rootScope.config }
         })
         .then(function (x) {
             $scope.addFoodBtnIcon = 'fa fa-plus';
@@ -3852,7 +3744,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 $rootScope.currentMenu.data.selectedFoods[idx] = x;
                 $rootScope.currentMenu.data.selectedInitFoods[idx] = initFood;
             }
-            
+
             initFood.meal.code = $rootScope.currentMeal;
 
             $scope.food = [];
@@ -4014,10 +3906,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         /**** More recipes in one meal *****/
 
     };
-  
+
     $scope.get = function () {
         if ($rootScope.user.licenceStatus === 'demo') {
-            functions.demoAlert('this function is not available in demo version');
+            if (!functions.checkPermissionAlert('this function is not available in demo version', 'activate full version')) return;
         } else {
             getMenuPopup();
         }
@@ -4049,10 +3941,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     }
                 }
             }
-            
+
             getRecommendations(angular.copy($rootScope.currentMenu.client.clientData));
             getTotals($rootScope.currentMenu);
-            $rootScope.currentMeal = x.data.meals[0].code; 
+            $rootScope.currentMeal = x.data.meals[0].code;
         }, function () {
         });
     };
@@ -4194,28 +4086,28 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
         var translateFoods = function (menu) {
             $rootScope.setLanguage($scope.toLanguage);
-             $timeout(function () {
-                 angular.forEach(menu.data.selectedFoods, function (value, key) {
-                     value.food = $translate.instant(value.food);
-                     value.unit = $translate.instant(value.unit);
-                 })
-                 angular.forEach(menu.data.selectedInitFoods, function (value, key) {
-                     value.food = $translate.instant(value.food);
-                     value.unit = $translate.instant(value.unit);
-                 })
-                 $mdDialog.hide(menu);
-                 $rootScope.setLanguage('hr');
-              }, 500);
+            $timeout(function () {
+                angular.forEach(menu.data.selectedFoods, function (value, key) {
+                    value.food = $translate.instant(value.food);
+                    value.unit = $translate.instant(value.unit);
+                })
+                angular.forEach(menu.data.selectedInitFoods, function (value, key) {
+                    value.food = $translate.instant(value.food);
+                    value.unit = $translate.instant(value.unit);
+                })
+                $mdDialog.hide(menu);
+                $rootScope.setLanguage('hr');
+            }, 500);
         }
 
     };
 
     $scope.save = function () {
-        if ($rootScope.currentMenu.data.selectedFoods.length == 0) {
+        if ($rootScope.currentMenu.data.selectedFoods.length === 0) {
             return false;
         }
-        if ($rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('the saving function is disabled in demo version');
+        if ($rootScope.user.licenceStatus === 'demo') {
+            if(!functions.checkPermissionAlert('the saving function is disabled in demo version', 'activate full version')) return;
             return false;
         } else {
             openSaveMenuPopup();
@@ -4400,10 +4292,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 [t.carbohydratesPercentage, t.proteinsPercentage, t.fatsPercentage],
                 [$translate.instant('carbohydrates') + ' (%)', $translate.instant('proteins') + ' (%)', $translate.instant('fats') + ' (%)'],
                 ['#f2f20f', '#28c1e0', '#ed722f'],
-                { responsive: true, maintainAspectRatio: false, legend: { display: true, position: 'right',"labels": {"fontSize": 14} },
-                scales: {
-                    xAxes: [{ display: false, scaleLabel: { display: false }, ticks: { beginAtZero: true } }],
-                    yAxes: [{ display: false, scaleLabel: { display: false }, ticks: { beginAtZero: true } }]}
+                {
+                    responsive: true, maintainAspectRatio: false, legend: { display: true, position: 'right', "labels": { "fontSize": 14 } },
+                    scales: {
+                        xAxes: [{ display: false, scaleLabel: { display: false }, ticks: { beginAtZero: true } }],
+                        yAxes: [{ display: false, scaleLabel: { display: false }, ticks: { beginAtZero: true } }]
+                    }
                 },
                 []
         );
@@ -4859,7 +4753,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
         charts.guageChart(id, value, unit, options);
     }
-   
+
     var mealEnergyChart = function (idx) {
         var recommended = $rootScope.recommendations.energy;
         var id = 'mealEnergyChart_' + idx;
@@ -4929,7 +4823,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.parameterStyle = function (total, r) {
         if (!angular.isDefined(total) || !angular.isDefined(r)) { return; }
         if (r.mda !== null && total < r.mda) {
-             return 'background-color:#9bc1ff; color:white';
+            return 'background-color:#9bc1ff; color:white';
         }
         if (r.ui != null && total > r.ui) {
             return 'background-color:#f94040; color:white';
@@ -4948,10 +4842,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     var openRecipePopup = function () {
-        if ($rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('this function is not available in demo version');
-            return false;
-        }
+        if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
         $mdDialog.show({
             controller: getRecipePopupCtrl,
             templateUrl: 'assets/partials/popup/getrecipe.html',
@@ -5149,7 +5040,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $rootScope.menuTpl = x;
             if (x == 'dailyMenuTpl') {
                 getTotals($rootScope.currentMenu);
-            } 
+            }
         }, 700);
     }
     if ($rootScope.menuTpl !== 'weeklyMenuTpl') {
@@ -5301,14 +5192,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     $scope.shoppingList = [];
     $scope.getShoppingList = function (x) {
-        if ($rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('this function is not available in demo version');
-            return false;
-        }
-        if ($rootScope.user.userType < 2 || $rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('this function is available only in premium package');
-            return false;
-        }
+        if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
+        if (!functions.checkPermission($rootScope.user, 'premium')) return;
         openShoppingListPopup(x);
     }
 
@@ -5353,7 +5238,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             if (x < 1 || functions.isNullOrEmpty(x)) { return false }
             createShoppingList($scope.currentMenu.data.selectedFoods, x);
         }
-        
+
         $scope.copyToClipboard = function (id) {
             return functions.copyToClipboard(id);
         }
@@ -5443,10 +5328,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     $scope.showMealMicronutrients = false;
     $scope.toggleMealMicronutrients = function (show) {
-        if ($rootScope.user.userType < 2 || $rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('this function is available only in premium package');
-            return;
-        }
+        if (!functions.checkPermission($rootScope.user, 'premium')) return;
         $scope.showMealMicronutrients = !show;
     }
 
@@ -5515,10 +5397,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.save = function (x) {
-        if ($rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('this function is not available in demo version');
-            return false;
-        }
+        if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
         if (functions.isNullOrEmpty(x.food)) {
             functions.alert($translate.instant('food title is required'), '');
             return false;
@@ -5727,10 +5606,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.initPages(5);
 
         var checkUserType = function () {
-            if ($rootScope.user.userType < 2 || $rootScope.user.licenceStatus === 'demo') {
-                functions.demoAlert('this function is available only in premium package');
-                return false;
-            }
+            if (!functions.checkPermission($rootScope.user, 'premium')) return;
         }
 
         $scope.cancel = function () {
@@ -5938,11 +5814,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.save = function (recipe) {
-        if ($rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('the saving function is disabled in demo version');
-            return false;
-        }
-        if (recipe.title == '' || recipe.title == null) {
+        if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
+        if (recipe.title === '' || recipe.title === null) {
             functions.alert($translate.instant('enter recipe title'), '');
             return false;
         }
@@ -5959,7 +5832,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
         });
     }
-    
+
     $scope.removeFood = function (idx) {
         var confirm = $mdDialog.confirm()
             .title($translate.instant('delete food') + '?')
@@ -6002,7 +5875,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         });
     }
 
-    $scope.search = function() {
+    $scope.search = function () {
         openMyRecipesPopup();
     }
 
@@ -6157,7 +6030,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     $scope.saveRecipeAsMyFood = function (recipe) {
-         if (recipe.data.selectedFoods.length == 0) {
+        if (recipe.data.selectedFoods.length == 0) {
             functions.alert($translate.instant('choose food'), '');
             return false;
         }
@@ -6208,10 +6081,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
 
         $scope.confirm = function (x) {
-            if ($rootScope.user.licenceStatus == 'demo') {
-                functions.demoAlert('the saving function is disabled in demo version');
-                return false;
-            }
+            if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
             if (functions.isNullOrEmpty(x.recipe.title)) {
                 $scope.d.titleAlert = true;
             } else if (functions.isNullOrEmpty(x.unit)) {
@@ -6254,10 +6124,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.printRecipePreview = function (x) {
-        if ($rootScope.user.userType < 2 || $rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('this function is available only in premium package');
-            return false;
-        }
+        if (!functions.checkPermission($rootScope.user, 'premium')) return;
         $mdDialog.show({
             controller: $scope.printRecipePreviewCtrl,
             templateUrl: 'assets/partials/popup/printrecipe.html',
@@ -6321,7 +6188,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             return (functions.isNullOrEmpty(des) ? '' : (des + ', ')) + serv + ' serv. ' + $translate.instant(title);
         }
 
-        
+
         $scope.pdfLink == null;
         $scope.creatingPdf = false;
 
@@ -6481,10 +6348,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         if (x.food.title === '' || x.netPrice.currency === '') {
             return false;
         }
-        if ($rootScope.user.licenceStatus === 'demo') {
-            functions.demoAlert('this function is not available in demo version');
-            return false;
-        }
+        if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
         localStorage.currency = x.netPrice.currency;
         $rootScope.config.currency = x.netPrice.currency;
         $scope.price.netPrice.currency = localStorage.currency;
@@ -6738,7 +6602,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.printType = 1;
 
     $scope.getDay = function (x) {
-        switch(x) {
+        switch (x) {
             case 0: return $translate.instant('monday');
             case 1: return $translate.instant('tuesday');
             case 2: return $translate.instant('wednesday');
@@ -6801,8 +6665,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.get = function (idx) {
-        if ($rootScope.user.licenceStatus == 'demo') {
-            functions.demoAlert('this function is not available in demo version');
+        if ($rootScope.user.licenceStatus === 'demo') {
+            if(!functions.checkPermissionAlert('this function is not available in demo version', 'activate full version')) return;
         } else {
             getMenuPopup(idx);
         }
@@ -7156,10 +7020,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.user = $rootScope.user;
 
         var save = function (x) {
-            if ($rootScope.user.licenceStatus == 'demo') {
-                functions.demoAlert('the saving function is disabled in demo version');
-                return false;
-            }
+            if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
             if (functions.isNullOrEmpty(x.title)) {
                 functions.alert($translate.instant('enter menu title'), '');
                 return false;
@@ -7228,17 +7089,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 init();
             }
         });
-        //$http({
-        //    url: $sessionStorage.config.backend + webService + '/Delete',
-        //    method: "POST",
-        //    data: { userId: $rootScope.user.userGroupId, id: x.id, lang: $rootScope.config.language }
-        //})
-        //.then(function (response) {
-        //    $scope.d = JSON.parse(response.data.d);
-        //},
-        //function (response) {
-        //    alert(response.data.d)
-        //});
     }
 
     $scope.openShoppingListPopup = function (x) {
@@ -7417,7 +7267,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             $translate.instant('activation code') + ': ' + '<strong>' + $scope.clientApp.code + '</strong>' +
             '<br />' +
             '<hr />' +
-             $translate.instant('or') + ' ' +  $translate.instant('web application') + ' (' + $translate.instant('without activation code') + '): ' + '<strong><a href="' + link + '">' + link + '</a></strong>' +
+             $translate.instant('or') + ' ' + $translate.instant('web application') + ' (' + $translate.instant('without activation code') + '): ' + '<strong><a href="' + link + '">' + link + '</a></strong>' +
             '<br />' +
             '<br />' +
             '<i>* ' + $translate.instant('this is an automatically generated email – please do not reply to it') + '</i>' +
@@ -7654,7 +7504,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 }])
 
-.directive('loadingDirective', function ()  {
+.directive('loadingDirective', function () {
     return {
         restrict: 'E',
         scope: {
@@ -7666,15 +7516,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 })
 
 .directive('passwordStrength', [
-    function() {
+    function () {
         return {
             require: 'ngModel',
             restrict: 'E',
             scope: {
                 password: '=ngModel'
             },
-            link: function(scope, elem, attrs, ctrl) {
-                scope.$watch('password', function(newVal) {
+            link: function (scope, elem, attrs, ctrl) {
+                scope.$watch('password', function (newVal) {
                     scope.strength = isSatisfied(newVal && newVal.length >= 8) +
                       isSatisfied(newVal && /[A-z]/.test(newVal)) +
                       isSatisfied(newVal && /(?=.*\W)/.test(newVal)) +
@@ -7694,12 +7544,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 ])
 .directive('patternValidator', [
-    function() {
+    function () {
         return {
             require: 'ngModel',
             restrict: 'A',
-            link: function(scope, elem, attrs, ctrl) {
-                ctrl.$parsers.unshift(function(viewValue) {
+            link: function (scope, elem, attrs, ctrl) {
+                ctrl.$parsers.unshift(function (viewValue) {
                     var patt = new RegExp(attrs.patternValidator);
                     var isValid = patt.test(viewValue);
                     ctrl.$setValidity('passwordPattern', isValid);

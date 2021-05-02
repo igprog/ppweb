@@ -17,16 +17,35 @@ angular.module('functions', [])
             }, function () {
             });
         },
-        demoAlert: function (alert) {
+        checkPermissionAlert: function (alert, textContent) {
             var confirm = $mdDialog.confirm()
                 .title($translate.instant(alert))
-                .textContent($translate.instant('activate full version'))
+                .textContent($translate.instant(textContent))
                 .ok($translate.instant('yes'))
                 .cancel($translate.instant('not now'));
             $mdDialog.show(confirm).then(function () {
                 $state.go('order');
             }, function () {
             });
+        },
+        checkPermission: function (user, packages) {
+            var note = packages === 'premium'
+                ? 'this function is available only in premium package'
+                : 'this function is available only in standard and premium package';
+            if (user.userType < 2 || user.licenceStatus === 'demo') {
+                this.checkPermissionAlert(note, 'send order');
+                return false;
+            } else {
+                return true;
+            }
+        },
+        demoAlert: function (licenceStatus) {
+            if (licenceStatus === 'demo') {
+                this.checkPermissionAlert('this function is not available in demo version', 'activate full version');
+                return false;
+            } else {
+                return true;
+            }
         },
         isNullOrEmpty: function (x) {
             var res = false;

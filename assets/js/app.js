@@ -114,7 +114,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
         .state('program-prehrane-5', {
             url: '/program-prehrane-5', templateUrl: './assets/pages/program-prehrane-5.html', controller: 'appCtrl',
             data: {
-                pageTitle: '5.0',
+                pageTitle: '| Verzija 5.0',
                 pageDescription: ' | Računalni program za izradu jelovnika Program Prehrane 5.0.'
             }
         })
