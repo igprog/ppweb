@@ -190,9 +190,14 @@
                     </pre>
                     </div>
                 </div>
-                <div ng-hide="user.country.toLowerCase().startsWith('hr') || user.country.toLowerCase().startsWith('cr') || user.discountCoeff > 0">
-                    <div ng-if="config.language!='en'" ng-include="'./assets/partials/paypal.html'"></div>
-                    <div ng-if="config.language=='en'" ng-include="'./assets/partials/paypal_usd.html'"></div>
+                <div ng-hide="user.country.toLowerCase().startsWith('hr') || user.country.toLowerCase().startsWith('cr')">
+                    <div ng-if="user.discountCoeff===0">
+                        <div ng-if="config.language!=='en'" ng-include="'./assets/partials/paypal.html'"></div>
+                        <div ng-if="config.language==='en'" ng-include="'./assets/partials/paypal_usd.html'"></div>
+                    </div>
+                    <div ng-if="user.discountCoeff===0.2">
+                        <div ng-include="'./assets/partials/paypal_discount_20.html'"></div>
+                    </div>
                 </div>
             </div>
         </div>

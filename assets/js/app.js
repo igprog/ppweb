@@ -181,6 +181,17 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
          });
     }
 
+    var getDateDiff = function (x) {
+        var today = new Date();
+        var date1 = new Date(x);
+        var diffDays = parseInt((date1 - today) / (1000 * 60 * 60 * 24));
+        return diffDays;
+    }
+
+    $scope.showDiscount = (discount) => {
+        return getDateDiff(discount.dateTo) >= 0 && discount.perc > 0 && discount.title;
+    }
+
     var reloadPage = () => {
         if (typeof (Storage) !== 'undefined') {
             if (localStorage.version) {
@@ -872,7 +883,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
     $scope.show = (discount) => {
         return getDateDiff(discount.dateTo) >= 0 && discount.perc > 0 && discount.title;
     }
-     var getDateDiff = function (x) {
+    var getDateDiff = function (x) {
         var today = new Date();
         var date1 = new Date(x);
         var diffDays = parseInt((date1 - today) / (1000 * 60 * 60 * 24));
