@@ -148,6 +148,13 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
     }
 
+    var getAppAlert = function () {
+        functions.post('Files', 'LoadSettings', {}).then(function (d) {
+            $scope.appAlert = d.appAlert;
+        });
+    }
+    getAppAlert();
+
     $rootScope.initMyCalculation = function () {
         functions.post('Calculations', 'Init', { userType: 2 }).then(function (d) {
             $rootScope.myCalculation = d;
@@ -6394,17 +6401,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.alertMsg = null;
 
     $scope.login = function (u, p) {
-        $http({
-            url: $rootScope.config.backend + 'Users.asmx/Login',
-            method: "POST",
-            data: {
-                userName: u,
-                password: p
-            }
-        })
-        .then(function (response) {
-            var user = JSON.parse(response.data.d);
-            if (user.userId != null) {
+        functions.post('Users', 'Login', { userName: u, password: p }).then(function (d) {
+            var user = d;
+            if (user.userId !== null) {
                 $scope.user.firstName = user.firstName;
                 $scope.user.lastName = user.lastName;
                 $scope.user.companyName = user.companyName;
@@ -6415,6 +6414,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 $scope.user.pin = user.pin;
                 $scope.user.email = user.email;
                 $scope.user.userType = user.userType;
+                $scope.user.discountCoeff = user.discountCoeff;
                 $scope.showUserDetails = true;
                 $scope.showErrorAlert = false;
                 $scope.calculatePrice();
@@ -6422,35 +6422,21 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 $scope.showErrorAlert = true;
                 $scope.errorMesage = $translate.instant('wrong user name or password');
             }
-        },
-        function (response) {
-            $scope.errorLogin = true;
-            $scope.showErrorAlert = true;
-            $scope.errorMesage = $translate.instant('user was not found');
-            $scope.showUserDetails = false;
         });
     }
 
     var init = function () {
-        $http({
-            url: $rootScope.config.backend + 'Orders.asmx/Init',
-            method: 'POST',
-            data: ''
-        })
-     .then(function (response) {
-         $scope.user = JSON.parse(response.data.d);
-         $scope.user.userName = $rootScope.user.userName;
-         $scope.user.password = $rootScope.user.password;
-         $scope.user.application = $scope.application;
-         $scope.user.version = $scope.version;
-         $scope.user.licence = 1;
-         $scope.user.licenceNumber = 1;
-         $scope.user.userType = $scope.userType;
-         $scope.login($scope.user.userName, $scope.user.password);
-     },
-     function (response) {
-         alert(response.data.d);
-     });
+        functions.post('Orders', 'Init', {}).then(function (d) {
+            $scope.user = d;
+            $scope.user.userName = $rootScope.user.userName;
+            $scope.user.password = $rootScope.user.password;
+            $scope.user.application = $scope.application;
+            $scope.user.version = $scope.version;
+            $scope.user.licence = 1;
+            $scope.user.licenceNumber = 1;
+            $scope.user.userType = $scope.userType;
+            $scope.login($scope.user.userName, $scope.user.password);
+        });
     }
 
     var getConfig = function () {

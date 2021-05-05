@@ -1,4 +1,5 @@
-﻿<html lang="hr">
+﻿<!DOCTYPE html>
+<html lang="hr">
 <head>
     <title>Program Prehrane Web | Aplikacija</title>
     <meta charset="utf-8">
@@ -25,14 +26,14 @@
     <script src="assets/js/vendor/angular-animate.min.js"></script>
     <script src="assets/js/vendor/angular-aria.min.js"></script>
     <script src="assets/js/vendor/angular-messages.min.js"></script>
-    <script src="assets/js/vendor/angular-material.min.js"></script>
-    <script src="assets/js/vendor/Chart.min.js"></script>
-    <script src="assets/js/vendor/angular-chart.min.js"></script>
-    <script src="assets/js/vendor/angular-number-picker.min.js"></script>
+    <script src="assets/js/vendor/angular-material.min.js" defer></script>
+    <script src="assets/js/vendor/Chart.min.js" defer></script>
+    <script src="assets/js/vendor/angular-chart.min.js" defer></script>
+    <script src="assets/js/vendor/angular-number-picker.min.js" defer></script>
     <script src="assets/js/vendor/ngStorage.min.js"></script>
     <script src="assets/js/vendor/aui-min.js"></script>
     <script src="assets/js/vendor/moment.js"></script>
-    <script src="assets/js/vendor/ui-scheduler-event-recorder.js"></script>
+    <script src="assets/js/vendor/ui-scheduler-event-recorder.js" defer></script>
     <script src="assets/js/vendor/angular-ui-router.min.js"></script>
     <script src="assets/js/vendor/angular-translate.min.js"></script>
     <script src="assets/js/vendor/angular-translate-loader-partial.min.js"></script>
@@ -185,7 +186,7 @@
                 </div>
 
                 <div ng-if="config.language!=='en'" class="nav-item">
-                    <a href="../#/uputa" target="_blank" title="{{'help' | translate}}" class="nav-link">
+                    <a href="../#/uputa" title="{{'help' | translate}}" class="nav-link">
                         <i class="fas fa-fw fa-question"></i>
                         <span>{{'help' | translate}}</span>
                     </a>
@@ -239,7 +240,7 @@
                     <!-- Topbar Navbar -->
                     <ul ng-show="!isLogin&&config.instagram.show" class="navbar-nav ml-auto">
                         <li class="nav-item dropdown no-arrow" ng-cloak>
-                            <a href="{{config.instagram.url}}" class="nav-link ml-3 text-right" title="{{'follow us on instagram' | translate}} - {{config.instagram.name}}" target="_blank">
+                            <a href="{{config.instagram.url}}" class="nav-link ml-3 text-right" title="{{'follow us on instagram' | translate}} - {{config.instagram.name}}" >
                                 <div>
                                     <i class="fab fa-instagram fa-2x ml-2"></i>
                                 </div>
@@ -250,7 +251,7 @@
                     <ul ng-show="isLogin" class="navbar-nav ml-auto">
 
                         <li ng-if="config.instagram.show" class="nav-item dropdown no-arrow" ng-cloak>
-                            <a href="{{config.instagram.url}}" class="nav-link" title="{{'follow us on instagram' | translate}} - {{config.instagram.name}}" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+                            <a href="{{config.instagram.url}}" class="nav-link" title="{{'follow us on instagram' | translate}} - {{config.instagram.name}}" ><i class="fab fa-instagram fa-fw"></i></a>
                         </li>
 
                         <!-- Nav Item - Apointments -->
@@ -418,7 +419,7 @@
    
     <script src="assets/js/app.js"></script>
     <script src="assets/js/functions.js"></script>
-    <script src="assets/js/charts.js"></script>
+    <script src="assets/js/charts.js" defer></script>
 
     <!--<script type="text/javascript" src="../assets/js/vendor/jquery.floating-social-share.min.js"></script>
     <script>

@@ -9,6 +9,12 @@
                                 <div class="text-center pb-2" ng-cloak>
                                     <h2 style="font-size:26px">{{config.title | translate}}</h2>
                                     <h3 class="text-xs text-gray-500"><em>{{'version' | translate}}: {{config.version}}</em></h3>
+                                    <div ng-if="appAlert" class="card shadow mb-3">
+                                        <div class="card-body">
+                                            <h3>{{'notification' | translate}}:</h3>
+                                            <p>{{appAlert}}</p>
+                                        </div>
+                                    </div>
                                     <hr />
                                     <div class="h4 text-gray-900 mb-4">{{'sign in' | translate}}</div>
                                 </div>

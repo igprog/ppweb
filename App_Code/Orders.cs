@@ -82,7 +82,7 @@ public class Orders : WebService {
         x.maxNumberOfUsers = 1;
         x.isForeign = false;
         Prices P = new Prices();
-        x.discountCoeff = P.GetDiscountData().perc / 100.0;
+        x.discountCoeff = P.GetDiscountData(null).perc / 100.0;
         x.priceWithDiscount = 0.0;
         x.priceWithDiscountEur = 0.0;
         return JsonConvert.SerializeObject(x, Formatting.None);

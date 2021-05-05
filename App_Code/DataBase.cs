@@ -10,6 +10,7 @@ using System.Data.SQLite;
 namespace Igprog {
     public class DataBase {
         string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
+        Log L = new Log();
 
         public DataBase() {
         }
@@ -32,6 +33,9 @@ namespace Igprog {
         public string bodyfat = "bodyfat";
         public string sharingrecipes = "sharingrecipes";
         public string tickets = "tickets";
+        // TODO: errorlog, activitylog
+        public string errorlog = "errorlog";
+        public string activitylog = "activitylog";
 
 
         #region CreateTable (users.ddb)
@@ -355,6 +359,30 @@ namespace Igprog {
         }
         #endregion
 
+        #region Log
+        public void ErrorLog(string path) {
+            string sql = @"CREATE TABLE IF NOT EXISTS errorlog
+                (id NVARCHAR(50) PRIMARY KEY,
+                userId NVARCHAR(50),
+                service NVARCHAR(50),
+                method NVARCHAR(50),
+                time NVARCHAR(200),
+                msg NVARCHAR(200),
+                stackTrace VARCHAR(200))";
+            CreateTable(path, sql);
+        }
+
+        public void ActivityLog(string path) {
+            string sql = @"CREATE TABLE IF NOT EXISTS activitylog
+                (id NVARCHAR(50) PRIMARY KEY,
+                userId NVARCHAR(50),
+                activity NVARCHAR(50),
+                method NVARCHAR(50),
+                time NVARCHAR(200))";
+            CreateTable(path, sql);
+        }
+        #endregion Log
+
 
         public void CreateDataBase(string userId, string table) {
             try {
@@ -367,7 +395,9 @@ namespace Igprog {
                     SQLiteConnection.CreateFile(path);
                 }
                 CreateTables(table, path);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+                L.SendErrorLog(e, table, userId, "DataBase", "CreateDataBase");
+            }
         }
 
         public void CreateGlobalDataBase(string path, string table) {
@@ -380,7 +410,9 @@ namespace Igprog {
                     SQLiteConnection.CreateFile(path);
                 }
                 CreateTables(table, path);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+                L.SendErrorLog(e, table, path, "DataBase", "CreateGlobalDataBase");
+            }
         }
 
         private void CreateTables(string table, string path) {
@@ -437,6 +469,12 @@ namespace Igprog {
                 case "tickets":
                     Tickets(path);
                     break;
+                case "errorlog":
+                    ErrorLog(path);
+                    break;
+                case "activityLog":
+                    ActivityLog(path);
+                    break;
                 default:
                     break;
             }
@@ -453,7 +491,9 @@ namespace Igprog {
                         connection.Close();
                     } 
                 };
-            } catch (Exception e) { }
+            } catch (Exception e) {
+                L.SendErrorLog(e, sql, path, "DataBase", "CreateTable");
+            }
         }
 
         public string GetDataBasePath(string userId, string dataBase) {
@@ -490,7 +530,10 @@ namespace Igprog {
                     connection.Close();
                 }
                 return exists;
-            } catch (Exception e) { return false; }
+            } catch (Exception e) {
+                L.SendErrorLog(e, table, userId, "DataBase", "CheckColumn");
+                return false;
+            }
         }
         /*************************************************/
 

@@ -87,6 +87,7 @@ public class Prices : System.Web.Services.WebService {
         public string dateTo;
         public string title;
         public string desc;
+        public double oldUserDiscountPerc;
     }
 
     #endregion Classes
@@ -205,7 +206,7 @@ public class Prices : System.Web.Services.WebService {
     public string GetDiscount() {
         Discount x = new Discount();
         try {
-            x = GetDiscountData();
+            x = GetDiscountData(null);
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, null, "Prices", "GetDiscount");
@@ -256,13 +257,18 @@ public class Prices : System.Web.Services.WebService {
         }
     }
 
-    public Discount GetDiscountData() {
+    public Discount GetDiscountData(Users.NewUser user) {
         Files F = new Files();
         Discount x = new Discount();
-        x = F.GetSettingsData().discount;
         Global G = new Global();
+        x = F.GetSettingsData().discount;
         if (G.DateDiff(Convert.ToDateTime(G.NowLocal()), Convert.ToDateTime(x.dateTo), false) < 0) {
             x = new Discount();
+        }
+        if (user != null) {
+            if (!string.IsNullOrWhiteSpace(user.userGroupId) && (user.licenceStatus != Global.LicenceStatus.demo)) {
+                x.perc = F.GetSettingsData().discount.oldUserDiscountPerc;
+            }
         }
         return x;
     }

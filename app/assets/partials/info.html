@@ -9,11 +9,11 @@
                 <li><span class="text-capitalize">{{'version' | translate}}: </span>{{config.version}}</li>
                 <li>&copy {{today | date:'yyyy'}} {{config.copyright}}</li>
                 <li><span class="text-capitalize">{{'author' | translate}}: </span>{{config.author}}</li>
-                <li><span class="text-capitalize">{{'web' | translate}}: </span><a href="{{config.webpageurl}}" target="_blank">{{config.webpage}}</a></li>
-                <li><span class="text-capitalize">{{'email' | translate}}: </span><a href="mailto:{{config.language=='en'?config.email_en:config.email}}" target="_blank">{{config.language=='en'?config.email_en:config.email}}</a></li>
+                <li><span class="text-capitalize">{{'web' | translate}}: </span><a href="{{config.webpageurl}}" >{{config.webpage}}</a></li>
+                <li><span class="text-capitalize">{{'email' | translate}}: </span><a href="mailto:{{config.language=='en'?config.email_en:config.email}}" >{{config.language=='en'?config.email_en:config.email}}</a></li>
             </ul>
             <div class="text-right">
-                <a href="../app/korisnicka-licenca.html" title="{{'terms and conditions' | translate}}" target="_blank"><i class="fa fa-file-alt"></i> {{'terms and conditions' | translate}}</a>
+                <a href="../app/korisnicka-licenca.html" title="{{'terms and conditions' | translate}}" ><i class="fa fa-file-alt"></i> {{'terms and conditions' | translate}}</a>
             </div>
             <hr />
             <div ng-if="config.language!=='en'">

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Services;
 using System.Configuration;
 using Newtonsoft.Json;
 using System.Data.SQLite;
-using System.IO;
 using Igprog;
 
 /// <summary>
@@ -15,7 +13,7 @@ using Igprog;
 [WebService(Namespace = "http://programprehrane.com/app/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class SharingRecipes : System.Web.Services.WebService {
+public class SharingRecipes : WebService {
     string dataBase = ConfigurationManager.AppSettings["SharingDataBase"];
     string dataSource = string.Format("~/App_Data/{0}", ConfigurationManager.AppSettings["SharingDataBase"]);
     string mainSql = "id, userId, userGroupId, recordDate, title, desc, energy, mealGroup, status, statusNote, rank, like, views, lang";

@@ -987,6 +987,15 @@
                             </div>
                         </div>
                     </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Popust za stare korisnike:</label>
+                                <input ng-model="settings.discount.oldUserDiscountPerc" type="number" min="0" max="99" class="form-control">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card m-2">
@@ -1019,6 +1028,16 @@
                                     <label><input ng-model="settings.errorLogSettings.showStackTrace" type="checkbox" /> Spremi STACK TRACE</label>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card m-2">
+                <div class="card-header">Obavijest</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <textarea ng-model="settings.appAlert" rows="2" class="form-control" ></textarea>
                         </div>
                     </div>
                 </div>

@@ -430,7 +430,6 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
     }
 
     var sendSignupMail = function (newUser, lang) {
-        debugger;
         $http({
             url: $rootScope.config.backend + 'Users.asmx/SendSignupMail',
             method: 'POST',
@@ -626,7 +625,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
         })
         .then(function (response) {
             var user = JSON.parse(response.data.d);
-            if (user.userId != null) {
+            if (user.userId !== null) {
                 $scope.user.firstName = user.firstName;
                 $scope.user.lastName = user.lastName;
                 $scope.user.companyName = user.companyName;
@@ -636,8 +635,10 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
                 $scope.user.country = user.country;
                 $scope.user.pin = user.pin;
                 $scope.user.email = user.email;
+                $scope.user.discountCoeff = user.discountCoeff;
                 $scope.showUserDetails = true;
                 $scope.showErrorAlert = false;
+                $scope.calculatePrice();
             } else {
                 $scope.showErrorAlert = true;
                 $scope.errorMessage = 'Pogrešna kombinacija korisničkog imena i lozinke'

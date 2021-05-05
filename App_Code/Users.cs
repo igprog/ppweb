@@ -66,12 +66,13 @@ public class Users : WebService {
         public DataSum datasum = new DataSum();
 
         public string headerInfo { get; set; }  //TODO
+        public double discountCoeff { get; set; }
 
     }
 
-    public const string demo = "demo";
-    public const string expired = "expired";
-    public const string active = "active";
+    //public const string demo = "demo";
+    //public const string expired = "expired";
+    //public const string active = "active";
 
     public const string configFile = "config";
 
@@ -166,7 +167,7 @@ public class Users : WebService {
             x.expirationDate = string.IsNullOrEmpty(trialDays) ? DateTime.UtcNow.ToString() : DateTime.UtcNow.AddDays(Convert.ToInt32(trialDays)).ToString();
             x.daysToExpite = 0;
             x.isActive = string.IsNullOrEmpty(trialDays) ? false : true;
-            x.licenceStatus = string.IsNullOrEmpty(trialDays) ? demo : active;
+            x.licenceStatus = string.IsNullOrEmpty(trialDays) ? Global.LicenceStatus.demo : Global.LicenceStatus.active;
             x.ipAddress = HttpContext.Current.Request.UserHostAddress;
             x.rowid = 0;
             x.subusers = 0;
@@ -174,6 +175,7 @@ public class Users : WebService {
             x.package = "";
             x.datasum = new DataSum();
             x.headerInfo = "";
+            x.discountCoeff = 0.0;
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, null, "Users", "Init");
@@ -218,6 +220,8 @@ public class Users : WebService {
                         x.maxNumberOfUsers = GetMaxNumberOfUsers(x.userGroupId, x.userType);
                         x.package = GetPackage(x.licenceStatus, x.userType);
                         x.headerInfo = f.ReadFile(x.userGroupId, headerinfo);
+                        Prices P = new Prices();
+                        x.discountCoeff = P.GetDiscountData(x).perc / 100.0;
                         /****** SubUsers ******/
                         if (x.userId != x.userGroupId) {
                             x = GetUserGroupInfo(x, connection);
@@ -366,7 +370,7 @@ public class Users : WebService {
             List<NewUser> users = GetUsers(null, null, year, true);
             x.active = users.Where(a => a.isActive == true).Count();
             x.demo = users.Where(a => a.isActive == false && a.activationDate == a.expirationDate).Count();
-            x.expired = users.Where(a => a.licenceStatus == expired && G.DateDiff(a.activationDate, a.expirationDate) > 15).Count();
+            x.expired = users.Where(a => a.licenceStatus == Global.LicenceStatus.expired && G.DateDiff(a.activationDate, a.expirationDate) > 15).Count();
             x.licence = users.Where(a => a.isActive == true && a.userId == a.userGroupId && G.DateDiff(a.activationDate, a.expirationDate) > 15).Count();
             x.subuser = users.Where(a => a.isActive == true && a.userId != a.userGroupId).Count();
             x.total = users.Count();
@@ -988,7 +992,7 @@ public class Users : WebService {
         x.activationDate = DateTime.UtcNow.ToString();
         x.expirationDate = DateTime.UtcNow.ToString();
         x.isActive = true;
-        x.licenceStatus = active;
+        x.licenceStatus = Global.LicenceStatus.active;
         x.ipAddress = "";
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
@@ -1032,15 +1036,15 @@ public class Users : WebService {
     private string GetLicenceStatus(NewUser x) {
         try {
             if (x.isActive == false) {
-                return demo;
+                return Global.LicenceStatus.demo;
             }
             if (x.isActive == true && Convert.ToDateTime(x.expirationDate) < DateTime.UtcNow) {
-                return expired;
+                return Global.LicenceStatus.expired;
             } else {
-                return active;
+                return Global.LicenceStatus.active;
             }
         } catch (Exception e) {
-            return active;
+            return Global.LicenceStatus.active;
         }
     }
 
@@ -1341,13 +1345,13 @@ public class Users : WebService {
     }
 
     private string GetPackage(string licenceStatus, int userType) {
-        if (licenceStatus == "demo") {
-            return "demo";
+        if (licenceStatus == Global.Packages.demo) {
+            return Global.Packages.demo;
         }
         switch (userType) {
-            case 0: return "start";
-            case 1: return "standard";
-            case 2: return "premium";
+            case 0: return Global.Packages.start;
+            case 1: return Global.Packages.standard;
+            case 2: return Global.Packages.premium;
             default: return "";
         }
     }

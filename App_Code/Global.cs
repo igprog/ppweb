@@ -16,6 +16,21 @@ namespace Igprog {
         public Global() {
         }
 
+        public static class Packages {
+            public const string demo = "demo";
+            public const string start = "start";
+            public const string standard = "standard";
+            public const string premium = "premium";
+        }
+
+        public static class LicenceStatus {
+            public const string demo = "demo";
+            public const string expired = "expired";
+            public const string active = "active";
+        }
+
+
+
         public class Response {
             public bool isSuccess;
             public string msg;

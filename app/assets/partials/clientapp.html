@@ -24,10 +24,10 @@
                         <div class="card-header">{{'application access data' | translate}}</div>
                         <div class="card-body">
                             <div>
-                                {{'web application' | translate}}: <a href="{{config.clientapppageurl}}" target="_blank">{{config.clientapppageurl}}</a>
+                                {{'web application' | translate}}: <a href="{{config.clientapppageurl}}" >{{config.clientapppageurl}}</a>
                             </div>
                             <div>
-                                {{'android application' | translate}}: <a href="{{config.clientapp_apk}}" target="_blank">{{config.clientapp_apk}}</a>
+                                {{'android application' | translate}}: <a href="{{config.clientapp_apk}}" >{{config.clientapp_apk}}</a>
                             </div>
                             <div>
                                 <iframe src="https://www.appsgeyser.com/social_widget/social_widget.php?width=100&height=100&apkName=Program Prehrane Klijent_8297899&simpleVersion=yes"
@@ -41,7 +41,7 @@
                             <hr />
                             <div>
                                 {{'or' | translate}} {{'web application' | translate}} ({{'without activation code' | translate}}):<br />
-                                <a ng-if="client.clientId" href="{{clientAppUrl(client)}}" target="_blank" class="text-primary">{{clientAppUrl(client)}}</a>
+                                <a ng-if="client.clientId" href="{{clientAppUrl(client)}}" class="text-primary">{{clientAppUrl(client)}}</a>
                             </div>
 
                             <div class="mt10">
