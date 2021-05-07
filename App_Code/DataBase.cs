@@ -251,6 +251,7 @@ namespace Igprog {
         #endregion
 
         #region CreateTable (web page)
+        // TODO: add discountCoeff
         public void Orders(string path) {
             string sql = @"CREATE TABLE IF NOT EXISTS orders
                 (id VARCHAR (50) PRIMARY KEY,
@@ -273,7 +274,9 @@ namespace Igprog {
                 priceEur VARCHAR(50),
                 orderDate VARCHAR(50),
                 additionalService NVARCHAR(200),
-                note NVARCHAR(200))";
+                note NVARCHAR(200),
+                userGroupId VARCHAR(50),
+                discountCoeff VARCHAR(50))";
             CreateTable(path, sql);
         }
 

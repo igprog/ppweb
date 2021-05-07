@@ -76,7 +76,7 @@ namespace Igprog {
             return string.Format("{0}-{1}-{2}", year, month_, day_);
         }
 
-        public string NowLocal() {
+        public static string NowLocal() {
             return DateTime.Now.AddHours(serverTimeDiff).ToString();
         }
         #endregion Date

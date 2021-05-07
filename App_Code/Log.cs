@@ -87,7 +87,7 @@ public class Log : WebService {
             x.userId = userId;
             x.service = service;
             x.method = method;
-            x.time = G.NowLocal();
+            x.time = Global.NowLocal();
             x.msg = e.Message;
 
             string err = string.Format(@"## TIME: {0}
@@ -120,7 +120,7 @@ MESSAGE: {5}
             NewActivityLog x = new NewActivityLog();
             x.userId = userId;
             x.activity = activity;
-            x.time = string.IsNullOrWhiteSpace(dateTime) ? G.NowLocal() : dateTime;
+            x.time = string.IsNullOrWhiteSpace(dateTime) ? Global.NowLocal() : dateTime;
 
             string log = string.Format(@"## TIME: {0}; ACTIVITY: {1}; USER_ID: {2}", x.time, x.activity, x.userId);
 

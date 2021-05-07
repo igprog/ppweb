@@ -120,7 +120,7 @@ public class Invoice : System.Web.Services.WebService {
         x.number = GetNextInvoiceNumber(DateTime.Now.Year);
         x.fileName = null;
         x.orderNumber = order.orderNumber;
-        x.dateAndTime = DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
+        x.dateAndTime = Convert.ToDateTime(Global.NowLocal()).ToString("dd.MM.yyyy, HH:mm"); // DateTime.Now.ToString("dd.MM.yyyy, HH:mm");
         x.year = DateTime.Now.Year;
         x.firstName = order.firstName;
         x.lastName = order.lastName;
@@ -296,11 +296,26 @@ public class Invoice : System.Web.Services.WebService {
 
     private List<Item> GetItems(Orders.NewOrder order) {
         Item x = new Item();
-        x.title = string.Format("{0} {1}", order.application, order.version);
+        x.title = string.Format("{0} {1} (pretplata od {2} do {3})"
+            , order.application
+            , order.version
+            , Convert.ToDateTime(Global.NowLocal()).ToString("dd.MM.yyyy")
+            , Convert.ToDateTime(Global.NowLocal()).AddYears(Convert.ToInt32(order.licence)).ToString("dd.MM.yyyy"));
         x.qty = Convert.ToInt32(order.licenceNumber);
         x.unitPrice = order.price;
         List<Item> xx = new List<Item>();
         xx.Add(x);
+        // Users U = new Users();
+        // order.discountCoeff = Prices.GetDiscountData(U.GetUser(order.userGroupId)).perc / 100.0;
+        if (order.discountCoeff > 0) {
+            order.priceWithDiscount = order.price - (order.price * order.discountCoeff);
+            order.priceWithDiscountEur = order.price - (order.priceEur * order.discountCoeff);
+            x = new Item();
+            x.title = string.Format(@"Popust -{0}%", Math.Round(order.discountCoeff * 100, 0));
+            x.qty = 1;
+            x.unitPrice = -Math.Round(order.price - order.priceWithDiscount, 2);
+            xx.Add(x);
+        }
         return xx;
     }
 

@@ -641,7 +641,7 @@
     <script type="text/ng-template" id="orders">
         <div ng-controller="ordersCtrl" class="container-fluid">
             <h2>Narudžbe</h2>
-            <div class="row m10">
+            <div class="row m-2">
                 <div class="col-sm-2">
                     <select ng-model="year" class="form-control" ng-change="load(year, searchOrders)">
                         <option ng-selected="x==year?true:false" ng-repeat="x in years">{{x}}</option>
@@ -680,6 +680,8 @@
                         <th>Licenca</th>
                         <th>Broj licenci</th>
                         <th>Cijena</th>
+                        <th>Popust</th>
+                        <th>Cijena sa popustom</th>
                         <th>Dodatna usluga</th>
                         <th>Napomena</th>
                         <th></th>
@@ -701,7 +703,9 @@
                         <td>{{x.version}}</td>
                         <td>{{x.licence}}</td>
                         <td>{{x.licenceNumber}}</td>
-                        <td>{{x.price}}</td>
+                        <td class="text-right">{{x.price}}</td>
+                        <td class="text-right"><span ng-if="x.discountCoeff">{{x.discountCoeff * 100}}%</span></td>
+                        <td class="text-right"><span ng-if="x.priceWithDiscount">{{x.priceWithDiscount}}</span></td>
                         <td>{{x.additionalService}}</td>
                         <td>{{x.note}}</td>
                         <td><button ng-click="remove(x)" class="btn btn-outline-danger" title="Briši"><i class="fa fa-trash-alt"></i></button></td>
@@ -1036,8 +1040,11 @@
                 <div class="card-header">Obavijest</div>
                 <div class="card-body">
                     <div class="row">
+                        <div class="col-sm-6">
+                            <label class="pr-2"><input type="checkbox" ng-model="settings.appAlert.show" /> Prikaži obavijest</label>
+                        </div>
                         <div class="col-sm-12">
-                            <textarea ng-model="settings.appAlert" rows="2" class="form-control" ></textarea>
+                            <textarea ng-model="settings.appAlert.desc" rows="2" class="form-control" ></textarea>
                         </div>
                     </div>
                 </div>

@@ -635,6 +635,7 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
                 $scope.user.country = user.country;
                 $scope.user.pin = user.pin;
                 $scope.user.email = user.email;
+                $scope.user.userGroupId = user.userGroupId;
                 $scope.user.discountCoeff = user.discountCoeff;
                 $scope.showUserDetails = true;
                 $scope.showErrorAlert = false;

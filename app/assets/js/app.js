@@ -6414,6 +6414,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 $scope.user.pin = user.pin;
                 $scope.user.email = user.email;
                 $scope.user.userType = user.userType;
+                $scope.user.userGroupId = user.userGroupId;
                 $scope.user.discountCoeff = user.discountCoeff;
                 $scope.showUserDetails = true;
                 $scope.showErrorAlert = false;

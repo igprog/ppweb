@@ -52,6 +52,7 @@ public class Orders : WebService {
         public double discountCoeff;
         public double priceWithDiscount;
         public double priceWithDiscountEur;
+        public string userGroupId;
     }
 
     [WebMethod]
@@ -81,10 +82,10 @@ public class Orders : WebService {
         x.eInvoice = false;
         x.maxNumberOfUsers = 1;
         x.isForeign = false;
-        Prices P = new Prices();
-        x.discountCoeff = P.GetDiscountData(null).perc / 100.0;
+        x.discountCoeff = Prices.GetDiscountData(null).perc / 100.0;
         x.priceWithDiscount = 0.0;
         x.priceWithDiscountEur = 0.0;
+        x.userGroupId = null;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -94,7 +95,7 @@ public class Orders : WebService {
             List<NewOrder> xx = new List<NewOrder>();
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
                 connection.Open();
-                string sql = string.Format(@"SELECT id, orderNumber, firstName, lastName, companyName, address, postalCode, city, country, pin, email, ipAddress, application, version, licence, licenceNumber, price, priceEur, orderDate, additionalService, note
+                string sql = string.Format(@"SELECT id, orderNumber, firstName, lastName, companyName, address, postalCode, city, country, pin, email, ipAddress, application, version, licence, licenceNumber, price, priceEur, orderDate, additionalService, note, userGroupId, discountCoeff
                             FROM orders {0}
                             ORDER BY rowid DESC", !string.IsNullOrWhiteSpace(search) ? string.Format("WHERE UPPER(firstName) LIKE '{0}%' OR UPPER(lastName) LIKE '{0}%' OR UPPER(companyName) LIKE '{0}%' OR UPPER(email) LIKE '%{0}%'", search.ToUpper()) : "");
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
@@ -122,8 +123,13 @@ public class Orders : WebService {
                             x.orderDate = reader.GetValue(18) == DBNull.Value ? "" : reader.GetString(18);
                             x.additionalService = reader.GetValue(19) == DBNull.Value ? "" : reader.GetString(19);
                             x.note = reader.GetValue(20) == DBNull.Value ? "" : reader.GetString(20);
+                            x.userGroupId = reader.GetValue(21) == DBNull.Value ? "" : reader.GetString(21);
+                            x.discountCoeff = reader.GetValue(22) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(22));
+                            if (x.discountCoeff > 0) {
+                                x.priceWithDiscount = x.price - (x.price * x.discountCoeff);
+                                x.priceWithDiscountEur = x.priceEur - (x.priceEur * x.discountCoeff);
+                            }
                             x.eInvoice = false;
-                            x.discountCoeff = 0;
                             xx.Add(x);
                         }
                     }
@@ -160,14 +166,22 @@ public class Orders : WebService {
                         , x.application
                         , x.version
                         , x.maxNumberOfUsers > 5 ? string.Format("({0} korisnika)", x.maxNumberOfUsers) : ""
-                        , string.Format("- {0} god. licenca", x.licenceNumber));
+                        , string.Format("- {0} god. licenca", x.licence));
             item.qty = Convert.ToInt32(x.licenceNumber);
-            //item.unitPrice = x.price;
-            item.unitPrice = x.discountCoeff > 0 ? x.priceWithDiscount : x.price;
-
-            //i.total = x.price * item.qty;
-            i.total = x.discountCoeff > 0 ? x.priceWithDiscount * item.qty : x.price * item.qty;
+            item.unitPrice = x.price;
+            // item.unitPrice = x.discountCoeff > 0 ? x.priceWithDiscount : x.price;
             i.items.Add(item);
+
+            if (x.discountCoeff > 0) {
+                item = new Invoice.Item();
+                item.title = string.Format(@"Popust -{0}%", Math.Round(x.discountCoeff, 0));
+                item.unitPrice = x.price - x.priceWithDiscount;
+                i.items.Add(item);
+            }
+
+            // i.total = x.price * item.qty;
+            i.total = x.discountCoeff > 0 ? x.priceWithDiscount * item.qty : x.price * item.qty;
+
             i.showSignature = true;
             i.isForeign = x.isForeign;
             i.docType = (int)Invoice.DocType.offer;
@@ -190,7 +204,7 @@ public class Orders : WebService {
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
                 connection.Open();
                 string sql = @"INSERT INTO orders VALUES  
-                       (@id, @orderNumber, @firstName, @lastName, @companyName, @address, @postalCode, @city, @country, @pin, @email, @ipAddress, @application, @version, @licence, @licenceNumber, @price, @priceEur, @orderDate, @additionalService, @note)";
+                       (@id, @orderNumber, @firstName, @lastName, @companyName, @address, @postalCode, @city, @country, @pin, @email, @ipAddress, @application, @version, @licence, @licenceNumber, @price, @priceEur, @orderDate, @additionalService, @note, @userGroupId, @discountCoeff)";
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.Parameters.Add(new SQLiteParameter("id", x.id));
                     command.Parameters.Add(new SQLiteParameter("orderNumber", i.orderNumber));
@@ -208,11 +222,13 @@ public class Orders : WebService {
                     command.Parameters.Add(new SQLiteParameter("version", x.version));
                     command.Parameters.Add(new SQLiteParameter("licence", x.licence));
                     command.Parameters.Add(new SQLiteParameter("licenceNumber", x.licenceNumber));
-                    command.Parameters.Add(new SQLiteParameter("price", x.discountCoeff > 0 ? x.priceWithDiscount : x.price));
-                    command.Parameters.Add(new SQLiteParameter("priceEur", x.discountCoeff > 0 ? x.priceWithDiscountEur : x.priceEur));
+                    command.Parameters.Add(new SQLiteParameter("price", x.price));
+                    command.Parameters.Add(new SQLiteParameter("priceEur", x.priceEur));
                     command.Parameters.Add(new SQLiteParameter("orderDate", Convert.ToString(x.orderDate)));
                     command.Parameters.Add(new SQLiteParameter("additionalService", x.additionalService));
                     command.Parameters.Add(new SQLiteParameter("note", x.note));
+                    command.Parameters.Add(new SQLiteParameter("userGroupId", x.userGroupId));
+                    command.Parameters.Add(new SQLiteParameter("discountCoeff", x.discountCoeff));
                     command.ExecuteNonQuery();
                 }
                 connection.Close();

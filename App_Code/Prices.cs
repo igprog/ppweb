@@ -257,17 +257,18 @@ public class Prices : System.Web.Services.WebService {
         }
     }
 
-    public Discount GetDiscountData(Users.NewUser user) {
+    public static Discount GetDiscountData(Users.NewUser user) {
         Files F = new Files();
         Discount x = new Discount();
         Global G = new Global();
         x = F.GetSettingsData().discount;
-        if (G.DateDiff(Convert.ToDateTime(G.NowLocal()), Convert.ToDateTime(x.dateTo), false) < 0) {
+        if (G.DateDiff(Convert.ToDateTime(Global.NowLocal()), Convert.ToDateTime(x.dateTo), false) < 0) {
             x = new Discount();
         }
         if (user != null) {
             if (!string.IsNullOrWhiteSpace(user.userGroupId) && (user.licenceStatus != Global.LicenceStatus.demo)) {
-                x.perc = F.GetSettingsData().discount.oldUserDiscountPerc;
+                double oldUserDiscountPerc = F.GetSettingsData().discount.oldUserDiscountPerc;
+                x.perc = oldUserDiscountPerc > x.perc ? oldUserDiscountPerc : x.perc;
             }
         }
         return x;
