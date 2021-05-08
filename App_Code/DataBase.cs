@@ -33,9 +33,10 @@ namespace Igprog {
         public string bodyfat = "bodyfat";
         public string sharingrecipes = "sharingrecipes";
         public string tickets = "tickets";
+        public string loginlog = "loginlog";
         // TODO: errorlog, activitylog
-        public string errorlog = "errorlog";
-        public string activitylog = "activitylog";
+        // public string errorlog = "errorlog";
+        // public string activitylog = "activitylog";
 
 
         #region CreateTable (users.ddb)
@@ -61,6 +62,14 @@ namespace Igprog {
                         expirationDate VARCHAR(50),
                         isActive INTEGER,
                         ipAddress NVARCHAR(50))";
+            CreateTable(path, sql);
+        }
+
+        public void LoginLog(string path) {
+            string sql = @"CREATE TABLE IF NOT EXISTS loginlog
+                        (userId VARCHAR(50) PRIMARY KEY,
+                        lastLogin VARCHAR(50),
+                        loginCount INTEGER)";
             CreateTable(path, sql);
         }
         #endregion
@@ -477,6 +486,9 @@ namespace Igprog {
                     break;
                 case "activityLog":
                     ActivityLog(path);
+                    break;
+                case "loginlog":
+                    LoginLog(path);
                     break;
                 default:
                     break;

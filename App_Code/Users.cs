@@ -67,6 +67,7 @@ public class Users : WebService {
 
         public string headerInfo { get; set; }  //TODO
         public double discountCoeff { get; set; }
+        public Log.LoginLog loginLog = new Log.LoginLog();
 
     }
 
@@ -176,6 +177,7 @@ public class Users : WebService {
             x.datasum = new DataSum();
             x.headerInfo = "";
             x.discountCoeff = 0.0;
+            x.loginLog = new Log.LoginLog();
             return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
             L.SendErrorLog(e, null, null, "Users", "Init");
@@ -461,10 +463,14 @@ public class Users : WebService {
                     query = "";
                 }
                 string sql = string.Format(@"
-                        SELECT userId, userType, firstName, lastName, companyName, address, postalCode, city, country, pin, phone, email, userName, password, adminType, userGroupId, activationDate, expirationDate, isActive, iPAddress, rowid
-                        FROM users                       
-                        WHERE (UPPER(firstName) LIKE '%{0}%' OR UPPER(lastName) LIKE '%{0}%' OR UPPER(companyName) LIKE '%{0}%' OR UPPER(email) LIKE '%{0}%' OR userId LIKE '%{0}%' OR userGroupId LIKE '%{0}%') {2}
-                        ORDER BY rowid {3} {1}", query.ToUpper(), limitSql, aciveUsersSql, isDesc ? "DESC" : "ASC");
+                        SELECT u.userId, u.userType, u.firstName, u.lastName, u.companyName, u.address, u.postalCode, u.city, u.country, u.pin, u.phone, u.email, u.userName, u.password, u.adminType, u.userGroupId, u.activationDate, u.expirationDate, u.isActive, u.iPAddress, u.rowid,
+                        l.lastLogin, l.loginCount                        
+                        FROM users u      
+                        LEFT JOIN loginlog l
+                        ON u.userId = l.userId                
+                        WHERE (UPPER(u.firstName) LIKE '%{0}%' OR UPPER(u.lastName) LIKE '%{0}%' OR UPPER(u.companyName) LIKE '%{0}%' OR UPPER(u.email) LIKE '%{0}%' OR u.userId LIKE '%{0}%' OR u.userGroupId LIKE '%{0}%') {2}
+                        ORDER BY u.rowid {3} {1}", query.ToUpper(), limitSql, aciveUsersSql, isDesc ? "DESC" : "ASC");
+
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
@@ -500,6 +506,9 @@ public class Users : WebService {
                                 x = GetUserGroupInfo(x, connection);
                             }
                             /**********************/
+                            x.loginLog = new Log.LoginLog();
+                            x.loginLog.lastLogin = reader.GetValue(21) == DBNull.Value ? "" : reader.GetString(21);
+                            x.loginLog.loginCount = reader.GetValue(22) == DBNull.Value ? 0 : reader.GetInt32(22);
                             xx.Add(x);
                         }
                     }

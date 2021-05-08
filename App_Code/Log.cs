@@ -4,6 +4,8 @@ using System.Text;
 using System.Configuration;
 using Newtonsoft.Json;
 using Igprog;
+using System.Data.SQLite;
+using System.Web;
 
 /// <summary>
 /// ErrorLog
@@ -39,6 +41,12 @@ public class Log : WebService {
         public string userId;
         public string activity;
         public string time;
+    }
+
+    public class LoginLog {
+        public string userId;
+        public string lastLogin;
+        public int loginCount;
     }
     #endregion Class
 
@@ -132,8 +140,34 @@ MESSAGE: {5}
             }
             sb.AppendLine(log);
             F.SaveTempFile(activityLog, sb.ToString());
+
+            if (!string.IsNullOrWhiteSpace(userId)) {
+                UpdateLoginLog(userId, x.time);
+            }
+
         } catch (Exception e) {
             SendErrorLog(e, dateTime, userId, "Log", "ActivityLog");
+        }
+    }
+
+    public void UpdateLoginLog(string userId, string dateTime) {
+        try {
+            DataBase db = new DataBase();
+            string dataBase = ConfigurationManager.AppSettings["UsersDataBase"];
+            string path = HttpContext.Current.Server.MapPath("~/App_Data/" + dataBase);
+            db.CreateGlobalDataBase(path, db.loginlog);
+            string sql = string.Format(@"BEGIN;
+                        INSERT OR REPLACE INTO loginlog (userId, lastLogin, loginCount)
+                        VALUES ('{0}', '{1}', IFNULL((SELECT loginCount FROM loginlog WHERE userId = '{0}'), 0) + 1);
+                        COMMIT;", userId, dateTime);
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.ExecuteNonQuery();
+                }
+            }
+        } catch (Exception e) {
+            SendErrorLog(e, dateTime, userId, "Log", "UpdateLoginLog");
         }
     }
     #endregion Methods

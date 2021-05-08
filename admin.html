@@ -582,9 +582,11 @@
                         </div>
                         <div class="modal-body">
                             <p>{{currUser.companyName}}</p>
-                            <ul class="small">
+                            <ul>
                                 <li>UserId: {{currUser.userId}}</li>
                                 <li>UserGroupId: {{currUser.userGroupId}}</li>
+                                <li>Broj prijava u aplikaciju: <span class="badge badge-success">{{currUser.loginLog.loginCount}}</span></li>
+                                <li>Zadnja prijava: {{currUser.loginLog.lastLogin}}</li>
                             </ul>
                             <hr />
                             <h4 class="modal-title">Ukupno:</h4>
