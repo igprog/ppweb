@@ -305,8 +305,6 @@ public class Invoice : System.Web.Services.WebService {
         x.unitPrice = order.price;
         List<Item> xx = new List<Item>();
         xx.Add(x);
-        // Users U = new Users();
-        // order.discountCoeff = Prices.GetDiscountData(U.GetUser(order.userGroupId)).perc / 100.0;
         if (order.discountCoeff > 0) {
             order.priceWithDiscount = order.price - (order.price * order.discountCoeff);
             order.priceWithDiscountEur = order.price - (order.priceEur * order.discountCoeff);

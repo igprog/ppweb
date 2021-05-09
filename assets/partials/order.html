@@ -106,11 +106,11 @@
                         </div>
                     </div>
                     <div class="row m-1">
-                        <div class="col-lg-4">Cijena <em ng-if="user.discountCoeff > 0" class="small">(popust: {{user.discountCoeff * 100}}%)</em>: </div>
+                        <div class="col-lg-4">Cijena <em ng-if="discountCoeff > 0" class="small">(popust: {{discountCoeff * 100}}%)</em>: </div>
                         <div class="col-lg-6">
-                            <label ng-if="user.discountCoeff === 0">{{user.price}} kn ({{user.priceEur | number:0}} €)</label>
-                            <s ng-if="user.discountCoeff > 0">{{user.price}} kn ({{user.priceEur | number:0}} €)</s>
-                            <label ng-if="user.discountCoeff > 0">{{user.priceWithDiscount}} kn ({{user.priceWithDiscountEur | number:0}} €)</label>
+                            <label ng-if="discountCoeff === 0">{{user.price}} kn ({{user.priceEur | number:0}} €)</label>
+                            <s ng-if="discountCoeff > 0">{{user.price}} kn ({{user.priceEur | number:0}} €)</s>
+                            <label ng-if="discountCoeff > 0">{{user.priceWithDiscount}} kn ({{user.priceWithDiscountEur | number:0}} €)</label>
                         </div>
                     </div>
                 </div>
@@ -209,7 +209,7 @@ Banka: {{config.bank}}
 Primatelj: {{config.company}}
 Adresa: {{config.address}}
 Opis plaćanja: {{user.application}} {{user.version}}
-Iznos: <span ng-if="user.discountCoeff === 0">{{user.price | number:2}}</span><span ng-if="user.discountCoeff > 0">{{user.priceWithDiscount | number:2}}</span> kn
+Iznos: <span ng-if="discountCoeff === 0">{{user.price | number:2}}</span><span ng-if="discountCoeff > 0">{{user.priceWithDiscount | number:2}}</span> kn
 Model: <span ng-if="user.pin">HR00</span><span ng-if="!user.pin">HR99</span>
 <span ng-if="user.pin">Poziv na broj: {{user.pin}}</span> 
             </pre>
@@ -220,10 +220,10 @@ Model: <span ng-if="user.pin">HR00</span><span ng-if="!user.pin">HR99</span>
                     <pre>
 IBAN računa: {{config.iban}}
 SWIFT CODE: {{config.swift}}
-Iznos: <span ng-if="user.discountCoeff === 0">{{user.priceEur | number:2}}</span><span ng-if="user.discountCoeff > 0">{{user.priceWithDiscountEur | number:2}}</span> €
+Iznos: <span ng-if="discountCoeff === 0">{{user.priceEur | number:2}}</span><span ng-if="discountCoeff > 0">{{user.priceWithDiscountEur | number:2}}</span> €
                         </pre>
                 </div>
-                <div ng-if="premiumUsers<=5 && user.discountCoeff === 0">
+                <div ng-if="premiumUsers<=5 && discountCoeff === 0">
                     <b>Plaćanje putem PayPal-a:</b>
                     <div ng-if="user.application!='Program Prehrane 5.0'" ng-include="'./app/assets/partials/paypal.html'"></div>
                     <div ng-if="user.application=='Program Prehrane 5.0'" ng-include="'./assets/partials/paypal.html'"></div>

@@ -925,7 +925,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
         $rootScope.loading = true;
         functions.post(webService, 'Login', { userName: u, password: p }).then(function (d) {
-            if (d.userId != null) {
+            if (d.userId !== null) {
                 loginResponse(d);
             } else {
                 $rootScope.loading = false;
@@ -5422,6 +5422,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             x.foodGroup.code = 'OF';
         };
         functions.post(webService, 'Save', { userId: $rootScope.user.userGroupId, x: x }).then(function (d) {
+            if (d === undefined) {
+                functions.alert($translate.instant('error').toUpperCase() + '!', $translate.instant('If the value of a particular parameter is unknown, leave zero') + '.');
+                return;
+            }
             if (d.isSuccess) {
                 $rootScope.loadFoods();
             } else {
@@ -6389,6 +6393,14 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $window.location.href = '/app/#/login';
     }
 
+    $scope.discount = null;
+    var getDiscount = function () {
+        functions.post('Prices', 'GetDiscount', {}).then(function (d) {
+            $scope.discount = d;
+        });
+    }
+    getDiscount();
+
     $scope.application = $rootScope.config.title; // $translate.instant('nutrition program web');
     $scope.version = 'STANDARD';
     $scope.userType = 1;
@@ -6487,9 +6499,22 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $scope.user.priceEur = (totalprice + additionalUsers) / $rootScope.config.eur;
 
         if ($scope.user.discountCoeff > 0) {
-            $scope.user.priceWithDiscount = $scope.user.price - (Math.round($scope.user.price * $scope.user.discountCoeff) * 100 / 100);
-            $scope.user.priceWithDiscountEur = $scope.user.priceEur - (Math.round($scope.user.priceEur * $scope.user.discountCoeff) * 100 / 100);
+            $scope.discountCoeff = $scope.user.discountCoeff;
+            if ($scope.discount.perc === 0) {
+                $scope.discountCoeff = $scope.discount.oldUserDiscountPerc.packages.find(a => a.package === $scope.user.version.toLowerCase()).discountPerc / 100;
+            }
+            if ($scope.discountCoeff > 0) {
+                $scope.user.priceWithDiscount = $scope.user.price - (Math.round($scope.user.price * $scope.discountCoeff) * 100 / 100);
+                $scope.user.priceWithDiscountEur = $scope.user.priceEur - (Math.round($scope.user.priceEur * $scope.discountCoeff) * 100 / 100);
+            }
+        } else {
+            $scope.discountCoeff = 0;
         }
+
+        //if ($scope.user.discountCoeff > 0) {
+        //    $scope.user.priceWithDiscount = $scope.user.price - (Math.round($scope.user.price * $scope.user.discountCoeff) * 100 / 100);
+        //    $scope.user.priceWithDiscountEur = $scope.user.priceEur - (Math.round($scope.user.priceEur * $scope.user.discountCoeff) * 100 / 100);
+        //}
 
     }
 

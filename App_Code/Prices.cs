@@ -5,6 +5,7 @@ using System.IO;
 using System.Configuration;
 using Newtonsoft.Json;
 using System.Data.SQLite;
+using System.Linq;
 using Igprog;
 
 /// <summary>
@@ -87,7 +88,16 @@ public class Prices : System.Web.Services.WebService {
         public string dateTo;
         public string title;
         public string desc;
-        public double oldUserDiscountPerc;
+        public OldUserDiscountPerc oldUserDiscountPerc;
+    }
+
+    public class OldUserDiscountPerc {
+        public List<Package> packages;
+    }
+
+    public class Package {
+        public string package;
+        public double discountPerc;
     }
 
     #endregion Classes
@@ -263,11 +273,11 @@ public class Prices : System.Web.Services.WebService {
         Global G = new Global();
         x = F.GetSettingsData().discount;
         if (G.DateDiff(Convert.ToDateTime(Global.NowLocal()), Convert.ToDateTime(x.dateTo), false) < 0) {
-            x = new Discount();
+            x.perc = 0;
         }
         if (user != null) {
             if (!string.IsNullOrWhiteSpace(user.userGroupId) && (user.licenceStatus != Global.LicenceStatus.demo)) {
-                double oldUserDiscountPerc = F.GetSettingsData().discount.oldUserDiscountPerc;
+                double oldUserDiscountPerc = F.GetSettingsData().discount.oldUserDiscountPerc.packages.Where(a => a.package == user.package).FirstOrDefault().discountPerc;
                 x.perc = oldUserDiscountPerc > x.perc ? oldUserDiscountPerc : x.perc;
             }
         }

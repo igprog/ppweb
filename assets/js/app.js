@@ -173,12 +173,12 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
             method: 'POST',
             data: {}
         })
-         .then(function (response) {
-             $scope.discount = JSON.parse(response.data.d);
-         },
-         function (response) {
-             alert(JSON.parse(response.data.d));
-         });
+        .then(function (response) {
+            $scope.discount = JSON.parse(response.data.d);
+        },
+        function (response) {
+            alert(JSON.parse(response.data.d));
+        });
     }
 
     var getDateDiff = function (x) {
@@ -543,10 +543,17 @@ angular.module('app', ['ui.router', 'ngMaterial', 'charts'])
         var additionalUsers = $scope.premiumUsers > 5 && $scope.user.userType == 2 ? ($scope.premiumUsers - 5) * 500 : 0;  // 500kn/additional user;
         $scope.user.price = totalprice + additionalUsers;
         $scope.user.priceEur = (totalprice + additionalUsers) / $rootScope.config.eur;
-
         if ($scope.user.discountCoeff > 0) {
-            $scope.user.priceWithDiscount = $scope.user.price - (Math.round($scope.user.price * $scope.user.discountCoeff) * 100 / 100);
-            $scope.user.priceWithDiscountEur = $scope.user.priceEur - (Math.round($scope.user.priceEur * $scope.user.discountCoeff) * 100 / 100);
+            $scope.discountCoeff = $scope.user.discountCoeff;
+            if ($scope.discount.perc === 0) {
+                $scope.discountCoeff = $scope.discount.oldUserDiscountPerc.packages.find(a => a.package === $scope.user.version.toLowerCase()).discountPerc / 100;
+            }
+            if ($scope.discountCoeff > 0) {
+                $scope.user.priceWithDiscount = $scope.user.price - (Math.round($scope.user.price * $scope.discountCoeff) * 100 / 100);
+                $scope.user.priceWithDiscountEur = $scope.user.priceEur - (Math.round($scope.user.priceEur * $scope.discountCoeff) * 100 / 100);
+            }
+        } else {
+            $scope.discountCoeff = 0;
         }
     }
 

@@ -57,18 +57,18 @@
                 <div class="row m-1 mt-2">
                     <div class="col-sm-3 text-capitalize">{{'price' | translate}}:</div>
                     <div class="col-sm-6">
-                        <div ng-if="user.discountCoeff === 0">
+                        <div ng-if="discountCoeff === 0">
                             <h3 ng-if="config.language!=='en'" class="lead font-weight-bold">{{user.price}} kn ({{user.priceEur | number:2}} €)</h3>
                             <h3 ng-if="config.language==='en'" class="lead font-weight-bold">{{user.price / config.usd | number:2}} $</h3>
                         </div>
-                        <div ng-if="user.discountCoeff > 0">
+                        <div ng-if="discountCoeff > 0">
                             <s ng-if="config.language!=='en'" class="lead">{{user.price}} kn ({{user.priceEur | number:2}} €)</s>
                             <s ng-if="config.language==='en'" class="lead">{{user.price / config.usd | number:2}} $</s>
                         </div>
                     </div>
                 </div>
-                <div ng-if="user.discountCoeff > 0" class="row m-1 mt-2">
-                    <div class="col-sm-3">{{'price with discount' | translate}} ({{user.discountCoeff * 100}}%):</div>
+                <div ng-if="discountCoeff > 0" class="row m-1 mt-2">
+                    <div class="col-sm-3">{{'price with discount' | translate}} ({{discountCoeff * 100}}%):</div>
                     <div class="col-sm-6">
                         <h3 ng-if="config.language!=='en'" class="lead font-weight-bold">{{user.priceWithDiscount}} kn ({{user.priceWithDiscountEur | number:2}} €)</h3>
                         <h3 ng-if="config.language==='en'" class="lead font-weight-bold">{{user.priceWithDiscountEur / config.usd | number:2}} $</h3>
@@ -160,7 +160,7 @@
 <span class="text-capitalize">{{'recipient' | translate}}</span>: {{config.company}}
 <span>{{'address' | translate}}</span>: {{config.address}}, {{config.language==='en'?'Croatia':'Hrvatska'}}
 <span>{{'payment description' | translate}}</span>: {{user.application}} {{user.version}}
-<span class="text-capitalize">{{'amount' | translate}}</span>: <span ng-if="user.discountCoeff === 0">{{user.price}}</span><span ng-if="user.discountCoeff > 0">{{user.priceWithDiscount}}</span> kn
+<span class="text-capitalize">{{'amount' | translate}}</span>: <span ng-if="discountCoeff === 0">{{user.price}}</span><span ng-if="discountCoeff > 0">{{user.priceWithDiscount}}</span> kn
 <span>{{'model' | translate}}</span>: <span ng-if="user.pin">HR00</span><span ng-if="!user.pin">HR99</span>
 <span ng-if="user.pin">{{'reference number' | translate}}: {{user.pin}}</span> 
                     </pre>
@@ -171,7 +171,7 @@
                             <pre>
 {{'iban' | translate}}: {{config.iban}}
 {{'swift code' | translate}}: {{config.swift}}
-{{'amount' | translate}}: <span ng-if="user.discountCoeff === 0">{{user.priceEur | number:2}}</span><span ng-if="user.discountCoeff > 0">{{user.priceWithDiscountEur | number:2}}</span> €
+{{'amount' | translate}}: <span ng-if="discountCoeff === 0">{{user.priceEur | number:2}}</span><span ng-if="discountCoeff > 0">{{user.priceWithDiscountEur | number:2}}</span> €
                         </pre>
                         </div>
                     </div>
@@ -191,11 +191,11 @@
                     </div>
                 </div>
                 <div ng-hide="user.country.toLowerCase().startsWith('hr') || user.country.toLowerCase().startsWith('cr')">
-                    <div ng-if="user.discountCoeff===0">
+                    <div ng-if="discountCoeff===0">
                         <div ng-if="config.language!=='en'" ng-include="'./assets/partials/paypal.html'"></div>
                         <div ng-if="config.language==='en'" ng-include="'./assets/partials/paypal_usd.html'"></div>
                     </div>
-                    <div ng-if="user.discountCoeff===0.2">
+                    <div ng-if="discountCoeff===0.2">
                         <div ng-include="'./assets/partials/paypal_discount_20.html'"></div>
                     </div>
                 </div>

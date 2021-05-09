@@ -962,19 +962,19 @@
                     <div class="row">
                         <div class="col-lg-2">
                             <div class="form-group">
-                                <label>Postotak:</label>
+                                <label>Popust (%):</label>
                                 <input ng-model="settings.discount.perc" type="number" min="0" max="99" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3">
                             <div class="form-group">
-                                <label>Od:</label>
+                                <label>Od (YYYY-MM-DD):</label>
                                 <input ng-model="settings.discount.dateFrom" type="text" placeholder="YYYY-MM-DD" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3">
                             <div class="form-group">
-                                <label>Do:</label>
+                                <label>Do (YYYY-MM-DD):</label>
                                 <input ng-model="settings.discount.dateTo" type="text" placeholder="YYYY-MM-DD" class="form-control">
                             </div>
                         </div>
@@ -995,10 +995,13 @@
                     </div>
                     <hr />
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-12">
+                            <label>Popust za stare korisnike:</label>
+                        </div>
+                        <div class="col-lg-4" ng-repeat="x in settings.discount.oldUserDiscountPerc.packages">
                             <div class="form-group">
-                                <label>Popust za stare korisnike:</label>
-                                <input ng-model="settings.discount.oldUserDiscountPerc" type="number" min="0" max="99" class="form-control">
+                                <label class="text-uppercase">{{x.package}} (%):</label>
+                                <input ng-model="x.discountPerc" type="number" min="0" max="99" class="form-control">
                             </div>
                         </div>
                     </div>

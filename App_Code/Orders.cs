@@ -174,8 +174,9 @@ public class Orders : WebService {
 
             if (x.discountCoeff > 0) {
                 item = new Invoice.Item();
-                item.title = string.Format(@"Popust -{0}%", Math.Round(x.discountCoeff, 0));
-                item.unitPrice = x.price - x.priceWithDiscount;
+                item.title = string.Format(@"Popust -{0}%", Math.Round(x.discountCoeff * 100, 0));
+                item.qty = 1;
+                item.unitPrice = -Math.Round(x.price - x.priceWithDiscount, 2);
                 i.items.Add(item);
             }
 
