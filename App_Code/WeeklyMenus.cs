@@ -69,12 +69,9 @@ public class WeeklyMenus : WebService {
 
     [WebMethod]
     public string Load(string userGroupId, int limit, int offset, string search, string clientId, string userId, string lang) {
-        try
-        {
+        try {
             return JsonConvert.SerializeObject(LoadWeeklyMenus(userGroupId, limit, offset, search, clientId, userId, lang), Formatting.None);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             L.SendErrorLog(e, null, userId, "WeeklyMenus", "Load");
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
@@ -365,7 +362,7 @@ public class WeeklyMenus : WebService {
             if (!string.IsNullOrWhiteSpace(search) && string.IsNullOrEmpty(clientId)) {
                 whereSql = string.Format("WHERE (UPPER(w.title) LIKE '%{0}%' OR UPPER(w.note) LIKE '%{0}%')", search.ToUpper());
             } else if (!string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
-                whereSql = string.Format("WHERE w.clientId = '{1}' AND (UPPER(w.title) LIKE '%{0}%' OR UPPER(w.note) LIKE '%{0}%' OR w.energy LIKE '{0}%')", search.ToUpper(), clientId);
+                whereSql = string.Format("WHERE w.clientId = '{1}' AND (UPPER(w.title) LIKE '%{0}%' OR UPPER(w.note) LIKE '%{0}%')", search.ToUpper(), clientId);
             } else if (string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
                 whereSql = string.Format("WHERE w.clientId = '{0}'", clientId);
             } else {
