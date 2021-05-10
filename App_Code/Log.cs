@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Igprog;
 using System.Data.SQLite;
 using System.Web;
+using System.Collections.Generic;
 
 /// <summary>
 /// ErrorLog
@@ -16,7 +17,6 @@ using System.Web;
 public class Log : WebService {
     public static string errorLog = ConfigurationManager.AppSettings["ErrorLog"];
     public static string activityLog = ConfigurationManager.AppSettings["ActivityLog"];
-    Global G = new Global(); 
 
     public Log(){
     }
@@ -47,6 +47,7 @@ public class Log : WebService {
         public string userId;
         public string lastLogin;
         public int loginCount;
+        public Users.NewUser user;
     }
     #endregion Class
 
@@ -80,6 +81,40 @@ public class Log : WebService {
             return JsonConvert.SerializeObject("ok", Formatting.Indented);
         } catch (Exception e) {
             SendErrorLog(e, dateTime, userId, "Log", "SaveActivityLog");
+            return JsonConvert.SerializeObject(e.Message, Formatting.Indented);
+        }
+    }
+
+    [WebMethod]
+    public string LoadLoginLog() {
+        try {
+            List<LoginLog> xx = new List<LoginLog>();
+            string usersDataBase = ConfigurationManager.AppSettings["UsersDataBase"];
+            Global G = new Global();
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + usersDataBase))) {
+                connection.Open();
+                string sql = @"SELECT l.userId, l.lastLogin, l.loginCount, u.firstName, u.lastName
+                            FROM loginlog l
+                            LEFT JOIN users u
+                            ON u.userId = l.userId
+                            ORDER BY l.rowid DESC LIMIT 10";
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            LoginLog x = new LoginLog();
+                            x.userId = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
+                            x.lastLogin = reader.GetValue(1) == DBNull.Value ? null : reader.GetString(1);
+                            x.loginCount = reader.GetValue(2) == DBNull.Value ? 0 : reader.GetInt32(2);
+                            x.user = new Users.NewUser();
+                            x.user.firstName = reader.GetValue(3) == DBNull.Value ? null : reader.GetString(3);
+                            x.user.lastName = reader.GetValue(4) == DBNull.Value ? null : reader.GetString(4);
+                            xx.Add(x);
+                        }
+                    }
+                }
+            }
+            return JsonConvert.SerializeObject(xx, Formatting.None);
+        } catch (Exception e) {
             return JsonConvert.SerializeObject(e.Message, Formatting.Indented);
         }
     }
@@ -152,15 +187,16 @@ MESSAGE: {5}
 
     public void UpdateLoginLog(string userId, string dateTime) {
         try {
+            string usersDataBase = ConfigurationManager.AppSettings["UsersDataBase"];
+            Global G = new Global();
+            string path = HttpContext.Current.Server.MapPath("~/App_Data/" + usersDataBase);
             DataBase db = new DataBase();
-            string dataBase = ConfigurationManager.AppSettings["UsersDataBase"];
-            string path = HttpContext.Current.Server.MapPath("~/App_Data/" + dataBase);
             db.CreateGlobalDataBase(path, db.loginlog);
             string sql = string.Format(@"BEGIN;
                         INSERT OR REPLACE INTO loginlog (userId, lastLogin, loginCount)
                         VALUES ('{0}', '{1}', IFNULL((SELECT loginCount FROM loginlog WHERE userId = '{0}'), 0) + 1);
                         COMMIT;", userId, dateTime);
-            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + usersDataBase))) {
                 connection.Open();
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     command.ExecuteNonQuery();

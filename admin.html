@@ -463,9 +463,25 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <textarea ng-model="activityLog" rows="30" class="form-control" style="background-color:#3a3a3a; color:#03f144"></textarea>
-                                    <div class="text-right mt-2">
-                                        <button class="btn btn-outline-primary" ng-click="saveLog('activity.log', activityLog)"><i class="fa fa-save"></i> Spremi</button>
+                                    <div class="table-responsive p-2" style="max-height:300px">
+                                        <table class="table table-sm">
+                                            <tr>
+                                                <th>Korisnik</th>
+                                                <th>Zadnja prijava</th>
+                                                <th class="text-center">Upuno prijava</th>
+                                            </tr>
+                                            <tr ng-repeat="x in loginLog" class="table-borderless">
+                                                <td>{{x.user.firstName}} {{x.user.lastName}}</td>
+                                                <td>{{x.lastLogin}}</td>
+                                                <td class="text-center"><span class="badge badge-success">{{x.loginCount}}</span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="p-2">
+                                        <textarea ng-model="activityLog" rows="30" class="form-control" style="background-color:#3a3a3a; color:#03f144"></textarea>
+                                        <div class="text-right mt-2">
+                                            <button class="btn btn-outline-primary" ng-click="saveLog('activity.log', activityLog)"><i class="fa fa-save"></i> Spremi</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

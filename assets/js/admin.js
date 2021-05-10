@@ -269,6 +269,15 @@ angular.module('app', [])
         $scope.loading = true;
         functions.post('Log', 'Load', { fileName: 'activity.log' }).then(function (d) {
             $scope.activityLog = d;
+            loadLoginLog();
+            $scope.loading = false;
+        });
+    }
+
+    var loadLoginLog = function () {
+        $scope.loading = true;
+        functions.post('Log', 'LoadLoginLog', {}).then(function (d) {
+            $scope.loginLog = d;
             $scope.loading = false;
         });
     }
@@ -278,6 +287,7 @@ angular.module('app', [])
         functions.post('Log', 'Save', { fileName: filName, content: x }).then(function (d) {
         });
     }
+
 
     /***** Tickets *****/
     $scope.ticketType = 0;

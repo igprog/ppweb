@@ -91,10 +91,12 @@ public class Recipes : System.Web.Services.WebService {
                         }
                     } 
                 }
-                connection.Close();
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "Recipes", "Load");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]

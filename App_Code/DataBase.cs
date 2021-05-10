@@ -9,7 +9,6 @@ using System.Data.SQLite;
 /// </summary>
 namespace Igprog {
     public class DataBase {
-        string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
         Log L = new Log();
 
         public DataBase() {
@@ -397,6 +396,7 @@ namespace Igprog {
 
 
         public void CreateDataBase(string userId, string table) {
+            string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
             try {
                 string path = GetDataBasePath(userId, dataBase);
                 string dir = Path.GetDirectoryName(path);
@@ -428,7 +428,6 @@ namespace Igprog {
         }
 
         private void CreateTables(string table, string path) {
-           
             switch (table) {
                 case "users":
                     Users(path);
