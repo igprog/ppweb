@@ -1561,7 +1561,7 @@ public class PrintPdf : WebService {
                 PdfPTable table = new PdfPTable(5);
                 table.AddCell(new PdfPCell(new Phrase(t.Tran("date", lang), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
                 table.AddCell(new PdfPCell(new Phrase(t.Tran("height", lang) + " (cm)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
-                table.AddCell(new PdfPCell(new Phrase(t.Tran("weight", lang) + " (cm)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
+                table.AddCell(new PdfPCell(new Phrase(t.Tran("weight", lang) + " (kg)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
                 table.AddCell(new PdfPCell(new Phrase(t.Tran("waist", lang) + " (cm)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
                 table.AddCell(new PdfPCell(new Phrase(t.Tran("hip", lang) + " (cm)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
 

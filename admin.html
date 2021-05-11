@@ -521,10 +521,13 @@
                         <div class="card m-3" ng-repeat="x in tickets track by $index">
                             <div class="card-header">
                                 <a href="" ng-click="removeTicket(x)" class="close" style="color:red!important" title="briši">&times;</a>
+                                <div class="text-secondary small">
+                                    {{x.reportDate}}
+                                </div>
                                 <div class="form-inline pt-2">
                                     <i class="{{getStatusIcon(x.status)}}" style="padding-right:5px"></i>
                                     <input ng-model="x.title" class="form-control" />
-                                    <span class="text-muted"><em>{{x.desc.length > 80 ? x.desc.substring(0, 77) + '...' : x.desc}}</em></span>
+                                    <span class="text-muted pl-2"><em>{{x.desc.length > 80 ? x.desc.substring(0, 77) + '...' : x.desc}}</em></span>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
@@ -910,12 +913,12 @@
                                     <td><input ng-model="i.paidDate" type="text" class="form-control" /></td>
                                 </tr>
                             </table>
-                            <div class="text-right">
+                            <div class="text-right p-1">
                                 <button class="btn btn-outline-success" ng-click="saveDb(i)"><i class="fa fa-{{loading_2==true?'spinner fa-spin':'save'}}"></i> Spremi</button>
                             </div>
                         </div>
                         <div style="margin-bottom:100px">
-                            <div class="row">
+                            <div class="row mt-2">
                                 <span class="col-sm-9 text-right">Poravnanje - klijent (300 desno, 0 lijevo):</span>
                                 <div class="col-sm-3">
                                     <input ng-model="i.clientLeftSpacing" type="number" min="0" max="350" class="form-control text-right" />
@@ -944,13 +947,13 @@
                                     <input ng-model="i.totPrice_eur" class="form-control" type="number" />
                                 </div>
                             </div>
-                            <div class="mt10">
+                            <div class="mt-2">
                                 <button class="btn btn-outline-danger" ng-click="createPdf(i)"><i class="fa fa-{{loading==true?'spinner fa-spin':'file-pdf'}}"></i> Kreiraj PDF</button>
                             </div>
-                            <div class="m10">
+                            <div class="m-2">
                                 <a ng-if="pdfTempLink" href="{{pdfTempLink}}" download><i class="fa fa-file-pdf"></i> {{pdfTempLink}}</a>
                             </div>
-                            <div class="row m10">
+                            <div class="row m-2">
                                 <div class="col-sm-4">
                                     <button ng-if="pdfTempLink" href="" class="btn btn-outline-success btn-block" ng-click="save(i)"><i class="fa fa-{{loading_1==true?'spinner fa-spin':'save'}}"></i> Spremi PDF</button>
                                 </div>

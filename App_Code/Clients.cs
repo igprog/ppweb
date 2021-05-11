@@ -62,7 +62,7 @@ public class Clients : WebService {
             DataBase db = new DataBase();
             string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
             db.CreateDataBase(userId, db.clients);
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
+            // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
             try {
                 if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(clientId)) {
                     return new NewClient();
@@ -143,7 +143,7 @@ public class Clients : WebService {
         SaveResponse r = new SaveResponse();
         try {
             db.CreateDataBase(user.userGroupId, db.clients);
-            db.AddColumn(user.userGroupId, db.GetDataBasePath(user.userGroupId, dataBase), db.clients, "note");  //new column in clients tbl.
+            // db.AddColumn(user.userGroupId, db.GetDataBasePath(user.userGroupId, dataBase), db.clients, "note");  //new column in clients tbl.
             string sql = null;
             if (x.clientId == null && Check(user.userGroupId, x) == false) {
                 r.data = null;
@@ -327,7 +327,7 @@ public class Clients : WebService {
         List<NewClient> xx = new List<NewClient>();
         Users U = new Users();
         try {
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
+            // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 string sql = string.Format(@"

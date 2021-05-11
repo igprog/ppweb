@@ -145,8 +145,8 @@ public class ClientsData : System.Web.Services.WebService {
         string sql = null;
         try {
             db.CreateDataBase(userId, db.clientsData);
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.
+            // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
+            // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.
             Global G = new Global();
             x.clientNote = G.RemoveSingleQuotes(x.clientNote);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
@@ -377,8 +377,8 @@ public class ClientsData : System.Web.Services.WebService {
             NewClientData x = new NewClientData();
             db.CreateDataBase(userId, db.clients);
             db.CreateDataBase(userId, db.clientsData);
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.
+            // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
+            // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.
             string sql = string.Format(@"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId, c.note, cd.bodyFatPerc
                         FROM clientsdata as cd
                         LEFT OUTER JOIN clients as c

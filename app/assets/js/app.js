@@ -1008,7 +1008,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
 
     $scope.loginAs = function (uid) {
-
         if (!functions.isNullOrEmpty(uid)) {
             functions.post(webService, 'Get', { userId: uid }).then(function (d) {
                 if (d.userId !== null) {
@@ -2106,8 +2105,22 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
     initChartDays();
 
+    var displayTypeTitle = $translate.instant('weight') + ' ' + $translate.instant('kg');
     $scope.changeDisplayType = function (type, clientLogsDays) {
+        $scope.displayType = type;
         setClientLogGraphData(type, clientLogsDays);
+    }
+
+    var getDisplayTypeTitle = function (type) {
+        if (type == 0) {
+            return $translate.instant('weight') + ' ' + $translate.instant('kg');
+        } else if (type == 1) {
+            return $translate.instant('waist') + ' ' + $translate.instant('cm');
+        } else if (type == 2) {
+            return  $translate.instant('hip') + ' ' + $translate.instant('cm');
+        } else {
+            return null;
+        }
     }
 
     var getRecommendedWeight = function (h) {
@@ -2195,7 +2208,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
 
         $scope.clientLogGraphData = charts.createGraph(
-            [$translate.instant("measured value"), $translate.instant("lower limit"), $translate.instant("upper limit"), $translate.instant("goal")],
+            [getDisplayTypeTitle($scope.displayType), $translate.instant("lower limit"), $translate.instant("upper limit"), $translate.instant("goal")],
             [
                 clientLog,
                 goalFrom,
@@ -2212,7 +2225,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 }
             },
             [
-                { label: $translate.instant("measured value"), borderWidth: 1, type: 'bar', fill: true },
+                { label: getDisplayTypeTitle($scope.displayType), borderWidth: 1, type: 'bar', fill: true },
                 { label: $translate.instant("lower limit"), borderWidth: 2, type: 'line', fill: false },
                 { label: $translate.instant("upper limit"), borderWidth: 2, type: 'line', fill: false },
                 { label: $translate.instant("goal") + ' (2 ' + $translate.instant("kg") + '/' + $translate.instant("mo") + ')', borderWidth: 3, type: 'line', fill: false, strokeColor: "#33ff33", fillColor: "#43ff33" }

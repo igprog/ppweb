@@ -9,13 +9,17 @@
         </md-toolbar>
         <md-dialog-content>
             <div class="md-dialog-content p-4">
+                <div class="pull-right">
+                    <button class="btn btn-outline-primary" ng-click="confirm(d.data)"><i class="fa fa-save"></i> {{'save' | translate}}</button>
+                </div>
                 <div>
                     <img src="/app/assets/img/caliper.png" />
                     <em class="text-primary">{{'body fat measurement using caliper' | translate}}</em>
                 </div>
+                <hr />
                 <div class="row">
-                    <div class="col-lg-5 pt-4 pb-5">
-                        <div class="mt-4 pt-4">
+                    <div class="col-lg-5 pt-4 pb-2">
+                        <div class="mt-1 pt-1">
                             <md-input-container class="md-block" flex style="margin-top:0px">
                                 <label>{{'method' | translate}}</label>
                                 <md-select ng-model="method">
@@ -58,8 +62,8 @@
                         <ng-include src="svg"></ng-include>
                     </div>
                 </div>
-                <div class="text-right">
-                    <hr />
+                <hr class="m-1"/>
+                <div class="pull-right">
                     <button class="btn btn-outline-primary" ng-click="confirm(d.data)"><i class="fa fa-save"></i> {{'save' | translate}}</button>
                 </div>
             </div>
