@@ -1587,7 +1587,11 @@ public class PrintPdf : WebService {
                 doc.Add(Chunk.NEWLINE);
 
                 if (!string.IsNullOrEmpty(imageData)) {
-                    doc.Add(AppendChart(userId, imageData));
+                    PdfPTable tblChart = new PdfPTable(1);
+                    tblChart.WidthPercentage = 100f;
+                    tblChart.DefaultCell.Border = 0;
+                    tblChart.AddCell(AppendChart(userId, imageData));
+                    doc.Add(tblChart);
                 }
             }
 
