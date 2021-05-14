@@ -93,7 +93,7 @@ public class Log : WebService {
             Global G = new Global();
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + usersDataBase))) {
                 connection.Open();
-                string sql = @"SELECT l.userId, l.lastLogin, l.loginCount, u.firstName, u.lastName
+                string sql = @"SELECT l.userId, l.lastLogin, l.loginCount, u.firstName, u.lastName, u.companyName
                             FROM loginlog l
                             LEFT JOIN users u
                             ON u.userId = l.userId
@@ -108,6 +108,7 @@ public class Log : WebService {
                             x.user = new Users.NewUser();
                             x.user.firstName = reader.GetValue(3) == DBNull.Value ? null : reader.GetString(3);
                             x.user.lastName = reader.GetValue(4) == DBNull.Value ? null : reader.GetString(4);
+                            x.user.companyName = reader.GetValue(5) == DBNull.Value ? null : reader.GetString(5);
                             xx.Add(x);
                         }
                     }

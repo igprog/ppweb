@@ -467,11 +467,15 @@
                                         <table class="table table-sm">
                                             <tr>
                                                 <th>Korisnik</th>
+                                                <th>Tvrtka</th>
                                                 <th>Zadnja prijava</th>
                                                 <th class="text-center">Upuno prijava</th>
                                             </tr>
                                             <tr ng-repeat="x in loginLog" class="table-borderless">
-                                                <td>{{x.user.firstName}} {{x.user.lastName}}</td>
+                                                <td>
+                                                    <div>{{x.user.firstName}} {{x.user.lastName}}</div>
+                                                </td>
+                                                <td><em ng-if="x.user.companyName" class="small text-muted">{{x.user.companyName}}</em></td>
                                                 <td>{{x.lastLogin}}</td>
                                                 <td class="text-center"><span class="badge badge-success">{{x.loginCount}}</span></td>
                                             </tr>
