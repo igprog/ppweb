@@ -237,12 +237,57 @@
     <div ng-if="clientData.clientId" class="container" ng-cloak>
         <div>
             <div class="text-right">
-                <a ng-if="pdfLink1==null" href="" ng-click="printClientLogPdf()" class="btn btn-outline-primary text-capitalize" ng-disabled="creatingPdf"><span><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf-o'}}"></i> {{'create pdf' | translate}}</span></a>
+                <a href="" title="{{'print settings' | translate}}" class="mr-3" ng-click="toggleSettings(showSettings)">{{'print settings' | translate}} <i class="fa fa-{{showSettings?'sort-down':'caret-right'}}"></i></a>
+                <button ng-if="pdfLink1==null" ng-click="printClientLogPdf(settings)" class="btn btn-outline-primary text-capitalize" ng-disabled="creatingPdf"><span><i class="fa fa-{{creatingPdf==true?'spinner fa-spin':'file-pdf-o'}}"></i> {{'create pdf' | translate}}</span></button>
                 <a ng-if="pdfLink1!=null" href="{{pdfLink1}}" class="btn btn-danger text-capitalize" download ng-click="hidePdfLink1()"><i class="fa fa-file-pdf-o"></i> {{'take pdf' | translate}}</a>
+            </div>
+            <div ng-if="showSettings" class="row my-2 justify-content-end">
+                <div class="col-xl-7 pt-3 px-4 shadow">
+                    <fieldset class="fieldset-border m-2">
+                        <legend class="fieldset-border">{{'show in print' | translate}}</legend>
+                        <div layout-gt-sm="row">
+                            <md-input-container class="md-block mx-2">
+                                <md-checkbox ng-model="settings.showTable" class="md-primary text-capitalize">
+                                    {{'table' | translate}}
+                                </md-checkbox>
+                            </md-input-container>
+                            <md-input-container class="md-block mx-2">
+                                <md-checkbox ng-model="settings.showChart" class="md-primary text-capitalize">
+                                    {{'chart' | translate}}
+                                </md-checkbox>
+                            </md-input-container>
+                        </div>
+                        <div ng-if="settings.showTable">
+                            <hr class="m-0" />
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block mx-2">
+                                    <md-checkbox ng-model="settings.showHeight" class="md-primary text-capitalize">
+                                        {{'height' | translate}}
+                                    </md-checkbox>
+                                </md-input-container>
+                                <md-input-container class="md-block mx-2">
+                                    <md-checkbox ng-model="settings.showWeight" class="md-primary text-capitalize">
+                                        {{'weight' | translate}}
+                                    </md-checkbox>
+                                </md-input-container>
+                                <md-input-container class="md-block mx-2">
+                                    <md-checkbox ng-model="settings.showWaist" class="md-primary text-capitalize">
+                                        {{'waist' | translate}}
+                                    </md-checkbox>
+                                </md-input-container>
+                                <md-input-container class="md-block mx-2">
+                                    <md-checkbox ng-model="settings.showHip" class="md-primary text-capitalize">
+                                        {{'hip' | translate}}
+                                    </md-checkbox>
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
             </div>
             <div class="row">
                 <div class="col-lg-4 pt-2">
-                    <span>{{'show' | translate}}</span>
+                    <span class="text-capitalize">{{'show' | translate}}</span>
                     <select ng-model="displayType" class="form-control" ng-change="changeDisplayType(displayType, clientLogsDays)">
                         <option value=0 ng-selected="displayType===0?true:false">{{'weight' | translate}} ({{'kg' | translate}})</option>
                         <option value=1 ng-selected="displayType===1?true:false">{{'waist' | translate}} ({{'cm' | translate}})</option>
@@ -250,7 +295,7 @@
                     </select>
                 </div>
                 <div class="col-lg-4 pt-2">
-                    <span>{{'period' | translate}}</span>
+                    <span class="text-capitalize">{{'period' | translate}}</span>
                     <select ng-model="clientLogsDays" class="form-control" ng-options="x.title | translate for x in chartDays" ng-change="setClientLogGraphData(0, clientLogsDays)"></select>
                 </div>
                 <div class="col-lg-2 pt-2">

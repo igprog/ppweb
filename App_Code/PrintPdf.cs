@@ -91,6 +91,15 @@ public class PrintPdf : WebService {
         public string headerInfo;
     }
 
+    public class ClientLogSettings {
+        public bool showTable;
+        public bool showChart;
+        public bool showHeight;
+        public bool showWeight;
+        public bool showWaist;
+        public bool showHip;
+    }
+
     #region WebMethods
     [WebMethod]
     public string InitMenuSettings() {
@@ -205,6 +214,18 @@ public class PrintPdf : WebService {
         x.date = null;
         x.author = null;
         x.headerInfo = null;
+        return JsonConvert.SerializeObject(x, Formatting.None);
+    }
+
+    [WebMethod]
+    public string InitClientLogSettings() {
+        ClientLogSettings x = new ClientLogSettings();
+        x.showTable = true;
+        x.showChart = true;
+        x.showHeight = false;
+        x.showWeight = true;
+        x.showWaist = true;
+        x.showHip = true;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -1536,7 +1557,7 @@ public class PrintPdf : WebService {
     }
 
     [WebMethod]
-    public string ClientLogPdf(string userId, Clients.NewClient client, ClientsData.NewClientData clientData, List<ClientsData.NewClientData> clientLog, string lang, string imageData, string headerInfo) {
+    public string ClientLogPdf(string userId, Clients.NewClient client, ClientsData.NewClientData clientData, List<ClientsData.NewClientData> clientLog, string lang, string imageData, string headerInfo, ClientLogSettings settings) {
         try {
             var doc = new Document();
             string path = Server.MapPath(string.Format("~/upload/users/{0}/pdf/", userId));
@@ -1551,42 +1572,74 @@ public class PrintPdf : WebService {
             AppendHeader(doc, userId, headerInfo);
 
             doc.Add(new Paragraph(string.Format("{0} {1}" , client.firstName, client.lastName), GetFont(12)));
-            doc.Add(new Paragraph(string.Format("{0}: {1}", t.Tran("gender", lang), t.Tran(clientData.gender.title, lang)), GetFont(9)));
-            doc.Add(new Paragraph(string.Format("{0}: {1}", t.Tran("age", lang), clientData.age), GetFont(9)));
+            doc.Add(new Paragraph(string.Format("{0} / {1} {2}", t.Tran(clientData.gender.title, lang), clientData.age, t.Tran("g", lang)), GetFont(9)));
+            doc.Add(new Paragraph(string.Format("{0}: {1} {2}", t.Tran("height", lang), clientData.height, t.Tran("cm", lang)), GetFont(9)));
             doc.Add(new Chunk(line));
 
             if (clientLog.Count > 0) {
                 doc.Add(new Paragraph(t.Tran("tracking of anthropometric measures", lang), GetFont()));
 
-                PdfPTable table = new PdfPTable(5);
-                table.AddCell(new PdfPCell(new Phrase(t.Tran("date", lang), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
-                table.AddCell(new PdfPCell(new Phrase(t.Tran("height", lang) + " (cm)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
-                table.AddCell(new PdfPCell(new Phrase(t.Tran("weight", lang) + " (kg)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
-                table.AddCell(new PdfPCell(new Phrase(t.Tran("waist", lang) + " (cm)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
-                table.AddCell(new PdfPCell(new Phrase(t.Tran("hip", lang) + " (cm)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
+                if (settings.showTable) {
+                    int columnCount = 1;
+                    if (settings.showHeight) {
+                        columnCount ++;
+                    }
+                    if (settings.showWeight) {
+                        columnCount++;
+                    }
+                    if (settings.showHip) {
+                        columnCount++;
+                    }
+                    if (settings.showWaist) {
+                        columnCount++;
+                    }
 
-                foreach (ClientsData.NewClientData cl in clientLog) {
-                    PdfPCell cell1 = new PdfPCell(new Phrase(Convert.ToDateTime(cl.date).ToString("dd.MM.yyyy"), courier));
-                    cell1.Border = 0;
-                    table.AddCell(cell1);
-                    PdfPCell cell2 = new PdfPCell(new Phrase(cl.height.ToString(), courier));
-                    cell2.Border = 0;
-                    table.AddCell(cell2);
-                    PdfPCell cell3 = new PdfPCell(new Phrase(cl.weight.ToString(), courier));
-                    cell3.Border = 0;
-                    table.AddCell(cell3);
-                    PdfPCell cell4 = new PdfPCell(new Phrase(cl.waist.ToString(), courier));
-                    cell4.Border = 0;
-                    table.AddCell(cell4);
-                    PdfPCell cell5 = new PdfPCell(new Phrase(cl.hip.ToString(), courier));
-                    cell5.Border = 0;
-                    table.AddCell(cell5);
+                    PdfPTable table = new PdfPTable(columnCount);
+                    table.AddCell(new PdfPCell(new Phrase(t.Tran("date", lang), GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
+                    if (settings.showHeight) {
+                        table.AddCell(new PdfPCell(new Phrase(t.Tran("height", lang) + " (cm)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
+                    }
+                    if (settings.showWeight) {
+                        table.AddCell(new PdfPCell(new Phrase(t.Tran("weight", lang) + " (kg)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
+                    }
+                    if (settings.showWaist) {
+                        table.AddCell(new PdfPCell(new Phrase(t.Tran("waist", lang) + " (cm)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
+                    }
+                    if (settings.showHip) {
+                        table.AddCell(new PdfPCell(new Phrase(t.Tran("hip", lang) + " (cm)", GetFont())) { Border = PdfPCell.BOTTOM_BORDER, Padding = 2, MinimumHeight = 30, PaddingTop = 15 });
+                    }
+
+                    foreach (ClientsData.NewClientData cl in clientLog) {
+                        PdfPCell cell1 = new PdfPCell(new Phrase(Convert.ToDateTime(cl.date).ToString("dd.MM.yyyy"), courier));
+                        cell1.Border = 0;
+                        table.AddCell(cell1);
+                        if (settings.showHeight) {
+                            PdfPCell cell2 = new PdfPCell(new Phrase(cl.height.ToString(), courier));
+                            cell2.Border = 0;
+                            table.AddCell(cell2);
+                        }
+                        if (settings.showWeight) {
+                            PdfPCell cell3 = new PdfPCell(new Phrase(cl.weight.ToString(), GetFont()));
+                            cell3.Border = 0;
+                            table.AddCell(cell3);
+                        }
+                        if (settings.showWaist) {
+                            PdfPCell cell4 = new PdfPCell(new Phrase(cl.waist.ToString(), courier));
+                            cell4.Border = 0;
+                            table.AddCell(cell4);
+                        }
+                        if (settings.showHip) {
+                            PdfPCell cell5 = new PdfPCell(new Phrase(cl.hip.ToString(), courier));
+                            cell5.Border = 0;
+                            table.AddCell(cell5);
+                        }
+                    }
+                    doc.Add(table);
+                    doc.Add(new Chunk(line));
+                    doc.Add(Chunk.NEWLINE);
                 }
-                doc.Add(table);
-                doc.Add(new Chunk(line));
-                doc.Add(Chunk.NEWLINE);
 
-                if (!string.IsNullOrEmpty(imageData)) {
+                if (!string.IsNullOrEmpty(imageData) && settings.showChart) {
                     PdfPTable tblChart = new PdfPTable(1);
                     tblChart.WidthPercentage = 100f;
                     tblChart.DefaultCell.Border = 0;

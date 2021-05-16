@@ -2264,8 +2264,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.pdfLink = null;
     $scope.creatingPdf = false;
     $scope.printClientPdf = function () {
-        if ($scope.creatingPdf == true) {
-            return false;
+        if ($scope.creatingPdf) {
+            return;
         }
         $scope.creatingPdf = true;
         functions.post('PrintPdf', 'ClientPdf', { userId: $sessionStorage.usergroupid, client: $rootScope.client, clientData: $rootScope.clientData, lang: $rootScope.config.language, headerInfo: $rootScope.user.headerInfo }).then(function (d) {
@@ -2279,18 +2279,29 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
     }
 
-    $scope.pdfLink1 = null;
+    $scope.showSettings = false;
+    $scope.toggleSettings = function (showSettings) {
+        $scope.showSettings = !showSettings;
+    }
 
-    $scope.printClientLogPdf = function () {
-        if ($scope.creatingPdf == true) {
-            return false;
+    var initClientLogSettings = function () {
+        functions.post('PrintPdf', 'InitClientLogSettings', {}).then(function (d) {
+            $scope.settings = d;
+        });
+    }
+    initClientLogSettings();
+
+    $scope.pdfLink1 = null;
+    $scope.printClientLogPdf = function (settings) {
+        if ($scope.creatingPdf) {
+            return;
         }
         $scope.creatingPdf = true;
         var img = null;
         if (document.getElementById("clientDataChart") != null) {
             img = document.getElementById("clientDataChart").toDataURL("image/png").replace(/^data:image\/(png|jpg);base64,/, "");
         }
-        functions.post('PrintPdf', 'ClientLogPdf', { userId: $sessionStorage.usergroupid, client: $rootScope.client, clientData: $rootScope.clientData, clientLog: $scope.clientLog_, lang: $rootScope.config.language, imageData: img, headerInfo: $rootScope.user.headerInfo }).then(function (d) {
+        functions.post('PrintPdf', 'ClientLogPdf', { userId: $sessionStorage.usergroupid, client: $rootScope.client, clientData: $rootScope.clientData, clientLog: $scope.clientLog_, lang: $rootScope.config.language, imageData: img, headerInfo: $rootScope.user.headerInfo, settings: settings }).then(function (d) {
             $scope.creatingPdf = false;
             var fileName = d;
             $scope.pdfLink1 = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
