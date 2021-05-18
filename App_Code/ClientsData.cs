@@ -14,7 +14,7 @@ using Igprog;
 [WebService(Namespace = "http://programprehrane.com/app/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class ClientsData : System.Web.Services.WebService {
+public class ClientsData : WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     string usersDataBase = ConfigurationManager.AppSettings["UsersDataBase"];
 
@@ -60,6 +60,7 @@ public class ClientsData : System.Web.Services.WebService {
         public string bmrEquation;
 
         public BodyFat.NewBodyFat bodyFat = new BodyFat.NewBodyFat();
+        public double targetedMass { get; set; }
     }
 
     #region WebMethods
@@ -87,6 +88,7 @@ public class ClientsData : System.Web.Services.WebService {
         x.clientNote = null;
         x.bmrEquation = C.MifflinStJeor;
         x.bodyFat = new BodyFat.NewBodyFat();
+        x.targetedMass = 0;
         return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
@@ -95,6 +97,7 @@ public class ClientsData : System.Web.Services.WebService {
         List<NewClientData> xx = new List<NewClientData>();
         try {
             db.CreateDataBase(userId, db.clientsData);
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass");  //new column in clientsData tbl.
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 string sql = @"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId
@@ -146,15 +149,16 @@ public class ClientsData : System.Web.Services.WebService {
         try {
             db.CreateDataBase(userId, db.clientsData);
             // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
-            // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.
+            // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clientsData tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass");  //new column in clientsData tbl.
             Global G = new Global();
             x.clientNote = G.RemoveSingleQuotes(x.clientNote);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 if (Check(userId, x)) {
-                    sql = string.Format(@"INSERT INTO clientsdata (clientId, height, weight, waist, hip, pal, goal, activities, diet, meals, date, userId, bodyFatPerc)
-                            VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}');
-                            UPDATE clients SET note = '{13}' WHERE clientId = '{0}';"
+                    sql = string.Format(@"INSERT INTO clientsdata (clientId, height, weight, waist, hip, pal, goal, activities, diet, meals, date, userId, bodyFatPerc, targetedMass)
+                            VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}', '{12}', '{13}');
+                            UPDATE clients SET note = '{14}' WHERE clientId = '{0}';"
                             , x.clientId, x.height, x.weight, x.waist, x.hip, x.pal.value, x.goal.code
                             , JsonConvert.SerializeObject(x.activities, Formatting.None)
                             , JsonConvert.SerializeObject(x.diet, Formatting.None)
@@ -162,10 +166,11 @@ public class ClientsData : System.Web.Services.WebService {
                             , x.date
                             , x.userId
                             , x.bodyFat.bodyFatPerc
+                            , x.targetedMass
                             , x.clientNote);
                 } else {
                     sql = string.Format(@"UPDATE clientsdata SET  
-                            height = '{0}', weight = '{1}', waist = '{2}', hip = '{3}', pal = '{4}', goal = '{5}', activities = '{6}', diet = '{7}', meals = '{8}', date = '{9}', bodyFatPerc = '{10}' 
+                            height = '{0}', weight = '{1}', waist = '{2}', hip = '{3}', pal = '{4}', goal = '{5}', activities = '{6}', diet = '{7}', meals = '{8}', date = '{9}', bodyFatPerc = '{10}', targetedMass = '{16}' 
                             WHERE clientId = '{11}' AND ((strftime('%d', date) = '{12}' AND strftime('%m', date) = '{13}' AND strftime('%Y', date) = '{14}') OR date = '{9}');
                             UPDATE clients SET note = '{15}' WHERE clientId = '{11}';"
                             , x.height, x.weight, x.waist, x.hip, x.pal.value, x.goal.code
@@ -178,7 +183,8 @@ public class ClientsData : System.Web.Services.WebService {
                             , Convert.ToDateTime(x.date).Day
                             , (Convert.ToDateTime(x.date).Month < 10 ? string.Format("0{0}", Convert.ToDateTime(x.date).Month) : Convert.ToDateTime(x.date).Month.ToString())
                             , Convert.ToDateTime(x.date).Year
-                            , x.clientNote);
+                            , x.clientNote
+                            , x.targetedMass);
                 }
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteTransaction transaction = connection.BeginTransaction()) {
@@ -218,9 +224,10 @@ public class ClientsData : System.Web.Services.WebService {
         try {
             List<NewClientData> xx = new List<NewClientData>();
             db.CreateDataBase(userId, db.clientsData);
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass");  //new column in clientsData tbl.
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
-                string sql = string.Format(@"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId
+                string sql = string.Format(@"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId, cd.targetedMass
                         FROM clientsdata as cd
                         LEFT OUTER JOIN clients as c
                         ON cd.clientId = c.clientId
@@ -248,6 +255,7 @@ public class ClientsData : System.Web.Services.WebService {
                             x.meals = JsonConvert.DeserializeObject<List<Meals.NewMeal>>(reader.GetString(12));
                             x.date = reader.GetValue(13) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(13);
                             x.userId = reader.GetValue(14) == DBNull.Value ? "" : reader.GetString(14);
+                            x.targetedMass = reader.GetValue(15) == DBNull.Value ? 0.0 : Convert.ToDouble(reader.GetString(15));
                             xx.Add(x);
                         }
                     } 
@@ -379,7 +387,8 @@ public class ClientsData : System.Web.Services.WebService {
             db.CreateDataBase(userId, db.clientsData);
             // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
             // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.
-            string sql = string.Format(@"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId, c.note, cd.bodyFatPerc
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass");  //new column in clientsData tbl.
+            string sql = string.Format(@"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId, c.note, cd.bodyFatPerc, cd.targetedMass
                         FROM clientsdata as cd
                         LEFT OUTER JOIN clients as c
                         ON cd.clientId = c.clientId
@@ -410,6 +419,7 @@ public class ClientsData : System.Web.Services.WebService {
                         x.clientNote = reader.GetValue(15) == DBNull.Value ? "" : reader.GetString(15);
                         x.bodyFat = new BodyFat.NewBodyFat();
                         x.bodyFat.bodyFatPerc = reader.GetValue(16) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(16));
+                        x.targetedMass = reader.GetValue(17) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(17));
                         DetailEnergyExpenditure.DailyActivities da = new DetailEnergyExpenditure.DailyActivities();
                         x.dailyActivities = da.getDailyActivities(userId, x.clientId);
                         x.myMeals = GetMyMeals(userId, x.clientId);

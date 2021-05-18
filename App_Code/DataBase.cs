@@ -104,7 +104,8 @@ namespace Igprog {
                 meals NVARCHAR(200),
                 date VARCHAR(50),
                 userId VARCHAR(50),
-                bodyFatPerc VARCHAR(50))";
+                bodyFatPerc VARCHAR(50),
+                targetedMass VARCHAR(50))";
             CreateTable(path, sql);
         }
 

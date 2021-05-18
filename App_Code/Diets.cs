@@ -88,43 +88,47 @@ public class Diets : System.Web.Services.WebService {
                     } 
                 }
                 connection.Close();
-            }
-                
-            string json = JsonConvert.SerializeObject(xx, Formatting.None);
-            return json;
-        } catch (Exception e) { return ("Error: " + e); }
+            }   
+            return JsonConvert.SerializeObject(xx, Formatting.None);
+        } catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
-     [WebMethod]
+    [WebMethod]
     public string Get(string id) {
         try {
-            SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase));
-            connection.Open();
-            string sql = @"SELECT id, diet, dietDescription, carbohydratesMin, carbohydratesMax, proteinsMin, proteinsMax, fatsMin, fatsMax, saturatedFatsMin, saturatedFatsMax, note
+            NewDiet x = new NewDiet();
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
+                connection.Open();
+                string sql = @"SELECT id, diet, dietDescription, carbohydratesMin, carbohydratesMax, proteinsMin, proteinsMax, fatsMin, fatsMax, saturatedFatsMin, saturatedFatsMax, note
                         FROM diets
                         WHERE id = @id";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            command.Parameters.Add(new SQLiteParameter("id", id));
-            SQLiteDataReader reader = command.ExecuteReader();
-            NewDiet x = new NewDiet();
-            while (reader.Read()) {
-                x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-                x.diet = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-                x.dietDescription = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                x.carbohydratesMin = reader.GetValue(3) == DBNull.Value ? 0 : reader.GetInt32(3);
-                x.carbohydratesMax = reader.GetValue(4) == DBNull.Value ? 0 : reader.GetInt32(4);
-                x.proteinsMin = reader.GetValue(5) == DBNull.Value ? 0 : reader.GetInt32(5);
-                x.proteinsMax = reader.GetValue(6) == DBNull.Value ? 0 : reader.GetInt32(6);
-                x.fatsMin = reader.GetValue(7) == DBNull.Value ? 0 : reader.GetInt32(7);
-                x.fatsMax = reader.GetValue(8) == DBNull.Value ? 0 : reader.GetInt32(8);
-                x.saturatedFatsMin = reader.GetValue(9) == DBNull.Value ? 0 : reader.GetInt32(9);
-                x.saturatedFatsMax = reader.GetValue(10) == DBNull.Value ? 0 : reader.GetInt32(10);
-                x.note = reader.GetValue(11) == DBNull.Value ? "" : reader.GetString(11);
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.Parameters.Add(new SQLiteParameter("id", id));
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
+                            x.diet = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
+                            x.dietDescription = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
+                            x.carbohydratesMin = reader.GetValue(3) == DBNull.Value ? 0 : reader.GetInt32(3);
+                            x.carbohydratesMax = reader.GetValue(4) == DBNull.Value ? 0 : reader.GetInt32(4);
+                            x.proteinsMin = reader.GetValue(5) == DBNull.Value ? 0 : reader.GetInt32(5);
+                            x.proteinsMax = reader.GetValue(6) == DBNull.Value ? 0 : reader.GetInt32(6);
+                            x.fatsMin = reader.GetValue(7) == DBNull.Value ? 0 : reader.GetInt32(7);
+                            x.fatsMax = reader.GetValue(8) == DBNull.Value ? 0 : reader.GetInt32(8);
+                            x.saturatedFatsMin = reader.GetValue(9) == DBNull.Value ? 0 : reader.GetInt32(9);
+                            x.saturatedFatsMax = reader.GetValue(10) == DBNull.Value ? 0 : reader.GetInt32(10);
+                            x.note = reader.GetValue(11) == DBNull.Value ? "" : reader.GetString(11);
+                        }
+                    } 
+                    connection.Close();
+                }
             }
-            connection.Close();
-            string json = JsonConvert.SerializeObject(x, Formatting.None);
-            return json;
-        } catch (Exception e) { return ("Error: " + e); }
+            return JsonConvert.SerializeObject(x, Formatting.None);
+        } catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
     #endregion
 

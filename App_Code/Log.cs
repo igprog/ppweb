@@ -97,7 +97,7 @@ public class Log : WebService {
                             FROM loginlog l
                             LEFT JOIN users u
                             ON u.userId = l.userId
-                            ORDER BY l.rowid DESC LIMIT 10";
+                            ORDER BY l.rowid DESC LIMIT 20";
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {

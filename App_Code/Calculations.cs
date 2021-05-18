@@ -37,6 +37,7 @@ public class Calculations : System.Web.Services.WebService {
         public List<BmrEquation> bmrEquations = new List<BmrEquation>();
 
         public BodyFat.NewBodyFat bodyFat;
+
     }
 
     public class ValueTitle {
@@ -489,7 +490,9 @@ public class Calculations : System.Web.Services.WebService {
     public string GetMyCalculation(string userId, string clientId) {
         try {
             return JsonConvert.SerializeObject(GetJsonFile(userId, clientId), Formatting.None);
-        } catch (Exception e) { return ("Error: " + e); }
+        } catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     private NewCalculation GetJsonFile(string userId, string clientId) {

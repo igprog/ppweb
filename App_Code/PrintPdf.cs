@@ -1658,7 +1658,7 @@ public class PrintPdf : WebService {
     }
 
     [WebMethod]
-    public string CalculationPdf(string userId, Clients.NewClient client, ClientsData.NewClientData clientData, Calculations.NewCalculation calculation, Calculations.NewCalculation myCalculation, string goal, string lang, string headerInfo) {
+    public string CalculationPdf(string userId, Clients.NewClient client, ClientsData.NewClientData clientData, Calculations.NewCalculation calculation, Calculations.NewCalculation myCalculation, string lang, string headerInfo) {
         try {
             var doc = new Document();
             string path = Server.MapPath(string.Format("~/upload/users/{0}/pdf/", userId));
@@ -1739,7 +1739,7 @@ public class PrintPdf : WebService {
 {2}"
             , t.Tran("goal", lang).ToUpper()
             , t.Tran(calculation.goal.title, lang)
-            , !string.IsNullOrEmpty(goal) ? string.Format("{0}: {1} {2}", t.Tran("targeted mass", lang), goal, t.Tran("kg", lang)) : "");
+            , clientData.targetedMass > 0 ? string.Format("{0}: {1} {2}", t.Tran("targeted mass", lang), clientData.targetedMass, t.Tran("kg", lang)) : "");
             doc.Add(new Paragraph(g, GetFont()));
 
             string r = string.Format(@"

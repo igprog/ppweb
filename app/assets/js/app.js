@@ -1981,15 +1981,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             method: "POST",
             data: { palValue: x }
         })
-      .then(function (response) {
-          $rootScope.pal = JSON.parse(response.data.d)
-          $rootScope.pal.value = x;
-          $rootScope.clientData.pal = $rootScope.pal;
-          $scope.toggleTpl('inputData');
-      },
-      function (response) {
-          alert(response.data.d)
-      });
+        .then(function (response) {
+            $rootScope.pal = JSON.parse(response.data.d)
+            $rootScope.pal.value = x;
+            $rootScope.clientData.pal = $rootScope.pal;
+            $scope.toggleTpl('inputData');
+        },
+        function (response) {
+            alert(response.data.d)
+        });
     }
 
     $scope.getClientLog = function (x) {
@@ -2780,16 +2780,20 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     if ($rootScope.goalWeightValue_ === undefined) { $rootScope.goalWeightValue_ = 0; }
-    $scope.changeGoalWeightValue = function (x) {
-        $rootScope.goalWeightValue_ = angular.copy(x);
-    }
+    //$scope.changeGoalWeightValue = function (x) {
+    //    //$rootScope.goalWeightValue_ = angular.copy(x);
+    //    $rootScope.clientData.targetedMass = angular.copy(x);
+    //}
+    //$scope.changeGoalWeightValue = function (x) {
+    //    $rootScope.goalWeightValue_ = angular.copy(x);
+    //}
 
     $scope.getGoal = function (goal) {
         var x = goal.code;
         if (goal.isDisabled) { return false; }
         var energy = 0;
         var activity = 0;
-        $rootScope.goalWeightValue = 0;
+        var goalWeightValue = 0;
         switch (x) {
             case "G1":  // redukcija tjelesne mase
                 if ($rootScope.appCalculation.goal.code == "G1") {
@@ -2805,9 +2809,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
                 }
                 if ($rootScope.appCalculation.goal.code == "G2") {
-                    $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
+                    goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
                 } else {
-                    $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.calculation.recommendedWeight.max));
+                    goalWeightValue = Math.round(angular.copy($rootScope.calculation.recommendedWeight.max));
                 }
                 break;
             case "G2":  // zadrzavanje postojece tjelesne mase
@@ -2823,7 +2827,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     energy = $rootScope.appCalculation.recommendedEnergyIntake - 300;
                     activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
                 }
-                $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
+                goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
                 break;
             case "G3":  // povecanje tjelesne mase
                 if ($rootScope.appCalculation.goal.code == "G1") {
@@ -2843,9 +2847,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     activity = $rootScope.appCalculation.recommendedEnergyExpenditure + 200;
                 }
                 if ($rootScope.appCalculation.goal.code == "G2") {
-                    $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.calculation.recommendedWeight.max));
+                    goalWeightValue = Math.round(angular.copy($rootScope.calculation.recommendedWeight.max));
                 } else {
-                    $rootScope.goalWeightValue = $rootScope.clientData.weight < $rootScope.calculation.recommendedWeight.min ? Math.round(angular.copy($rootScope.calculation.recommendedWeight.min)) : Math.round(angular.copy(parseInt($rootScope.clientData.weight) + 10));  //TODO
+                    goalWeightValue = $rootScope.clientData.weight < $rootScope.calculation.recommendedWeight.min ? Math.round(angular.copy($rootScope.calculation.recommendedWeight.min)) : Math.round(angular.copy(parseInt($rootScope.clientData.weight) + 10));  //TODO
                 }
                 break;
             case "G4":  // povecanje misicne mase
@@ -2862,9 +2866,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                     activity = $rootScope.appCalculation.recommendedEnergyExpenditure + 100;
                 }
                 if ($rootScope.appCalculation.goal.code == "G2") {
-                    $rootScope.goalWeightValue = $rootScope.clientData.weight < $rootScope.calculation.recommendedWeight.min ? Math.round(angular.copy($rootScope.calculation.recommendedWeight.min)) : Math.round(angular.copy(parseInt($rootScope.clientData.weight) + 10));  //TODO
+                    goalWeightValue = $rootScope.clientData.weight < $rootScope.calculation.recommendedWeight.min ? Math.round(angular.copy($rootScope.calculation.recommendedWeight.min)) : Math.round(angular.copy(parseInt($rootScope.clientData.weight) + 10));  //TODO
                 } else {
-                    $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
+                    goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
                 }
                 break;
             default:
@@ -2872,7 +2876,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 activity = 0;
                 break;
         }
-        $scope.changeGoalWeightValue($rootScope.goalWeightValue);
+        // $scope.changeGoalWeightValue(goalWeightValue);
 
         angular.forEach($rootScope.goals, function (value, key) {
             if (value.code == x) {
@@ -2884,7 +2888,114 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
         $rootScope.calculation.recommendedEnergyIntake = Math.round(energy);
         $rootScope.calculation.recommendedEnergyExpenditure = Math.round(activity);
+
+        // $rootScope.calculation.targetedMass = $rootScope.clientData.targetedMass > 0 ? $rootScope.clientData.targetedMass : Math.round(goalWeightValue);
+        if ($rootScope.clientData.targetedMass == 0) {
+            $rootScope.clientData.targetedMass = Math.round(goalWeightValue);
+        }
     }
+
+    //$scope.getGoal = function (goal) {
+    //    var x = goal.code;
+    //    if (goal.isDisabled) { return false; }
+    //    var energy = 0;
+    //    var activity = 0;
+    //    $rootScope.goalWeightValue = 0;
+    //    switch (x) {
+    //        case "G1":  // redukcija tjelesne mase
+    //            if ($rootScope.appCalculation.goal.code == "G1") {
+    //                energy = $rootScope.appCalculation.recommendedEnergyIntake;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G2") {
+    //                energy = $rootScope.appCalculation.tee - 300;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G3") {
+    //                energy = $rootScope.appCalculation.recommendedEnergyIntake + 300;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G2") {
+    //                $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
+    //            } else {
+    //                $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.calculation.recommendedWeight.max));
+    //            }
+    //            break;
+    //        case "G2":  // zadrzavanje postojece tjelesne mase
+    //            if ($rootScope.appCalculation.goal.code == "G1") {
+    //                energy = $rootScope.appCalculation.tee + $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G2") {
+    //                energy = $rootScope.appCalculation.recommendedEnergyIntake;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G3") {
+    //                energy = $rootScope.appCalculation.recommendedEnergyIntake - 300;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //            }
+    //            $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
+    //            break;
+    //        case "G3":  // povecanje tjelesne mase
+    //            if ($rootScope.appCalculation.goal.code == "G1") {
+    //                energy = $rootScope.appCalculation.recommendedEnergyIntake;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G2") {
+    //                energy = $rootScope.appCalculation.recommendedEnergyIntake + 300 + $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G3") {
+    //                energy = $rootScope.appCalculation.recommendedEnergyIntake;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G4") {
+    //                energy = $rootScope.appCalculation.recommendedEnergyIntake + 500;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure + 200;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G2") {
+    //                $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.calculation.recommendedWeight.max));
+    //            } else {
+    //                $rootScope.goalWeightValue = $rootScope.clientData.weight < $rootScope.calculation.recommendedWeight.min ? Math.round(angular.copy($rootScope.calculation.recommendedWeight.min)) : Math.round(angular.copy(parseInt($rootScope.clientData.weight) + 10));  //TODO
+    //            }
+    //            break;
+    //        case "G4":  // povecanje misicne mase
+    //            if ($rootScope.appCalculation.goal.code == "G1") {
+    //                energy = $rootScope.appCalculation.tee + $rootScope.appCalculation.recommendedEnergyExpenditure;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure + 200;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G2") {
+    //                energy = $rootScope.appCalculation.tee + 500;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure + 200;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G3") {   //TODO
+    //                energy = $rootScope.appCalculation.recommendedEnergyIntake + 400;
+    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure + 100;
+    //            }
+    //            if ($rootScope.appCalculation.goal.code == "G2") {
+    //                $rootScope.goalWeightValue = $rootScope.clientData.weight < $rootScope.calculation.recommendedWeight.min ? Math.round(angular.copy($rootScope.calculation.recommendedWeight.min)) : Math.round(angular.copy(parseInt($rootScope.clientData.weight) + 10));  //TODO
+    //            } else {
+    //                $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
+    //            }
+    //            break;
+    //        default:
+    //            energy = 0;
+    //            activity = 0;
+    //            break;
+    //    }
+    //    $scope.changeGoalWeightValue($rootScope.goalWeightValue);
+
+    //    angular.forEach($rootScope.goals, function (value, key) {
+    //        if (value.code == x) {
+    //            $rootScope.clientData.goal.code = value.code;
+    //            $rootScope.clientData.goal.title = value.title;
+    //            $rootScope.calculation.goal.code = x;
+    //        }
+    //    })
+
+    //    $rootScope.calculation.recommendedEnergyIntake = Math.round(energy);
+    //    $rootScope.calculation.recommendedEnergyExpenditure = Math.round(activity);
+    //}
 
     var isGoalDisabled = function () {
         if ($rootScope.calculation.bmi.value < 18.5) {
@@ -2898,7 +3009,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $scope.creatingPdf = false;
     $scope.printPdf = function () {
         $scope.creatingPdf = true;
-        functions.post('PrintPdf', 'CalculationPdf', { userId: $sessionStorage.usergroupid, client: $rootScope.client, clientData: $rootScope.clientData, calculation: $rootScope.calculation, myCalculation: $rootScope.myCalculation, goal: $rootScope.goalWeightValue_, lang: $rootScope.config.language, headerInfo: $rootScope.user.headerInfo }).then(function (d) {
+        functions.post('PrintPdf', 'CalculationPdf', { userId: $sessionStorage.usergroupid, client: $rootScope.client, clientData: $rootScope.clientData, calculation: $rootScope.calculation, myCalculation: $rootScope.myCalculation, lang: $rootScope.config.language, headerInfo: $rootScope.user.headerInfo }).then(function (d) {
             var fileName = d;
             $scope.creatingPdf = false;
             $scope.pdfLink = $sessionStorage.config.backend + 'upload/users/' + $rootScope.user.userGroupId + '/pdf/' + fileName + '.pdf';
