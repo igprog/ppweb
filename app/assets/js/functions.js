@@ -101,6 +101,7 @@ angular.module('functions', [])
             }).then(function (response) {
                 return JSON.parse(response.data.d);
             }, function (response) {
+                alert(response.data);
                 return response.data.d;
             });
         },

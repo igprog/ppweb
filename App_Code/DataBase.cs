@@ -33,6 +33,7 @@ namespace Igprog {
         public string sharingrecipes = "sharingrecipes";
         public string tickets = "tickets";
         public string loginlog = "loginlog";
+        public string mydiets = "mydiets";
         // TODO: errorlog, activitylog
         // public string errorlog = "errorlog";
         // public string activitylog = "activitylog";
@@ -255,6 +256,24 @@ namespace Igprog {
                 records VARCHAR(200),
                 recordMethod VARCHAR(20),
                 PRIMARY KEY (recordDate, clientId))";
+            CreateTable(path, sql);
+        }
+
+        // TODO mydiets
+        public void MyDiets(string path) {
+            string sql = @"CREATE TABLE IF NOT EXISTS mydiets
+                (id VARCHAR(50) PRIMARY KEY,
+                diet VARCHAR(200),
+                dietDescription VARCHAR(200),
+                carbohydratesMin INTEGER,
+                carbohydratesMax INTEGER,
+                proteinsMin INTEGER,
+                proteinsMax INTEGER,
+                fatsMin INTEGER,
+                fatsMax INTEGER,
+                saturatedFatsMin INTEGER,
+                saturatedFatsMax INTEGER,
+                note NVARCHAR(200))";
             CreateTable(path, sql);
         }
         #endregion
@@ -489,6 +508,9 @@ namespace Igprog {
                     break;
                 case "loginlog":
                     LoginLog(path);
+                    break;
+                case "mydiets":
+                    MyDiets(path);
                     break;
                 default:
                     break;

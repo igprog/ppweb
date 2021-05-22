@@ -15,7 +15,7 @@ using Igprog;
 [WebService(Namespace = "http://programprehrane.com/app/")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [System.Web.Script.Services.ScriptService]
-public class Recipes : System.Web.Services.WebService {
+public class Recipes : WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     string appDataBase = ConfigurationManager.AppSettings["AppDataBase"];
     DataBase db = new DataBase();

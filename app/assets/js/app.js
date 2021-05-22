@@ -263,11 +263,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $rootScope.loadDiets = function () {
         functions.post('Diets', 'Load', { lang: $rootScope.config.language }).then(function (d) {
             $rootScope.diets = d;
-            angular.forEach($rootScope.diets, function (value, key) {
-                $rootScope.diets[key].diet = $translate.instant($rootScope.diets[key].diet).replace('&gt;', '<').replace('&lt;', '>');;
-                $rootScope.diets[key].dietDescription = $translate.instant($rootScope.diets[key].dietDescription).replace('&gt;', '<').replace('&lt;', '>');
-                $rootScope.diets[key].note = $translate.instant($rootScope.diets[key].note).replace('&gt;', '<').replace('&lt;', '>');
-            })
+            //angular.forEach($rootScope.diets, function (value, key) {
+            //    $rootScope.diets[key].diet = $translate.instant($rootScope.diets[key].diet).replace('&gt;', '<').replace('&lt;', '>');;
+            //    $rootScope.diets[key].dietDescription = $translate.instant($rootScope.diets[key].dietDescription).replace('&gt;', '<').replace('&lt;', '>');
+            //    $rootScope.diets[key].note = $translate.instant($rootScope.diets[key].note).replace('&gt;', '<').replace('&lt;', '>');
+            //})
         });
     };
 
@@ -3206,12 +3206,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     $rootScope.selectedNavItem = $state.current.name;
     var webService = 'Diets';
 
-    if ($rootScope.diets == undefined) { $rootScope.loadDiets(); };
+    if ($rootScope.diets === undefined) { $rootScope.loadDiets(); };
 
     var get = function (x) {
-        functions.post(webService, 'Get', { id: x }).then(function (d) {
-            var diet = d;
-            $rootScope.clientData.diet = diet;
+        functions.post(webService, 'Get', { id: x, lang: $rootScope.config.language }).then(function (d) {
+            $rootScope.clientData.diet = d;
         });
     };
 
