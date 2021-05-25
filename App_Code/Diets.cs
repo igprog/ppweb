@@ -33,16 +33,17 @@ public class Diets : WebService {
         public int saturatedFatsMin { get; set; }
         public int saturatedFatsMax { get; set; }
         public string note { get; set; }
+        public bool myDiet { get; set; }
     }
 
     #region WebMethods
-    [WebMethod]
-    public string Init() {
-        return JsonConvert.SerializeObject(InitData(), Formatting.None);
-    }
+    //[WebMethod]
+    //public string Init() {
+    //    return JsonConvert.SerializeObject(InitData(), Formatting.None);
+    //}
 
     [WebMethod]
-    public string Load(string lang) {
+    public string Load(string userId, string lang) {
         try {
             List<NewDiet> xx = new List<NewDiet>();
             string[] translations = T.Translations(lang);
@@ -58,7 +59,15 @@ public class Diets : WebService {
                         }
                     } 
                 }
+            }
+
+            MyDiets MD = new MyDiets();
+            List<NewDiet> myDiets = MD.LoadMyMealsData(userId);
+            if (myDiets.Count > 0) {
+                myDiets.AddRange(xx);
+                xx = myDiets;
             }   
+            
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
@@ -91,22 +100,24 @@ public class Diets : WebService {
     #endregion
 
     #region Methods
-    public NewDiet InitData() {
-        NewDiet x = new NewDiet();
-        x.id = null;
-        x.diet = null;
-        x.dietDescription = null;
-        x.carbohydratesMin = 0;
-        x.carbohydratesMax = 0;
-        x.proteinsMin = 0;
-        x.proteinsMax = 0;
-        x.fatsMin = 0;
-        x.fatsMax = 0;
-        x.saturatedFatsMin = 0;
-        x.saturatedFatsMax = 0;
-        x.note = null;
-        return x;
-    }
+    //public NewDiet InitData() {
+    //    NewDiet x = new NewDiet();
+    //    x.id = null;
+    //    x.diet = null;
+    //    x.dietDescription = null;
+    //    x.carbohydratesMin = 0;
+    //    x.carbohydratesMax = 0;
+    //    x.proteinsMin = 0;
+    //    x.proteinsMax = 0;
+    //    x.fatsMin = 0;
+    //    x.fatsMax = 0;
+    //    x.saturatedFatsMin = 0;
+    //    x.saturatedFatsMax = 0;
+    //    x.note = null;
+    //    x.appDiet = true;
+    //    return x;
+    //}
+
     public NewDiet GetData(SQLiteDataReader reader, string[] translations, string lang) {
         NewDiet x = new NewDiet();
         x.id = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
@@ -121,6 +132,7 @@ public class Diets : WebService {
         x.saturatedFatsMin = reader.GetValue(9) == DBNull.Value ? 0 : reader.GetInt32(9);
         x.saturatedFatsMax = reader.GetValue(10) == DBNull.Value ? 0 : reader.GetInt32(10);
         x.note = reader.GetValue(11) == DBNull.Value ? "" : T.Tran(reader.GetString(11), translations, string.IsNullOrEmpty(lang) ? "hr" : lang);
+        x.myDiet = false;
         return x;
     }
     #endregion Methods

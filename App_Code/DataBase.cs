@@ -207,7 +207,8 @@ namespace Igprog {
                 title NVARCHAR(50),
                 description NVARCHAR(200),
                 energy VARCHAR(50),
-                mealGroup VARCHAR(50))";
+                mealGroup VARCHAR(50),
+                mealData TEXT)";
             CreateTable(path, sql);
         }
 
@@ -540,6 +541,13 @@ namespace Igprog {
         public void AddColumn(string userId, string path, string table, string column) {
             if(!CheckColumn(userId, table, column)) {
                 string sql = string.Format("ALTER TABLE {0} ADD COLUMN {1} NVARCHAR(200)", table, column);
+                CreateTable(path, sql);
+            }
+        }
+
+        public void AddColumn(string userId, string path, string table, string column, string type) {
+            if (!CheckColumn(userId, table, column)) {
+                string sql = string.Format("ALTER TABLE {0} ADD COLUMN {1} {2}", table, column, type);
                 CreateTable(path, sql);
             }
         }

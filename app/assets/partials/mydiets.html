@@ -1,0 +1,71 @@
+﻿<div class="container" ng-cloak>
+    <div class="card">
+        <div class="card-header">
+            <h4>{{'my diet' | translate}}</h4>
+        </div>
+        <div class="card-body p-4">
+            <div>
+                <button class="btn btn-outline-primary" ng-click="new()"><i class="fa fa-file"></i> {{'new diet' | translate}}</button>
+                <button class="btn btn-outline-primary text-capitalize" ng-click="search()"><i class="fa fa-search"></i> {{'search' | translate}}</button>
+                <button ng-disabled="d.diet===null" class="btn btn-outline-primary text-capitalize" ng-click="save(d)"><i class="fa fa-floppy-o"></i> {{'save' | translate}}</button>
+                <button ng-disabled="d.id===null" class="btn btn-outline-danger text-capitalize" ng-click="remove(d)"><i class="fa fa-trash-alt"></i> {{'delete' | translate}}</button>
+            </div>
+            <div class="pt-4">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>{{'title' | translate}}</label>
+                            <input ng-model="d.diet" type="text">
+                        </md-input-container>
+                    </div>
+                    <div class="col-sm-12">
+                        <md-input-container class="md-block" flex-gt-sm>
+                            <label>{{'description' | translate}}...</label>
+                            <textarea ng-model="d.dietDescription" rows="3" class="area"></textarea>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div>
+                    <div layout-gt-sm="row">
+                        <md-input-container>
+                            <label>{{'carbohydrates' | translate}} - min (%)</label>
+                            <input ng-model="d.carbohydratesMin" allow-only-numbers required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>{{'carbohydrates' | translate}} - max (%)</label>
+                            <input ng-model="d.carbohydratesMax" allow-only-numbers required>
+                        </md-input-container>
+                    </div>
+                    <div layout-gt-sm="row">
+                        <md-input-container>
+                            <label>{{'proteins' | translate}} - min (%)</label>
+                            <input ng-model="d.proteinsMin" allow-only-numbers required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>{{'proteins' | translate}} - max (%)</label>
+                            <input ng-model="d.proteinsMax" allow-only-numbers required>
+                        </md-input-container>
+                    </div>
+                    <div layout-gt-sm="row">
+                        <md-input-container>
+                            <label>{{'fats' | translate}} - min (%)</label>
+                            <input ng-model="d.fatsMin" allow-only-numbers required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>{{'fats' | translate}} - max (%)</label>
+                            <input ng-model="d.fatsMax" allow-only-numbers required>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>{{'note' | translate}}...</label>
+                        <textarea ng-model="d.note" rows="3" class="area"></textarea>
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <json-directive data="d" desc="'myDiet'"></json-directive>
+</div>
+

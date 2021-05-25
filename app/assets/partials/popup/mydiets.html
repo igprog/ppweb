@@ -1,0 +1,51 @@
+﻿<md-dialog aria-label="MyRecipe dialog" flex class="fixed-height">
+    <md-toolbar class="bg-main">
+        <div class="md-toolbar-tools">
+            <h2 class="text-capitalize">{{'my diets' | translate}}</h2>
+            <span flex></span>
+            <a href="" class="btn btn-outline-light" ng-click="cancel()" title="{{'close' | translate}}">x</a>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <loading-directive value="loading"></loading-directive>
+            <div ng-show="!loading" class="md-dialog-content">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <form id="searchFrm" class="input-group">
+                            <input ng-model="searchQuery" class="form-control search" type="text" placeholder="{{'search' | translate}}..." autofocus />
+                            <span class="input-group-append">
+                                <button class="btn btn-outline-primary" form="searchFrm" type="submit" ng-click="search(searchQuery)" ><i class="fa fa-search" aria-hidden="true"></i>&#8203;</button>
+                            </span>
+                        </form>
+                    </div>
+                </div>
+                <div class="card border-left-main shadow mt-3" ng-repeat="x in d | limitTo:limit track by $index">
+                    <div class="card-body">
+                        <a href="" ng-click="remove(x)" class="close" title="{{'delete' | translate}}">&times;</a>
+                        <div class="row no-gutters align-items-center py-2 pointer" ng-click="confirm(x.id)">
+                            <div class="col mr-2">
+                                <div class="h5 mb-0 text-gray-800">
+                                    <div class="row">
+                                        <div class="col-lg-2 pb-2">
+                                            <div class="text-primary">
+                                                <i class="fa fa-heartbeat fa-3x"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-10">
+                                            <div class="h5 font-weight-bold text-main mb-1">{{x.diet}}</div>
+                                            <p>{{x.dietDescription.length > 150 ? x.dietDescription.substring(0, 147) + '...' : x.dietDescription}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right mr-4 mt-2">
+                    <button ng-if="limit<d.length+1" class="btn btn-outline-primary" ng-click="loadMore()"><i class="fa fa-arrow-down"></i> {{'show more' | translate}}...</button>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+</md-dialog>

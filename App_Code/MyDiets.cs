@@ -16,6 +16,7 @@ public class MyDiets : WebService {
     string dataBase = ConfigurationManager.AppSettings["UserDataBase"];
     DataBase db = new DataBase();
     Log L = new Log();
+    private static string mainSql = "id, diet, dietDescription, carbohydratesMin, carbohydratesMax, proteinsMin, proteinsMax, fatsMin, fatsMax, saturatedFatsMin, saturatedFatsMax, note";
 
     public MyDiets() { 
     }
@@ -23,20 +24,67 @@ public class MyDiets : WebService {
     private class SaveResponse {
         public Diets.NewDiet data = new Diets.NewDiet();
         public string msg;
+        public string msg1;
         public bool isSuccess;
     }
 
     #region WebMethods
     [WebMethod]
     public string Init() {
-        Diets D = new Diets();
-        return JsonConvert.SerializeObject(D.InitData(), Formatting.None);
+        Diets.NewDiet x = new Diets.NewDiet();
+        x.id = null;
+        x.diet = null;
+        x.dietDescription = null;
+        x.carbohydratesMin = 0;
+        x.carbohydratesMax = 0;
+        x.proteinsMin = 0;
+        x.proteinsMax = 0;
+        x.fatsMin = 0;
+        x.fatsMax = 0;
+        x.saturatedFatsMin = 0;
+        x.saturatedFatsMax = 0;
+        x.note = null;
+        x.myDiet = true;
+        return JsonConvert.SerializeObject(x, Formatting.None);
     }
 
     [WebMethod]
     public string Load(string userId) {
         try {
             return JsonConvert.SerializeObject(LoadMyMealsData(userId), Formatting.None);
+        } catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
+    }
+
+    [WebMethod]
+    public string Search(string userId, string query) {
+        try {
+            string sql = string.Format(@"SELECT {0} FROM mydiets WHERE LOWER(diet) LIKE '%{1}' ORDER BY rowid DESC", mainSql, query.ToLower());
+            List<Diets.NewDiet> xx = LoadData(userId, sql);
+            return JsonConvert.SerializeObject(xx, Formatting.None);
+        } catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
+    }
+
+    [WebMethod]
+    public string Get(string userId, string id) {
+        try {
+            Diets.NewDiet x = new Diets.NewDiet();
+            db.CreateDataBase(userId, db.mydiets);
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                string sql = string.Format(@"SELECT {0} FROM mydiets WHERE id = '{1}'", mainSql, id);
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            x = GetData(reader);
+                        }
+                    }
+                }
+            }
+            return JsonConvert.SerializeObject(x, Formatting.None);
         } catch (Exception e) {
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
@@ -77,6 +125,7 @@ public class MyDiets : WebService {
         } catch (Exception e) {
             r.data = x;
             r.msg = e.Message;
+            r.msg1 = "report a problem";
             r.isSuccess = false;
             L.SendErrorLog(e, x.id, null, "MyDiets", "Save");
             return JsonConvert.SerializeObject(r, Formatting.None);
@@ -108,13 +157,16 @@ public class MyDiets : WebService {
 
     #region Methods
     public List<Diets.NewDiet> LoadMyMealsData(string userId) {
+        string sql = string.Format(@"SELECT {0} FROM mydiets ORDER BY rowid DESC", mainSql);
+        List<Diets.NewDiet> xx = LoadData(userId, sql);
+        return xx;
+    }
+
+    public List<Diets.NewDiet> LoadData(string userId, string sql) {
         List<Diets.NewDiet> xx = new List<Diets.NewDiet>();
         db.CreateDataBase(userId, db.mydiets);
         using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
             connection.Open();
-            string sql = @"SELECT id, diet, dietDescription, carbohydratesMin, carbohydratesMax, proteinsMin, proteinsMax, fatsMin, fatsMax, saturatedFatsMin, saturatedFatsMax, note
-                        FROM mydiets
-                        ORDER BY rowid ASC";
             using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                 using (SQLiteDataReader reader = command.ExecuteReader()) {
                     while (reader.Read()) {
@@ -140,6 +192,7 @@ public class MyDiets : WebService {
         x.saturatedFatsMin = reader.GetValue(9) == DBNull.Value ? 0 : reader.GetInt32(9);
         x.saturatedFatsMax = reader.GetValue(10) == DBNull.Value ? 0 : reader.GetInt32(10);
         x.note = reader.GetValue(11) == DBNull.Value ? "" : reader.GetString(11);
+        x.myDiet = true;
         return x;
     }
 

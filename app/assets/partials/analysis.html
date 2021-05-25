@@ -84,7 +84,7 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset class="fieldset-border">
+        <fieldset ng-if="!clientData.diet.myDiet" class="fieldset-border">
             <legend class="fieldset-border">{{'unit servings' | translate}}</legend>
             <div class="row">
                 <div class="col-lg-6">
@@ -139,6 +139,32 @@
                     </div>
                 </div>
                 <div ng-if="showCharts" class="col-lg-6">
+                    <canvas id="servChart" class="chart chart-bar"
+                            chart-data="servGraphData.data" chart-labels="servGraphData.labels" chart-colors="servGraphData.colors"
+                            chart-series="servGraphData.series" chart-options="servGraphData.options" chart-dataset-override="servGraphData.datasetOverride"></canvas>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset ng-if="clientData.diet.myDiet" class="fieldset-border">
+            <legend class="fieldset-border">{{'other foods' | translate}}</legend>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-borderless">
+                            <tr class="border-top border-bottom">
+                                <th></th>
+                                <th>{{'choosen' | translate}}</th>
+                                <th>{{'acceptable' | translate}}</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="font-weight-bold">{{totals.servings.otherFoodsEnergy | number:1}} {{'kcal' | translate}} <i class="{{checkOtherFoods(totals.servings.otherFoodsEnergy, recommendations.servings.otherFoodsEnergy)}}"></i></td>
+                                <td>{{recommendations.servings.otherFoodsEnergy | number:1}} {{'kcal' | translate}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div ng-if="showCharts&&!clientData.diet.myDiet" class="col-lg-6">
                     <canvas id="servChart" class="chart chart-bar"
                             chart-data="servGraphData.data" chart-labels="servGraphData.labels" chart-colors="servGraphData.colors"
                             chart-series="servGraphData.series" chart-options="servGraphData.options" chart-dataset-override="servGraphData.datasetOverride"></canvas>

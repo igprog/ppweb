@@ -29,7 +29,7 @@
                         </div>
                         <div class="table-responsive" style="height:50vh">
                             <table class="table table-hover table-sm table-borderless">
-                                <tr ng-repeat="x in diets | filter: searchValue" ng-click="select(x)">
+                                <tr ng-repeat="x in diets | filter: searchValue" ng-click="select(x)" class="{{x.myDiet?'text-success':''}}">
                                     <td style="width:5%"><md-checkbox ng-checked="x.id==clientData.diet.id" class="md-primary" aria-label="diet"></md-checkbox></td>
                                     <td style="width:65%">{{x.diet}}</td>
                                     <td style="width:10%">{{x.carbohydratesMin}}-{{x.carbohydratesMax}}%</td>
@@ -61,8 +61,8 @@
                                     <div class="h5 font-weight-bold text-main mb-1">{{clientData.diet.diet | translate}}</div>
                                     <div class="mb-0 font-weight-bold text-gray-800">
                                         <div>{{clientData.diet.dietDescription | translate}}.</div>
-                                        <em ng-if="clientData.diet.note" class="mt-1">* {{clientData.diet.note}}.</em>
                                     </div>
+                                    <em ng-if="clientData.diet.note" class="mt-1">* {{clientData.diet.note}}.</em>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-heartbeat fa-2x text-gray-300"></i>
@@ -70,17 +70,8 @@
                             </div>
                         </div>
                     </div>
-                    <!--<div class="alert alert-success">
-                        <strong>{{clientData.diet.diet | translate}}</strong>
-                        <p>{{clientData.diet.dietDescription | translate}}.</p>
-                        <em ng-if="clientData.diet.note">* {{clientData.diet.note}}.</em>
-                    </div>-->
                 </fieldset>
             </div>
-            <!--<div>
-                <a href="" ng-if="client.clientId" class="btn btn-default btn-lg center center-left" title="{{'back' | translate}}" ng-click="toggleNewTpl('activities')"><i class="fa fa-angle-double-left fa-2x text-primary" aria-hidden="true"></i></a>
-                <a href="" ng-if="client.clientId" class="btn btn-default btn-lg center center-right" title="{{'forward' | translate}}" ng-click="toggleNewTpl('meals')"><i class="fa fa-angle-double-right fa-2x text-primary" aria-hidden="true"></i></a>
-            </div>-->
         </div>
         <div>
             <hr />

@@ -70,6 +70,9 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         .state('loginas', {
             url: '/loginas', templateUrl: './assets/partials/loginas.html', controller: 'loginCtrl'
         })
+        .state('mydiets', {
+            url: '/mydiets', templateUrl: './assets/partials/mydiets.html', controller: 'myDietsCtrl'
+        })
 
     $urlRouterProvider.otherwise("/");
 
@@ -261,7 +264,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     };
 
     $rootScope.loadDiets = function () {
-        functions.post('Diets', 'Load', { lang: $rootScope.config.language }).then(function (d) {
+        functions.post('Diets', 'Load', { lang: $rootScope.config.language, userId: $rootScope.user.userGroupId }).then(function (d) {
             $rootScope.diets = d;
             //angular.forEach($rootScope.diets, function (value, key) {
             //    $rootScope.diets[key].diet = $translate.instant($rootScope.diets[key].diet).replace('&gt;', '<').replace('&lt;', '>');;
@@ -451,7 +454,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         else if (x.code === 'MBS') { title = $translate.instant('meal before sleep'); }
         else title = x.title;
         if ($rootScope.currentMenu !== undefined) {
-            $scope.currMealTitle = $rootScope.currentMenu.data.meals.find(a => a.code === $rootScope.currentMeal).title;
+            var currMealTitle_ = $rootScope.currentMenu.data.meals.find(a => a.code === $rootScope.currentMeal);
+            if (currMealTitle_ !== undefined) {
+                $scope.currMealTitle = currMealTitle_.title;
+            }
         }
         return title;
     }
@@ -7552,6 +7558,159 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             }
         }
     }
+
+}])
+
+.controller('myDietsCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate) {
+    if ($rootScope.user === undefined) {
+        $window.location.href = '/app/#/login';
+    }
+
+    var webService = 'MyDiets';
+
+    var init = function () {
+        functions.post(webService, 'Init', {}).then(function (d) {
+            $scope.d = d;
+        });
+    };
+
+    init();
+
+    $scope.add = function (x) {
+        $scope.myDiets.push(x);
+    }
+
+    $scope.new = function () {
+        init();
+    }
+
+    $scope.save = function (d) {
+        if (!functions.checkPermission($rootScope.user, 'premium')) return;
+        if (d.diet === '' || d.diet === null) {
+            functions.alert($translate.instant('title is required'), '');
+            return;
+        }
+        functions.post(webService, 'Save', { userId: $sessionStorage.usergroupid, x: d }).then(function (d) {
+            if (d.isSuccess) {
+                $scope.d = d.data;
+                $rootScope.loadDiets();
+            } else {
+                functions.alert($translate.instant(d.msg), d.msg1 !== null ? $translate.instant(d.msg1) : null);
+            }
+        });
+    }
+
+    $scope.remove = function (x) {
+        var confirm = $mdDialog.confirm()
+            .title($translate.instant('delete recipe') + '?')
+            .textContent(x.diet)
+            .targetEvent()
+            .ok($translate.instant('yes'))
+            .cancel($translate.instant('no'));
+        $mdDialog.show(confirm).then(function () {
+            remove(x);
+        }, function () {
+        });
+    };
+
+    var remove = function (x) {
+        functions.post(webService, 'Delete', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
+            init();
+            $rootScope.loadDiets();
+        });
+    }
+
+    $scope.search = function () {
+        openMyDietsPopup();
+    }
+
+    var openMyDietsPopup = function () {
+        if ($rootScope.user.licenceStatus === 'demo') { return; }
+        $mdDialog.show({
+            controller: getMyDietsPopupCtrl,
+            templateUrl: 'assets/partials/popup/mydiets.html',
+            parent: angular.element(document.body),
+            clickOutsideToClose: true,
+        })
+        .then(function (resp) {
+            $scope.d = resp;
+        }, function () {
+        });
+    };
+
+    var getMyDietsPopupCtrl = function ($scope, $mdDialog, $http) {
+        $scope.limit = 20;
+        $scope.userId = $rootScope.user.userId;
+        $scope.userGroupId = $rootScope.user.userGroupId;
+        $scope.searchQuery = null;
+        $scope.loading = false;
+
+        $scope.loadMore = function () {
+            $scope.limit += 20;
+        }
+
+        var load = function () {
+            $scope.sharingRecipes = false;
+            if ($rootScope.user.licenceStatus === 'demo') {
+                return;
+            }
+            $scope.loading = true;
+            functions.post(webService, 'Load', { userId: $rootScope.user.userGroupId }).then(function (d) {
+                $scope.d = d;
+                $scope.loading = false;
+            });
+        }
+        load();
+
+        $scope.load = function () {
+            return load();
+        }
+
+        $scope.cancel = function () {
+            $mdDialog.cancel();
+        };
+
+        $scope.search = function (searchQuery) {
+            $scope.loading = true;
+            functions.post(webService, 'Search', { userId: $rootScope.user.userGroupId, query: searchQuery }).then(function (d) {
+                $scope.d = d;
+                $scope.loading = false;
+            });
+        }
+
+        var get = function (userGroupId, id) {
+            functions.post(webService, 'Get', { userId: userGroupId, id: id }).then(function (d) {
+                $mdDialog.hide(d);
+            });
+        }
+
+        $scope.confirm = function (id) {
+            get($rootScope.user.userGroupId, id);
+        }
+
+        $scope.remove = function (x) {
+            var confirm = $mdDialog.confirm()
+                .title($translate.instant('delete recipe') + '?')
+                .textContent(x.diet)
+                .targetEvent(x)
+                .ok($translate.instant('yes'))
+                .cancel($translate.instant('no'));
+            $mdDialog.show(confirm).then(function () {
+                remove(x);
+                openMyRecipesPopup();
+            }, function () {
+                openMyRecipesPopup();
+            });
+        };
+
+        var remove = function (x) {
+            functions.post(webService, 'Delete', { userId: $rootScope.user.userGroupId, id: x.id }).then(function (d) {
+                load();
+                $rootScope.loadDiets();
+            });
+        }
+
+    };
 
 }])
 //-------------end Program Prehrane Controllers--------------------
