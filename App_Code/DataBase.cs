@@ -183,6 +183,8 @@ namespace Igprog {
                 clientId VARCHAR(50),
                 userGroupId VARCHAR(50),
                 energy VARCHAR(50),
+                menuData TEXT,
+                myMeals TEXT,
                 PRIMARY KEY(id, clientId))";
             CreateTable(path, sql);
         }

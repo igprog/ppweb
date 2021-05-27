@@ -190,6 +190,10 @@ public class Recipes : WebService {
                     }
                 }
                 // SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
+
+                Files F = new Files();
+                F.RemoveJsonFile(userId, x.id, "recipes", "mealData", db, dataBase, null); //******* Remove json file if exists (old sistem).
+
                 r.data = x;
                 r.isSuccess = true;
                 return JsonConvert.SerializeObject(r, Formatting.None);
@@ -217,12 +221,12 @@ public class Recipes : WebService {
                 }
                 connection.Close();
             }
-            DeleteJson(userId, id);
+            Files F = new Files();
+            F.DeleteJsonFile(userId, id, "recipes", null);
             /******* Delete from My Foods if exists (Recipes as My Food) *******/
             MyFoods mf = new MyFoods();
             mf.Delete(userId, id);
             /*******************************************************************/
-            Files F = new Files();
             F.DeleteRecipeFolder(userId, id);
             /******* Delete from My Sharing Recipes if exists *******/
             SharingRecipes SR = new SharingRecipes();
@@ -277,7 +281,9 @@ public class Recipes : WebService {
                 connection.Close();
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -342,11 +348,11 @@ public class Recipes : WebService {
         x.mealGroup.title = GetMealGroupTitle(x.mealGroup.code);
         // x.data = getJson ? JsonConvert.DeserializeObject<JsonFile>(GetJsonFile(userId, x.id)) : new JsonFile();
         if (getJson) {
-            string recipeData = reader.GetValue(5) == DBNull.Value ? null : reader.GetString(5);
-            if (!string.IsNullOrWhiteSpace(recipeData)) {
-                x.data = JsonConvert.DeserializeObject<JsonFile>(recipeData);  // old sistem: recipe saved in json file.
+            string data = reader.GetValue(5) == DBNull.Value ? null : reader.GetString(5);
+            if (!string.IsNullOrWhiteSpace(data)) {
+                x.data = JsonConvert.DeserializeObject<JsonFile>(data);  // new sistem: recipe saved in db
             } else {
-                x.data = JsonConvert.DeserializeObject<JsonFile>(GetJsonFile(userId, x.id)); // new sistem: recipe saved in db
+                x.data = JsonConvert.DeserializeObject<JsonFile>(GetJsonFile(userId, x.id)); // old sistem: recipe saved in json file
             }
         }
         x.recipeImg = GetRecipeImg(userId, x.id);
@@ -382,13 +388,14 @@ public class Recipes : WebService {
         File.WriteAllText(Server.MapPath(path), value);
     }
 
-    public void DeleteJson(string userId, string filename) {
-        string path = Server.MapPath(string.Format("~/App_Data/users/{0}/recipes", userId));
-        string filepath = string.Format("{0}/{1}.json", path, filename);
-        if (File.Exists(filepath)) {
-            File.Delete(filepath);
-        }
-    }
+    //public void DeleteJson(string userId, string filename) {
+    //    string path = Server.MapPath(string.Format("~/App_Data/users/{0}/recipes", userId));
+    //    string filepath = string.Format("{0}/{1}.json", path, filename);
+    //    if (File.Exists(filepath)) {
+    //        File.Delete(filepath);
+    //    }
+    //}
+
     public string GetJsonFile(string userId, string filename) {
         string path = string.Format("~/App_Data/users/{0}/recipes/{1}.json", userId, filename);
         string json = "";
@@ -545,6 +552,31 @@ public class Recipes : WebService {
         NewRecipe x = SR.GetRecipeById(recipeId);
         return string.Format("../upload/users/{0}/recipes/{1}/recipeimg/{2}", recipeId == x.id ? x.sharingData.recipeOwner.userGroupId : userId, recipeId, recipeImg);
     }
+
+    //private void RemoveJsonFile(string userId, string id) {
+    //    try {
+    //        if (!string.IsNullOrWhiteSpace(userId) && !string.IsNullOrWhiteSpace(id)) {
+    //            string data = null;
+    //            string sql = string.Format(@"SELECT mealData FROM recipes WHERE id = '{0}'", id);
+    //            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+    //                connection.Open();
+    //                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+    //                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+    //                        while (reader.Read()) {
+    //                            data = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //            if (!string.IsNullOrWhiteSpace(data)) {
+    //                DeleteJson(userId, id);
+    //            }
+    //        }
+    //    } catch (Exception e) {
+    //        L.SendErrorLog(e, id, userId, "Recipes", "RemoveJsonFile");
+    //    }
+        
+    //}
     #endregion Methods
 
 }

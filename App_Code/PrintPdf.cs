@@ -1901,21 +1901,17 @@ public class PrintPdf : WebService {
 
             doc.Open();
             AppendHeader(doc, userId, settings.headerInfo);
-            //if (settings.showClientData) {
-            //    ShowClientData(doc, recipe.client, lang);
-            //}
+
             doc.Add(new Paragraph(" ", GetFont()));
-            //doc.Add(new Paragraph(string.Format("{0}: {1}", t.Tran("recipe", lang).ToUpper(), recipe.title), GetFont(12)));
-            //doc.Add(new Paragraph(string.Format("{0}", t.Tran("recipe", lang).ToUpper(), recipe.title), GetFont(12)));
             doc.Add(new Paragraph(string.Format("{0}", recipe.title), GetFont(16)));
             doc.Add(new Paragraph(" ", GetFont()));
 
             PdfPTable table = new PdfPTable(2);
             table.WidthPercentage = 100f;
             table.SetWidths(new float[] { 2f, 3f });
+            string imgFileName, imgPathFile = null;
             if (settings.showImg) {
                 string imgPath = Server.MapPath(string.Format("~/upload/users/{0}/recipes/{1}/recipeimg", userId, recipe.id));
-                string imgFileName, imgPathFile = null;
                 if (Directory.Exists(imgPath)) {
                     string[] ss = Directory.GetFiles(imgPath);
                     imgFileName = ss.Select(a => string.Format("{0}{1}", Path.GetFileNameWithoutExtension(a), Path.GetExtension(a))).FirstOrDefault();
@@ -1923,28 +1919,20 @@ public class PrintPdf : WebService {
                 }
                 if (File.Exists(imgPathFile)) {
                     Image img = Image.GetInstance(imgPathFile);
-                    //img.Alignment = Image.ALIGN_RIGHT;
                     img.ScaleToFit(280f, 130f);
-                    //img.SpacingAfter = 2f;
-                    //doc.Add(img);
                     table.AddCell(new PdfPCell(img) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, PaddingBottom = 10 });
-                } else {
-                    table.AddCell(new PdfPCell(new Phrase("", GetFont())) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, PaddingBottom = 10 });
+                    if (settings.showDescription) {
+                        table.AddCell(new PdfPCell(new Phrase(recipe.description, GetFont(10))) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, PaddingBottom = 10 });
+                    }
                 }
-                if (settings.showDescription) {
-                    table.AddCell(new PdfPCell(new Phrase(recipe.description, GetFont(10))) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, PaddingBottom = 10 });
-                } else {
-                    table.AddCell(new PdfPCell(new Phrase("", GetFont())) { Border = PdfPCell.NO_BORDER, Padding = 2, MinimumHeight = 15, PaddingBottom = 10 });
-                }
+                doc.Add(table);
             }
 
-            if (settings.showDescription && !settings.showImg) {
+            if (settings.showDescription && (!settings.showImg || !File.Exists(imgPathFile))) {
                 doc.Add(new Paragraph("", GetFont()));
                 doc.Add(new Paragraph(string.Format("{0}:", t.Tran("description, recipe preparation", lang).ToUpper()), GetFont(12)));
                 doc.Add(new Paragraph(recipe.description, GetFont(8)));
             } 
-
-            doc.Add(table);
 
             if (settings.consumers > 1) {
                 doc.Add(new Paragraph(t.Tran("number of consumers", lang) + ": " + settings.consumers, GetFont(8)));

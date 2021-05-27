@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Services;
 using System.IO;
 using Newtonsoft.Json;
+using System.Data.SQLite;
+using Igprog;
 
 /// <summary>
 /// files
@@ -263,6 +265,41 @@ public class Files : WebService {
                 return null;
             }
         } catch (Exception e) { return (e.Message); }
+    }
+
+    public void RemoveJsonFile(string userId, string id, string table, string field, DataBase db, string dataBase, string subFolder) {
+        try {
+            if (!string.IsNullOrWhiteSpace(userId) && !string.IsNullOrWhiteSpace(id)) {
+                string data = null;
+                string sql = string.Format(@"SELECT {0} FROM {1} WHERE id = '{2}'", field, table, id);
+                using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                    connection.Open();
+                    using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                        using (SQLiteDataReader reader = command.ExecuteReader()) {
+                            while (reader.Read()) {
+                                data = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
+                            }
+                        }
+                    }
+                }
+                if (!string.IsNullOrWhiteSpace(data)) {
+                    DeleteJsonFile(userId, id, table, subFolder);
+                }
+            }
+        } catch (Exception e) {
+            L.SendErrorLog(e, id, userId, table, "RemoveJsonFile");
+        }
+    }
+
+     public void DeleteJsonFile(string userId, string filename, string table, string subFolder) {
+        string path = Server.MapPath(string.Format("~/App_Data/users/{0}/{1}{2}"
+            , userId
+            , table
+            , !string.IsNullOrWhiteSpace(subFolder) ? string.Format("/{0}", subFolder) : null));
+        string filepath = string.Format("{0}/{1}.json", path, filename);
+        if (File.Exists(filepath)) {
+            File.Delete(filepath);
+        }
     }
     #endregion Methods
 

@@ -24,6 +24,7 @@ public class Menues : WebService {
     public Menues() {
     }
 
+    #region Class
     public class NewMenu {
         public string id;
         public string title;
@@ -60,6 +61,10 @@ public class Menues : WebService {
         public bool isSuccess; 
     }
 
+    private static string MENU_DATA = "menuData";  // new column in menues tbl.
+    private static string MY_MEALS = "myMeals"; // new column in menues tbl.
+    #endregion Class
+
     #region WebMethods
 
     #region ClientMenues
@@ -88,6 +93,8 @@ public class Menues : WebService {
     public string Load(string userGroupId, int limit, int offset, string search, string clientId, string userId) {
         try {
             db.CreateDataBase(userGroupId, db.menues);
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.menues, MENU_DATA, "TEXT");  //new column in menues tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.menues, MY_MEALS, "TEXT");  //new column in menues tbl.
             List<NewMenu> xx = new List<NewMenu>();
             string whereSql = null;
             if (!string.IsNullOrWhiteSpace(search) && string.IsNullOrEmpty(clientId)) {
@@ -213,6 +220,9 @@ public class Menues : WebService {
     public string LoadClientMenues(string userId, string clientId) {
         try {
             List<NewMenu> xx = new List<NewMenu>();
+            db.CreateDataBase(userId, db.menues);
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.menues, MENU_DATA, "TEXT");  //new column in menues tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.menues, MY_MEALS, "TEXT");  //new column in menues tbl.
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 string sql = string.Format(@"
@@ -261,6 +271,8 @@ public class Menues : WebService {
         SaveResponse r = new SaveResponse();
         try {
             db.CreateDataBase(userId, db.menues);
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.menues, MENU_DATA, "TEXT");  //new column in menues tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.menues, MY_MEALS, "TEXT");  //new column in menues tbl.
             if (x.id == null && Check(userId, x) != false) {
                 r.data = x;
                 r.msg = "there is already a menu with the same name";
@@ -276,19 +288,28 @@ public class Menues : WebService {
             }
             x.title = G.RemoveSingleQuotes(x.title);
             x.note = G.RemoveSingleQuotes(x.note);
+
+            string myMealsData = null;
+            if (myMeals != null) {
+                if (myMeals.data != null) {
+                    if (myMeals.data.meals.Count > 2) {
+                        myMealsData = JsonConvert.SerializeObject(myMeals, Formatting.None);
+                    }
+                }
+            }
             string sql = null;
             if (string.IsNullOrEmpty(x.id)) {
                 x.id = Guid.NewGuid().ToString();
                 sql = string.Format(@"BEGIN;
-                INSERT INTO menues (id, title, diet, date, note, userId, clientId, userGroupId, energy)
-                VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}');
-                COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy);
+                INSERT INTO menues (id, title, diet, date, note, userId, clientId, userGroupId, energy, menuData, myMeals)
+                VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}');
+                COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy, JsonConvert.SerializeObject(x.data, Formatting.None), myMealsData);
             } else {
                 sql = string.Format(@"BEGIN;
                 UPDATE menues SET
-                title = '{1}', diet = '{2}', date = '{3}', note = '{4}', userId = '{5}', clientId = '{6}', userGroupId = '{7}', energy = '{8}'
+                title = '{1}', diet = '{2}', date = '{3}', note = '{4}', userId = '{5}', clientId = '{6}', userGroupId = '{7}', energy = '{8}', menuData = '{9}', myMeals = '{10}'
                 WHERE id = '{0}';
-                COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy);
+                COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy, JsonConvert.SerializeObject(x.data, Formatting.None), myMealsData);
             }
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
@@ -297,14 +318,21 @@ public class Menues : WebService {
                 }
             }
             x.data.meals = CombineTitleDesc(x);
-            SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
-            if (myMeals != null) {
-                if (myMeals.data != null) {
-                    if (myMeals.data.meals.Count > 2) {
-                        SaveMyMealsJsonToFile(userId, x.id, JsonConvert.SerializeObject(myMeals, Formatting.None));
-                    }
-                }
-            }
+            // SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
+
+            Files F = new Files();
+            F.RemoveJsonFile(userId, x.id, "menues", MENU_DATA, db, dataBase, null); //******* Remove json file if exists (old sistem).
+            F.RemoveJsonFile(userId, x.id, "menues", MY_MEALS, db, dataBase, "mymeals"); //******* Remove myMeals json file if exists (old sistem).
+
+            // TODO: remove myMeals to menues tbl
+            //if (myMeals != null) {
+            //    if (myMeals.data != null) {
+            //        if (myMeals.data.meals.Count > 2) {
+            //            SaveMyMealsJsonToFile(userId, x.id, JsonConvert.SerializeObject(myMeals, Formatting.None));
+            //        }
+            //    }
+            //}
+
             r.data = x;
             r.isSuccess = true;
             return JsonConvert.SerializeObject(r, Formatting.None);
@@ -336,7 +364,8 @@ public class Menues : WebService {
                         command.ExecuteNonQuery();
                     }
                 }
-                DeleteJson(user.userGroupId, menu.id);
+                Files F = new Files();
+                F.DeleteJsonFile(user.userGroupId, menu.id, "menues", null);
                 x.isSuccess = true;
                 x.msg = null;
                 return JsonConvert.SerializeObject(x, Formatting.None);
@@ -451,9 +480,11 @@ public class Menues : WebService {
     #region Methods
     public NewMenu GetMenu(string userId, string id) {
         NewMenu x = new NewMenu();
+        db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.menues, MENU_DATA, "TEXT");  //new column in menues tbl.
+        db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.menues, MY_MEALS, "TEXT");  //new column in menues tbl.
         using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
             connection.Open();
-            string sql = @"SELECT id, title, diet, date, note, userId, clientId, userGroupId, energy
+            string sql = @"SELECT id, title, diet, date, note, userId, clientId, userGroupId, energy, menuData, myMeals
                     FROM menues
                     WHERE id = @id";
             using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
@@ -470,16 +501,40 @@ public class Menues : WebService {
                         x.client = (reader.GetValue(6) == DBNull.Value || reader.GetValue(7) == DBNull.Value) ? new Clients.NewClient() : client.GetClient(reader.GetString(7), reader.GetString(6));
                         x.userGroupId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
                         x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
-                        string jsonData = GetJsonFile(userId, x.id);
-                        if (!string.IsNullOrWhiteSpace(jsonData)) {
-                            x.data = JsonConvert.DeserializeObject<Data>(jsonData);
+                        string data = reader.GetValue(9) == DBNull.Value ? null : reader.GetString(9);
+                        if (!string.IsNullOrWhiteSpace(data)) {
+                            x.data = JsonConvert.DeserializeObject<Data>(data);  // new sistem: menu saved in db
                         } else {
+                            string jsonData = GetJsonFile(userId, x.id);   // old sistem: menu saved in json file.
+                            if (!string.IsNullOrWhiteSpace(jsonData)) {
+                                x.data = JsonConvert.DeserializeObject<Data>(jsonData);
+                            } else {
+                                //x.data.selectedFoods = new List<Foods.NewFood>();
+                                //x.data.selectedInitFoods = new List<Foods.NewFood>();
+                                //Meals M = new Meals();
+                                //x.data.meals = M.LoadData();
+                            }
+                            //x.data = JsonConvert.DeserializeObject<Data>(GetJsonFile(userId, x.id)); // new sistem: menu saved in db
+                        }
+                        if (x.data.selectedFoods.Count == 0) {
                             x.data.selectedFoods = new List<Foods.NewFood>();
                             x.data.selectedInitFoods = new List<Foods.NewFood>();
                             Meals M = new Meals();
                             x.data.meals = M.LoadData();
                         }
-                        if (x.data != null) {
+
+
+
+                            //string jsonData = GetJsonFile(userId, x.id);
+                            //if (!string.IsNullOrWhiteSpace(jsonData)) {
+                            //    x.data = JsonConvert.DeserializeObject<Data>(jsonData);
+                            //} else {
+                            //    x.data.selectedFoods = new List<Foods.NewFood>();
+                            //    x.data.selectedInitFoods = new List<Foods.NewFood>();
+                            //    Meals M = new Meals();
+                            //    x.data.meals = M.LoadData();
+                            //}
+                            if (x.data != null) {
                             x.splitMealDesc = MealTitleDesc(x.data.meals);
                         }
                         x.client.clientData = new ClientsData.NewClientData();
@@ -520,13 +575,13 @@ public class Menues : WebService {
         return json;
     }
 
-    public void DeleteJson(string userId, string filename) {
-        string path = Server.MapPath("~/App_Data/users/" + userId + "/menues");
-        string filepath = path + "/" + filename + ".json";
-        if (File.Exists(filepath)) {
-            File.Delete(filepath);
-        }
-    }
+    //public void DeleteJson(string userId, string filename) {
+    //    string path = Server.MapPath("~/App_Data/users/" + userId + "/menues");
+    //    string filepath = path + "/" + filename + ".json";
+    //    if (File.Exists(filepath)) {
+    //        File.Delete(filepath);
+    //    }
+    //}
 
     private string GetJsonFile(string userId, string filename) {
         string path = "~/App_Data/users/" + userId + "/menues/" + filename + ".json" ;
@@ -628,7 +683,16 @@ public class Menues : WebService {
                                 x.client = reader.GetValue(6) == DBNull.Value ? new Clients.NewClient() : client.GetClient(x.userId, reader.GetString(6));
                                 x.userGroupId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
                                 x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
-                                x.data = JsonConvert.DeserializeObject<Data>(GetJsonFile(userId, x.id));
+                                // x.data = JsonConvert.DeserializeObject<Data>(GetJsonFile(userId, x.id));
+                                string data = reader.GetValue(9) == DBNull.Value ? null : reader.GetString(9);
+                                if (!string.IsNullOrWhiteSpace(data)) {
+                                    x.data = JsonConvert.DeserializeObject<Data>(data);
+                                } else {
+                                    string jsonData = GetJsonFile(userId, x.id); // old sistem: menu saved in json file.
+                                    if (!string.IsNullOrWhiteSpace(jsonData)) {
+                                        x.data = JsonConvert.DeserializeObject<Data>(jsonData);
+                                    }
+                                }
                             }
                         } 
                     }
@@ -715,6 +779,31 @@ public class Menues : WebService {
             return menu.data.meals;
         }
     }
+
+    //private void RemoveJsonFile(string userId, string id) {
+    //    try {
+    //        if (!string.IsNullOrWhiteSpace(userId) && !string.IsNullOrWhiteSpace(id)) {
+    //            string data = null;
+    //            string sql = string.Format(@"SELECT menuData FROM menues WHERE id = '{0}'", id);
+    //            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+    //                connection.Open();
+    //                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+    //                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+    //                        while (reader.Read())
+    //                        {
+    //                            data = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //            if (!string.IsNullOrWhiteSpace(data)) {
+    //                DeleteJson(userId, id);
+    //            }
+    //        }
+    //    } catch (Exception e) {
+    //        L.SendErrorLog(e, id, userId, "Menuew", "RemoveJsonFile");
+    //    }
+    //}
     #endregion
 
 
