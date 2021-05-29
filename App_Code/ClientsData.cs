@@ -380,13 +380,13 @@ public class ClientsData : WebService {
     }
 
      public NewClientData GetClientData(string userId, string clientId, SQLiteConnection connection) {
-         try {
+        NewClientData x = new NewClientData();
+        try {
             List<NewClientData> xx = new List<NewClientData>();
-            NewClientData x = new NewClientData();
             db.CreateDataBase(userId, db.clients);
             db.CreateDataBase(userId, db.clientsData);
-            // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
-            // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.
             db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass");  //new column in clientsData tbl.
             string sql = string.Format(@"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId, c.note, cd.bodyFatPerc, cd.targetedMass
                         FROM clientsdata as cd
@@ -434,7 +434,7 @@ public class ClientsData : WebService {
             return x;
         } catch (Exception e) {
             L.SendErrorLog(e, clientId, userId, "ClientsData", "GetClientData");
-            return new NewClientData();
+            return x;
         }
     }
 

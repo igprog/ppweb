@@ -210,7 +210,7 @@ namespace Igprog {
                 description NVARCHAR(200),
                 energy VARCHAR(50),
                 mealGroup VARCHAR(50),
-                mealData TEXT)";
+                recipeData TEXT)";
             CreateTable(path, sql);
         }
 
@@ -220,7 +220,8 @@ namespace Igprog {
                 title NVARCHAR(50),
                 description NVARCHAR(200),
                 userId VARCHAR(50),
-                userGroupId VARCHAR(50))";
+                userGroupId VARCHAR(50),
+                mealData TEXT)";
             CreateTable(path, sql);
             //TODO add column group - addColumn();
         }

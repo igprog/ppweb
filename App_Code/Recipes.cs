@@ -61,8 +61,8 @@ public class Recipes : WebService {
         public bool isSuccess;
     }
 
-    private static string mealGroup = "mealGroup";  // new column in recipes tbl.
-    private static string mealData = "mealData";  // new column in recipes tbl.
+    private static string MEAL_GROUP = "mealGroup";  // new column in recipes tbl.
+    private static string RECIPE_DATA = "recipeData";  // new column in recipes tbl.
 
     #endregion Class
 
@@ -79,8 +79,8 @@ public class Recipes : WebService {
         try {
             List<NewRecipe> xx = new List<NewRecipe>();
             db.CreateDataBase(userId, db.recipes);
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, mealGroup);  //new column in recipes tbl.
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, mealData, "TEXT");  //new column in recipes tbl.
+            //db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, mealGroup);  //new column in recipes tbl.
+            //db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, recipeData, "TEXT");  //new column in recipes tbl.
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 string sql = @"SELECT id, title, description, energy, mealGroup
@@ -111,7 +111,7 @@ public class Recipes : WebService {
                 string sql = string.Format(@"SELECT id, title, description, energy, mealGroup FROM recipes
                                 {0} {1} {2} ORDER BY rowid DESC"
                                 , (string.IsNullOrWhiteSpace(query) && string.IsNullOrEmpty(mealGroup)) ? "" : "WHERE"
-                                , !string.IsNullOrWhiteSpace(query) ? string.Format("(UPPER(title) LIKE '%{0}%' OR UPPER(description) LIKE '%{0}%')", query.ToUpper()) : ""
+                                , !string.IsNullOrWhiteSpace(query) ? string.Format("(UPPER(title) LIKE '%{0}%' OR UPPER(description) LIKE '%{0}%' OR UPPER(id) = '{0}')", query.ToUpper()) : ""
                                 , !string.IsNullOrEmpty(mealGroup) ? string.Format(" {0} mealGroup = '{1}'", !string.IsNullOrEmpty(query) ? "AND" : "", mealGroup) : "");     
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
@@ -134,11 +134,11 @@ public class Recipes : WebService {
         try {
             NewRecipe x = new NewRecipe();
             db.CreateDataBase(userId, db.recipes);
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, mealGroup);  //new column in recipes tbl.
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, mealData, "TEXT");  //new column in recipes tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, MEAL_GROUP);  //new column in recipes tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, RECIPE_DATA, "TEXT");  //new column in recipes tbl.
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
-                string sql = @"SELECT id, title, description, energy, mealGroup, mealData
+                string sql = @"SELECT id, title, description, energy, mealGroup, recipeData
                         FROM recipes
                         WHERE id = @id";
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
@@ -163,8 +163,8 @@ public class Recipes : WebService {
         SaveResponse r = new SaveResponse();
         try {
             db.CreateDataBase(userId, db.recipes);
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, mealGroup);  //new column in recipes tbl.
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, mealData, "TEXT");  //new column in recipes tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, MEAL_GROUP);  //new column in recipes tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, RECIPE_DATA, "TEXT");  //new column in recipes tbl.
             if (string.IsNullOrEmpty(x.id) && Check(userId, x)) {
                 r.data = x;
                 r.msg = "there is already a recipe with the same name";
@@ -180,7 +180,7 @@ public class Recipes : WebService {
                 x.title = G.RemoveSingleQuotes(x.title);
                 x.description = G.RemoveSingleQuotes(x.description);
                 sql = string.Format(@"BEGIN;
-                        INSERT OR REPLACE INTO recipes (id, title, description, energy, mealGroup, mealData)
+                        INSERT OR REPLACE INTO recipes (id, title, description, energy, mealGroup, recipeData)
                         VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}');
                         COMMIT;", x.id, x.title, x.description, x.energy, x.mealGroup.code, JsonConvert.SerializeObject(x.data, Formatting.None));
                 using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
@@ -192,7 +192,7 @@ public class Recipes : WebService {
                 // SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
 
                 Files F = new Files();
-                F.RemoveJsonFile(userId, x.id, "recipes", "mealData", db, dataBase, null); //******* Remove json file if exists (old sistem).
+                F.RemoveJsonFile(userId, x.id, "recipes", RECIPE_DATA, db, dataBase, null); //******* Remove json file if exists (old sistem).
 
                 r.data = x;
                 r.isSuccess = true;
@@ -552,31 +552,6 @@ public class Recipes : WebService {
         NewRecipe x = SR.GetRecipeById(recipeId);
         return string.Format("../upload/users/{0}/recipes/{1}/recipeimg/{2}", recipeId == x.id ? x.sharingData.recipeOwner.userGroupId : userId, recipeId, recipeImg);
     }
-
-    //private void RemoveJsonFile(string userId, string id) {
-    //    try {
-    //        if (!string.IsNullOrWhiteSpace(userId) && !string.IsNullOrWhiteSpace(id)) {
-    //            string data = null;
-    //            string sql = string.Format(@"SELECT mealData FROM recipes WHERE id = '{0}'", id);
-    //            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
-    //                connection.Open();
-    //                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-    //                    using (SQLiteDataReader reader = command.ExecuteReader()) {
-    //                        while (reader.Read()) {
-    //                            data = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //            if (!string.IsNullOrWhiteSpace(data)) {
-    //                DeleteJson(userId, id);
-    //            }
-    //        }
-    //    } catch (Exception e) {
-    //        L.SendErrorLog(e, id, userId, "Recipes", "RemoveJsonFile");
-    //    }
-        
-    //}
     #endregion Methods
 
 }

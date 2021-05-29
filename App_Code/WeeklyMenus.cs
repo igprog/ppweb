@@ -360,9 +360,9 @@ public class WeeklyMenus : WebService {
         List<NewWeeklyMenus> xx = new List<NewWeeklyMenus>();
         string whereSql = null;
             if (!string.IsNullOrWhiteSpace(search) && string.IsNullOrEmpty(clientId)) {
-                whereSql = string.Format("WHERE (UPPER(w.title) LIKE '%{0}%' OR UPPER(w.note) LIKE '%{0}%')", search.ToUpper());
+                whereSql = string.Format("WHERE (UPPER(w.title) LIKE '%{0}%' OR UPPER(w.note) LIKE '%{0}%' OR UPPER(w.id) = '{0}')", search.ToUpper());
             } else if (!string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
-                whereSql = string.Format("WHERE w.clientId = '{1}' AND (UPPER(w.title) LIKE '%{0}%' OR UPPER(w.note) LIKE '%{0}%')", search.ToUpper(), clientId);
+                whereSql = string.Format("WHERE w.clientId = '{1}' AND (UPPER(w.title) LIKE '%{0}%' OR UPPER(w.note) LIKE '%{0}%' OR UPPER(w.id) = '{0}')", search.ToUpper(), clientId);
             } else if (string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
                 whereSql = string.Format("WHERE w.clientId = '{0}'", clientId);
             } else {

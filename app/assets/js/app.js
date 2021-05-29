@@ -3625,10 +3625,16 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
     $rootScope.selectedNavItem = $state.current.name;
 
+    if ($rootScope.calculation.recommendedEnergyIntake === undefined) {
+        $state.go('calculation');
+        $rootScope.selectedNavItem = 'calculation';
+        return;
+    }
+
     if ($rootScope.clientData === undefined) {
         $state.go('meals');
         $rootScope.selectedNavItem = 'meals';
-        return false;
+        return;
     }
     var webService = 'Foods.asmx';
     $scope.addFoodBtnIcon = 'fa fa-plus';

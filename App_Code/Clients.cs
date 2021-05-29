@@ -143,7 +143,7 @@ public class Clients : WebService {
         SaveResponse r = new SaveResponse();
         try {
             db.CreateDataBase(user.userGroupId, db.clients);
-            // db.AddColumn(user.userGroupId, db.GetDataBasePath(user.userGroupId, dataBase), db.clients, "note");  //new column in clients tbl.
+            db.AddColumn(user.userGroupId, db.GetDataBasePath(user.userGroupId, dataBase), db.clients, "note");  //new column in clients tbl.
             string sql = null;
             if (x.clientId == null && Check(user.userGroupId, x) == false) {
                 r.data = null;
