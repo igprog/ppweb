@@ -97,7 +97,7 @@ public class ClientsData : WebService {
         List<NewClientData> xx = new List<NewClientData>();
         try {
             db.CreateDataBase(userId, db.clientsData);
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass");  //new column in clientsData tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass", "VARCHAR(50)");  //new column in clientsData tbl.
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 string sql = @"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId
@@ -149,8 +149,8 @@ public class ClientsData : WebService {
         try {
             db.CreateDataBase(userId, db.clientsData);
             // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
-            // db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clientsData tbl.
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass");  //new column in clientsData tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc", "VARCHAR(50)");  //new column in clientsData tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass", "VARCHAR(50)");  //new column in clientsData tbl.
             Global G = new Global();
             x.clientNote = G.RemoveSingleQuotes(x.clientNote);
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
@@ -224,7 +224,7 @@ public class ClientsData : WebService {
         try {
             List<NewClientData> xx = new List<NewClientData>();
             db.CreateDataBase(userId, db.clientsData);
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass");  //new column in clientsData tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass", "VARCHAR(50)");  //new column in clientsData tbl.
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
                 connection.Open();
                 string sql = string.Format(@"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId, cd.targetedMass
@@ -386,8 +386,8 @@ public class ClientsData : WebService {
             db.CreateDataBase(userId, db.clients);
             db.CreateDataBase(userId, db.clientsData);
             db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clients, "note");  //new column in clients tbl.
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc");  //new column in clients tbl.
-            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass");  //new column in clientsData tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "bodyFatPerc", "VARCHAR(50)");  //new column in clients tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.clientsData, "targetedMass", "VARCHAR(50)");  //new column in clientsData tbl.
             string sql = string.Format(@"SELECT cd.rowid, cd.clientId, c.birthDate, c.gender, cd.height, cd.weight, cd.waist, cd.hip, cd.pal, cd.goal, cd.activities, cd.diet, cd.meals, cd.date, cd.userId, c.note, cd.bodyFatPerc, cd.targetedMass
                         FROM clientsdata as cd
                         LEFT OUTER JOIN clients as c
