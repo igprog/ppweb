@@ -293,6 +293,7 @@ public class Menues : WebService {
                     }
                 }
             }
+            x.data.meals = CombineTitleDesc(x);
             string sql = null;
             if (string.IsNullOrEmpty(x.id)) {
                 x.id = Guid.NewGuid().ToString();
@@ -313,7 +314,7 @@ public class Menues : WebService {
                     command.ExecuteNonQuery();
                 }
             }
-            x.data.meals = CombineTitleDesc(x);
+            //x.data.meals = CombineTitleDesc(x);
             // SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
 
             Files F = new Files();
@@ -706,6 +707,8 @@ public class Menues : WebService {
 
     public NewMenu WeeklyMenu(string userId, string menuId) {
         NewMenu x = new NewMenu();
+        db.AddColumn(userId, db.GetDataBasePath(userId, userDataBase), db.menues, MENU_DATA, "TEXT");  //new column in menues tbl.
+        db.AddColumn(userId, db.GetDataBasePath(userId, userDataBase), db.menues, MY_MEALS, "TEXT");  //new column in menues tbl.
         try {
             if (!string.IsNullOrEmpty(menuId)) {
                 using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, userDataBase))) {
@@ -743,7 +746,7 @@ public class Menues : WebService {
             }
             return x;
         } catch (Exception e) {
-            L.SendErrorLog(e, userId, menuId, "Menues", "WeeklyMenu");
+            L.SendErrorLog(e, menuId, userId, "Menues", "WeeklyMenu");
             return x;
         }
     }
