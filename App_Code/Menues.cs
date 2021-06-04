@@ -269,7 +269,7 @@ public class Menues : WebService {
             db.CreateDataBase(userId, db.menues);
             db.AddColumn(userId, db.GetDataBasePath(userId, userDataBase), db.menues, MENU_DATA, "TEXT");  //new column in menues tbl.
             db.AddColumn(userId, db.GetDataBasePath(userId, userDataBase), db.menues, MY_MEALS, "TEXT");  //new column in menues tbl.
-            if (x.id == null && Check(userId, x) != false) {
+            if (string.IsNullOrWhiteSpace(x.id) && Check(userId, x) != false) {
                 r.data = x;
                 r.msg = "there is already a menu with the same name";
                 r.isSuccess = false;

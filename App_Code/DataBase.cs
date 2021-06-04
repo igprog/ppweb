@@ -585,6 +585,19 @@ namespace Igprog {
         }
         /*************************************************/
 
+        /********************** Create user DB ***************************/
+        public void CreateUserDataBases(string userId) {
+            CreateDataBase(userId, clients);
+            CreateDataBase(userId, clientsData);
+            
+        }
+
+        public void CreateUserNewDataBaseFields(string userId, string userDataBase) {
+            // AddColumn(userId, db.GetDataBasePath(userId, userDataBase), clients, "note");  //new column in clients tbl.
+            AddColumn(userId, GetDataBasePath(userId, userDataBase), clientsData, "bodyFatPerc", "VARCHAR(50)");  //new column in clients tbl.
+            AddColumn(userId, GetDataBasePath(userId, userDataBase), clientsData, "targetedMass", "VARCHAR(50)");  //new column in clientsData tbl.
+        }
+        /********************** Create user DB ***************************/
     }
 
 }

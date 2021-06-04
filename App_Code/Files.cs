@@ -23,12 +23,18 @@ public class Files : WebService {
         public Prices.Discount discount;
         public string pp5DownloadEnableCode;
         public Log.ErrorLogSettings errorLogSettings;
+        public ActivityLogSettings activityLogSettings;
         public AppAlert appAlert;
     }
 
     public class AppAlert {
         public string desc;
         public bool show;
+    }
+
+    public class ActivityLogSettings {
+        public bool show;
+        public bool save;
     }
 
     #region WebMethods

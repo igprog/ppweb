@@ -264,22 +264,35 @@ angular.module('app', [])
     /***** Error Log *****/
 
     /***** Activity Log *****/
+    var loadSettings = function () {
+        functions.post('Files', 'LoadSettings', {}).then(function (d) {
+            $scope.settings = d;
+        });
+    }
+    loadSettings();
+
+    $scope.activeTabActivity = 'lastActivity';
     $scope.loadActivityLog = function () {
         $scope.activeTab = 'activityLog';
         $scope.loading = true;
         functions.post('Log', 'Load', { fileName: 'activity.log' }).then(function (d) {
             $scope.activityLog = d;
-            loadLoginLog();
+            loadLoginLog(false);
             $scope.loading = false;
         });
     }
 
-    var loadLoginLog = function () {
+    var loadLoginLog = function (isAll) {
         $scope.loading = true;
-        functions.post('Log', 'LoadLoginLog', {}).then(function (d) {
+        functions.post('Log', 'LoadLoginLog', { isAll: isAll }).then(function (d) {
             $scope.loginLog = d;
             $scope.loading = false;
         });
+    }
+
+    $scope.loadLoginLog = function (isAll) {
+        $scope.activeTabActivity = isAll ? 'allActivities' : 'lastActivity';
+        loadLoginLog(isAll);
     }
     /***** Activity Log *****/
 

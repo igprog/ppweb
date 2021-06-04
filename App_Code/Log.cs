@@ -86,18 +86,19 @@ public class Log : WebService {
     }
 
     [WebMethod]
-    public string LoadLoginLog() {
+    public string LoadLoginLog(bool isAll) {
         try {
             List<LoginLog> xx = new List<LoginLog>();
             string usersDataBase = ConfigurationManager.AppSettings["UsersDataBase"];
             Global G = new Global();
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + usersDataBase))) {
                 connection.Open();
-                string sql = @"SELECT l.userId, l.lastLogin, l.loginCount, u.firstName, u.lastName, u.companyName
+                string sql = string.Format(@"SELECT l.userId, l.lastLogin, l.loginCount, u.firstName, u.lastName, u.companyName
                             FROM loginlog l
                             LEFT JOIN users u
                             ON u.userId = l.userId
-                            ORDER BY l.rowid DESC LIMIT 20";
+                            WHERE u.isActive = 1
+                            ORDER BY l.rowid DESC {0}", isAll ?  null : "LIMIT 20");
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
@@ -161,26 +162,26 @@ MESSAGE: {5}
 
     public void ActivityLog(string userId, string activity, string dateTime) {
         try {
+            Files F = new Files();
             NewActivityLog x = new NewActivityLog();
             x.userId = userId;
             x.activity = activity;
             x.time = string.IsNullOrWhiteSpace(dateTime) ? Global.NowLocal() : dateTime;
+            if (F.GetSettingsData().activityLogSettings.save) {
+                string log = string.Format(@"## TIME: {0}; ACTIVITY: {1}; USER_ID: {2}", x.time, x.activity, x.userId);
 
-            string log = string.Format(@"## TIME: {0}; ACTIVITY: {1}; USER_ID: {2}", x.time, x.activity, x.userId);
-
-            StringBuilder sb = new StringBuilder();
-            Files F = new Files();
-            string oldLog = F.ReadTempFile(activityLog);
-            if (oldLog != null) {
-                sb.AppendLine(oldLog);
+                StringBuilder sb = new StringBuilder();
+                string oldLog = F.ReadTempFile(activityLog);
+                if (oldLog != null) {
+                    sb.AppendLine(oldLog);
+                }
+                sb.AppendLine(log);
+                F.SaveTempFile(activityLog, sb.ToString());
             }
-            sb.AppendLine(log);
-            F.SaveTempFile(activityLog, sb.ToString());
 
             if (!string.IsNullOrWhiteSpace(userId)) {
                 UpdateLoginLog(userId, x.time);
             }
-
         } catch (Exception e) {
             SendErrorLog(e, dateTime, userId, "Log", "ActivityLog");
         }
