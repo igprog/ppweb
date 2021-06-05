@@ -3930,7 +3930,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             if (d.msg !== null) {
                 functions.alert($translate.instant(d.msg), '');
             } else {
-                $scope.new();
+                init();
             }
         });
     }
