@@ -29,6 +29,7 @@
                     </div>
                     <button ng-disabled="currentMenu.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'show menu preview' | translate}}" ng-click="printPreview()"><i class="fa fa-print"></i> <span class="d-none d-sm-inline">{{'print' | translate}}</span></button>
                     <button ng-disabled="currentMenu.data.selectedFoods.length==0" class="btn btn-outline-primary" title="{{'shopping list' | translate}}" ng-click="getShoppingList(currentMenu)"><i class="fas fa-shopping-basket"></i> <span class="d-none d-sm-inline">{{'shopping list' | translate}}</span></button>
+                    <button ng-disabled="currentMenu.data.selectedFoods.length==0" class="btn btn-outline-danger" title="{{'delete' | translate}}" ng-click="remove(currentMenu)"><i class="fa fa-trash-alt"></i> <span class="d-none d-sm-inline">{{'remove' | translate}}</span></button>
                 </div>
                 <div class="card-body">
                     <div layout-gt-sm="row" style="margin:0px">

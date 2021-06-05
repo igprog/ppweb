@@ -3912,19 +3912,29 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         init();
     }
 
-    $scope.delete = function () {
+    $scope.remove = function (x) {
         var confirm = $mdDialog.confirm()
-            .title($translate.instant('delete menu') + '?')
-            .textContent()
-            .targetEvent()
-            .ok($translate.instant('yes'))
-            .cancel($translate.instant('no'));
+             .title($translate.instant('remove menu') + '?')
+             .textContent(x.title)
+             .targetEvent(x)
+             .ok($translate.instant('yes'))
+             .cancel($translate.instant('no'));
         $mdDialog.show(confirm).then(function () {
-            init();
-            alert('TODO');
+            remove(x);
         }, function () {
         });
-    };
+    }
+
+    var remove = function (x) {
+        functions.post('Menues', 'Delete', { user: $rootScope.user, menu: x }).then(function (d) {
+            if (d.msg !== null) {
+                functions.alert($translate.instant(d.msg), '');
+            } else {
+                $scope.new();
+            }
+        });
+    }
+
 
     $scope.removeFood = function (x, idx) {
         $rootScope.currentMenu.data.selectedFoods.splice(idx, 1);
