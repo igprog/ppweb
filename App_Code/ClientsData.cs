@@ -413,6 +413,9 @@ public class ClientsData : WebService {
                         x.goal.title = g.GetGoal(x.goal.code).title;
                         x.activities = JsonConvert.DeserializeObject<List<Activities.ClientActivity>>(reader.GetString(10));
                         x.diet = JsonConvert.DeserializeObject<Diets.NewDiet>(reader.GetString(11));
+                        if (x.diet == null) {
+                            x.diet = new Diets.NewDiet();
+                        }
                         x.meals = JsonConvert.DeserializeObject<List<Meals.NewMeal>>(reader.GetString(12));
                         x.date = reader.GetValue(13) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(13);
                         x.userId = reader.GetValue(14) == DBNull.Value ? "" : reader.GetString(14);

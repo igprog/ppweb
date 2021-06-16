@@ -434,6 +434,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         x.userId = $rootScope.user.userId;
         x.clientId = x.clientId == null ? $rootScope.client.clientId : x.clientId;
         x.date = functions.dateToString(x.date);
+        debugger;
+        // Remove desc from meals
+        if (x.meals.length > 0) {
+            //x.meals.map(a => { a.description = null; return a; });
+            x.meals.map(a => a.description = null);
+        }
         functions.post('ClientsData', 'Save', { userId: $sessionStorage.usergroupid, x: x, userType: $rootScope.user.userType }).then(function (d) {
             $rootScope.clientData.date = new Date($rootScope.clientData.date);
         });
@@ -2901,107 +2907,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
     }
 
-    //$scope.getGoal = function (goal) {
-    //    var x = goal.code;
-    //    if (goal.isDisabled) { return false; }
-    //    var energy = 0;
-    //    var activity = 0;
-    //    $rootScope.goalWeightValue = 0;
-    //    switch (x) {
-    //        case "G1":  // redukcija tjelesne mase
-    //            if ($rootScope.appCalculation.goal.code == "G1") {
-    //                energy = $rootScope.appCalculation.recommendedEnergyIntake;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G2") {
-    //                energy = $rootScope.appCalculation.tee - 300;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G3") {
-    //                energy = $rootScope.appCalculation.recommendedEnergyIntake + 300;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G2") {
-    //                $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
-    //            } else {
-    //                $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.calculation.recommendedWeight.max));
-    //            }
-    //            break;
-    //        case "G2":  // zadrzavanje postojece tjelesne mase
-    //            if ($rootScope.appCalculation.goal.code == "G1") {
-    //                energy = $rootScope.appCalculation.tee + $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G2") {
-    //                energy = $rootScope.appCalculation.recommendedEnergyIntake;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G3") {
-    //                energy = $rootScope.appCalculation.recommendedEnergyIntake - 300;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //            }
-    //            $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
-    //            break;
-    //        case "G3":  // povecanje tjelesne mase
-    //            if ($rootScope.appCalculation.goal.code == "G1") {
-    //                energy = $rootScope.appCalculation.recommendedEnergyIntake;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G2") {
-    //                energy = $rootScope.appCalculation.recommendedEnergyIntake + 300 + $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G3") {
-    //                energy = $rootScope.appCalculation.recommendedEnergyIntake;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G4") {
-    //                energy = $rootScope.appCalculation.recommendedEnergyIntake + 500;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure + 200;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G2") {
-    //                $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.calculation.recommendedWeight.max));
-    //            } else {
-    //                $rootScope.goalWeightValue = $rootScope.clientData.weight < $rootScope.calculation.recommendedWeight.min ? Math.round(angular.copy($rootScope.calculation.recommendedWeight.min)) : Math.round(angular.copy(parseInt($rootScope.clientData.weight) + 10));  //TODO
-    //            }
-    //            break;
-    //        case "G4":  // povecanje misicne mase
-    //            if ($rootScope.appCalculation.goal.code == "G1") {
-    //                energy = $rootScope.appCalculation.tee + $rootScope.appCalculation.recommendedEnergyExpenditure;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure + 200;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G2") {
-    //                energy = $rootScope.appCalculation.tee + 500;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure + 200;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G3") {   //TODO
-    //                energy = $rootScope.appCalculation.recommendedEnergyIntake + 400;
-    //                activity = $rootScope.appCalculation.recommendedEnergyExpenditure + 100;
-    //            }
-    //            if ($rootScope.appCalculation.goal.code == "G2") {
-    //                $rootScope.goalWeightValue = $rootScope.clientData.weight < $rootScope.calculation.recommendedWeight.min ? Math.round(angular.copy($rootScope.calculation.recommendedWeight.min)) : Math.round(angular.copy(parseInt($rootScope.clientData.weight) + 10));  //TODO
-    //            } else {
-    //                $rootScope.goalWeightValue = Math.round(angular.copy($rootScope.clientData.weight));
-    //            }
-    //            break;
-    //        default:
-    //            energy = 0;
-    //            activity = 0;
-    //            break;
-    //    }
-    //    $scope.changeGoalWeightValue($rootScope.goalWeightValue);
-
-    //    angular.forEach($rootScope.goals, function (value, key) {
-    //        if (value.code == x) {
-    //            $rootScope.clientData.goal.code = value.code;
-    //            $rootScope.clientData.goal.title = value.title;
-    //            $rootScope.calculation.goal.code = x;
-    //        }
-    //    })
-
-    //    $rootScope.calculation.recommendedEnergyIntake = Math.round(energy);
-    //    $rootScope.calculation.recommendedEnergyExpenditure = Math.round(activity);
-    //}
 
     var isGoalDisabled = function () {
         if ($rootScope.calculation.bmi.value < 18.5) {
@@ -4324,6 +4229,10 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             x.client = d.client;
             x.userId = d.client.userId;
             x.id = saveasnew == true ? null : x.id;
+            if (d.totals === undefined) {
+                functions.alert('d.totals == undefined', $translate.instant('report a problem'));
+                return;
+            }
             x.energy = d.totals.energy;
             x.date = new Date(new Date().setHours(0, 0, 0, 0));
             save(x);

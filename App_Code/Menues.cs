@@ -806,11 +806,12 @@ public class Menues : WebService {
                 StringBuilder sb = new StringBuilder();
                 int idx = 0;
                 if (dishDesc != null) {
+                    Global G = new Global();
                     foreach (var dd in dishDesc) {
                         if (idx > 0) {
                             sb.Append("|");  /***** new dish *****/
                         }
-                        sb.Append(string.Format("{0}~{1}~{2}", dd.title, dd.desc, dd.id));
+                        sb.Append(string.Format("{0}~{1}~{2}", G.RemoveSingleQuotes(dd.title), G.RemoveSingleQuotes(dd.desc), dd.id));
                         //if (!string.IsNullOrWhiteSpace(dd.desc)) {
                         //    sb.Append(string.Format("{0}~{1}", dd.title, dd.desc));
                         //} else if (!string.IsNullOrWhiteSpace(dd.title) && string.IsNullOrWhiteSpace(dd.desc)) {
