@@ -213,11 +213,10 @@ public class Users : WebService {
                         x = GetUserData(reader, connection);
                     }
                 }
-                connection.Close();
             }
             x.datasum = GetDataSum(x.userGroupId, x.userId, x.userType, x.adminType);
 
-            L.ActivityLog(x.userId, "LOGIN", null);
+            L.ActivityLog(x.userId, string.IsNullOrWhiteSpace(x.userId) ? string.Format("ERROR LOGIN; USERNAME: {0}", userName) : "LOGIN", null);
 
             if (!string.IsNullOrWhiteSpace(x.userGroupId)) {
                 db.CreateUserDataBases(x.userGroupId);

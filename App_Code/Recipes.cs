@@ -552,6 +552,37 @@ public class Recipes : WebService {
         NewRecipe x = SR.GetRecipeById(recipeId);
         return string.Format("../upload/users/{0}/recipes/{1}/recipeimg/{2}", recipeId == x.id ? x.sharingData.recipeOwner.userGroupId : userId, recipeId, recipeImg);
     }
+
+    public JsonFile GetRecipeData(string userId, string id) {
+        JsonFile x = new JsonFile();
+        try {
+            db.CreateDataBase(userId, db.recipes);
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, MEAL_GROUP);  //new column in recipes tbl.
+            db.AddColumn(userId, db.GetDataBasePath(userId, dataBase), db.recipes, RECIPE_DATA, "TEXT");  //new column in recipes tbl.
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                string sql = string.Format(@"SELECT recipeData FROM recipes WHERE id = '{0}'", id);
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.Parameters.Add(new SQLiteParameter("id", id));
+                    Clients.Client client = new Clients.Client();
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            string data = reader.GetValue(0) == DBNull.Value ? null : reader.GetString(0);
+                            if (!string.IsNullOrWhiteSpace(data)) {
+                                x = JsonConvert.DeserializeObject<JsonFile>(data);  // new sistem: recipe saved in db
+                            } else {
+                                x = JsonConvert.DeserializeObject<JsonFile>(GetJsonFile(userId, id)); // old sistem: recipe saved in json file
+                            }
+                        }
+                    }
+                }
+            }
+            return x;
+        } catch (Exception e) {
+            L.SendErrorLog(e, id, null, "Recipes", "GetRecipeData");
+            return x;
+        }
+    }
     #endregion Methods
 
 }

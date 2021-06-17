@@ -226,7 +226,7 @@ angular.module('app', [])
         });
     }
 
-    $scope.GetSharingRecipe = function (x, idx) {
+    $scope.getSharingRecipe = function (x, idx) {
         $scope.loading = true;
         functions.post('SharingRecipes', 'Get', {userId: null, id: x.id }).then(function (d) {
             $scope.sharingRecipes[idx] = d;

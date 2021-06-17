@@ -434,12 +434,13 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         x.userId = $rootScope.user.userId;
         x.clientId = x.clientId == null ? $rootScope.client.clientId : x.clientId;
         x.date = functions.dateToString(x.date);
-        debugger;
-        // Remove desc from meals
+
+        /***** Remove desc from meals *****/
         if (x.meals.length > 0) {
-            //x.meals.map(a => { a.description = null; return a; });
             x.meals.map(a => a.description = null);
         }
+        /***** Remove desc from meals *****/
+
         functions.post('ClientsData', 'Save', { userId: $sessionStorage.usergroupid, x: x, userType: $rootScope.user.userType }).then(function (d) {
             $rootScope.clientData.date = new Date($rootScope.clientData.date);
         });

@@ -140,7 +140,7 @@ public class SharingRecipes : WebService {
                         }
                     }
                 }
-                x.data = JsonConvert.DeserializeObject<Recipes.JsonFile>(R.GetJsonFile(x.sharingData.recipeOwner.userGroupId, x.id));
+                x.data = R.GetRecipeData(x.sharingData.recipeOwner.userGroupId, x.id);
                 x.sharingData.recipeId = x.id;
                 x.mealGroup.title = R.GetMealGroupTitle(x.mealGroup.code);
                 x.recipeImg = Recipes.GetRecipeImg(x.sharingData.recipeOwner.userGroupId, x.id);
