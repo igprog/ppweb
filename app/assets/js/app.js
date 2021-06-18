@@ -1060,8 +1060,11 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             forgotPassword(x);
         }
 
+        $scope.sending = false;
         var forgotPassword = function (x) {
+            $scope.sending = true;
             functions.post(webService, 'ForgotPassword', { email: x, lang: $rootScope.config.language }).then(function (d) {
+                $scope.sending = false;
                 $mdDialog.hide();
                 functions.alert(d, '');
             });
@@ -7359,134 +7362,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
 }])
 
-.controller('resetPasswordCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', 'functions', '$translate', '$translatePartialLoader', function ($scope, $http, $sessionStorage, $window, $rootScope, functions, $translate, $translatePartialLoader) {
-    var webService = 'Users';
-    var config = null;
-    var lang = null;
-    var uid = null;
-    var queryString = null;
-    $scope.user = null;
-    $scope.resp = null;
-    $scope.d = {
-        password: null,
-        passwordConfirm: null
-    }
-
-    queryString = location.search.split('&');
-    if (queryString.length >= 1) {
-        if (queryString[0].substring(1, 4) === 'uid') {
-            uid = queryString[0].substring(5);
-            $http.get('./config/config.json').then(function (response) {
-                config = response.data;
-                functions.post(webService, 'Get', { userId: uid }).then(function (d) {
-                    $scope.user = d;
-                });
-            });
-        }
-        if (queryString.length === 2) {
-            if (queryString[1].substring(0, 4) === 'lang') {
-                lang = queryString[1].substring(5);
-                $translate.use(lang);
-                $translatePartialLoader.addPart('main');
-            }
-        }
-    }
-
-    $scope.save = function (x) {
-        if (functions.isNullOrEmpty(x.password) || functions.isNullOrEmpty(x.passwordConfirm)) {
-            functions.alert($translate.instant('all fields are required'), '');
-            return false;
-        }
-        if (x.password !== x.passwordConfirm) {
-            functions.alert($translate.instant('passwords are not the same'), '');
-            return false;
-        }
-        functions.post(webService, 'ResetPassword', { uid: uid, newPasword: x.password }).then(function (d) {
-            functions.alert($translate.instant(d), '');
-            $scope.resp = d;
-        });
-    }
-
-
-}])
-
-.controller('deleteAccountCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', 'functions', '$translate', '$translatePartialLoader', function ($scope, $http, $sessionStorage, $window, $rootScope, functions, $translate, $translatePartialLoader) {
-    var webService = 'Users';
-    var config = null;
-    var lang = null;
-    $scope.uid = null;
-    var queryString = null;
-    $scope.user = null;
-    $scope.errorMesage = false;
-    $scope.d = {
-        userName: null,
-        password: null
-    }
-    $scope.response = {
-        isSuccess: false,
-        msg: null
-    };
-
-    queryString = location.search.split('&');
-    if (queryString.length >= 1) {
-        if (queryString[0].substring(1, 4) === 'uid') {
-            $scope.uid = queryString[0].substring(5);
-            $http.get('./config/config.json').then(function (response) {
-                config = response.data;
-            });
-        }
-        if (queryString.length === 2) {
-            if (queryString[1].substring(0, 4) === 'lang') {
-                lang = queryString[1].substring(5);
-                $translate.use(lang);
-                $translatePartialLoader.addPart('main');
-            }
-        }
-    }
-
-    $scope.login = function (d) {
-        functions.post(webService, 'Login', { userName: d.userName, password: d.password }).then(function (d) {
-            var user = d;
-            if (user.userId !== null) {
-                if (user.userId !== $scope.uid) {
-                    $scope.showErrorAlert = true;
-                    $scope.errorMesage = $translate.instant('wrong user');
-                } else if (user.userId !== user.userGroupId) {
-                    functions.alert($translate.instant('you do not have permission to delete this user account'), '');
-                } else {
-                    $scope.showErrorAlert = false;
-                    $scope.user = user;
-                }
-            } else {
-                $scope.showErrorAlert = true;
-                $scope.errorMesage = $translate.instant('wrong user name or password');
-            }
-        });
-    }
-
-    var remove = function (user) {
-        if (user.userId !== user.userGroupId) {
-            functions.alert($translate.instant('you do not have permission to delete this account'), '');
-        } else {
-            functions.post(webService, 'DeleteAllUserGroup', { x: user }).then(function (d) {
-                $scope.response = d;
-            });
-        }
-    }
-
-    $scope.confirm = function (user) {
-        if (functions.isNullOrEmpty(user.userId)) {
-            functions.alert('choose user', '');
-        } else {
-            var r = confirm($translate.instant('delete') + " " + user.firstName + " " + user.lastName + "?");
-            if (r === true) {
-                remove(user);
-            }
-        }
-    }
-
-}])
-
 .controller('myDietsCtrl', ['$scope', '$http', '$sessionStorage', '$window', '$rootScope', '$mdDialog', 'functions', '$translate', function ($scope, $http, $sessionStorage, $window, $rootScope, $mdDialog, functions, $translate) {
     if ($rootScope.user === undefined) {
         $window.location.href = '/app/#/login';
@@ -7754,6 +7629,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         }
     }
 ])
+
 .directive('patternValidator', [
     function () {
         return {
@@ -7770,7 +7646,6 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         };
     }
 ]);
-
 
 ;
 

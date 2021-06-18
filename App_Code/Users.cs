@@ -193,7 +193,9 @@ public class Users : WebService {
     public string Login(string userName, string password) {
         try {
             NewUser x = new NewUser();
-
+            if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password)) {
+                return JsonConvert.SerializeObject(x, Formatting.None);
+            }
             /***** Create LoginLog tbl *****/
             string path = HttpContext.Current.Server.MapPath("~/App_Data/" + dataBase);
             db.CreateGlobalDataBase(path, db.loginlog);

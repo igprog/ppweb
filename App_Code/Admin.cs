@@ -23,9 +23,10 @@ public class Admin : WebService {
         // if login attempt == 3 => save /lastlogin.txt , datetime
         // rerad loginattempt.
         if ((username.ToLower().Trim() == supervisorUserName.ToLower() && password == supervisorPassword) || (username.ToLower().Trim() == supervisorUserName1.ToLower() && password == supervisorPassword1)) {
-            // loginerror
             return true;
         } else {
+            Log L = new Log();
+            L.SaveActivityLog(null, string.Format("ERROR ADMIN LOGIN; USERNAME: {0}; PASSWORD: {1}", username, password), null);
             return false;
         }
     }
