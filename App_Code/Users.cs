@@ -249,7 +249,7 @@ public class Users : WebService {
                 using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
                     connection.Open();
                     using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-                        command.Parameters.Add(new SQLiteParameter("userId", x.userId));
+                        command.Parameters.Add(new SQLiteParameter("UserId", x.userId));
                         command.Parameters.Add(new SQLiteParameter("UserType", x.userType));
                         command.Parameters.Add(new SQLiteParameter("FirstName", x.firstName));
                         command.Parameters.Add(new SQLiteParameter("LastName", x.lastName));

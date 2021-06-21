@@ -153,67 +153,7 @@ public class Menues : WebService {
         }
     }
 
-    //[WebMethod]
-    //public string Load(string userId, int limit, int offset, string search, string clientId) {
-    //    try {
-    //        db.CreateDataBase(userId, db.menues);
-    //        List<NewMenu> xx = new List<NewMenu>();
-    //        using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
-    //            connection.Open();
-    //            string whereSql = null;
-    //            if (!string.IsNullOrWhiteSpace(search) && string.IsNullOrEmpty(clientId)) {
-    //                whereSql = string.Format("WHERE UPPER(title) LIKE '%{0}%' OR UPPER(note) LIKE '%{0}%' OR energy LIKE '{0}%'", search.ToUpper());
-    //            } else if (!string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
-    //                whereSql = string.Format("WHERE clientId = '{1}' AND (UPPER(title) LIKE '%{0}%' OR UPPER(note) LIKE '%{0}%' OR energy LIKE '{0}%')", search.ToUpper(), clientId);
-    //            } else if (string.IsNullOrWhiteSpace(search) && !string.IsNullOrEmpty(clientId)) {
-    //                whereSql = string.Format("WHERE clientId = '{0}'", clientId);
-    //            } else {
-    //                whereSql = null;
-    //            }
-
-    //            string sql = string.Format(@"SELECT id, title, diet, date, note, userId, clientId, userGroupId, energy FROM menues {0}
-    //                                        ORDER BY rowid DESC LIMIT {1} OFFSET {2} ", whereSql , limit , offset);
-
-    //            using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
-    //                Clients.Client client = new Clients.Client();
-    //                using (SQLiteDataReader reader = command.ExecuteReader()) {
-    //                    while (reader.Read()) {
-    //                        NewMenu x = new NewMenu();
-    //                        x.id = reader.GetValue(0) == DBNull.Value ? "" : reader.GetString(0);
-    //                        x.title = reader.GetValue(1) == DBNull.Value ? "" : reader.GetString(1);
-    //                        x.diet = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-    //                        x.date = reader.GetValue(3) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(3);
-    //                        x.note = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-    //                        x.userId = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5);
-    //                        if (!string.IsNullOrEmpty(clientId)) {
-    //                            x.client = client.GetClient(userId, clientId);
-    //                        } else {
-    //                            x.client = (reader.GetValue(6) == DBNull.Value || reader.GetValue(7) == DBNull.Value) ? new Clients.NewClient() : client.GetClient(reader.GetString(7), reader.GetString(6));
-    //                        }
-    //                        x.userGroupId = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
-    //                        x.energy = reader.GetValue(8) == DBNull.Value ? 0 : Convert.ToDouble(reader.GetString(8));
-    //                        xx.Add(x);
-    //                    }
-    //                }
-    //            }
-    //        }
-
-    //        if (xx.Count > 0) {
-    //            foreach (var m in xx) {
-    //                if (!string.IsNullOrEmpty(m.userId)) {
-    //                    Users U = new Users();
-    //                    m.author = U.GetUserFullName(m.userId, true);
-    //                }
-    //            }
-    //        }
-
-    //        return JsonConvert.SerializeObject(xx, Formatting.None);
-    //    } catch (Exception e) {
-    //        L.SendErrorLog(e, null, userId, "Menus", "Load");
-    //        return JsonConvert.SerializeObject(e.Message, Formatting.None);
-    //    }
-    //}
-
+    
     [WebMethod]
     public string LoadClientMenues(string userId, string clientId) {
         try {
@@ -282,8 +222,8 @@ public class Menues : WebService {
                 r.isSuccess = false;
                 return JsonConvert.SerializeObject(r, Formatting.None);
             }
-            x.title = G.RemoveSingleQuotes(x.title);
-            x.note = G.RemoveSingleQuotes(x.note);
+            // x.title = G.RemoveSingleQuotes(x.title);
+            // x.note = G.RemoveSingleQuotes(x.note);
 
             string myMealsData = null;
             if (myMeals != null) {
@@ -295,40 +235,53 @@ public class Menues : WebService {
             }
             x.data.meals = CombineTitleDesc(x);
             string sql = null;
+            //if (string.IsNullOrEmpty(x.id)) {
+            //    x.id = Guid.NewGuid().ToString();
+            //    sql = string.Format(@"BEGIN;
+            //    INSERT INTO menues (id, title, diet, date, note, userId, clientId, userGroupId, energy, menuData, myMeals)
+            //    VALUES ('{0}', @Title, '{2}', '{3}', @Note, '{5}', '{6}', '{7}', '{8}', '{9}', '{10}');
+            //    COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy, JsonConvert.SerializeObject(x.data, Formatting.None), myMealsData);
+            //} else {
+            //    sql = string.Format(@"BEGIN;
+            //    UPDATE menues SET
+            //    title = @Title, diet = '{2}', date = '{3}', note = @Note, userId = '{5}', clientId = '{6}', userGroupId = '{7}', energy = '{8}', menuData = '{9}', myMeals = '{10}'
+            //    WHERE id = '{0}';
+            //    COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy, JsonConvert.SerializeObject(x.data, Formatting.None), myMealsData);
+            //}
             if (string.IsNullOrEmpty(x.id)) {
                 x.id = Guid.NewGuid().ToString();
-                sql = string.Format(@"BEGIN;
+                sql = @"BEGIN;
                 INSERT INTO menues (id, title, diet, date, note, userId, clientId, userGroupId, energy, menuData, myMeals)
-                VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}');
-                COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy, JsonConvert.SerializeObject(x.data, Formatting.None), myMealsData);
+                VALUES (@Id, @Title, @Diet, @Date, @Note, @UserId, @ClientId, @UserGroupId, @Energy, @MenuData, @MyMealsData);
+                COMMIT;";
             } else {
-                sql = string.Format(@"BEGIN;
+                sql = @"BEGIN;
                 UPDATE menues SET
-                title = '{1}', diet = '{2}', date = '{3}', note = '{4}', userId = '{5}', clientId = '{6}', userGroupId = '{7}', energy = '{8}', menuData = '{9}', myMeals = '{10}'
-                WHERE id = '{0}';
-                COMMIT;", x.id, x.title, x.diet, x.date, x.note, user.userId, x.client.clientId, string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId, x.energy, JsonConvert.SerializeObject(x.data, Formatting.None), myMealsData);
+                title = @Title, diet = @Diet, date = @Date, note = @Note, userId = @UserId, clientId = @ClientId, userGroupId = @UserGroupId, energy = @Energy, menuData = @MenuData, myMeals = @MyMealsData
+                WHERE id = @Id;
+                COMMIT;";
             }
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, userDataBase))) {
                 connection.Open();
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    command.Parameters.Add(new SQLiteParameter("Id", x.id));
+                    command.Parameters.Add(new SQLiteParameter("Title", x.title));
+                    command.Parameters.Add(new SQLiteParameter("Diet", x.diet));
+                    command.Parameters.Add(new SQLiteParameter("Date", x.date));
+                    command.Parameters.Add(new SQLiteParameter("Note", x.note));
+                    command.Parameters.Add(new SQLiteParameter("UserId", user.userId));
+                    command.Parameters.Add(new SQLiteParameter("ClientId", x.client.clientId));
+                    command.Parameters.Add(new SQLiteParameter("UserGroupId", string.IsNullOrEmpty(x.userGroupId) ? userId : x.userGroupId));
+                    command.Parameters.Add(new SQLiteParameter("Energy", x.energy));
+                    command.Parameters.Add(new SQLiteParameter("MenuData", JsonConvert.SerializeObject(x.data, Formatting.None)));
+                    command.Parameters.Add(new SQLiteParameter("MyMealsData", myMealsData));
                     command.ExecuteNonQuery();
                 }
             }
-            //x.data.meals = CombineTitleDesc(x);
-            // SaveJsonToFile(userId, x.id, JsonConvert.SerializeObject(x.data, Formatting.None));
 
             Files F = new Files();
             F.RemoveJsonFile(userId, x.id, "menues", MENU_DATA, db, userDataBase, null); //******* Remove json file if exists (old sistem).
             F.RemoveJsonFile(userId, x.id, "menues", MY_MEALS, db, userDataBase, "mymeals"); //******* Remove myMeals json file if exists (old sistem).
-
-            // TODO: remove myMeals to menues tbl
-            //if (myMeals != null) {
-            //    if (myMeals.data != null) {
-            //        if (myMeals.data.meals.Count > 2) {
-            //            SaveMyMealsJsonToFile(userId, x.id, JsonConvert.SerializeObject(myMeals, Formatting.None));
-            //        }
-            //    }
-            //}
 
             r.data = x;
             r.isSuccess = true;
@@ -811,7 +764,8 @@ public class Menues : WebService {
                         if (idx > 0) {
                             sb.Append("|");  /***** new dish *****/
                         }
-                        sb.Append(string.Format("{0}~{1}~{2}", G.RemoveSingleQuotes(dd.title), G.RemoveSingleQuotes(dd.desc), dd.id));
+                        // sb.Append(string.Format("{0}~{1}~{2}", G.RemoveSingleQuotes(dd.title), G.RemoveSingleQuotes(dd.desc), dd.id));
+                        sb.Append(string.Format("{0}~{1}~{2}", dd.title, dd.desc, dd.id));
                         //if (!string.IsNullOrWhiteSpace(dd.desc)) {
                         //    sb.Append(string.Format("{0}~{1}", dd.title, dd.desc));
                         //} else if (!string.IsNullOrWhiteSpace(dd.title) && string.IsNullOrWhiteSpace(dd.desc)) {

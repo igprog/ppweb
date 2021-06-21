@@ -3534,6 +3534,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
     }
     $rootScope.selectedNavItem = $state.current.name;
 
+    if ($rootScope.calculation === undefined) {
+        $state.go('clientsdata');
+        $rootScope.selectedNavItem = 'clientsdata';
+        return;
+    }
+
     if ($rootScope.calculation.recommendedEnergyIntake === undefined) {
         $state.go('calculation');
         $rootScope.selectedNavItem = 'calculation';
@@ -4205,12 +4211,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
                 document.getElementById("txtMenuTitle").focus();
                 functions.alert($translate.instant('enter menu title'), '');
                 openSaveMenuPopup();
-                return false;
+                return;
             }
             currentMenu.diet = d.client.clientData.diet.diet;
             var myMeals = null;
             if (currentMenu.data.meals.length > 2) {
-                if (currentMenu.data.meals[0].code != 'B') {
+                if (currentMenu.data.meals[0].code !== 'B') {
                     myMeals = $scope.d.client.clientData.myMeals;
                 }
             }
