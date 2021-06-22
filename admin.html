@@ -83,7 +83,7 @@
             <h2>Program Prehrane Web</h2>
             <div>
                 <ul class="nav nav-tabs">
-                    <li class="nav-item" ng-class="activeTab==='users'?'nav-link active':'nav-link'" ng-click="search(searchQuery, showActive, limit, isDesc)"><a href=""><i class="fa fa-users"></i> Korisnici</a></li>
+                    <li class="nav-item" ng-class="activeTab==='users'?'nav-link active':'nav-link'" ng-click="search(searchQuery, showActive, licenceStatus, limit, isDesc)"><a href=""><i class="fa fa-users"></i> Korisnici</a></li>
                     <li class="nav-item" ng-class="activeTab==='total'?'nav-link active':'nav-link'" ng-click="total(year)"><a href=""><i class="fa fa-chart-bar"></i> Analitika</a></li>
                     <li class="nav-item" ng-class="activeTab==='sharingRecipes'?'nav-link active':'nav-link'" ng-click="loadSharingRecipes()"><a href=""><i class="fa fa-share-alt"></i> Podijeljeni Recepti</a></li>
                     <li class="nav-item" ng-class="activeTab==='errorLog'?'nav-link active':'nav-link'" ng-click="loadErrorLog()"><a href=""><i class="fa fa-exclamation-triangle"></i> Error Log</a></li>
@@ -95,11 +95,11 @@
                 <div class="row p-1">
                     <div class="col-lg-3">
                         <form id="serchFrm">
-                            <span class="p5">Pretraži:</span>
+                            <span class="p-2">Pretraži:</span>
                             <div class="input-group">
                                 <input ng-model="searchQuery" type="text" class="form-control" placeholder="Ime, E-mail, ID...">
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" form="serchFrm" type="submit" ng-click="search(searchQuery, showActive, limit, isDesc)">
+                                    <button class="btn btn-outline-secondary" form="serchFrm" type="submit" ng-click="search(searchQuery, showActive, licenceStatus, limit, isDesc)">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </div>
@@ -110,7 +110,7 @@
                         <span>Limit: <input ng-model="limit" class="form-control" /></span>
                     </div>
                     <div class="col-lg-2">
-                        <span class="p5">Admin Code:</span>
+                        <span class="p-2">Admin Code:</span>
                         <div class="input-group">
                             <input ng-model="adminCode" type="password" class="form-control">
                             <div class="input-group-append">
@@ -121,9 +121,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="checkbox p-1">
-                    <label class="pr-2"><input type="checkbox" ng-model="showDetails" /> Prikaži detalje / uredi</label>
-                    <label><input type="checkbox" ng-model="showActive" ng-click="search(searchQuery, showActive, limit, isDesc)" /> Prikaži aktivne</label>
+                <div class="row p-1">
+                    <div class="col-sm-3 checkbox px-3">
+                        <label class="pr-2"><input type="checkbox" ng-model="showDetails" /> Prikaži detalje / uredi</label>
+                        <label><input type="checkbox" ng-model="showActive" ng-click="search(searchQuery, showActive, licenceStatus, limit, isDesc)" /> Prikaži aktivne</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="m-0">Status licence:</label>
+                        <select ng-model="licenceStatus" class="form-control" ng-change="search(searchQuery, showActive, licenceStatus, limit, isDesc)">
+                            <option value="">Svi</option>
+                            <option value="demo">Demo</option>
+                            <option value="expired">Istekla licenca</option>
+                            <option value="active">Aktivan</option>
+                        </select>
+                    </div>
                 </div>
                 <div ng-if="loading" class="text-center text-primary">
                     <label class="lead text-primary">Učitavanje...</label>
@@ -138,7 +149,7 @@
                     <table class="table table-sm">
                         <tr>
                             <th></th>
-                            <th>Br. <a href="" ng-click="search(searchQuery, showActive, limit, !isDesc)" title="{{isDesc?'Prikaži najstarije':'Prikaži najnovije'}}"><i class="fa fa-sort"></i></a></th>
+                            <th>Br. <a href="" ng-click="search(searchQuery, showActive, licenceStatus, limit, !isDesc)" title="{{isDesc?'Prikaži najstarije':'Prikaži najnovije'}}"><i class="fa fa-sort"></i></a></th>
                             <th ng-if="showDetails">UserId</th>
                             <th ng-if="showDetails">UserGroupId</th>
                             <th>Ime</th>

@@ -136,7 +136,6 @@ public class Clients : WebService {
             return JsonConvert.SerializeObject(e.Message, Formatting.None);
         }
     }
-
     
     [WebMethod]
     public string Save(Users.NewUser user, NewClient x, string lang) {
@@ -253,6 +252,28 @@ public class Clients : WebService {
         }
     }
 
+    [WebMethod]
+    public string GetClientsCount(string userId) {
+        int count = 0;
+        try {
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
+                connection.Open();
+                string sql = string.Format(@"SELECT COUNT([rowid]) FROM clients WHERE userId = '{0}'", userId);
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection)) {
+                    using (SQLiteDataReader reader = command.ExecuteReader()) {
+                        while (reader.Read()) {
+                            count = reader.GetInt32(0);
+                        }
+                    }
+                }
+            }
+            return JsonConvert.SerializeObject(count, Formatting.None);
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "Clients", "GetClientsCount");
+            return JsonConvert.SerializeObject(count, Formatting.None);
+        }
+    }
+
     #region ClientApp
     [WebMethod]
     public string UpdateClient(string userId, NewClient x) {
@@ -272,7 +293,10 @@ public class Clients : WebService {
                 connection.Close();
             }
             return JsonConvert.SerializeObject(x, Formatting.None);
-        } catch (Exception e) { return (e.Message); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.clientId, userId, "Clients", "UpdateClient");
+            return JsonConvert.SerializeObject(e.Message, Formatting.None);
+        }
     }
 
     [WebMethod]
@@ -306,10 +330,16 @@ public class Clients : WebService {
                     }   
                 }
                 connection.Close();
-            }    
-            if (count == 0) { return true; }
-            else { return false; }
-        } catch (Exception e) { return false; }
+            }
+            if (count == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            L.SendErrorLog(e, x.clientId, userId, "Clients", "Check");
+            return false;
+        }
     }
 
     public Gender GetGender(int value) {
@@ -363,12 +393,15 @@ public class Clients : WebService {
                 } 
             }
             return xx;
-        } catch (Exception e) { return (new List<NewClient>()); }
+        } catch (Exception e) {
+            L.SendErrorLog(e, user.userId, userId, "Clients", "GetClients");
+            return xx;
+        }
     }
 
     public int NumberOfClientsPerMonth(string userId) {
+        int count = 0;
         try {
-            int count = 0;
             int month = DateTime.Now.Month;
             int year = DateTime.Now.Year;
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + db.GetDataBasePath(userId, dataBase))) {
@@ -382,10 +415,12 @@ public class Clients : WebService {
                         }
                     }
                 }
-                connection.Close();
             }
             return count;
-        } catch (Exception e) { return 0; }
+        } catch (Exception e) {
+            L.SendErrorLog(e, null, userId, "Clients", "NumberOfClientsPerMonth");
+            return count;
+        }
     }
 
     public int MonthlyLimitOfClients(int userType) {

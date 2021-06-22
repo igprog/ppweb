@@ -77,6 +77,7 @@ angular.module('app', [])
     $scope.isDesc = true;
     $scope.activeTab = 'users';
     $scope.adminCode = null;
+    $scope.licenceStatus = null;
 
     function setYears() {
         $scope.years = [];
@@ -117,17 +118,17 @@ angular.module('app', [])
         });
     }
 
-    $scope.search = function (searchQuery, showActive, limit, isDesc) {
+    $scope.search = function (searchQuery, showActive, licenceStatus, limit, isDesc) {
         $scope.loading = true;
         $scope.activeTab = 'users';
         $scope.page = 1;
         $scope.isDesc = isDesc;
-        functions.post('Users', 'Search', { query: searchQuery, limit: limit, page: $scope.page, activeUsers: showActive, isDesc: isDesc }).then(function (d) {
+        functions.post('Users', 'Search', { query: searchQuery, limit: limit, page: $scope.page, activeUsers: showActive, licenceStatus: licenceStatus, isDesc: isDesc }).then(function (d) {
             $scope.d = d;
             $scope.loading = false;
         });
     }
-    $scope.search(null, false, $scope.limit, $scope.isDesc);
+    $scope.search(null, false, null, $scope.limit, $scope.isDesc);
 
     $scope.update = function (user) {
         functions.post('Users', 'Update', { x: user }).then(function (d) {

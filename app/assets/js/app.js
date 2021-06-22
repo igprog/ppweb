@@ -337,29 +337,29 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             if ($rootScope.clientData.length === 0 && x === 'clientsdata') {
                 $state.go(x);
                 $rootScope.selectedNavItem = x;
-                return false;
+                return;
             }
             if (x !== 'clientsdata') {
                 if (validateForm() == false) {
-                    return false;
+                    return;
                 };
             }
             if ($rootScope.clientData.meals == null) {
                 $state.go('meals');
                 $rootScope.selectedNavItem = 'meals';
                 functions.alert($translate.instant('choose meals'), '');
-                return false;
+                return;
             }
             if (x == 'menu' && $rootScope.clientData.meals.length > 0 && !$rootScope.isMyMeals && $rootScope.clientData.meals[0].code == 'B') {
                 if ($rootScope.clientData.meals[1].isSelected == false && $rootScope.clientData.meals[5].isSelected == true) {
                     $state.go('meals');
                     functions.alert($translate.instant('the selected meal combination is not allowed in the menu') + '!', $rootScope.clientData.meals[5].title + ' ' + $translate.instant('in this combination must be turned off') + '.');
-                    return false;
+                    return;
                 }
                 if ($rootScope.clientData.meals[3].isSelected == false && $rootScope.clientData.meals[5].isSelected == true) {
                     $state.go('meals');
                     functions.alert($translate.instant('the selected meal combination is not allowed in the menu') + '!', $rootScope.clientData.meals[5].title + ' ' + $translate.instant('in this combination must be turned off') + '.');
-                    return false;
+                    return;
                 }
             }
             if (x == 'menu') {
@@ -373,7 +373,7 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         } else {
             if (x !== 'clientsdata') {
                 functions.alert($translate.instant('choose client'), '');
-                return false;
+                return;
             }
         }
         $state.go(x);
@@ -404,24 +404,24 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     $rootScope.saveClientData = function (x) {
         if (validateForm() == false) {
-            return false;
+            return;
         };
         if ($rootScope.clientData.meals == null) {
             $state.go('meals');
             $rootScope.selectedNavItem = 'meals';
             functions.alert($translate.instant('choose meals'), '');
-            return false;
+            return;
         }
         if ($rootScope.clientData.meals.length > 0 && !$rootScope.isMyMeals && $rootScope.clientData.meals[0].code == 'B') {
             if ($rootScope.clientData.meals[1].isSelected == false && $rootScope.clientData.meals[5].isSelected == true) {
                 $state.go('meals');
                 functions.alert($translate.instant('the selected meal combination is not allowed in the menu') + '!', $rootScope.clientData.meals[5].title + ' ' + $translate.instant('in this combination must be turned off') + '.');
-                return false;
+                return;
             }
             if ($rootScope.clientData.meals[3].isSelected == false && $rootScope.clientData.meals[5].isSelected == true) {
                 $state.go('meals');
                 functions.alert($translate.instant('the selected meal combination is not allowed in the menu') + '!', $rootScope.clientData.meals[5].title + ' ' + $translate.instant('in this combination must be turned off') + '.');
-                return false;
+                return;
             }
         }
         saveClientData(x);
@@ -1531,41 +1531,30 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         $window.location.href = '/app/#/login';
     }
     var getUser = function () {
-        if ($rootScope.user === null) { return false; }
-        $http({
-            url: $sessionStorage.config.backend + 'Users.asmx/Get',
-            method: 'POST',
-            data: { userId: $rootScope.user.userId },
-        }).then(function (response) {
-            $rootScope.user = JSON.parse(response.data.d);
+        if ($rootScope.user === null) { return; }
+        functions.post('Users', 'Get', { userId: $rootScope.user.userId }).then(function (d) {
+            $rootScope.user = d;
             $scope.expirationDate = new Date($rootScope.user.expirationDate);
-        },
-       function (response) {
-           functions.alert($translate.instant(response.data.d));
-       });
+        });
     }
     getUser();
 
     var showHelpAlert = function () {
         $timeout(function () {
-            if ($rootScope.currTpl == './assets/partials/dashboard.html') {
-                $http({
-                    url: $sessionStorage.config.backend + 'Clients.asmx/Load',
-                    method: 'POST',
-                    data: { userId: $sessionStorage.usergroupid, user: $rootScope.user }
-                })
-            .then(function (response) {
-                var clients = JSON.parse(response.data.d);
-                if (clients.length == 0) {
-                    functions.alert($translate.instant('need help') + '?', $translate.instant('contact our technical support by email') + ': ' + $rootScope.config.email + ' ' + $translate.instant('or phone') + ': ' + $rootScope.config.phone + '.');
-                    $sessionStorage.showHelpAlert = true;
-                }
-            }, function (response) { });
+            if ($rootScope.selectedNavItem === 'dashboard') {
+                functions.post('Clients', 'GetClientsCount', { userId: $sessionStorage.usergroupid }).then(function (d) {
+                    var count = d;
+                    if (count !== 0) {
+                        functions.alert($translate.instant('need help') + '?', $translate.instant('contact our technical support by email') + ': ' + $rootScope.config.email + ' ' + $translate.instant('or phone') + ': ' + $rootScope.config.phone + '.');
+                        $sessionStorage.showHelpAlert = true;
+                    }
+                });
             }
         }, 8000);
     }
+
     if ($rootScope.user !== null) {
-        if ($rootScope.user.licenceStatus == 'demo' && $rootScope.config.language == 'hr' && $sessionStorage.showHelpAlert === undefined) {
+        if ($rootScope.user.licenceStatus === 'demo' && $rootScope.config.language === 'hr' && $sessionStorage.showHelpAlert === undefined) {
             showHelpAlert();
         }
     } else {
@@ -3627,6 +3616,12 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
         })
         .then(function (response) {
             $rootScope.currentMenu = JSON.parse(response.data.d);
+            if ($rootScope.client === null) {
+                $state.go('dashboard');
+                $rootScope.selectedNavItem = 'dashboard';
+                functions.alert($translate.instant('choose client'), '');
+                return;
+            }
             $rootScope.currentMenu.client = $rootScope.client;
             $rootScope.currentMenu.client.clientData = $rootScope.clientData;  //TODO sredit
 

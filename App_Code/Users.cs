@@ -437,7 +437,7 @@ public class Users : WebService {
     //}
 
     [WebMethod]
-    public string Search(string query, int? limit, int? page, bool activeUsers, bool isDesc) {
+    public string Search(string query, int? limit, int? page, bool activeUsers, string licenceStatus, bool isDesc) {
         try {
             List<NewUser> xx = new List<NewUser>();
             using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + Server.MapPath("~/App_Data/" + dataBase))) {
@@ -446,7 +446,7 @@ public class Users : WebService {
                 if (limit != null && page != null) {
                     limitSql = string.Format("LIMIT {0} OFFSET {1}", limit, (page - 1) * limit);
                 }
-                string aciveUsersSql = "";
+                string aciveUsersSql = null;
                 if (activeUsers == true) {
                     aciveUsersSql = "AND u.isActive = 1";
                 }
@@ -469,7 +469,9 @@ public class Users : WebService {
                         }
                     }
                 }
-                connection.Close();
+            }
+            if (!string.IsNullOrWhiteSpace(licenceStatus)) {
+                xx = xx.Where(a => a.licenceStatus == licenceStatus).ToList();
             }
             return JsonConvert.SerializeObject(xx, Formatting.None);
         } catch (Exception e) {
@@ -504,34 +506,6 @@ public class Users : WebService {
                     using (SQLiteDataReader reader = command.ExecuteReader()) {
                         while (reader.Read()) {
                             NewUser x = GetUserData(reader, connection);
-                            //x.userId = reader.GetString(0);
-                            //x.userType = reader.GetValue(1) == DBNull.Value ? 0 : reader.GetInt32(1);
-                            //x.firstName = reader.GetValue(2) == DBNull.Value ? "" : reader.GetString(2);
-                            //x.lastName = reader.GetValue(3) == DBNull.Value ? "" : reader.GetString(3);
-                            //x.companyName = reader.GetValue(4) == DBNull.Value ? "" : reader.GetString(4);
-                            //x.address = reader.GetValue(5) == DBNull.Value ? "" : reader.GetString(5);
-                            //x.postalCode = reader.GetValue(6) == DBNull.Value ? "" : reader.GetString(6);
-                            //x.city = reader.GetValue(7) == DBNull.Value ? "" : reader.GetString(7);
-                            //x.country = reader.GetValue(8) == DBNull.Value ? "" : reader.GetString(8);
-                            //x.pin = reader.GetValue(9) == DBNull.Value ? "" : reader.GetString(9);
-                            //x.phone = reader.GetValue(10) == DBNull.Value ? "" : reader.GetString(10);
-                            //x.email = reader.GetValue(11) == DBNull.Value ? "" : reader.GetString(11);
-                            //x.userName = reader.GetValue(12) == DBNull.Value ? "" : reader.GetString(12);
-                            //x.password = reader.GetValue(13) == DBNull.Value ? "" : Decrypt(reader.GetString(13));
-                            //x.adminType = reader.GetValue(14) == DBNull.Value ? 0 : reader.GetInt32(14);
-                            //x.userGroupId = reader.GetString(15);
-                            //x.activationDate = reader.GetValue(16) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(16);
-                            //x.expirationDate = reader.GetValue(17) == DBNull.Value ? DateTime.UtcNow.ToString() : reader.GetString(17);
-                            //x.daysToExpite = G.DateDiff(x.expirationDate);
-                            //x.isActive = reader.GetValue(18) == DBNull.Value ? true : Convert.ToBoolean(reader.GetInt32(18));
-                            //x.licenceStatus = GetLicenceStatus(x);
-                            //x.ipAddress = reader.GetValue(19) == DBNull.Value ? "" : reader.GetString(19);
-                            ///****** SubUsers ******/
-                            //if (x.userId != x.userGroupId) {
-                            //    x = GetUserGroupInfo(x, connection);
-                            //}
-                            //x.maxNumberOfUsers = GetMaxNumberOfUsers(x.userGroupId, x.userType);
-                            ///**********************/
                             xx.Add(x);
                         } 
                     }
