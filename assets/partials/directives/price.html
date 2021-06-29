@@ -35,9 +35,9 @@
         </div>
         <div ng-if="discount.perc>0">
             <div><s>{{950/eur | number:2}} € / 1 godina</s></div>
-            <div><span class="font-weight-bold">{{950/eur - (950/eur * discount.perc/100.0)  | number : 2}} kn</span> / 1 godina</div>
+            <div><span class="font-weight-bold">{{950/eur - (950/eur * discount.perc/100.0)  | number : 2}} €</span> / 1 godina</div>
             <div><s>{{1520/eur | number:2}} € / 2 godine</s></div>
-            <div><span class="font-weight-bold">{{1520/eur - (1520/eur * discount.perc/100.0)  | number : 2}} kn</span> / 2 godine</div>
+            <div><span class="font-weight-bold">{{1520/eur - (1520/eur * discount.perc/100.0)  | number : 2}} €</span> / 2 godine</div>
         </div>
     </div>
     <div ng-if="!eur">
