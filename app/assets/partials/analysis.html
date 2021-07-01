@@ -53,8 +53,8 @@
                         <th>{{'proteins' | translate}}<br /><span class="small">(<em>{{'g' | translate}}</em>)</span></th>
                         <th>{{'fats' | translate}}<br /><span class="small">(<em>{{'g' | translate}}</em>)</span></th>
                     </tr>
-                    <tr ng-if="x.energy.val>0" ng-repeat="x in totals.mealsTotal">
-                        <td class="nowrap">{{x.title}}</td>
+                    <tr ng-repeat="x in totals.mealsTotal">
+                        <td class="nowrap">{{getMealTitle(x)}}</td>
                         <td class="text-nowrap"><span class="font-weight-bold">{{x.energy.val | number:1}}</span> ({{x.energy.perc | number:1}} %) <i class="{{checkTotal(x.energy.perc, getMealRecommendation(x.code).energyMinPercentage, getMealRecommendation(x.code).energyMaxPercentage)}}"></i></td>
                         <td class="text-nowrap"><span>{{getMealRecommendation(x.code).energyMin}} - {{getMealRecommendation(x.code).energyMax}}</span> <span class="small">({{getMealRecommendation(x.code).energyMinPercentage}} - {{getMealRecommendation(x.code).energyMaxPercentage}} %)</span></td>
                         <td class="text-nowrap">{{x.carbohydrates.val | number:1}} <span class="small">({{x.carbohydrates.perc | number:1}} %)</span></td>

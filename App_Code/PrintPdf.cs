@@ -2504,14 +2504,14 @@ public class PrintPdf : WebService {
     }
 
     private void AppendMealDistribution(PdfPTable tblMeals, Foods.Totals totals, Foods.Recommendations recommendations, string lang, int i, Foods.MealsTotal meal, List<Meals.NewMeal> meals) {
-        if (totals.mealsTotal[i].energy.val > 0) {
+        // if (totals.mealsTotal[i].energy.val > 0) {
             tblMeals.AddCell(new PdfPCell(new Phrase(t.Tran(GetMealTitle(meal.code, meal.title, meals), lang), GetFont())) { Border = 0 });
             tblMeals.AddCell(new PdfPCell(new Phrase(Math.Round(Convert.ToDouble(totals.mealsTotal[i].energy.val), 1).ToString() + " " + t.Tran("kcal", lang) + " (" + Math.Round(Convert.ToDouble(totals.mealsTotal[i].energy.perc), 1).ToString() + " %)", GetFont(CheckTotal(totals.mealsTotal[i].energy.perc, recommendations.mealsRecommendationEnergy[i].meal.energyMinPercentage, recommendations.mealsRecommendationEnergy[i].meal.energyMaxPercentage)))) { Border = 0 });
             tblMeals.AddCell(new PdfPCell(new Phrase(Math.Round(Convert.ToDouble(recommendations.mealsRecommendationEnergy[i].meal.energyMin), 1).ToString() + "-" + recommendations.mealsRecommendationEnergy[i].meal.energyMax.ToString() + " " + t.Tran("kcal", lang) + " (" + recommendations.mealsRecommendationEnergy[i].meal.energyMinPercentage.ToString() + "-" + recommendations.mealsRecommendationEnergy[i].meal.energyMaxPercentage.ToString() + " %)", GetFont(7))) { Border = 0 });
             tblMeals.AddCell(new PdfPCell(new Phrase(Math.Round(Convert.ToDouble(totals.mealsTotal[i].carbohydrates.val), 1).ToString() + " " + t.Tran("g", lang) + " (" + Math.Round(Convert.ToDouble(totals.mealsTotal[i].carbohydrates.perc), 1).ToString() + " %)", GetFont(7))) { Border = 0 });
             tblMeals.AddCell(new PdfPCell(new Phrase(Math.Round(Convert.ToDouble(totals.mealsTotal[i].proteins.val), 1).ToString() + " " + t.Tran("g", lang) + " (" + Math.Round(Convert.ToDouble(totals.mealsTotal[i].proteins.perc), 1).ToString() + " %)", GetFont(7))) { Border = 0 });
             tblMeals.AddCell(new PdfPCell(new Phrase(Math.Round(Convert.ToDouble(totals.mealsTotal[i].fats.val), 1).ToString() + " " + t.Tran("g", lang) + " (" + Math.Round(Convert.ToDouble(totals.mealsTotal[i].fats.perc), 1).ToString() + " %)", GetFont(7))) { Border = 0 });
-        }
+       //  }
     }
 
     private string GetMealTitle(string code, string title, List<Meals.NewMeal> meals) {

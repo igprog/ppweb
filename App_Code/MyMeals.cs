@@ -37,6 +37,13 @@ public class MyMeals : WebService {
         public List<Foods.MealsRecommendationEnergy> energyPerc;
     }
 
+    private class SaveResponse {
+        public NewMyMeals data = new NewMyMeals();
+        public string msg;
+        public string msg1;
+        public bool isSuccess;
+    }
+
     private static string MEAL_DATA = "mealData";  // // new column in myMeals tbl.
     #endregion Class
 
@@ -217,11 +224,14 @@ public class MyMeals : WebService {
 
     [WebMethod]
     public string Save(string userId, NewMyMeals x) {
+        SaveResponse r = new SaveResponse();
         try {
             db.CreateDataBase(userId, db.meals);
             db.AddColumn(userId, db.GetDataBasePath(userId, userDataBase), db.meals, MEAL_DATA, "TEXT");  //new column in recipes tbl.
             if (string.IsNullOrEmpty(x.id) && Check(userId, x.title)) {
-                return "error";
+                r.msg = "meals with the same name already exists";
+                r.isSuccess = false;
+                return JsonConvert.SerializeObject(r, Formatting.None);
             } else {
                 if (string.IsNullOrEmpty(x.id)) {
                     x.id = Convert.ToString(Guid.NewGuid());
@@ -250,7 +260,9 @@ public class MyMeals : WebService {
                 Files F = new Files();
                 F.RemoveJsonFile(userId, x.id, "meals", MEAL_DATA, db, userDataBase, null); //******* Remove json file if exists (old sistem).
 
-                return JsonConvert.SerializeObject(x, Formatting.None);
+                r.data = x;
+                r.isSuccess = true;
+                return JsonConvert.SerializeObject(r, Formatting.None);
             }
         } catch (Exception e) {
             L.SendErrorLog(e, x.id, userId, "MyMeals", "Save");
@@ -258,6 +270,7 @@ public class MyMeals : WebService {
         }
     }
 
+    
     [WebMethod]
     public string Delete(string userId, string id) {
         try {

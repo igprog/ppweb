@@ -3405,9 +3405,8 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
 
     $scope.save = function () {
         if (!functions.demoAlert($rootScope.user.licenceStatus)) return;
-        if ($rootScope.user.userType < 2) {
-            return;
-        }
+        if ($rootScope.user.userType < 2) return;
+
         if ($rootScope.myMeals.data.meals.length < 3) {
             functions.alert($translate.instant('choose at least 3 meals'), '');
             return;
@@ -3416,22 +3415,15 @@ angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngMaterial', 'cha
             functions.alert($translate.instant('title is required'), '');
             return;
         }
-        $http({
-            url: $sessionStorage.config.backend + 'MyMeals.asmx/Save',
-            method: "POST",
-            data: { userId: $sessionStorage.usergroupid, x: $rootScope.myMeals }
-        })
-        .then(function (response) {
-            if (response.data.d != 'error') {
-                $rootScope.myMeals = JSON.parse(response.data.d);
-                $rootScope.clientData.myMeals = angular.copy($rootScope.myMeals);
-                $rootScope.isMyMeals = true;
-            } else {
-                functions.alert($translate.instant('meals with the same name already exists'), '');
+
+        functions.post(webService, 'Save', { userId: $sessionStorage.usergroupid, x: $rootScope.myMeals }).then(function (d) {
+            if (!d.isSuccess) {
+                functions.alert($translate.instant(d.msg), '');
+                return;
             }
-        },
-        function (response) {
-            functions.alert($translate.instant(response.data.d), '');
+            $rootScope.myMeals = d.data;
+            $rootScope.clientData.myMeals = angular.copy($rootScope.myMeals);
+            $rootScope.isMyMeals = true;
         });
     }
 
