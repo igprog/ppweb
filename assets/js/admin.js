@@ -146,8 +146,7 @@ angular.module('app', [])
     }
 
     $scope.remove = function (user) {
-        var r = confirm("Briši " + user.firstName + " "  + user.lastName + "?");
-        if (r == true) {
+        if (confirm("Briši " + user.firstName + " " + user.lastName + "?")) {
             remove(user);
         }
     }
@@ -155,12 +154,16 @@ angular.module('app', [])
     var remove = function (user) {
         if (user.userId !== user.userGroupId) {
             alert('Samo glavni nositelj računa može biti obrisan.');
-        } else {
-            functions.post('Users', 'DeleteAllUserGroup', { x: user }).then(function (d) {
-                load($scope.limit);
-                alert(d.msg);
-            });
+            return;
         }
+        if (user.licenceStatus === 'active') {
+            alert('Aktivan korisnik ne može biti izvrisan. Ako želiš izbrisati aktivnog korisnika prvo ga deaktiviraj.');
+            return;
+        }
+        functions.post('Users', 'DeleteAllUserGroup', { x: user }).then(function (d) {
+            load($scope.limit);
+            alert(d.msg);
+        });
     }
 
     $scope.idxStart = 0;

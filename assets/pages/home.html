@@ -80,11 +80,11 @@
                 Osmišljavanjem jelovnika korištenjem ove aplikacije, prehrana krajnjih korisnika postaje uravnotežena i raznolika
                 što se može zahvaliti činjenici da se izrada jelovnika bazira na preporučenom broju jediničnih serviranja svih skupina namirnica <em>(piramida prehrane)</em> te njihovih energetskih, makro i mikronutiritivnih vrijednost.
                 S obzirom da web aplikacija <a href="../app" target="_self" title="web aplikacija"><strong>Program Prehrane Web</strong></a> sadrži bazu od preko <a ui-sref="tablica-namirnica" href="" class="nodecoration" title="Tablica namirnica">700 namirnica i jela</a> moguće je zadovoljiti zahtjeve većine korisnika po pitanju izbora namirnica.
-                Osim toga aplikacija pruža mogućnost unosa vlastitih namirnica i njihovih makro i mikronutritivnih vrijednosti.
-                Nadalje, kad se govori o problemu prekomjerne tjelesne mase, preporuča se uz promjenu prehrambenih navika, u svakodnevicu uključiti i dodatnu tjelesnu aktivnost,
-                pa tako program nudi podatke o energetskoj potrošnji za preko 400 tjelesnih aktivnosti. <br />
+                Osim toga aplikacija pruža mogućnost unosa vlastitih namirnica i njihovih makro i mikronutritivnih vrijednosti, unos vlastitih dijeta i obroka te kreiranja i razmjenu recepata sa drugim korisnicima aplikacije.
+                Kad se govori o problemu prekomjerne tjelesne mase, preporuča se uz promjenu prehrambenih navika, u svakodnevicu uključiti i dodatnu tjelesnu aktivnost,
+                pa tako program nudi podatke o energetskoj potrošnji za preko 400 tjelesnih aktivnosti.<br />
                 Osim preporuka za izradu plana prehrane za mršavljenje, program nudi i preporuke za debljanje kod osoba sa sniženom tjelesnom masom i preporuke za povećenje mišićne mase,
-                kao i preporuke za više vrsta dijeta kao što su <em>redukcijska dijeta, visokoproteinska dijeta , ulkusna dijeta, dijabetička dijeta, semivegetarijanska dijeta i dr...</em><br />
+                kao i preporuke za više vrsta dijeta kao što su <em>redukcijska dijeta, visokoproteinska dijeta, ulkusna dijeta, dijabetička dijeta, semivegetarijanska dijeta i dr...</em><br />
                 Više o karakteristikama i funkcijama aplikacije pogledajte <a ui-sref="price" href="" title="cijene"><strong>ovdje...</strong></a>
             </p>
         </div>
@@ -93,10 +93,10 @@
         </div>
         <div>
             <p class="text-justify">
-                <a href="../app" target="_self" title="web aplikacija"><strong>Program Prehrane Web</strong></a> je online aplikacija i za razliku od stare <a ui-sref="program-prehrane-5" href="" title="program prehrane 5.0" rel="noopener"><strong>verziju 5.0</strong></a> nije potrebna instalacija na računalo,
+                Za razliku od starije verzije (<a ui-sref="program-prehrane-5" href="" title="program prehrane 5.0" rel="noopener"><strong>verzija 5.0</strong></a>), koja je 2019 povućena iz prodaje, nova verzija <a href="../app" target="_self" title="web aplikacija"><strong>Program Prehrane Web</strong></a> je online aplikacija što znaći da nije potrebna instalacija na računalo,
                 već je dovoljna samo registracija u sustav, a aplikaciji možete pristupiti sa bilo kojeg računala koji ima pristup internetu neovisno o operativnom sustavu. Još jedna od prednosti u odnosu na <a ui-sref="program-prehrane-5" href="" title="program prehrane 5.0" rel="noopener"><strong>verziju 5.0</strong></a> je u tome
-                što zajedničkoj bazi podataka može pristupiti više korisnika (nutricionista) unutar jednog tima. Svi podaci (podaci o klijentima, jelovnici, vlastite namirnice i recepti se spremaju na server i nema opasnosti od gubitka podataka zbog kvara ili zamjene računala).
-                Dizajn aplikacije je responzivan što znači da se automatski prilagođava rezoluciji monitora bilo kojeg uređaja (računalo, tablet, mobitel). <br />
+                što zajedničkoj bazi podataka može pristupiti više korisnika (nutricionista) unutar jednog tima. Svi podaci (podaci o klijentima, jelovnici, vlastite namirnice, recepti itd) se spremaju na server i nema opasnosti od gubitka podataka zbog kvara ili zamjene računala.
+                Dizajn aplikacije je responzivan što znači da se automatski prilagođava rezoluciji monitora bilo kojeg uređaja (računalo, tablet, mobitel).<br />
             </p>
         </div>
         <div ng-include="'./assets/partials/awards.html'"></div>
@@ -223,6 +223,10 @@
     <hr class="mt-5" />
     <div class="pt-5">
         <ng-include src="'./assets/partials/customers.html'" ></ng-include>
+    </div>
+    <div class="pt-5 text-center">
+        <hr />
+        <a ui-sref="registration" href="" class="btn btn-default m-3 main-gradient" title="postani korisnik"><i class="fa fa-user-plus fa-2x"></i> <span class="lead"> Registriraj se i isprobaj besplatnu DEMO verziju</span></a>
     </div>
     <div class="pt-5">
         <ng-include src="'./assets/pages/contact.html'"></ng-include>
