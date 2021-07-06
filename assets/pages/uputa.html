@@ -1,36 +1,37 @@
-﻿<div class="pt-5">
-    <div id="content" class="sidenav hidden-xs" style="padding-bottom:60px">
-        <h4 class="text-center">Sadržaj</h4>
-        <ul class="list-group">
-            <li class="list-group-item" ng-click="scrollTo('signup')"><a href="">Registracija</a></li>
-            <li class="list-group-item" ng-click="scrollTo('login')"><a href="">Prijava</a></li>
-            <li class="list-group-item" ng-click="scrollTo('dashboard')"><a href="">Kontrolna ploča (Dashboard)</a></li>
-            <li class="list-group-item" ng-click="scrollTo('newclient')"><a href="">Novi klijent</a></li>
-            <li class="list-group-item" ng-click="scrollTo('steps')"><a href="">Koraci u izradi jelovnika</a></li>
-            <li class="list-group-item" ng-click="scrollTo('inputdata')"><a href="">Ulazni podaci</a></li>
-            <li class="list-group-item" ng-click="scrollTo('bodyfat')"><a href="">Izračun masnog tkiva</a></li>
-            <li class="list-group-item" ng-click="scrollTo('detailpal')"><a href="">Detaljni izračun energetske potrošnje</a></li>
-            <li class="list-group-item" ng-click="scrollTo('anthropometricmeasures')"><a href="">Praćenje antropometrijskih parametara</a></li>
-            <li class="list-group-item" ng-click="scrollTo('calculation')"><a href="">Izračun</a></li>
-            <li class="list-group-item" ng-click="scrollTo('additionalactivities')"><a href="">Dodatna energetska potrošnja</a></li>
-            <li class="list-group-item" ng-click="scrollTo('diet')"><a href="">Dijeta</a></li>
-            <li class="list-group-item" ng-click="scrollTo('meals')"><a href="">Obroci</a></li>
-            <li class="list-group-item" ng-click="scrollTo('menus')"><a href="">Izrada jelovnika</a></li>
-            <li class="list-group-item" ng-click="scrollTo('weeklymenu')"><a href="">Tjedni jelovnik</a></li>
-            <li class="list-group-item" ng-click="scrollTo('myfoods')"><a href="">Moje namirnice</a></li>
-            <li class="list-group-item" ng-click="scrollTo('usda')"><a href="">USDA baza namirnica</a></li>
-            <li class="list-group-item" ng-click="scrollTo('myrecipes')"><a href="">Moji recepti</a></li>
-            <li class="list-group-item" ng-click="scrollTo('sharedrecipes')"><a href="">Razmjena recepata</a></li>
-            <li class="list-group-item" ng-click="scrollTo('prices')"><a href="">Cijene</a></li>
-            <li class="list-group-item" ng-click="scrollTo('shoppinglist')"><a href="">Košarica</a></li>
-            <li class="list-group-item" ng-click="scrollTo('newuser')"><a href="">Novi korisnik</a></li>
-            <li class="list-group-item" ng-click="scrollTo('removeuser')"><a href="">Brisanje korisničkog računa</a></li>
-            <!--<li class="list-group-item"><a href="#settings">Postavke</a></li>
-            <li class="list-group-item"><a href="#additionaloptions">Dodatne opcije</a></li>-->
-        </ul>
-        <hr />
+﻿<div>
+    <div href="" class="sidenav-menu ml-2"><a href="" onclick="openNav()"><i class="fa fa-bars"></i> Sadržaj</a></div>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn my-5" title="cancel" onclick="closeNav()">&times;</a>
+        <div class="small" style="margin-top:70px">
+            <form>
+                <div class="list-group-item" ng-click="scrollTo('signup')"><a href="">Registracija</a></div>
+                <div class="list-group-item" ng-click="scrollTo('login')"><a href="">Prijava</a></div>
+                <div class="list-group-item" ng-click="scrollTo('dashboard')"><a href="">Kontrolna ploča (Dashboard)</a></div>
+                <div class="list-group-item" ng-click="scrollTo('newclient')"><a href="">Novi klijent</a></div>
+                <div class="list-group-item" ng-click="scrollTo('steps')"><a href="">Koraci u izradi jelovnika</a></div>
+                <div class="list-group-item" ng-click="scrollTo('inputdata')"><a href="">Ulazni podaci</a></div>
+                <div class="list-group-item" ng-click="scrollTo('bodyfat')"><a href="">Izračun masnog tkiva</a></div>
+                <div class="list-group-item" ng-click="scrollTo('detailpal')"><a href="">Detaljni izračun energetske potrošnje</a></div>
+                <div class="list-group-item" ng-click="scrollTo('anthropometricmeasures')"><a href="">Praćenje antropometrijskih parametara</a></div>
+                <div class="list-group-item" ng-click="scrollTo('calculation')"><a href="">Izračun</a></div>
+                <div class="list-group-item" ng-click="scrollTo('additionalactivities')"><a href="">Dodatna energetska potrošnja</a></div>
+                <div class="list-group-item" ng-click="scrollTo('diet')"><a href="">Dijeta</a></div>
+                <div class="list-group-item" ng-click="scrollTo('meals')"><a href="">Obroci</a></div>
+                <div class="list-group-item" ng-click="scrollTo('menus')"><a href="">Izrada jelovnika</a></div>
+                <div class="list-group-item" ng-click="scrollTo('weeklymenu')"><a href="">Tjedni jelovnik</a></div>
+                <div class="list-group-item" ng-click="scrollTo('myfoods')"><a href="">Moje namirnice</a></div>
+                <div class="list-group-item" ng-click="scrollTo('usda')"><a href="">USDA baza namirnica</a></div>
+                <div class="list-group-item" ng-click="scrollTo('myrecipes')"><a href="">Moji recepti</a></div>
+                <div class="list-group-item" ng-click="scrollTo('sharedrecipes')"><a href="">Razmjena recepata</a></div>
+                <div class="list-group-item" ng-click="scrollTo('prices')"><a href="">Cijene</a></div>
+                <div class="list-group-item" ng-click="scrollTo('shoppinglist')"><a href="">Košarica</a></div>
+                <div class="list-group-item" ng-click="scrollTo('newuser')"><a href="">Novi korisnik</a></div>
+                <div class="list-group-item" ng-click="scrollTo('removeuser')"><a href="">Brisanje korisničkog računa</a></div>
+            </form>
+        </div>
     </div>
-    <div class="well main-content" style="padding:50px">
+
+    <div class="well main-content p-5">
         <h1>Program Prehrane Web</h1>
         <h5><em>Web aplikacija za izradu uravnoteženih jelovnika i plana tjelesne aktivnosti</em></h5>
         <h3 class="text-uppercase"><i class="fa fa-question-circle"></i> Uputa za korištenje</h3>
@@ -694,13 +695,24 @@
                         <hr />
                     </div>-->
                 </div>
-                <div class="text-center navbar-fixed-bottom" style="padding:0px 0px 10px 0px">
+                <div class="text-center navbar-fixed-bottom pt-2">
                     <a href="#home" class="text-primary" title="Na vrh"><span class="fa fa-chevron-up fa-2x"></span></a>
                 </div>
             </div>
         </div>
     </div>
-    <div class="footer pt60 bg-grey text-right">
+    <!--<div class="footer pt-5 bg-grey text-right">
         <span class="pull-left">Copyright © <span id="year"></span> IG PROG</span>
-    </div>
+    </div>-->
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "270px";
+        }
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
+
+
 </div>

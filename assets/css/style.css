@@ -419,5 +419,57 @@ md-input-container > label {
     color: #696969;
 }
 
+/************* sidenav ******************/
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 80px;
+}
+
+.sidenav a {
+    text-decoration: none;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 50px;
+    margin-left: 50px;
+}
+
+.sidenav i {
+    width: 25px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav a {font-size: 18px;}
+}
+
+.sidenav-menu {
+    position: fixed;
+    top: 75px;
+    left: 20px;
+    overflow-x: hidden;
+    font-size: 20px;
+    background-color: #fff;
+}
+
+/************* sidenav ******************/
+
 
 
